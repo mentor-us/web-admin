@@ -1,0 +1,17 @@
+.not-found__container {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-size: cover!important;
+  background-position: center!important;
+  background-repeat: no-repeat!important;
+}
+
+.not-found___text {
+  margin: 5px 0;
+  text-align: center;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+}

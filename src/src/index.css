@@ -1,0 +1,61 @@
+span {
+  text-transform: none;
+}
+
+/* Chỉnh sửa sweet alert component */
+.swal2-container {
+  z-index: 12000 !important;
+}
+
+.swal-wide {
+  /* width:500px!important; */
+  height: 100px !important;
+}
+
+/* Chỉnh sửa helper text ở mỗi input */
+.MuiFormHelperText-root {
+  margin: 0 !important;
+  margin-top: 0.5rem !important;
+  font-size: 0.8rem !important;
+  color: red !important;
+}
+
+.MuiBox-root::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.MuiTableContainer-root::-webkit-scrollbar{
+  height: 0.5rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track, .MuiTableContainer-root::-webkit-scrollbar-track, .MuiBox-root::-webkit-scrollbar-track, ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb, .MuiTableContainer-root::-webkit-scrollbar-thumb ,.MuiBox-root::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover, .MuiTableContainer-root::-webkit-scrollbar-thumb:hover, .MuiBox-root::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Remove input number spin-button */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}

@@ -1,0 +1,13 @@
+.statistic__card-container-image {
+    display: flex;
+    height: 100%;
+    width: 126px;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+    -webkit-box-align: center;
+    align-items: center;
+    background-color: rgb(255, 255, 255)!important;
+    border-radius: 50%;
+    outline: rgba(255, 255, 255, 0.2) solid 10px;
+    margin: 0px 10px 0px -60px;
+}

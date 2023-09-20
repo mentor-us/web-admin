@@ -1,0 +1,9 @@
+.statistic__white-card-container-image {
+    display: flex;
+    height: 100%;
+    width: 100px;
+    -webkit-box-pack: end;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+}

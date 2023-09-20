@@ -1,0 +1,35 @@
+.configuration__container {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.configuration__container::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+/* Track */
+.configuration__container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.configuration__container::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+.configuration__container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.configuration__email-item {
+  width: 100%;
+  padding: 5px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
