@@ -103,7 +103,7 @@ function Configurator() {
               mt={1}
             >
               <MDTypography variant="h6">Khoảng thời gian tối đa</MDTypography>
-              <TooltipCustom placement="left" title={fromToRange.description}>
+              <TooltipCustom placement="left" title={fromToRange.description ?? ""}>
                 <Icon fontSize="xl" sx={{ cursor: "pointer" }}>
                   info
                 </Icon>
