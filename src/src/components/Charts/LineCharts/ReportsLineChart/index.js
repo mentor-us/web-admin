@@ -5,6 +5,17 @@ import PropTypes from "prop-types";
 
 // react-chartjs-2 components
 import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  Tooltip,
+  Filler
+} from "chart.js";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -17,6 +28,19 @@ import MDTypography from "components/MDComponents/MDTypography";
 
 // ReportsLineChart configurations
 import configs from "./configs";
+
+// Tree-shaking ChartJS components.
+// More info: https://react-chartjs-2.js.org/docs/migration-to-v4#tree-shaking
+ChartJS.register(
+  CategoryScale,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  Tooltip,
+  Filler
+);
 
 function ReportsLineChart({ color, title, description, date, chart, height }) {
   const isTransparent = color === "none";
