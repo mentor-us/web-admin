@@ -1,6 +1,16 @@
 import { useMemo } from "react";
 import PropTypes from "prop-types";
 import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  BarController,
+  BarElement,
+  LinearScale,
+  Title,
+  Legend,
+  Tooltip
+} from "chart.js";
 
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
@@ -10,6 +20,11 @@ import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 
 import configs from "./configs";
+
+// Tree-shaking ChartJS components.
+// More info: https://react-chartjs-2.js.org/docs/migration-to-v4#tree-shaking
+
+ChartJS.register(CategoryScale, BarController, BarElement, LinearScale, Title, Legend, Tooltip);
 
 function ReportsBarChart({ color, title, description, date, chart, height }) {
   const isTransparent = color === "none";

@@ -295,8 +295,12 @@ function EditConfiguratorButton({ data }) {
                   value={fromToRange || " "}
                   onChange={handleFromToRangeChange}
                   inputProps={{ maxLength: 2 }}
-                  error={fromToRange.length === 0}
-                  helperText={fromToRange.length === 0 ? "Khoảng thời gian không được rỗng" : ""}
+                  error={fromToRange && fromToRange.length === 0}
+                  helperText={
+                    fromToRange && fromToRange.length === 0
+                      ? "Khoảng thời gian không được rỗng"
+                      : ""
+                  }
                 />
               </MDBox>
             </MDBox>

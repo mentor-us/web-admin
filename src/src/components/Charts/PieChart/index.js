@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 
 // react-chartjs-2 components
 import { Pie } from "react-chartjs-2";
+import { Chart as ChartJs, PieController, ArcElement, Tooltip } from "chart.js";
+
 // @mui material components
 import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
@@ -15,6 +17,8 @@ import MDTypography from "components/MDComponents/MDTypography";
 
 // PieChart configurations
 import configs from "./configs";
+
+ChartJs.register(PieController, ArcElement, Tooltip);
 
 function PieChart({ icon, title, description, height, chart }) {
   const { data, options } = configs(chart.labels || [], chart.datasets || {});
