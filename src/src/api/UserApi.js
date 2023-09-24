@@ -1,19 +1,16 @@
 import { makeRequestSearch } from "utils";
 import AxiosClient from "./AxiosClient";
+import ErrorWrapper from "./ErrorWrapper";
 
-export default class UserApi {
-  static async findById(userId) {
+const UserApi = {
+  async findById(userId) {
     let user = {};
-    try {
-      const response = await AxiosClient.get(`api/users/${userId}`);
-      user = response.data;
-    } catch (error) {
-      throw new Error(error.message);
-    }
+    const response = await AxiosClient.get(`api/users/${userId}`);
+    user = response.data;
     return user;
-  }
+  },
 
-  static async findByIds(userIds) {
+  async findByIds(userIds) {
     const response = await Promise.all(
       userIds.map(async (userId) => {
         const user = await this.findById(userId);
@@ -21,156 +18,94 @@ export default class UserApi {
       })
     );
     return response.filter((x) => !!x);
-  }
+  },
 
-  static async getAllUser() {
+  async getAllUser() {
     let userList = [];
-    try {
-      const response = await AxiosClient.get(`api/users/all`);
-
-      if (response.success) {
-        userList = response.data;
-      }
-    } catch (error) {
-      throw new Error(error.message);
+    const response = await AxiosClient.get(`api/users/all`);
+    if (response.success) {
+      userList = response.data;
     }
-
     return userList;
-  }
+  },
 
-  static async getAllUserPaging(req) {
+  getAllUserPaging(req) {
     const { page, size } = req;
-    try {
-      return await AxiosClient.get(`api/users/all-paging?page=${page}&size=${size}`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
 
-  static async delete(userID) {
-    try {
-      const response = await AxiosClient.delete(`api/users/${userID}`);
-      return response;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+    return AxiosClient.get(`api/users/all-paging?page=${page}&size=${size}`);
+  },
 
-  static async add(req) {
-    try {
-      const response = await AxiosClient.post(`api/users`, req);
-      return response;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  delete(userID) {
+    return AxiosClient.delete(`api/users/${userID}`);
+  },
 
-  static async disableAccount(req) {
-    try {
-      const response = await AxiosClient.patch(`api/users/disable`, req);
-      return response;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  add(req) {
+    return AxiosClient.post(`api/users`, req);
+  },
 
-  static async enableAccount(req) {
-    try {
-      const response = await AxiosClient.patch(`api/users/enable`, req);
-      return response;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  disableAccount(req) {
+    return AxiosClient.patch(`api/users/disable`, req);
+  },
 
-  static async search(req) {
+  async enableAccount(req) {
+    return AxiosClient.patch(`api/users/enable`, req);
+  },
+
+  search(req) {
     const reqUri = makeRequestSearch(req);
 
-    try {
-      return await AxiosClient.get(`api/users/find?${reqUri}`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+    return AxiosClient.get(`api/users/find?${reqUri}`);
+  },
 
-  static async update(id, data) {
-    try {
-      return await AxiosClient.patch(`api/users/${id}/admin`, data);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  update(id, data) {
+    return AxiosClient.patch(`api/users/${id}/admin`, data);
+  },
 
-  static async getAccountDetail(id) {
-    try {
-      return await AxiosClient.get(`api/users/${id}/detail`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  getAccountDetail(id) {
+    return AxiosClient.get(`api/users/${id}/detail`);
+  },
 
-  static async deleteMultiple(req) {
-    try {
-      const response = await AxiosClient.delete(`api/users`, { data: req });
-      return response;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  deleteMultiple(req) {
+    return AxiosClient.delete(`api/users`, { data: req });
+  },
 
-  static async loadByEmail(req) {
-    try {
-      return await AxiosClient.get(`api/users/allByEmail?email=${req}`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  loadByEmail(req) {
+    return AxiosClient.get(`api/users/allByEmail?email=${req}`);
+  },
 
-  static async exportAccount(req) {
+  exportAccount(req) {
     const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`api/users/export?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
 
-  static async exportAccountSearch(req) {
+    return AxiosClient.get(`api/users/export?${reqUri}`, {
+      responseType: "blob"
+    });
+  },
+
+  exportAccountSearch(req) {
     const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`api/users/export/search?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
 
-  static async exportAccountMentee(id, req) {
+    return AxiosClient.get(`api/users/export/search?${reqUri}`, {
+      responseType: "blob"
+    });
+  },
+
+  exportAccountMentee(id, req) {
     const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`api/users/${id}/menteeGroups/export?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
 
-  static async exportAccountMentor(id, req) {
+    return AxiosClient.get(`api/users/${id}/menteeGroups/export?${reqUri}`, {
+      responseType: "blob"
+    });
+  },
+
+  exportAccountMentor(id, req) {
     const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`api/users/${id}/mentorGroups/export?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
 
-  static async importAccount(file) {
+    return AxiosClient.get(`api/users/${id}/mentorGroups/export?${reqUri}`, {
+      responseType: "blob"
+    });
+  },
+
+  async importAccount(file) {
     const data = new FormData();
     data.append("file", file);
     const config = {
@@ -179,13 +114,8 @@ export default class UserApi {
       }
     };
 
-    let response;
-    try {
-      response = await AxiosClient.post(`api/users/import`, data, config);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-
-    return response;
+    return AxiosClient.post(`api/users/import`, data, config);
   }
-}
+};
+
+export default ErrorWrapper(UserApi);
