@@ -1,4 +1,3 @@
-import { API_URL } from "config";
 import { makeRequestSearch } from "utils";
 import AxiosClient from "./AxiosClient";
 
@@ -7,13 +6,13 @@ export default class StatisticApi {
     if (req !== "" || req !== null) {
       const reqUri = makeRequestSearch(req);
       try {
-        return await AxiosClient.get(`${API_URL}api/analytic?${reqUri}`);
+        return await AxiosClient.get(`api/analytic?${reqUri}`);
       } catch (error) {
         throw new Error(error.message);
       }
     } else {
       try {
-        return await AxiosClient.get(`${API_URL}api/analytic?`);
+        return await AxiosClient.get(`api/analytic?`);
       } catch (error) {
         throw new Error(error.message);
       }
@@ -23,7 +22,7 @@ export default class StatisticApi {
   // static async getGeneralByGroupCategory(req) {
   //   const reqUri = makeRequestSearch(req);
   //   try {
-  //     return await AxiosClient.get(`${API_URL}api/analytic?${reqUri}`);
+  //     return await AxiosClient.get(`api/analytic?${reqUri}`);
   //   } catch (error) {
   //     throw new Error(error.message);
   //   }
@@ -33,7 +32,7 @@ export default class StatisticApi {
     const reqUri = makeRequestSearch(req);
 
     try {
-      return await AxiosClient.get(`${API_URL}api/analytic/chart?${reqUri}`);
+      return await AxiosClient.get(`api/analytic/chart?${reqUri}`);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -42,10 +41,8 @@ export default class StatisticApi {
   static async getGroupsStatisticTableData(req) {
     const { page, pageSize } = req;
     try {
-      return await AxiosClient.get(
-        `${API_URL}api/analytic/groups?page=${page}&pageSize=${pageSize}`
-      );
-      // return await AxiosClient.get(`${API_URL}api/analytic/groups?page=${page}&pageSize=${size}`);
+      return await AxiosClient.get(`api/analytic/groups?page=${page}&pageSize=${pageSize}`);
+      // return await AxiosClient.get(`api/analytic/groups?page=${page}&pageSize=${size}`);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -54,8 +51,8 @@ export default class StatisticApi {
   // static async filterGroupsStatisticTableData(req) {
   //   const { page, pageSize } = req;
   //   try {
-  //     return await AxiosClient.get(`${API_URL}api/analytic/find?`);
-  //     // return await AxiosClient.get(`${API_URL}api/analytic/groups?page=${page}&pageSize=${size}`);
+  //     return await AxiosClient.get(`api/analytic/find?`);
+  //     // return await AxiosClient.get(`api/analytic/groups?page=${page}&pageSize=${size}`);
   //   } catch (error) {
   //     throw new Error(error.message);
   //   }
@@ -63,7 +60,7 @@ export default class StatisticApi {
 
   static async findById(groupID) {
     try {
-      return await AxiosClient.get(`${API_URL}api/analytic/${groupID}`);
+      return await AxiosClient.get(`api/analytic/${groupID}`);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -71,7 +68,7 @@ export default class StatisticApi {
 
   static async updateUserStatistic(userID, req) {
     try {
-      return await AxiosClient.patch(`${API_URL}api/analytic/${userID}`, req);
+      return await AxiosClient.patch(`api/analytic/${userID}`, req);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -87,7 +84,7 @@ export default class StatisticApi {
     };
 
     try {
-      return await AxiosClient.post(`${API_URL}api/analytic/import-multiple`, data, config);
+      return await AxiosClient.post(`api/analytic/import-multiple`, data, config);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -103,7 +100,7 @@ export default class StatisticApi {
     };
 
     try {
-      return await AxiosClient.post(`${API_URL}api/analytic/import-training-point`, data, config);
+      return await AxiosClient.post(`api/analytic/import-training-point`, data, config);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -119,7 +116,7 @@ export default class StatisticApi {
     };
 
     try {
-      return await AxiosClient.post(`${API_URL}api/analytic/import-studying-point`, data, config);
+      return await AxiosClient.post(`api/analytic/import-studying-point`, data, config);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -135,7 +132,7 @@ export default class StatisticApi {
     };
 
     try {
-      return await AxiosClient.post(`${API_URL}api/analytic/import-has-english-cert`, data, config);
+      return await AxiosClient.post(`api/analytic/import-has-english-cert`, data, config);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -144,7 +141,7 @@ export default class StatisticApi {
   static async search(req) {
     const reqUri = makeRequestSearch(req);
 
-    const url = `${API_URL}api/analytic/find?${reqUri}`;
+    const url = `api/analytic/find?${reqUri}`;
     try {
       return await AxiosClient.get(url);
     } catch (error) {
@@ -154,7 +151,7 @@ export default class StatisticApi {
 
   static async searchDetail(groupID, req) {
     const reqUri = makeRequestSearch(req);
-    const url = `${API_URL}api/analytic/find/${groupID}?${reqUri}`;
+    const url = `api/analytic/find/${groupID}?${reqUri}`;
     try {
       return await AxiosClient.get(url);
     } catch (error) {
@@ -165,7 +162,7 @@ export default class StatisticApi {
   static async exportLog(req) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/analytic/log?${reqUri}`, {
+      return await AxiosClient.get(`api/analytic/log?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {
@@ -176,7 +173,7 @@ export default class StatisticApi {
   static async exportStatistic(req) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/analytic/report?${reqUri}`, {
+      return await AxiosClient.get(`api/analytic/report?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {
@@ -187,7 +184,7 @@ export default class StatisticApi {
   static async exportGroupStatistic(req) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/analytic/groups/export?${reqUri}`, {
+      return await AxiosClient.get(`api/analytic/groups/export?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {
@@ -198,7 +195,7 @@ export default class StatisticApi {
   static async exportGroupStatisticSearch(req) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/analytic/groups/export/search?${reqUri}`, {
+      return await AxiosClient.get(`api/analytic/groups/export/search?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {
@@ -209,7 +206,7 @@ export default class StatisticApi {
   static async exportGroupStatisticDetail(req, groupID) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/analytic/${groupID}/export?${reqUri}`, {
+      return await AxiosClient.get(`api/analytic/${groupID}/export?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {
@@ -220,7 +217,7 @@ export default class StatisticApi {
   static async exportGroupStatisticDetailSearch(req, groupID) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/analytic/${groupID}/export/search?${reqUri}`, {
+      return await AxiosClient.get(`api/analytic/${groupID}/export/search?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {

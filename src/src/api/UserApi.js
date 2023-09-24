@@ -1,4 +1,3 @@
-import { API_URL } from "config";
 import { makeRequestSearch } from "utils";
 import AxiosClient from "./AxiosClient";
 
@@ -6,7 +5,7 @@ export default class UserApi {
   static async findById(userId) {
     let user = {};
     try {
-      const response = await AxiosClient.get(`${API_URL}api/users/${userId}`);
+      const response = await AxiosClient.get(`api/users/${userId}`);
       user = response.data;
     } catch (error) {
       throw new Error(error.message);
@@ -27,7 +26,7 @@ export default class UserApi {
   static async getAllUser() {
     let userList = [];
     try {
-      const response = await AxiosClient.get(`${API_URL}api/users/all`);
+      const response = await AxiosClient.get(`api/users/all`);
 
       if (response.success) {
         userList = response.data;
@@ -42,7 +41,7 @@ export default class UserApi {
   static async getAllUserPaging(req) {
     const { page, size } = req;
     try {
-      return await AxiosClient.get(`${API_URL}api/users/all-paging?page=${page}&size=${size}`);
+      return await AxiosClient.get(`api/users/all-paging?page=${page}&size=${size}`);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -50,7 +49,7 @@ export default class UserApi {
 
   static async delete(userID) {
     try {
-      const response = await AxiosClient.delete(`${API_URL}api/users/${userID}`);
+      const response = await AxiosClient.delete(`api/users/${userID}`);
       return response;
     } catch (error) {
       throw new Error(error.message);
@@ -59,7 +58,7 @@ export default class UserApi {
 
   static async add(req) {
     try {
-      const response = await AxiosClient.post(`${API_URL}api/users`, req);
+      const response = await AxiosClient.post(`api/users`, req);
       return response;
     } catch (error) {
       throw new Error(error.message);
@@ -68,7 +67,7 @@ export default class UserApi {
 
   static async disableAccount(req) {
     try {
-      const response = await AxiosClient.patch(`${API_URL}api/users/disable`, req);
+      const response = await AxiosClient.patch(`api/users/disable`, req);
       return response;
     } catch (error) {
       throw new Error(error.message);
@@ -77,7 +76,7 @@ export default class UserApi {
 
   static async enableAccount(req) {
     try {
-      const response = await AxiosClient.patch(`${API_URL}api/users/enable`, req);
+      const response = await AxiosClient.patch(`api/users/enable`, req);
       return response;
     } catch (error) {
       throw new Error(error.message);
@@ -88,7 +87,7 @@ export default class UserApi {
     const reqUri = makeRequestSearch(req);
 
     try {
-      return await AxiosClient.get(`${API_URL}api/users/find?${reqUri}`);
+      return await AxiosClient.get(`api/users/find?${reqUri}`);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -96,7 +95,7 @@ export default class UserApi {
 
   static async update(id, data) {
     try {
-      return await AxiosClient.patch(`${API_URL}api/users/${id}/admin`, data);
+      return await AxiosClient.patch(`api/users/${id}/admin`, data);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -104,7 +103,7 @@ export default class UserApi {
 
   static async getAccountDetail(id) {
     try {
-      return await AxiosClient.get(`${API_URL}api/users/${id}/detail`);
+      return await AxiosClient.get(`api/users/${id}/detail`);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -112,7 +111,7 @@ export default class UserApi {
 
   static async deleteMultiple(req) {
     try {
-      const response = await AxiosClient.delete(`${API_URL}api/users`, { data: req });
+      const response = await AxiosClient.delete(`api/users`, { data: req });
       return response;
     } catch (error) {
       throw new Error(error.message);
@@ -121,7 +120,7 @@ export default class UserApi {
 
   static async loadByEmail(req) {
     try {
-      return await AxiosClient.get(`${API_URL}api/users/allByEmail?email=${req}`);
+      return await AxiosClient.get(`api/users/allByEmail?email=${req}`);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -130,7 +129,7 @@ export default class UserApi {
   static async exportAccount(req) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/users/export?${reqUri}`, {
+      return await AxiosClient.get(`api/users/export?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {
@@ -141,7 +140,7 @@ export default class UserApi {
   static async exportAccountSearch(req) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/users/export/search?${reqUri}`, {
+      return await AxiosClient.get(`api/users/export/search?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {
@@ -152,7 +151,7 @@ export default class UserApi {
   static async exportAccountMentee(id, req) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/users/${id}/menteeGroups/export?${reqUri}`, {
+      return await AxiosClient.get(`api/users/${id}/menteeGroups/export?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {
@@ -163,7 +162,7 @@ export default class UserApi {
   static async exportAccountMentor(id, req) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/users/${id}/mentorGroups/export?${reqUri}`, {
+      return await AxiosClient.get(`api/users/${id}/mentorGroups/export?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {
@@ -182,7 +181,7 @@ export default class UserApi {
 
     let response;
     try {
-      response = await AxiosClient.post(`${API_URL}api/users/import`, data, config);
+      response = await AxiosClient.post(`api/users/import`, data, config);
     } catch (error) {
       throw new Error(error.message);
     }

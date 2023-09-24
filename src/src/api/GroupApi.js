@@ -1,4 +1,3 @@
-import { API_URL } from "config";
 import { roleMemberEnum } from "utils/constants";
 import { makeRequestSearch } from "utils";
 
@@ -8,7 +7,7 @@ export default class GroupApi {
   static async all(req) {
     const { page, size } = req;
     try {
-      return await AxiosClient.get(`${API_URL}api/groups?type=admin&page=${page}&pageSize=${size}`);
+      return await AxiosClient.get(`api/groups?type=admin&page=${page}&pageSize=${size}`);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -16,7 +15,7 @@ export default class GroupApi {
 
   static async findById(id) {
     try {
-      return await AxiosClient.get(`${API_URL}api/groups/${id}`);
+      return await AxiosClient.get(`api/groups/${id}`);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -24,7 +23,7 @@ export default class GroupApi {
 
   static async add(data) {
     try {
-      return await AxiosClient.post(`${API_URL}api/groups`, data);
+      return await AxiosClient.post(`api/groups`, data);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -33,7 +32,7 @@ export default class GroupApi {
   static async search(req) {
     const reqUri = makeRequestSearch(req);
 
-    const url = `${API_URL}api/groups/find?${reqUri}`;
+    const url = `api/groups/find?${reqUri}`;
     try {
       return await AxiosClient.get(url);
     } catch (error) {
@@ -52,7 +51,7 @@ export default class GroupApi {
 
     let response;
     try {
-      response = await AxiosClient.post(`${API_URL}api/groups/import`, data, config);
+      response = await AxiosClient.post(`api/groups/import`, data, config);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -62,9 +61,7 @@ export default class GroupApi {
 
   static async addDetail(id, data, type) {
     const url =
-      type === roleMemberEnum.mentee
-        ? `${API_URL}api/groups/${id}/mentees`
-        : `${API_URL}api/groups/${id}/mentors`;
+      type === roleMemberEnum.mentee ? `api/groups/${id}/mentees` : `api/groups/${id}/mentors`;
     try {
       return await AxiosClient.post(url, data);
     } catch (error) {
@@ -75,8 +72,8 @@ export default class GroupApi {
   static async deleteDetail(id, idUser, type) {
     const url =
       type === roleMemberEnum.mentee
-        ? `${API_URL}api/groups/${id}/mentees/${idUser}`
-        : `${API_URL}api/groups/${id}/mentors/${idUser}`;
+        ? `api/groups/${id}/mentees/${idUser}`
+        : `api/groups/${id}/mentors/${idUser}`;
     try {
       return await AxiosClient.delete(url);
     } catch (error) {
@@ -85,7 +82,7 @@ export default class GroupApi {
   }
 
   static async promoteToMentor(id, idUser) {
-    const url = `${API_URL}api/groups/${id}/mentors/${idUser}`;
+    const url = `api/groups/${id}/mentors/${idUser}`;
     try {
       return await AxiosClient.patch(url);
     } catch (error) {
@@ -94,7 +91,7 @@ export default class GroupApi {
   }
 
   static async demoteToMentee(id, idUser) {
-    const url = `${API_URL}api/groups/${id}/mentees/${idUser}`;
+    const url = `api/groups/${id}/mentees/${idUser}`;
     try {
       return await AxiosClient.patch(url);
     } catch (error) {
@@ -104,7 +101,7 @@ export default class GroupApi {
 
   static async update(id, data) {
     try {
-      return await AxiosClient.patch(`${API_URL}api/groups/${id}`, data);
+      return await AxiosClient.patch(`api/groups/${id}`, data);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -112,7 +109,7 @@ export default class GroupApi {
 
   static async delete(id) {
     try {
-      return await AxiosClient.delete(`${API_URL}api/groups/${id}`);
+      return await AxiosClient.delete(`api/groups/${id}`);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -120,7 +117,7 @@ export default class GroupApi {
 
   static async getTemplate() {
     try {
-      const response = await AxiosClient.get(`${API_URL}api/groups/import`, {
+      const response = await AxiosClient.get(`api/groups/import`, {
         responseType: "blob"
       });
 
@@ -132,7 +129,7 @@ export default class GroupApi {
 
   static async deleteMultiple(req) {
     try {
-      const response = await AxiosClient.delete(`${API_URL}api/groups`, { data: req });
+      const response = await AxiosClient.delete(`api/groups`, { data: req });
       return response;
     } catch (error) {
       throw new Error(error.message);
@@ -141,7 +138,7 @@ export default class GroupApi {
 
   static async disableGroup(req) {
     try {
-      const response = await AxiosClient.patch(`${API_URL}api/groups/disable`, req);
+      const response = await AxiosClient.patch(`api/groups/disable`, req);
       return response;
     } catch (error) {
       throw new Error(error.message);
@@ -150,7 +147,7 @@ export default class GroupApi {
 
   static async enableGroup(req) {
     try {
-      const response = await AxiosClient.patch(`${API_URL}api/groups/enable`, req);
+      const response = await AxiosClient.patch(`api/groups/enable`, req);
       return response;
     } catch (error) {
       throw new Error(error.message);
@@ -160,7 +157,7 @@ export default class GroupApi {
   static async exportGroup(req) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/groups/export?${reqUri}`, {
+      return await AxiosClient.get(`api/groups/export?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {
@@ -171,7 +168,7 @@ export default class GroupApi {
   static async exportGroupMentee(id, req) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/groups/${id}/mentees/export?${reqUri}`, {
+      return await AxiosClient.get(`api/groups/${id}/mentees/export?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {
@@ -182,7 +179,7 @@ export default class GroupApi {
   static async exportGroupMentor(id, req) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/groups/${id}/mentors/export?${reqUri}`, {
+      return await AxiosClient.get(`api/groups/${id}/mentors/export?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {
@@ -193,7 +190,7 @@ export default class GroupApi {
   static async exportGroupSearch(req) {
     const reqUri = makeRequestSearch(req);
     try {
-      return await AxiosClient.get(`${API_URL}api/groups/export/search?${reqUri}`, {
+      return await AxiosClient.get(`api/groups/export/search?${reqUri}`, {
         responseType: "blob"
       });
     } catch (error) {
