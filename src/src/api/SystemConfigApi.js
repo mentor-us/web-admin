@@ -1,19 +1,14 @@
 import AxiosClient from "./AxiosClient";
+import ErrorWrapper from "./ErrorWrapper";
 
-export default class SystemConfigApi {
-  static async getAll() {
-    try {
-      return await AxiosClient.get(`api/system-config/all`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+const SystemConfigApi = {
+  getAll() {
+    return AxiosClient.get(`api/system-config/all`);
+  },
 
-  static async update(id, data) {
-    try {
-      return await AxiosClient.patch(`api/system-config/${id}`, data);
-    } catch (error) {
-      throw new Error(error.message);
-    }
+  update(id, data) {
+    return AxiosClient.patch(`api/system-config/${id}`, data);
   }
-}
+};
+
+export default ErrorWrapper(SystemConfigApi);
