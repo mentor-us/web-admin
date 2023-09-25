@@ -1,7 +1,7 @@
 const wrapperFunction = (fn) => {
-  return async (...args) => {
+  return async function _dummyFunc(...args) {
     try {
-      const result = fn.apply(this, args);
+      const result = await fn.apply(this, args);
       return result;
     } catch (ex) {
       throw new Error(ex.message);
