@@ -3,30 +3,18 @@ import AxiosClient from "./AxiosClient";
 import ErrorWrapper from "./ErrorWrapper";
 
 const UserApi = {
-  async findById(userId) {
-    let user = {};
-    const response = await AxiosClient.get(`api/users/${userId}`);
-    user = response.data;
-    return user;
+  findById(userId) {
+    return AxiosClient.get(`api/users/${userId}`).then((response) => response.data);
   },
 
-  async findByIds(userIds) {
-    const response = await Promise.all(
-      userIds.map(async (userId) => {
-        const user = await this.findById(userId);
-        return user;
-      })
-    );
-    return response.filter((x) => !!x);
+  findByIds(userIds) {
+    return Promise.all(userIds.map(this.findById)).then((res) => res.filter(Boolean));
   },
 
-  async getAllUser() {
-    let userList = [];
-    const response = await AxiosClient.get(`api/users/all`);
-    if (response.success) {
-      userList = response.data;
-    }
-    return userList;
+  getAllUser() {
+    return AxiosClient.get(`api/users/all`).then((response) => {
+      return response.success ? response.data : [];
+    });
   },
 
   getAllUserPaging(req) {
@@ -47,14 +35,12 @@ const UserApi = {
     return AxiosClient.patch(`api/users/disable`, req);
   },
 
-  async enableAccount(req) {
+  enableAccount(req) {
     return AxiosClient.patch(`api/users/enable`, req);
   },
 
   search(req) {
-    const reqUri = makeRequestSearch(req);
-
-    return AxiosClient.get(`api/users/find?${reqUri}`);
+    return AxiosClient.get(`api/users/find?${makeRequestSearch(req)}`);
   },
 
   update(id, data) {
@@ -74,38 +60,30 @@ const UserApi = {
   },
 
   exportAccount(req) {
-    const reqUri = makeRequestSearch(req);
-
-    return AxiosClient.get(`api/users/export?${reqUri}`, {
+    return AxiosClient.get(`api/users/export?${makeRequestSearch(req)}`, {
       responseType: "blob"
     });
   },
 
   exportAccountSearch(req) {
-    const reqUri = makeRequestSearch(req);
-
-    return AxiosClient.get(`api/users/export/search?${reqUri}`, {
+    return AxiosClient.get(`api/users/export/search?${makeRequestSearch(req)}`, {
       responseType: "blob"
     });
   },
 
   exportAccountMentee(id, req) {
-    const reqUri = makeRequestSearch(req);
-
-    return AxiosClient.get(`api/users/${id}/menteeGroups/export?${reqUri}`, {
+    return AxiosClient.get(`api/users/${id}/menteeGroups/export?${makeRequestSearch(req)}`, {
       responseType: "blob"
     });
   },
 
   exportAccountMentor(id, req) {
-    const reqUri = makeRequestSearch(req);
-
-    return AxiosClient.get(`api/users/${id}/mentorGroups/export?${reqUri}`, {
+    return AxiosClient.get(`api/users/${id}/mentorGroups/export?${makeRequestSearch(req)}`, {
       responseType: "blob"
     });
   },
 
-  async importAccount(file) {
+  importAccount(file) {
     const data = new FormData();
     data.append("file", file);
     const config = {
