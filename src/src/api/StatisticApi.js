@@ -1,25 +1,13 @@
 import { makeRequestSearch } from "utils";
 import AxiosClient from "./AxiosClient";
+import ErrorWrapper from "./ErrorWrapper";
 
-export default class StatisticApi {
-  static async getGeneral(req) {
-    if (req !== "" || req !== null) {
-      const reqUri = makeRequestSearch(req);
-      try {
-        return await AxiosClient.get(`api/analytic?${reqUri}`);
-      } catch (error) {
-        throw new Error(error.message);
-      }
-    } else {
-      try {
-        return await AxiosClient.get(`api/analytic?`);
-      } catch (error) {
-        throw new Error(error.message);
-      }
-    }
-  }
+const StatisticApi = {
+  getGeneral(req) {
+    return AxiosClient.get(`api/analytic?${req ? makeRequestSearch(req) : ""}`);
+  },
 
-  // static async getGeneralByGroupCategory(req) {
+  // async getGeneralByGroupCategory(req) {
   //   const reqUri = makeRequestSearch(req);
   //   try {
   //     return await AxiosClient.get(`api/analytic?${reqUri}`);
@@ -28,27 +16,16 @@ export default class StatisticApi {
   //   }
   // }
 
-  static async getByMonth(req) {
-    const reqUri = makeRequestSearch(req);
+  getByMonth(req) {
+    return AxiosClient.get(`api/analytic/chart?${makeRequestSearch(req)}`);
+  },
 
-    try {
-      return await AxiosClient.get(`api/analytic/chart?${reqUri}`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async getGroupsStatisticTableData(req) {
+  getGroupsStatisticTableData(req) {
     const { page, pageSize } = req;
-    try {
-      return await AxiosClient.get(`api/analytic/groups?page=${page}&pageSize=${pageSize}`);
-      // return await AxiosClient.get(`api/analytic/groups?page=${page}&pageSize=${size}`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+    return AxiosClient.get(`api/analytic/groups?page=${page}&pageSize=${pageSize}`);
+  },
 
-  // static async filterGroupsStatisticTableData(req) {
+  // async filterGroupsStatisticTableData(req) {
   //   const { page, pageSize } = req;
   //   try {
   //     return await AxiosClient.get(`api/analytic/find?`);
@@ -58,23 +35,15 @@ export default class StatisticApi {
   //   }
   // }
 
-  static async findById(groupID) {
-    try {
-      return await AxiosClient.get(`api/analytic/${groupID}`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  findById(groupID) {
+    return AxiosClient.get(`api/analytic/${groupID}`);
+  },
 
-  static async updateUserStatistic(userID, req) {
-    try {
-      return await AxiosClient.patch(`api/analytic/${userID}`, req);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  updateUserStatistic(userID, req) {
+    return AxiosClient.patch(`api/analytic/${userID}`, req);
+  },
 
-  static async importGeneral(file) {
+  importGeneral(file) {
     const data = new FormData();
     data.append("file", file);
     const config = {
@@ -83,14 +52,10 @@ export default class StatisticApi {
       }
     };
 
-    try {
-      return await AxiosClient.post(`api/analytic/import-multiple`, data, config);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+    return AxiosClient.post(`api/analytic/import-multiple`, data, config);
+  },
 
-  static async importTrainingPointFile(file) {
+  importTrainingPointFile(file) {
     const data = new FormData();
     data.append("file", file);
     const config = {
@@ -99,14 +64,10 @@ export default class StatisticApi {
       }
     };
 
-    try {
-      return await AxiosClient.post(`api/analytic/import-training-point`, data, config);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+    return AxiosClient.post(`api/analytic/import-training-point`, data, config);
+  },
 
-  static async importStudyingPointFile(file) {
+  importStudyingPointFile(file) {
     const data = new FormData();
     data.append("file", file);
     const config = {
@@ -115,14 +76,10 @@ export default class StatisticApi {
       }
     };
 
-    try {
-      return await AxiosClient.post(`api/analytic/import-studying-point`, data, config);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+    return AxiosClient.post(`api/analytic/import-studying-point`, data, config);
+  },
 
-  static async importEnglishCertFile(file) {
+  importEnglishCertFile(file) {
     const data = new FormData();
     data.append("file", file);
     const config = {
@@ -131,97 +88,52 @@ export default class StatisticApi {
       }
     };
 
-    try {
-      return await AxiosClient.post(`api/analytic/import-has-english-cert`, data, config);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+    return AxiosClient.post(`api/analytic/import-has-english-cert`, data, config);
+  },
 
-  static async search(req) {
-    const reqUri = makeRequestSearch(req);
+  search(req) {
+    return AxiosClient.get(`api/analytic/find?${makeRequestSearch(req)}`);
+  },
 
-    const url = `api/analytic/find?${reqUri}`;
-    try {
-      return await AxiosClient.get(url);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  searchDetail(groupID, req) {
+    return AxiosClient.get(`api/analytic/find/${groupID}?${makeRequestSearch(req)}`);
+  },
 
-  static async searchDetail(groupID, req) {
-    const reqUri = makeRequestSearch(req);
-    const url = `api/analytic/find/${groupID}?${reqUri}`;
-    try {
-      return await AxiosClient.get(url);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  exportLog(req) {
+    return AxiosClient.get(`api/analytic/log?${makeRequestSearch(req)}`, {
+      responseType: "blob"
+    });
+  },
 
-  static async exportLog(req) {
-    const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`api/analytic/log?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  exportStatistic(req) {
+    return AxiosClient.get(`api/analytic/report?${makeRequestSearch(req)}`, {
+      responseType: "blob"
+    });
+  },
 
-  static async exportStatistic(req) {
-    const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`api/analytic/report?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  exportGroupStatistic(req) {
+    return AxiosClient.get(`api/analytic/groups/export?${makeRequestSearch(req)}`, {
+      responseType: "blob"
+    });
+  },
 
-  static async exportGroupStatistic(req) {
-    const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`api/analytic/groups/export?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  exportGroupStatisticSearch(req) {
+    return AxiosClient.get(`api/analytic/groups/export/search?${makeRequestSearch(req)}`, {
+      responseType: "blob"
+    });
+  },
 
-  static async exportGroupStatisticSearch(req) {
-    const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`api/analytic/groups/export/search?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  exportGroupStatisticDetail(req, groupID) {
+    return AxiosClient.get(`api/analytic/${groupID}/export?${makeRequestSearch(req)}`, {
+      responseType: "blob"
+    });
+  },
 
-  static async exportGroupStatisticDetail(req, groupID) {
-    const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`api/analytic/${groupID}/export?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
+  exportGroupStatisticDetailSearch(req, groupID) {
+    return AxiosClient.get(`api/analytic/${groupID}/export/search?${makeRequestSearch(req)}`, {
+      responseType: "blob"
+    });
   }
+};
 
-  static async exportGroupStatisticDetailSearch(req, groupID) {
-    const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`api/analytic/${groupID}/export/search?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-}
+export default ErrorWrapper(StatisticApi);
