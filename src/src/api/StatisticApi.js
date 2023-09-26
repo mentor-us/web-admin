@@ -1,6 +1,5 @@
 import { makeRequestSearch } from "utils";
 import AxiosClient from "./AxiosClient";
-import ErrorWrapper from "./ErrorWrapper";
 
 const StatisticApi = {
   getGeneral(req) {
@@ -136,4 +135,4 @@ const StatisticApi = {
   }
 };
 
-export default ErrorWrapper(StatisticApi);
+export default StatisticApi;

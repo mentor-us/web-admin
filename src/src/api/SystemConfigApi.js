@@ -1,5 +1,4 @@
 import AxiosClient from "./AxiosClient";
-import ErrorWrapper from "./ErrorWrapper";
 
 const SystemConfigApi = {
   getAll() {
@@ -11,4 +10,4 @@ const SystemConfigApi = {
   }
 };
 
-export default ErrorWrapper(SystemConfigApi);
+export default SystemConfigApi;

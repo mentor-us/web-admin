@@ -2,7 +2,6 @@ import { roleMemberEnum } from "utils/constants";
 import { makeRequestSearch } from "utils";
 
 import AxiosClient from "./AxiosClient";
-import ErrorWrapper from "./ErrorWrapper";
 
 const GroupApi = {
   all(req) {
@@ -106,4 +105,4 @@ const GroupApi = {
   }
 };
 
-export default ErrorWrapper(GroupApi);
+export default GroupApi;
