@@ -2,8 +2,8 @@ import ClientError from "errors/ClientError";
 import ServerError from "errors/ServerError";
 
 /**
- * This function wrap async/await function with try catch block
- *
+ * This function wrap function with try catch block
+ * to throw specific error
  * @param {function(...args) : Promise<any> | any} fn
  * @returns {function(...args) : Promise<any>}
  */
@@ -20,7 +20,7 @@ const wrapperFunction = (fn) => {
 };
 
 /**
- * Wrap all function in object with try catch block
+ * Wrap all function in object with new function
  * Don't need to wrap function in object manually
  * @param {object} object
  * @returns {object}
