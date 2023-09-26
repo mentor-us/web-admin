@@ -1,62 +1,44 @@
-export default function getMessage(returnCode, data) {
-  switch (returnCode) {
-    case 100:
-      return "Bạn không có quyền thực hiện chức năng này!";
-    case 104:
-      return "Tài khoản không tồn tại!";
-    case 107:
-      return "Tài khoản đã tồn tại!";
-    case 111:
-      return "Vui lòng điền đầy đủ thông tin bắt buộc!";
-    case 204:
-      return "Nhóm không tồn tại!";
-    case 207:
-      return "Tên nhóm đã tồn tại!";
-    case 208:
-      return "Loại nhóm không tồn tại!";
-    case 209:
-      return "Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc!";
-    case 210:
-      return `Không được nhập trùng email ${data}!`;
-    case 211:
-      return "Vui lòng điền đầy đủ thông tin!";
-    case 213:
-      return "Không tìm thấy mentee này trong nhóm!";
-    case 214:
-      return "Không tìm thấy mentor này trong nhóm!";
-    case 215:
-      return "Thời gian kết thúc quá xa so với thời gian bắt đầu!";
-    case 216:
-      return "Thời gian bắt đầu quá xa so với thời điểm hiện tại!";
-    case 217:
-      return "Thời gian kết thúc phải lớn hơn thời điểm hiện tại!";
-    case 218:
-      return "Email không hợp lệ!";
-    case 219:
-      return "Email có phần đuôi không hợp lệ!";
-    case 220:
-      return "Vai trò không hợp lệ!";
-    case 221:
-      return "Tập tin import không hợp lệ!";
-    case 401:
-      return "401"; // dùng để trả ra thông báo token hết hạn đã config từ interceptor
-    case 404:
-      return "Không tìm thấy loại nhóm!";
-    case 407:
-      return "Loại nhóm đã tồn tại!";
-    case 701:
-      return "Tài khoản này không có quyền admin của hệ thống. Vui lòng đăng nhập tài khoản khác!";
-    case 704:
-      return "Tài khoản không tồn tại. Vui lòng đăng nhập tài khoản khác!";
-    case 705:
-      return "Tài khoản đã bị khóa. Vui lòng đăng nhập tài khoản khác!";
-    case 706:
-      return "Tài khoản không thuộc Google hoặc Microsoft. Vui lòng đăng nhập tài khoản khác!";
-    case 903:
-      return `Không tìm thấy thành viên ${data}!`;
-    case 904:
-      return `Dữ liệu cập nhật của thành viên ${data} không hợp lệ. Vui lòng kiểm tra lại!`;
-    default:
-      return "Có lỗi trong quá trình xử lý. Vui lòng thực hiện lại!";
-  }
+if (!String.format) {
+  String.format = function format(str, ...args) {
+    return str.replace(/{(\d+)}/g, function replace(match, number) {
+      return typeof args[number] !== "undefined" ? args[number] : match;
+    });
+  };
+}
+
+const messages = {
+  100: "Bạn không có quyền thực hiện chức năng này!",
+  104: "Tài khoản không tồn tại!",
+  107: "Tài khoản đã tồn tại!",
+  111: "Vui lòng điền đầy đủ thông tin bắt buộc!",
+  204: "Nhóm không tồn tại!",
+  207: "Tên nhóm đã tồn tại!",
+  208: "Loại nhóm không tồn tại!",
+  209: "Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc!",
+  210: "Không được nhập trùng email {0}!",
+  211: "Vui lòng điền đầy đủ thông tin!",
+  213: "Không tìm thấy mentee này trong nhóm!",
+  214: "Không tìm thấy mentor này trong nhóm!",
+  215: "Thời gian kết thúc quá xa so với thời gian bắt đầu!",
+  216: "Thời gian bắt đầu quá xa so với thời điểm hiện tại!",
+  217: "Thời gian kết thúc phải lớn hơn thời điểm hiện tại!",
+  218: "Email không hợp lệ!",
+  219: "Email có phần đuôi không hợp lệ!",
+  220: "Vai trò không hợp lệ!",
+  221: "Tập tin import không hợp lệ!",
+  401: "401", // dùng để trả ra thông báo token hết hạn đã config từ interceptor
+  404: "Không tìm thấy loại nhóm!",
+  407: "Loại nhóm đã tồn tại!",
+  701: "Tài khoản này không có quyền admin của hệ thống. Vui lòng đăng nhập tài khoản khác!",
+  704: "Tài khoản không tồn tại. Vui lòng đăng nhập tài khoản khác!",
+  705: "Tài khoản đã bị khóa. Vui lòng đăng nhập tài khoản khác!",
+  706: "Tài khoản không thuộc Google hoặc Microsoft. Vui lòng đăng nhập tài khoản khác!",
+  903: "Không tìm thấy thành viên {0}!",
+  904: "Dữ liệu cập nhật của thành viên {0} không hợp lệ. Vui lòng kiểm tra lại!"
+};
+
+export default function getMessage(code, data) {
+  return messages[code]
+    ? String.format(messages[code], data)
+    : "Có lỗi trong quá trình xử lý. Vui lòng thực hiện lại!";
 }
