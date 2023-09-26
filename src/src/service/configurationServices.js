@@ -1,39 +1,33 @@
 import SystemConfigApi from "api/SystemConfigApi";
-import getMessage from "utils/message";
+import ServerError from "errors/ServerError";
+import ErrorWrapper from "./ErrorServiceWrapper";
 
 const getAllConfiguration = async () => {
-  try {
-    const response = await SystemConfigApi.getAll();
-    const result = {
-      fromToRange: {},
-      emailDomainsValid: {}
-    };
+  const response = await SystemConfigApi.getAll();
+  const result = {
+    fromToRange: {},
+    emailDomainsValid: {}
+  };
 
-    response.data.forEach((element) => {
-      if (element.key === "valid_domain") {
-        result.emailDomainsValid = element;
-      } else if (element.key === "valid_max_year") {
-        result.fromToRange = element;
-      }
-    });
+  response.data.forEach((element) => {
+    if (element.key === "valid_domain") {
+      result.emailDomainsValid = element;
+    } else if (element.key === "valid_max_year") {
+      result.fromToRange = element;
+    }
+  });
 
-    return result;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
+  return result;
 };
 
 const updateConfiguration = async (id, req) => {
-  try {
-    const response = await SystemConfigApi.update(id, req);
-    if (response.returnCode === 200) {
-      return response.data;
-    }
+  const response = await SystemConfigApi.update(id, req);
 
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const configurationServices = {
@@ -41,4 +35,4 @@ const configurationServices = {
   updateConfiguration
 };
 
-export default configurationServices;
+export default ErrorWrapper(configurationServices);

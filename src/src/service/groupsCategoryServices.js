@@ -1,108 +1,64 @@
 import GroupCategoryApi from "api/GroupCategoryApi";
-import getMessage from "utils/message";
+import { ServerError } from "errors";
+import ErrorWrapper from "./ErrorServiceWrapper";
 
-const getAllCategories = async () => {
-  try {
-    const response = await GroupCategoryApi.all();
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const getAllCategories = () => GroupCategoryApi.all();
 
 const addNewCategory = async (req) => {
-  try {
-    const response = await GroupCategoryApi.add(req);
+  const response = await GroupCategoryApi.add(req);
 
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const editCategory = async (id, req) => {
-  try {
-    const response = await GroupCategoryApi.update(id, req);
-    if (response.returnCode === 200) {
-      return response.data;
-    }
+  const response = await GroupCategoryApi.update(id, req);
 
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const deleteCategory = async (id, req) => {
-  try {
-    const response = await GroupCategoryApi.delete(id, req);
+  const response = await GroupCategoryApi.delete(id, req);
 
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const deleteMultipleCategories = async (req) => {
-  try {
-    const response = await GroupCategoryApi.deleteMultiple(req);
-    if (response.returnCode === 200) {
-      return response.data;
-    }
+  const response = await GroupCategoryApi.deleteMultiple(req);
 
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const searchCategory = async (req) => {
-  try {
-    const response = await GroupCategoryApi.search(req);
-    if (response.returnCode === 200) {
-      return response.data;
-    }
+  const response = await GroupCategoryApi.search(req);
 
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
-const exportGroupCategory = async (req) => {
-  try {
-    const response = await GroupCategoryApi.exportGroupCategory(req);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const exportGroupCategory = (req) => GroupCategoryApi.exportGroupCategory(req);
 
-const getPermissions = async (req) => {
-  try {
-    const response = await GroupCategoryApi.getPermissions(req);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const getPermissions = (req) => GroupCategoryApi.getPermissions(req);
 
-const exportGroupCategorySearch = async (req) => {
-  try {
-    const response = await GroupCategoryApi.exportGroupCategorySearch(req);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const exportGroupCategorySearch = (req) => GroupCategoryApi.exportGroupCategorySearch(req);
 
 const groupsCategoryServices = {
   getAllCategories,
@@ -115,4 +71,5 @@ const groupsCategoryServices = {
   getPermissions,
   exportGroupCategorySearch
 };
-export default groupsCategoryServices;
+
+export default ErrorWrapper(groupsCategoryServices);
