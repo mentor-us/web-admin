@@ -1,4 +1,4 @@
-import getMessage from "utils/message";
+import getMessage from "./message";
 
 class ClientError extends Error {
   constructor(clientErrorCode, data) {
