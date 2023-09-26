@@ -1,21 +1,22 @@
 import { ErrorAlert } from "components/SweetAlert";
+import { ServerError } from "errors";
 import { Navigate, useLocation } from "react-router-dom";
-import getMessage from "utils/message";
 
 function Auth() {
   const { search } = useLocation();
-  const tokenValue = new URLSearchParams(search).get("token");
-  const errorCodeValue = new URLSearchParams(search).get("error");
 
+  // If token is existed, save it to local storage and redirect to groups page
+  const tokenValue = new URLSearchParams(search).get("token");
   if (tokenValue) {
     localStorage.setItem("access_token", tokenValue);
     return <Navigate to="/groups" replace />;
   }
 
-  if (errorCodeValue) {
-    ErrorAlert(getMessage(parseInt(errorCodeValue, 10)));
-    return <Navigate to="/sign-in" replace />;
-  }
+  // If error occur on server, show error alert and redirect to sign in page
+  const errorCodeValue = new URLSearchParams(search).get("error");
+  const serverError = new ServerError(errorCodeValue);
+  ErrorAlert(serverError.message);
+  return <Navigate to="/sign-in" replace />;
 }
 
 export default Auth;
