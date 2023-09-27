@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - feature/MU-23-setup-cicd-web-admin
     paths:
       - src
       - .github/workflows/build-and-deploy-dev.yml

@@ -1,9 +1,8 @@
 # mentorus-web-admin
 
-| Development | Production |
-| ----------- | ---------- |
-
-| | |
+| Development                                                                                                                                                                                                                         | Production |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| [![Build and deploy development](https://github.com/hieucckha/mentorus-web-admin/actions/workflows/build-and-deploy-dev.yml/badge.svg)](https://github.com/hieucckha/mentorus-web-admin/actions/workflows/build-and-deploy-dev.yml) |            |
 
 ## Description
 
