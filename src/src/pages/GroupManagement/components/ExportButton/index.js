@@ -12,13 +12,13 @@ import {
   getIsSearchGroupSelector
 } from "redux/groups/selector";
 
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { formatDateExcel } from "utils/formatDate";
 import groupsServices from "service/groupsServices";
 
 function ExportButton({ isDisabled }) {
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const columnsHeaders = useSelector(getGroupColumnHeadersSelector);
   const searchRequest = useSelector(getGroupSearchRequestSelector);
   const isSearch = useSelector(getIsSearchGroupSelector);

@@ -8,14 +8,14 @@ import { SuccessAlert, ErrorAlert } from "components/SweetAlert";
 
 import { getAccountColumnHeadersSelector } from "redux/accounts/selector";
 
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { formatDateExcel } from "utils/formatDate";
 import { roleMemberEnum } from "utils/constants";
 import accountServices from "service/accountServices";
 
 function ExportButton({ type, userId, isDisabled }) {
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const columnsHeaders = useSelector(getAccountColumnHeadersSelector);
 
   const exportExcel = async (req) => {

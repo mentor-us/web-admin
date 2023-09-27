@@ -13,12 +13,13 @@ import { getCurrentUserSelector } from "redux/currentUser/selector";
 
 import { SuccessAlert, ErrorAlert, WarningAlertConfirm } from "components/SweetAlert";
 
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 
 function DisableAccountButton({ data, setState, typeButton, isInDetail, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------
 
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const dispatch = useDispatch();
 
   const currentUser = useSelector(getCurrentUserSelector);

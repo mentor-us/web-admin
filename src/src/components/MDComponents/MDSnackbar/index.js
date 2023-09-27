@@ -16,10 +16,10 @@ import MDTypography from "components/MDComponents/MDTypography";
 import MDSnackbarIconRoot from "components/MDComponents/MDSnackbar/MDSnackbarIconRoot";
 
 // Material Dashboard 2 React context
-import { useMaterialUIController } from "context/index";
+import { useMentorUs } from "hooks";
 
 function MDSnackbar({ color, icon, title, dateTime, content, close, bgWhite, ...rest }) {
-  const [controller] = useMaterialUIController();
+  const [controller] = useMentorUs();
   const { darkMode } = controller;
 
   let titleColor;

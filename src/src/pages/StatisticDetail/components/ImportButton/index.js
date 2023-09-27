@@ -17,19 +17,20 @@ import {
   importStudyingPointFileDetail,
   importEnglishCertFileDetail
 } from "redux/statisticDetail/slice";
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
 
 import excel from "assets/images/excel.png";
 import update from "assets/images/update-statistic.png";
 import point from "assets/images/point.png";
 import activity from "assets/images/activity.png";
 import certificate from "assets/images/certificate.png";
+import { useMentorUs } from "hooks";
 
 function ImportStatisticPointButton({ templateFileName, template, typeImport, setState }) {
   /// --------------------- Khai báo Biến, State -------------
 
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
   const [firstLoad, setFirstLoad] = useState(true);

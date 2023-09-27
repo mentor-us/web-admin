@@ -12,12 +12,13 @@ import { enableAccountDetail } from "redux/accountDetail/slice";
 
 import { SuccessAlert, ErrorAlert } from "components/SweetAlert";
 
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 
 function EnableAccountButton({ data, setState, typeButton, isInDetail, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------
 
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const dispatch = useDispatch();
 
   /// --------------------------------------------------------

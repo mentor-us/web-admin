@@ -11,12 +11,13 @@ import MDBox from "components/MDComponents/MDBox";
 // import { getAllUser } from "redux/accounts/slice";
 
 // Material Dashboard 2 React context
-import { useMaterialUIController, setLayout, setLoading } from "context";
+import { setLayout, setLoading } from "context";
+import { useMentorUs } from "hooks";
 import Loading from "components/Loading";
 import Footer from "layouts/Footer";
 
 function DashboardLayout({ children }) {
-  const [controller, dispatchContext] = useMaterialUIController();
+  const [controller, dispatchContext] = useMentorUs();
   const { miniSidenav, loading } = controller;
   const { pathname } = useLocation();
 

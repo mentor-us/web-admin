@@ -16,12 +16,8 @@ import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 
 // Material Dashboard 2 React example components
-import {
-  useMaterialUIController,
-  setMiniSidenav,
-  setTransparentSidenav,
-  setWhiteSidenav
-} from "context/index";
+import { setMiniSidenav, setTransparentSidenav, setWhiteSidenav } from "context/index";
+import { useMentorUs } from "hooks";
 import SidenavCollapse from "./SidenavCollapse";
 
 // Custom styles for the Sidenav
@@ -32,7 +28,7 @@ import SlideNavCollapseList from "./components/SlidenavCollapseList";
 // Material Dashboard 2 React context
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
-  const [controller, dispatchContext] = useMaterialUIController();
+  const [controller, dispatchContext] = useMentorUs();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode } = controller;
   const location = useLocation();
   const collapseName = location.pathname.split("/");

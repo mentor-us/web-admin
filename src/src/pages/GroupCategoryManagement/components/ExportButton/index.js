@@ -12,13 +12,13 @@ import {
   getIsSearchCategorySelector
 } from "redux/groupsCategory/selector";
 
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { formatDateExcel } from "utils/formatDate";
 import groupsCategoryServices from "service/groupsCategoryServices";
 
 function ExportButton({ isDisabled }) {
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const columnsHeaders = useSelector(getCategoryColumnHeadersSelector);
   const isSearch = useSelector(getIsSearchCategorySelector);
   const searchRequest = useSelector(getCategorySearchRequestSelector);

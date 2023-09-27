@@ -11,14 +11,15 @@ import TooltipCustom from "components/Tooltip";
 
 import { SuccessAlert, ErrorAlert, WarningAlertConfirm } from "components/SweetAlert";
 
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { disableGroup } from "redux/groups/slice";
 import { disableGroupDetail } from "redux/groupDetail/slice";
 
 function DisableGroupButton({ data, setState, typeButton, isInDetail, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------
 
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const dispatch = useDispatch();
 
   /// --------------------------------------------------------

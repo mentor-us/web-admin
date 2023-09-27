@@ -27,7 +27,8 @@ import { getFromToRangeSelector } from "redux/configuration/selector";
 
 import { addNewGroup } from "redux/groups/slice";
 
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import ImportEmailButton from "pages/GroupDetail/components/ImportEmailButton";
 import { getAnotherDateFromToday } from "utils/formatDate";
 import groupsServices from "service/groupsServices";
@@ -37,7 +38,7 @@ function AddModalButton() {
   /// --------------------- Khai báo Biến, State -------------
 
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const listCategories = useSelector(allCategoriesSelector);
   const userData = useSelector(getAccountsTableSelector);
   const fromToRange = useSelector(getFromToRangeSelector);

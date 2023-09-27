@@ -13,14 +13,15 @@ import { getAllConfiguration } from "redux/configuration/slice";
 
 import { isExpiredToken } from "utils";
 
-import { useMaterialUIController, setOpenConfigurator } from "context/index";
+import { setOpenConfigurator } from "context/index";
+import { useMentorUs } from "hooks";
 import ConfiguratorRoot from "./ConfiguratorRoot";
 
 import "./styles.css";
 import EditConfiguratorButton from "./EditConfiguratorButton";
 
 function Configurator() {
-  const [controller, dispatchContext] = useMaterialUIController();
+  const [controller, dispatchContext] = useMentorUs();
   const { openConfigurator } = controller;
   const dispatch = useDispatch();
   const fromToRange = useSelector(getFromToRangeSelector);

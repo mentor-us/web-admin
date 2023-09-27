@@ -10,14 +10,15 @@ import { SuccessAlert, ErrorAlert, WarningAlertConfirm } from "components/SweetA
 import TooltipCustom from "components/Tooltip";
 
 import { deleteGroup, deleteMultipleGroups } from "redux/groups/slice";
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 
 function DeleteGroupButton({ data, setState, typeButton, redirectURL, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
 
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------

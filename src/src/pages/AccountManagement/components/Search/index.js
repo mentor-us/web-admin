@@ -16,8 +16,8 @@ import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert } from "components/SweetAlert";
 
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { searchAccount, searchByButton, updateSearchRequest } from "redux/accounts/slice";
 import {
   getIsSearchAccountSelector,
@@ -34,7 +34,7 @@ function SearchBox() {
 
   const dispatch = useDispatch();
   const isSearch = useSelector(getIsSearchAccountSelector);
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState(null);

@@ -8,14 +8,15 @@ import MDTypography from "components/MDComponents/MDTypography";
 import MDBox from "components/MDComponents/MDBox";
 import { WarningAlertConfirm, ErrorAlert } from "components/SweetAlert";
 
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
 import { setRoleMember } from "redux/groupDetail/slice";
+import { useMentorUs } from "hooks";
 
 function SetRoleButton({ type, data, setState }) {
   /// --------------------- Khai báo Biến, State -------------
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
 
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------

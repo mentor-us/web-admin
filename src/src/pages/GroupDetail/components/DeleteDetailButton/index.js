@@ -7,14 +7,15 @@ import MDTypography from "components/MDComponents/MDTypography";
 import MDBox from "components/MDComponents/MDBox";
 import { SuccessAlert, ErrorAlert, WarningAlertConfirm } from "components/SweetAlert";
 
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { deleteDetail } from "redux/groupDetail/slice";
 
 function DeleteDetailButton({ type, data, setState }) {
   /// --------------------- Khai báo Biến, State -------------
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
 
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------

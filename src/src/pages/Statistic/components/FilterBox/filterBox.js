@@ -6,8 +6,8 @@ import MDTypography from "components/MDComponents/MDTypography";
 
 import { getValueOfList } from "utils";
 import { useState } from "react";
-import { setLoading, useMaterialUIController } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { filterStatistic, updateFilterValue } from "redux/statistic/slice";
 import { ErrorAlert } from "components/SweetAlert";
 import { getStatisticItemsPerPageSelector } from "redux/statistic/selector";
@@ -17,7 +17,7 @@ function FilterBox() {
 
   const allCategories = [{ id: "", name: "Tất cả" }, ...listCategories];
   const [category, setCategory] = useState("Tất cả");
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const dispatch = useDispatch();
   const itemsPerPage = useSelector(getStatisticItemsPerPageSelector);
 

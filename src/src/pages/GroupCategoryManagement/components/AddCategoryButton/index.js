@@ -9,8 +9,8 @@ import MDInput from "components/MDComponents/MDInput";
 import MDAvatar from "components/MDComponents/MDAvatar";
 import AutoCompleteCheckbox from "components/AutoComplete/AutoCompleteCheckbox";
 
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { SuccessAlert, ErrorAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import { addNewCategory } from "redux/groupsCategory/slice";
 import { getCategoryPermissionsSelector } from "redux/groupsCategory/selector";
@@ -21,7 +21,7 @@ import IconSelectButton from "../IconSelectButton";
 function AddCategoryButton() {
   /// --------------------- Khai báo Biến, State -------------
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");

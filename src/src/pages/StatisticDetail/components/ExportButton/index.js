@@ -10,8 +10,8 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { SuccessAlert, ErrorAlert } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
 
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import statisticServices from "service/statisticService";
 import { formatDateExcel } from "utils/formatDate";
 
@@ -19,7 +19,7 @@ function ExportButton({ groupId }) {
   /// --------------------- Khai báo Biến, State -------------
 
   // const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
 
   const [meetingChecked, setMeetingChecked] = useState(true);

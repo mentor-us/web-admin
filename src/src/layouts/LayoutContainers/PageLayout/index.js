@@ -10,10 +10,11 @@ import PropTypes from "prop-types";
 import MDBox from "components/MDComponents/MDBox";
 
 // Material Dashboard 2 React context
-import { useMaterialUIController, setLayout } from "context";
+import { setLayout } from "context";
+import { useMentorUs } from "hooks";
 
 function PageLayout({ background, children }) {
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const { pathname } = useLocation();
 
   useEffect(() => {

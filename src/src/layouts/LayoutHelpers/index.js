@@ -8,12 +8,14 @@ import MDBox from "components/MDComponents/MDBox";
 import Sidenav from "layouts/Sidenav/index";
 import routes from "routes";
 
-import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context/index";
+import { setMiniSidenav, setOpenConfigurator } from "context/index";
+import { useMentorUs } from "hooks";
+
 // Images
 import logo from "assets/images/logo_mentorus.jpg";
 
 function LayoutHelper() {
-  const [controller, dispatchContext] = useMaterialUIController();
+  const [controller, dispatchContext] = useMentorUs();
   const { layout, miniSidenav, sidenavColor, openConfigurator } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
 

@@ -10,8 +10,8 @@ import MDInput from "components/MDComponents/MDInput";
 import MDAvatar from "components/MDComponents/MDAvatar";
 import AutoCompleteCheckbox from "components/AutoComplete/AutoCompleteCheckbox";
 
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { SuccessAlert, ErrorAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import { editCategory } from "redux/groupsCategory/slice";
 import { getCategoryPermissionsSelector } from "redux/groupsCategory/selector";
@@ -22,7 +22,7 @@ function EditCategoryButton({ data, setState }) {
   /// --------------------- Khai báo Biến, State -------------
 
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
   const permissions = useSelector(getCategoryPermissionsSelector);
   const defaultValue = {

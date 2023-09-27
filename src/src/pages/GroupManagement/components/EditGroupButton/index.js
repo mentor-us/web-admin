@@ -20,8 +20,8 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import BasicDatePicker from "components/DatePicker";
 import TooltipCustom from "components/Tooltip";
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 // import { groupStatusList } from "utils/constants";
 import { getGroupStatusList } from "utils";
 import { allCategoriesSelector } from "redux/groupsCategory/selector";
@@ -35,7 +35,7 @@ import groupsServices from "service/groupsServices";
 function EditGroupButton({ data, setState, typeButton, isInDetail }) {
   /// --------------------- Khai báo Biến, State -------------
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const listCategories = useSelector(allCategoriesSelector);
   const [open, setOpen] = useState(false);
   const today = new Date();

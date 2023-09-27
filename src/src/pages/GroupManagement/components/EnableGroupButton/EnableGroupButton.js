@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { useDispatch } from "react-redux";
 import { enableGroup } from "redux/groups/slice";
 import { SuccessAlert, ErrorAlert } from "components/SweetAlert";
@@ -14,7 +15,7 @@ import { enableGroupDetail } from "redux/groupDetail/slice";
 
 function EnableGroupButton({ data, setState, typeButton, isInDetail, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const dispatch = useDispatch();
 
   const changeStatus = async () => {

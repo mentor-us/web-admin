@@ -11,12 +11,13 @@ import { SuccessAlert, ErrorAlert, WarningAlertConfirm } from "components/SweetA
 
 import { deleteCategory, deleteMultipleCategories } from "redux/groupsCategory/slice";
 import { removeGroupWithRemovedCategory } from "redux/groups/slice";
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import DeleteOptions from "./DeleteOptions";
 
 function DeleteCategoryButton({ data, setState, typeButton, isMultiple }) {
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
   const [deleteValue, setDeleteValue] = useState({
     type: "option 1",

@@ -17,7 +17,8 @@ import MDTypography from "components/MDComponents/MDTypography";
 import BasicDatePicker from "components/DatePicker";
 import CustomCheckbox from "components/Checkbox";
 
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { allCategoriesSelector } from "redux/groupsCategory/selector";
 import { getIsSearchGroupSelector, getGroupItemsPerPageSelector } from "redux/groups/selector";
 import { searchGroup, updateSearchRequest, searchByButton } from "redux/groups/slice";
@@ -34,7 +35,7 @@ function SearchBox() {
 
   const isSearch = useSelector(getIsSearchGroupSelector);
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const listCategories = useSelector(allCategoriesSelector);
   const today = new Date();
   const [groupName, setGroupName] = useState("");

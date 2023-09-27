@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import PropTypes from "prop-types";
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
@@ -18,8 +16,6 @@ import {
   getStatisticSearchRequestSelector,
   getStatisticTotalItemsSearchSelector,
   getStatisticTotalPagesSearchSelector,
-  getIsFilterStatisticSelector,
-  getStatisticFilterRequestSelector,
   getAllStatisticSearchSelector,
   getStatisticFilterValueSelector,
   getStatisticColumnHeadersSelector
@@ -27,14 +23,11 @@ import {
 import {
   getGroupsStatisticTableData,
   groupItemsPerPageChange,
-  searchStatistic,
-  searchByButton,
-  resetState
+  searchStatistic
   // filterTableStatistic
 } from "redux/statistic/slice";
 
 import statisticTableData from "pages/Statistic/data/statisticTableData";
-import { setLoading, useMaterialUIController } from "context";
 import { Card, Grid } from "@mui/material";
 import SearchBox from "../Search";
 import {} from "redux/statisticDetail/selector";

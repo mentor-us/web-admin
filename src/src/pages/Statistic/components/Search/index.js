@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { ErrorAlert } from "components/SweetAlert";
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { useDispatch, useSelector } from "react-redux";
 // import { allCategoriesSelector } from "redux/groupsCategory/selector";
 import {
@@ -36,7 +37,7 @@ function SearchBox() {
   /// --------------------- Khai báo Biến, State -------------
   const today = new Date();
   const isSearch = useSelector(getIsSearchStatisticSelector);
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const dispatch = useDispatch();
   const [groupName, setGroupName] = useState("");
   const [status, setStatus] = useState(null);

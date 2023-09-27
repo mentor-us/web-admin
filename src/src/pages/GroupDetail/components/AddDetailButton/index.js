@@ -14,8 +14,8 @@ import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "comp
 import { getAccountsTableSelector } from "redux/accounts/selector";
 import { addMember } from "redux/groupDetail/slice";
 
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { roleMemberEnum } from "utils/constants";
 
 import ImportEmailButton from "../ImportEmailButton";
@@ -25,7 +25,7 @@ function AddDetailButton({ type, data }) {
 
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
   const [emails, setEmails] = useState([]);
   const [firstLoad, setFirstLoad] = useState({

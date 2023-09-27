@@ -19,7 +19,7 @@ import MDTypography from "components/MDComponents/MDTypography";
 import Breadcrumbs from "components/Breadcrumbs";
 import TooltipCustom from "components/Tooltip";
 
-import { useMaterialUIController, setTransparentNavbar, setMiniSidenav } from "context";
+import { setTransparentNavbar, setMiniSidenav } from "context";
 
 import { getCurrentUserSelector } from "redux/currentUser/selector";
 import { logout } from "redux/currentUser/slice";
@@ -29,6 +29,7 @@ import { roleAccountList } from "utils/constants";
 // import { WEB_URL } from "config";
 
 import admin from "assets/images/admin.png";
+import { useMentorUs } from "hooks";
 import { navbar, navbarContainer, navbarRow, navbarIconButton } from "./styles";
 
 function DashboardNavbar({ absolute, light, isMini }) {
@@ -38,7 +39,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [navbarType, setNavbarType] = useState();
-  const [controller, dispatchContext] = useMaterialUIController();
+  const [controller, dispatchContext] = useMentorUs();
   const { miniSidenav, transparentNavbar, fixedNavbar, darkMode } = controller;
   const route = useLocation().pathname.split("/").slice(1);
   const currentUser = useSelector(getCurrentUserSelector);

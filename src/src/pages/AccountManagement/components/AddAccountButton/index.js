@@ -20,7 +20,8 @@ import { addNew } from "redux/accounts/slice";
 // import { getEmailDomainsValidSelector } from "redux/configuration/selector";
 import { getCurrentUserSelector } from "redux/currentUser/selector";
 
-import { useMaterialUIController, setLoading } from "context";
+import { useMentorUs } from "hooks";
+import { setLoading } from "context";
 import { roleAccountList } from "utils/constants";
 
 import { SuccessAlert, ErrorAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
@@ -31,7 +32,7 @@ function AddAccountButton() {
   /// --------------------- Khai báo Biến, State -------------
 
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
 
   const currentAccount = useSelector(getCurrentUserSelector);

@@ -12,8 +12,8 @@ import DropFileField from "components/DropFileField";
 
 import { importAccount } from "redux/accounts/slice";
 import { getCurrentUserSelector } from "redux/currentUser/selector";
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { formatDateExcel } from "utils/formatDate";
 
 import importAccountTemplate from "templates/Import_Account.xlsx";
@@ -25,7 +25,7 @@ export default function ImportAccountButton() {
   /// --------------------- Khai báo Biến, State -------------
 
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
   const [firstLoad, setFirstLoad] = useState(true);

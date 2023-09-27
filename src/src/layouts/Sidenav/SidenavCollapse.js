@@ -11,7 +11,7 @@ import Icon from "@mui/material/Icon";
 import MDBox from "components/MDComponents/MDBox";
 
 // Custom styles for the SidenavCollapse
-import { useMaterialUIController } from "context/index";
+import { useMentorUs } from "hooks";
 import {
   collapseItem,
   collapseIconBox,
@@ -22,7 +22,7 @@ import {
 // Material Dashboard 2 React context
 
 function SidenavCollapse({ icon, name, active, ...rest }) {
-  const [controller] = useMaterialUIController();
+  const [controller] = useMentorUs();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
 
   return (

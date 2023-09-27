@@ -21,7 +21,8 @@ import {
 } from "redux/groupsCategory/selector";
 import { searchCategory, searchByButton, updateSearchRequest } from "redux/groupsCategory/slice";
 
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { getValueOfList } from "utils";
 import { groupCategoryStatusList } from "utils/constants";
 
@@ -31,7 +32,7 @@ function SearchBox() {
   /// --------------------- Khai báo Biến, State -------------
 
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [categoryName, setCategoryName] = useState("");
   const [status, setStatus] = useState(null);
   const itemsPerPage = useSelector(getCategoryItemsPerPageSelector);

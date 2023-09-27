@@ -1,13 +1,13 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
+import { Provider as ReduxStoreProvider } from "react-redux";
 
 import "config";
-import { MaterialUIControllerProvider } from "context/index";
-import store from "redux/store";
+import { MentorUSAppProvider } from "context/index";
 import ensureEnvFileVar from "utils/ensureEnvVar";
-import "./index.css";
+import store from "redux/store";
 import App from "./App";
+import "./index.css";
 
 // Ensure .env file variables
 ensureEnvFileVar();
@@ -15,10 +15,10 @@ ensureEnvFileVar();
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-    <MaterialUIControllerProvider>
-      <Provider store={store}>
+    <MentorUSAppProvider>
+      <ReduxStoreProvider store={store}>
         <App />
-      </Provider>
-    </MaterialUIControllerProvider>
+      </ReduxStoreProvider>
+    </MentorUSAppProvider>
   </BrowserRouter>
 );

@@ -23,8 +23,8 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import BasicDatePicker from "components/DatePicker";
 import TooltipCustom from "components/Tooltip";
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { accountStatusList, genderList, roleAccountList } from "utils/constants";
 
 import { getCurrentUserSelector } from "redux/currentUser/selector";
@@ -38,7 +38,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
   /// --------------------- Khai báo Biến, State -------------
 
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
 
   const currentAccount = useSelector(getCurrentUserSelector);

@@ -12,13 +12,13 @@ import {
   getStatisticSearchRequestSelector
 } from "redux/statistic/selector";
 
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import { formatDateExcel } from "utils/formatDate";
 import statisticServices from "service/statisticService";
 
 function ExportButton({ isDisabled }) {
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const columnsHeaders = useSelector(getStatisticColumnHeadersSelector);
   const isSearch = useSelector(getIsSearchStatisticSelector);
   const searchRequest = useSelector(getStatisticSearchRequestSelector);

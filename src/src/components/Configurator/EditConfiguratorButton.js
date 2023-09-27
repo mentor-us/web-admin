@@ -9,8 +9,9 @@ import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 // import TooltipCustom from "components/Tooltip";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
 import { updateFromToRangeConfiguration } from "redux/configuration/slice";
+import { useMentorUs } from "hooks";
 
 import "./styles.css";
 
@@ -18,7 +19,7 @@ function EditConfiguratorButton({ data }) {
   /// --------------------- Khai báo Biến, State -------------
 
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
   const [fromToRange, setFromToRange] = useState(data.fromToRange.value);
   // const [emailDomainsValid, setEmailDomainsValid] = useState(data.emailDomainsValid.value);

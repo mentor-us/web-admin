@@ -20,15 +20,15 @@ import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
 import { updateMemberStatisticDetail } from "redux/statisticDetail/slice";
+import { useMentorUs } from "hooks";
 
 function UpdateStatisticDetail({ data }) {
   /// --------------------- Khai báo Biến, State -------------
 
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
   const [trainingPoint, setTrainingPoint] = useState(data.trainingPoint);
   const [studyingPoint, setStudyingPoint] = useState(data.studyingPoint);

@@ -22,11 +22,11 @@ import PropTypes from "prop-types";
 import MDButtonRoot from "components/MDComponents/MDButton/MDButtonRoot";
 
 // Material Dashboard 2 React contexts
-import { useMaterialUIController } from "context/index";
+import { useMentorUs } from "hooks";
 
 const MDButton = forwardRef(
   ({ color, variant, size, circular, iconOnly, children, ...rest }, ref) => {
-    const [controller] = useMaterialUIController();
+    const [controller] = useMentorUs();
     const { darkMode } = controller;
 
     return (

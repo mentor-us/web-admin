@@ -11,8 +11,8 @@ import TooltipCustom from "components/Tooltip";
 import DropFileField from "components/DropFileField";
 
 import { importGroups } from "redux/groups/slice";
-import { useMaterialUIController, setLoading } from "context";
-
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
 import groupsServices from "service/groupsServices";
 
 import { formatDateExcel } from "utils/formatDate";
@@ -25,7 +25,7 @@ export default function ImportModalButton() {
   /// --------------------- Khai báo Biến, State -------------
 
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
   const [firstLoad, setFirstLoad] = useState(true);
