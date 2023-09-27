@@ -1,19 +1,34 @@
 import Icon from "@mui/material/Icon";
-import AccountDetail from "pages/AccountDetail";
-import AccountManagement from "pages/AccountManagement";
+
+// App pages
 import Auth from "pages/Auth";
 import ProtectedAuth from "pages/Auth/ProtectedAuth";
+import AccountDetail from "pages/AccountDetail";
+import AccountManagement from "pages/AccountManagement";
 import DeepLink from "pages/DeepLink";
 import GroupCategory from "pages/GroupCategoryManagement";
 import GroupDetail from "pages/GroupDetail";
-// eslint-disable-next-line import/no-named-as-default
 import GroupManagement from "pages/GroupManagement";
 import PageNotFound from "pages/NotFound";
-import SignIn from "pages/SignIn/index";
 import Statistic from "pages/Statistic";
 import StatisticDetail from "pages/StatisticDetail";
+import SignIn from "pages/SignIn";
 import WebLandingPage from "pages/LandingPage/Web";
 import MobileLandingPage from "pages/LandingPage/Mobile";
+
+const pagesMap = {
+  groups: "Quản lý nhóm",
+  "group-detail": "Chi tiết về nhóm",
+  "group-category": "Quản lý loại nhóm",
+  statistic: "Hoạt động",
+  "statistic-detail": "Chi tiết hoạt động",
+  "account-management": "Quản lý tài khoản",
+  "account-detail": "Chi tiết tài khoản"
+};
+
+export const translateToVNmeseByKey = (key) => {
+  return pagesMap[key] ?? "";
+};
 
 const routes = [
   {
@@ -36,7 +51,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Quản lý nhóm",
+    name: translateToVNmeseByKey("groups"),
     key: "groups",
     icon: <Icon fontSize="small">groups</Icon>,
     route: "/groups",
@@ -49,7 +64,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Quản lý loại nhóm",
+    name: translateToVNmeseByKey("group-category"),
     key: "group-category",
     icon: <Icon fontSize="small">category</Icon>,
     route: "/group-category",
@@ -62,7 +77,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Chi tiết về nhóm",
+    name: translateToVNmeseByKey("group-detail"),
     key: "group-detail",
     icon: null,
     route: "/groups/group-detail/:id",
@@ -75,7 +90,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Quản lý tài khoản",
+    name: translateToVNmeseByKey("account-management"),
     key: "account-management",
     icon: <Icon fontSize="small">account_circle</Icon>,
     route: "/account-management",
@@ -88,7 +103,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Chi tiết tài khoản",
+    name: translateToVNmeseByKey("account-detail"),
     key: "account-detail",
     route: "/account-management/account-detail/:id",
     slideNavShow: false,
@@ -100,7 +115,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Hoạt động",
+    name: translateToVNmeseByKey("statistic"),
     key: "statistic",
     icon: <Icon fontSize="small">query_stats</Icon>,
     route: "/statistic",
@@ -113,7 +128,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Chi tiết hoạt động",
+    name: translateToVNmeseByKey("statistic-detail"),
     key: "statistic-detail",
     route: "/statistic/statistic-detail/:id",
     slideNavShow: false,
@@ -156,36 +171,5 @@ const routes = [
     component: <MobileLandingPage />
   }
 ];
-
-export const translateToVNmeseByKey = (key) => {
-  let value = "";
-  switch (key) {
-    case "groups":
-      value = "Quản lý nhóm";
-      break;
-    case "group-detail":
-      value = "Chi tiết về nhóm";
-      break;
-    case "group-category":
-      value = "Quản lý loại nhóm";
-      break;
-    case "statistic":
-      value = "Hoạt động";
-      break;
-    case "statistic-detail":
-      value = "Chi tiết hoạt động";
-      break;
-    case "account-management":
-      value = "Quản lý tài khoản";
-      break;
-    case "account-detail":
-      value = "Chi tiết tài khoản";
-      break;
-    default:
-      break;
-  }
-
-  return value;
-};
 
 export default routes;
