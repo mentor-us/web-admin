@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -27,9 +27,10 @@ import { logout } from "redux/currentUser/slice";
 import { getValueOfList } from "utils";
 import { roleAccountList } from "utils/constants";
 // import { WEB_URL } from "config";
-
 import admin from "assets/images/admin.png";
 import { useMentorUs } from "hooks";
+import { translateToVNmeseByKey } from "routes";
+import useBreadcrumbs from "hooks/useBreadcrumbs";
 import { navbar, navbarContainer, navbarRow, navbarIconButton } from "./styles";
 
 function DashboardNavbar({ absolute, light, isMini }) {
@@ -41,20 +42,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatchContext] = useMentorUs();
   const { miniSidenav, transparentNavbar, fixedNavbar, darkMode } = controller;
-  const route = useLocation().pathname.split("/").slice(1);
   const currentUser = useSelector(getCurrentUserSelector);
-
-  /// --------------------------------------------------------
-  /// --------------------- Các hàm thêm ---------------------
-
-  const getTitle = () => {
-    if (route.length > 1 && route.some((item) => item.includes("detail"))) {
-      route.pop();
-    }
-
-    return route[route.length - 1];
-  };
-
+  const { title, routes } = useBreadcrumbs();
   /// --------------------------------------------------------
   /// --------------------- Các hàm event ---------------------
 
@@ -199,7 +188,18 @@ function DashboardNavbar({ absolute, light, isMini }) {
     >
       <Toolbar sx={(theme) => navbarContainer(theme)}>
         <MDBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
-          <Breadcrumbs icon="home" title={getTitle()} route={route} light={light} />
+          <MDBox mr={{ xs: 0, xl: 8 }}>
+            <Breadcrumbs icon="home" routes={routes} light={light} />
+            <MDTypography
+              fontWeight="bold"
+              variant="h6"
+              color={light ? "white" : "dark"}
+              sx={{ mt: 0.5, fontSize: "1.12rem" }}
+              noWrap
+            >
+              {translateToVNmeseByKey(title)}
+            </MDTypography>
+          </MDBox>
         </MDBox>
         <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
           <MDBox color={light ? "white" : "inherit"}>
