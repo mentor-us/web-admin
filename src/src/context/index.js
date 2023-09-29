@@ -18,7 +18,6 @@ const initialState = {
   transparentNavbar: true,
   fixedNavbar: false,
   openConfigurator: false,
-  layout: "dashboard",
   darkMode: false,
   loading: false
 };
@@ -46,9 +45,6 @@ function appReducer(state, action) {
     }
     case "OPEN_CONFIGURATOR": {
       return { ...state, openConfigurator: action.payload };
-    }
-    case "LAYOUT": {
-      return { ...state, layout: action.payload };
     }
     case "DARKMODE": {
       return { ...state, darkMode: action.payload };
@@ -91,6 +87,5 @@ export const setTransparentNavbar = (dispatch, payload) =>
 export const setFixedNavbar = (dispatch, payload) => dispatch({ type: "FIXED_NAVBAR", payload });
 export const setOpenConfigurator = (dispatch, payload) =>
   dispatch({ type: "OPEN_CONFIGURATOR", payload });
-export const setLayout = (dispatch, payload) => dispatch({ type: "LAYOUT", payload });
 export const setDarkMode = (dispatch, payload) => dispatch({ type: "DARKMODE", payload });
 export const setLoading = (dispatch, payload) => dispatch({ type: "LOADING", payload });

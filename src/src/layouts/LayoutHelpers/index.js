@@ -16,7 +16,7 @@ import logo from "assets/images/logo_mentorus.jpg";
 
 function LayoutHelper() {
   const [controller, dispatchContext] = useMentorUs();
-  const { layout, miniSidenav, sidenavColor, openConfigurator } = controller;
+  const { miniSidenav, sidenavColor, openConfigurator } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
 
   const handleOnMouseEnter = () => {
@@ -59,9 +59,9 @@ function LayoutHelper() {
       </Icon>
     </MDBox>
   );
+
   return (
-    localStorage.getItem("access_token") &&
-    layout === "dashboard" && (
+    localStorage.getItem("access_token") && (
       <>
         <Sidenav
           color={sidenavColor}

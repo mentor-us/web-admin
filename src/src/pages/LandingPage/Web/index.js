@@ -1,5 +1,5 @@
 import React from "react";
-import PageLayout from "layouts/LayoutContainers/PageLayout";
+import FullPageLayout from "layouts/LayoutContainers/FullPageLayout";
 import MDBox from "components/MDComponents/MDBox";
 
 import img1 from "assets/images/1.png";
@@ -118,7 +118,7 @@ const info = [
 
 function WebLandingPage() {
   return (
-    <PageLayout>
+    <FullPageLayout>
       <MDBox width="100%" height="100vh" mx="auto">
         <Header isMobile={false} />
         <Home />
@@ -134,7 +134,7 @@ function WebLandingPage() {
         ))}
         <Footer />
       </MDBox>
-    </PageLayout>
+    </FullPageLayout>
   );
 }
 

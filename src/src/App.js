@@ -7,8 +7,6 @@ import { CssBaseline } from "@mui/material";
 import theme from "assets/theme";
 import routes from "routes";
 
-import LayoutHelper from "layouts/LayoutHelpers";
-
 import { getAllCategory, getPermissions } from "redux/groupsCategory/slice";
 import {
   allCategoriesSelector,
@@ -78,9 +76,6 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-
-      <LayoutHelper />
-
       <Routes>
         {getRoutes(routes)}
         <Route

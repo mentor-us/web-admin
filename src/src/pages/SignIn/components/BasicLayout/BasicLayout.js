@@ -2,11 +2,11 @@ import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
 
 import MDBox from "components/MDComponents/MDBox";
-import PageLayout from "layouts/LayoutContainers/PageLayout/index";
+import FullPageLayout from "layouts/LayoutContainers/FullPageLayout";
 
 function BasicLayout({ image, children }) {
   return (
-    <PageLayout>
+    <FullPageLayout>
       <MDBox
         position="absolute"
         width="100%"
@@ -28,7 +28,7 @@ function BasicLayout({ image, children }) {
           <Grid item>{children}</Grid>
         </Grid>
       </MDBox>
-    </PageLayout>
+    </FullPageLayout>
   );
 }
 
