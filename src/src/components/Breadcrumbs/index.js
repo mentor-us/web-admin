@@ -1,4 +1,5 @@
 // react-router-dom components
+import { memo } from "react";
 import { Link } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
@@ -9,80 +10,58 @@ import { Breadcrumbs as MuiBreadcrumbs } from "@mui/material";
 import Icon from "@mui/material/Icon";
 
 // Material Dashboard 2 React components
-import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 import { translateToVNmeseByKey } from "routes";
 
-function Breadcrumbs({ icon, title, route, light }) {
-  const routes = route.slice(0, -1);
-
+function Breadcrumbs({ icon, routes, light }) {
   return (
-    <MDBox mr={{ xs: 0, xl: 8 }}>
-      <MuiBreadcrumbs
-        sx={{
-          "& .MuiBreadcrumbs-separator": {
-            color: ({ palette: { white, grey } }) => (light ? white.main : grey[600])
-          }
-        }}
-      >
-        <Link to="/">
+    <MuiBreadcrumbs
+      sx={{
+        "& .MuiBreadcrumbs-separator": {
+          color: ({ palette: { white, grey } }) => (light ? white.main : grey[600])
+        }
+      }}
+    >
+      <Link to="/">
+        <MDTypography
+          component="span"
+          variant="body2"
+          color={light ? "white" : "dark"}
+          opacity={light ? 0.8 : 0.5}
+          sx={{ lineHeight: 0 }}
+        >
+          <Icon fontSize="medium">{icon}</Icon>
+        </MDTypography>
+      </Link>
+      {routes.map((route) => (
+        <Link to={`/${route}`} key={route}>
           <MDTypography
             component="span"
-            variant="body2"
+            variant="button"
+            fontWeight="regular"
             color={light ? "white" : "dark"}
             opacity={light ? 0.8 : 0.5}
             sx={{ lineHeight: 0 }}
           >
-            <Icon fontSize="medium">{icon}</Icon>
+            {translateToVNmeseByKey(route)}
           </MDTypography>
         </Link>
-        {routes.map((el) => (
-          <Link to={`/${el}`} key={el}>
-            <MDTypography
-              component="span"
-              variant="button"
-              fontWeight="regular"
-              color={light ? "white" : "dark"}
-              opacity={light ? 0.8 : 0.5}
-              sx={{ lineHeight: 0 }}
-            >
-              {translateToVNmeseByKey(el)}
-            </MDTypography>
-          </Link>
-        ))}
-        <MDTypography
-          variant="button"
-          fontWeight="regular"
-          color={light ? "white" : "dark"}
-          sx={{ lineHeight: 0 }}
-        >
-          {translateToVNmeseByKey(title)}
-        </MDTypography>
-      </MuiBreadcrumbs>
-      <MDTypography
-        fontWeight="bold"
-        variant="h6"
-        color={light ? "white" : "dark"}
-        sx={{ mt: 0.5, fontSize: "1.12rem" }}
-        noWrap
-      >
-        {translateToVNmeseByKey(title)}
-      </MDTypography>
-    </MDBox>
+      ))}
+    </MuiBreadcrumbs>
   );
 }
 
 // Setting default values for the props of Breadcrumbs
 Breadcrumbs.defaultProps = {
-  light: false
+  light: false,
+  icon: "home"
 };
 
 // Typechecking props for the Breadcrumbs
 Breadcrumbs.propTypes = {
-  icon: PropTypes.node.isRequired,
-  title: PropTypes.string.isRequired,
-  route: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Array)]).isRequired,
+  icon: PropTypes.node,
+  routes: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Array)]).isRequired,
   light: PropTypes.bool
 };
 
-export default Breadcrumbs;
+export default memo(Breadcrumbs);
