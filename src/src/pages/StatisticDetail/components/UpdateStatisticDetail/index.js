@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
 import {
   Backdrop,
   Box,
-  Modal,
-  Fade,
-  Typography,
-  Icon,
   Divider,
-  RadioGroup,
+  Fade,
   FormControlLabel,
-  Radio
+  Icon,
+  Modal,
+  Radio,
+  RadioGroup,
+  Typography
 } from "@mui/material";
-import { useDispatch } from "react-redux";
+import PropTypes from "prop-types";
 
-import MDButton from "components/MDComponents/MDButton";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
 import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
-import { setLoading } from "context";
+
 import { updateMemberStatisticDetail } from "redux/statisticDetail/slice";
-import { useMentorUs } from "hooks";
 
 function UpdateStatisticDetail({ data }) {
   /// --------------------- Khai báo Biến, State -------------

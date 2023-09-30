@@ -1,15 +1,14 @@
 // prop-types is a library for typechecking of props
-import PropTypes from "prop-types";
-
 // @mui material components
 import Card from "@mui/material/Card";
+import PropTypes from "prop-types";
+
+// Material Dashboard 2 React components
+import { useMentorUs } from "hooks";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
-
-// Material Dashboard 2 React components
-import { useMentorUs } from "hooks";
 
 // Timeline context
 import { TimelineProvider } from "../context/index";

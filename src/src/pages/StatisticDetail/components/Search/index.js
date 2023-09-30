@@ -1,17 +1,18 @@
-import { ErrorAlert } from "components/SweetAlert";
-import { setLoading } from "context";
-import { useMentorUs } from "hooks";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getIsSearchStatisticDetailSelector } from "redux/statisticDetail/selector";
-import { searchStatisticDetail, updateSearchRequest } from "redux/statisticDetail/slice";
-
 import PropTypes from "prop-types";
 
-import { getValueOfList, calculateDays } from "utils";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+import { calculateDays, getValueOfList } from "utils";
+
 import CustomCheckbox from "components/Checkbox";
 import BasicDatePicker from "components/DatePicker";
+import { ErrorAlert } from "components/SweetAlert";
 import { getAnotherDateFromToday } from "utils/formatDate";
+
+import { getIsSearchStatisticDetailSelector } from "redux/statisticDetail/selector";
+import { searchStatisticDetail, updateSearchRequest } from "redux/statisticDetail/slice";
 
 const {
   // Accordion,

@@ -1,6 +1,7 @@
 import React from "react";
-import { Icon } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
+import { Icon } from "@mui/material";
+
 import logo from "assets/images/logo.png";
 
 import "../../styles.css";

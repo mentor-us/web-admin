@@ -1,13 +1,15 @@
 /* eslint-disable no-use-before-define */
 import React from "react";
+import { Chip, TextField } from "@mui/material";
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 // import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import { TextField, Chip } from "@mui/material";
-import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
+
+import { isEmailValid } from "utils";
+
+import { ErrorAlert } from "components/SweetAlert";
 
 import "./styles.css";
-import { ErrorAlert } from "components/SweetAlert";
-import { isEmailValid } from "utils";
 
 const filter = createFilterOptions();
 

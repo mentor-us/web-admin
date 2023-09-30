@@ -1,6 +1,8 @@
-import GroupApi from "api/GroupApi";
-import ServerError from "errors/ServerError";
 import { calculateDays } from "utils";
+import GroupApi from "api/GroupApi";
+
+import ServerError from "errors/ServerError";
+
 import ErrorWrapper from "./ErrorServiceWrapper";
 
 const getAllGroups = (req) => GroupApi.all(req).then((res) => res.data);

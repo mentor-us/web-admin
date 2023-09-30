@@ -1,6 +1,4 @@
 import React from "react";
-import FullPageLayout from "layouts/FullPageLayout";
-import MDBox from "components/MDComponents/MDBox";
 
 import img1 from "assets/images/app-1.png";
 import img2 from "assets/images/app-2.png";
@@ -10,10 +8,13 @@ import img5 from "assets/images/app-5.png";
 import img6 from "assets/images/app-6.png";
 import img7 from "assets/images/app-7.png";
 
+import FullPageLayout from "layouts/FullPageLayout";
+import MDBox from "components/MDComponents/MDBox";
+
+import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Home from "../components/Home";
 import Instruction from "../components/Instruction";
-import Footer from "../components/Footer";
 import Register from "../components/Register";
 
 const info = [

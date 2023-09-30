@@ -1,17 +1,15 @@
 // react-routers components
 import { Link } from "react-router-dom";
-
+// @mui material components
+import Card from "@mui/material/Card";
 // prop-types is library for typechecking of props
 import PropTypes from "prop-types";
 
-// @mui material components
-import Card from "@mui/material/Card";
-
+import MDAvatar from "components/MDComponents/MDAvatar";
 // Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
-import MDAvatar from "components/MDComponents/MDAvatar";
 import MDButton from "components/MDComponents/MDButton";
+import MDTypography from "components/MDComponents/MDTypography";
 
 function ProfilesList({ title, profiles, shadow }) {
   const renderProfiles = profiles.map(({ image, name, description, action }) => (

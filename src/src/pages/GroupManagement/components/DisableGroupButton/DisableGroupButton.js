@@ -1,20 +1,20 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { Icon } from "@mui/material";
-import MDTypography from "components/MDComponents/MDTypography";
-import MDBox from "components/MDComponents/MDBox";
-import MDButton from "components/MDComponents/MDButton";
-import TooltipCustom from "components/Tooltip";
-
-// import { getCurrentUserSelector } from "redux/currentUser/selector";
-
-import { SuccessAlert, ErrorAlert, WarningAlertConfirm } from "components/SweetAlert";
+import PropTypes from "prop-types";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
-import { disableGroup } from "redux/groups/slice";
+
+import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
+import MDTypography from "components/MDComponents/MDTypography";
+// import { getCurrentUserSelector } from "redux/currentUser/selector";
+import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
+import TooltipCustom from "components/Tooltip";
+
 import { disableGroupDetail } from "redux/groupDetail/slice";
+import { disableGroup } from "redux/groups/slice";
 
 function DisableGroupButton({ data, setState, typeButton, isInDetail, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------

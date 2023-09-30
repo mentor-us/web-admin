@@ -1,5 +1,7 @@
 import SystemConfigApi from "api/SystemConfigApi";
+
 import ServerError from "errors/ServerError";
+
 import ErrorWrapper from "./ErrorServiceWrapper";
 
 const getAllConfiguration = async () => {

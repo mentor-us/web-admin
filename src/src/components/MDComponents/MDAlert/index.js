@@ -1,17 +1,14 @@
 import { useState } from "react";
-
+// @mui material components
+import Fade from "@mui/material/Fade";
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
-// @mui material components
-import Fade from "@mui/material/Fade";
-
-// Material Dashboard 2 React components
-import MDBox from "components/MDComponents/MDBox";
-
+import MDAlertCloseIcon from "components/MDComponents/MDAlert/MDAlertCloseIcon";
 // Custom styles for the MDAlert
 import MDAlertRoot from "components/MDComponents/MDAlert/MDAlertRoot";
-import MDAlertCloseIcon from "components/MDComponents/MDAlert/MDAlertCloseIcon";
+// Material Dashboard 2 React components
+import MDBox from "components/MDComponents/MDBox";
 
 function MDAlert({ color, dismissible, children, ...rest }) {
   const [alertStatus, setAlertStatus] = useState("mount");

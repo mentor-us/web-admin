@@ -1,11 +1,9 @@
 // prop-types is a library for typechecking of props
-import PropTypes from "prop-types";
-
 // react-router-dom components
 import { Link } from "react-router-dom";
-
 // @mui material components
 import Icon from "@mui/material/Icon";
+import PropTypes from "prop-types";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";

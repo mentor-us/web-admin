@@ -1,6 +1,7 @@
 import React from "react";
-import { PropTypes } from "prop-types";
 import { Pagination } from "@mui/material";
+import { PropTypes } from "prop-types";
+
 import "./styles.css";
 
 function CustomPagination({ totalPages, pageIndex, handleChangePage }) {

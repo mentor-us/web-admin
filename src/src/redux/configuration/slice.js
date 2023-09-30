@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-param-reassign */
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { emailDomainsValid } from "utils/constants";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
 import configurationServices from "service/configurationServices";
+import { emailDomainsValid } from "utils/constants";
 
 const initialState = {
   status: "idle",

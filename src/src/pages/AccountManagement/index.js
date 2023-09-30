@@ -1,46 +1,46 @@
 import React, { useEffect } from "react";
-import { Card, Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { Card, Grid } from "@mui/material";
 
 import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
-import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
 // import DataTable from "components/Tables/DataTable";
 import SelectAllFeature from "components/SelectAllFeature";
 import { ErrorAlert } from "components/SweetAlert";
+import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
 
 import {
   allAccountSelector,
-  getSelectAllSelector,
-  getIsSearchAccountSelector,
-  getAllAccountSearchSelector,
-  getAccountCurrentPageSelector,
-  getAccountTotalPagesSelector,
-  getAccountTotalItemsSelector,
-  getAccountItemsPerPageSelector,
-  getAccountsSelectAllSearchSelector,
-  getAccountSearchRequestSelector,
-  getAccountTotalItemsSearchSelector,
-  getAccountTotalPagesSearchSelector,
+  getAccountColumnHeadersSelector,
   getAccountCurrentPageSearchSelector,
-  getAccountColumnHeadersSelector
+  getAccountCurrentPageSelector,
+  getAccountItemsPerPageSelector,
+  getAccountSearchRequestSelector,
+  getAccountsSelectAllSearchSelector,
+  getAccountTotalItemsSearchSelector,
+  getAccountTotalItemsSelector,
+  getAccountTotalPagesSearchSelector,
+  getAccountTotalPagesSelector,
+  getAllAccountSearchSelector,
+  getIsSearchAccountSelector,
+  getSelectAllSelector
 } from "redux/accounts/selector";
 import {
   getAllUserPaging,
   itemsPerPageChange,
-  updateSelectAll,
+  resetState,
   searchAccount,
   searchByButton,
-  resetState
+  updateSelectAll
 } from "redux/accounts/slice";
 
-import accountTableData from "./data/accountTableData";
 import AddAccountButton from "./components/AddAccountButton";
-import SearchBox from "./components/Search";
 import ExportButton from "./components/ExportButton";
 import ImportAccountButton from "./components/ImportAccountButton";
+import SearchBox from "./components/Search";
+import accountTableData from "./data/accountTableData";
 
 function AccountManagement() {
   /// --------------------- Khai báo Biến, State -------------

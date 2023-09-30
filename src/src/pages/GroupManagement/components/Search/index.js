@@ -1,32 +1,32 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Autocomplete,
   Grid,
   Icon,
-  Autocomplete,
-  TextField,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails
+  TextField
 } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
 
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+import { calculateDays, getValueOfList, isEmailValid } from "utils";
+
+import CustomCheckbox from "components/Checkbox";
+import BasicDatePicker from "components/DatePicker";
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
-import BasicDatePicker from "components/DatePicker";
-import CustomCheckbox from "components/Checkbox";
-
-import { setLoading } from "context";
-import { useMentorUs } from "hooks";
-import { allCategoriesSelector } from "redux/groupsCategory/selector";
-import { getIsSearchGroupSelector, getGroupItemsPerPageSelector } from "redux/groups/selector";
-import { searchGroup, updateSearchRequest, searchByButton } from "redux/groups/slice";
+import { ErrorAlert } from "components/SweetAlert";
 import { groupStatusList } from "utils/constants";
 import { getAnotherDateFromToday } from "utils/formatDate";
-import { getValueOfList, calculateDays, isEmailValid } from "utils";
 
-import { ErrorAlert } from "components/SweetAlert";
+import { getGroupItemsPerPageSelector, getIsSearchGroupSelector } from "redux/groups/selector";
+import { searchByButton, searchGroup, updateSearchRequest } from "redux/groups/slice";
+import { allCategoriesSelector } from "redux/groupsCategory/selector";
 
 import "./styles.css";
 

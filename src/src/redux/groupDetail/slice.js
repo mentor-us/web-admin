@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-param-reassign */
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+import { addCheckedProp } from "utils";
+
 import groupDetailServices from "service/groupDetailServices";
 import groupsServices from "service/groupsServices";
-import { addCheckedProp } from "utils";
 
 const columnHeaders = [
   { text: "Email", textValue: "email", isShow: true },

@@ -1,26 +1,23 @@
 import { useMemo } from "react";
-
-// porp-types is a library for typechecking of props
-import PropTypes from "prop-types";
-
 // react-chartjs-2 components
 import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
-  Title,
-  Tooltip,
-  Filler
-} from "chart.js";
-
 // @mui material components
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
 import Icon from "@mui/material/Icon";
+import {
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip
+} from "chart.js";
+// porp-types is a library for typechecking of props
+import PropTypes from "prop-types";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";

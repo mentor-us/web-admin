@@ -1,25 +1,23 @@
 import { useMemo } from "react";
-import PropTypes from "prop-types";
-import { useTable, useSortBy, usePagination } from "react-table";
-
+import { usePagination, useSortBy, useTable } from "react-table";
+import { Autocomplete } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import { Autocomplete } from "@mui/material";
+import PropTypes from "prop-types";
 
+import CustomPagination from "components/CustomPagination";
+import HeaderFilter from "components/HeaderFilter";
 // Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
-import CustomPagination from "components/CustomPagination";
-import HeaderFilter from "components/HeaderFilter";
-// import { ITEMS_PER_PAGE } from "config";
 
-import DataTableHeadCell from "./DataTableHeadCell";
 import DataTableBodyCell from "./DataTableBodyCell";
-
+// import { ITEMS_PER_PAGE } from "config";
+import DataTableHeadCell from "./DataTableHeadCell";
 import "./style.css";
 
 function DataTableCustom({

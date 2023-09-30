@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid";
+import PropTypes from "prop-types";
 
-import MDBox from "components/MDComponents/MDBox";
 import FullPageLayout from "layouts/FullPageLayout";
+import MDBox from "components/MDComponents/MDBox";
 
 function BasicLayout({ image, children }) {
   return (

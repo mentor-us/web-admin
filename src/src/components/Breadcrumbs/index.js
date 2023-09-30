@@ -1,17 +1,16 @@
 // react-router-dom components
 import { memo } from "react";
 import { Link } from "react-router-dom";
-
-// prop-types is a library for typechecking of props.
-import PropTypes from "prop-types";
-
 // @mui material components
 import { Breadcrumbs as MuiBreadcrumbs } from "@mui/material";
 import Icon from "@mui/material/Icon";
+// prop-types is a library for typechecking of props.
+import PropTypes from "prop-types";
+
+import { translateToVNmeseByKey } from "routes";
 
 // Material Dashboard 2 React components
 import MDTypography from "components/MDComponents/MDTypography";
-import { translateToVNmeseByKey } from "routes";
 
 function Breadcrumbs({ icon, routes, light }) {
   return (

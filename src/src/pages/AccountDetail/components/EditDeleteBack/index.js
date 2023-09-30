@@ -1,18 +1,18 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Icon } from "@mui/material";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 
-import TooltipCustom from "components/Tooltip";
+import DeleteButton from "pages/AccountManagement/components/EditDelete/components/DeleteButton";
+import DisableAccountButton from "pages/AccountManagement/components/EditDelete/components/DisableAccountButton";
+import EditAccountButton from "pages/AccountManagement/components/EditDelete/components/EditAccountButton";
+import EnableAccountButton from "pages/AccountManagement/components/EditDelete/components/EnableAccountButton";
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
-import EditAccountButton from "pages/AccountManagement/components/EditDelete/components/EditAccountButton";
-import DeleteButton from "pages/AccountManagement/components/EditDelete/components/DeleteButton";
+import TooltipCustom from "components/Tooltip";
 
 import { getCurrentUserSelector } from "redux/currentUser/selector";
-import DisableAccountButton from "pages/AccountManagement/components/EditDelete/components/DisableAccountButton";
-import EnableAccountButton from "pages/AccountManagement/components/EditDelete/components/EnableAccountButton";
 
 function EditDeleteBackBox({ data }) {
   /// --------------------- Khai báo Biến, State -------------

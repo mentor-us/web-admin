@@ -1,34 +1,34 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Card, Icon } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import { Card, Grid, Icon } from "@mui/material";
+
+import { numberWithCommas } from "utils";
 
 import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
+import InfoNumberWhiteCard from "pages/Statistic/components/InfoNumberWhiteCard";
+import PieChart from "components/Charts/PieChart";
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
-import TooltipCustom from "components/Tooltip";
-import PieChart from "components/Charts/PieChart";
 import HorizontalTimelineItem from "components/Timeline/HorizontalTimeLine";
-import InfoNumberWhiteCard from "pages/Statistic/components/InfoNumberWhiteCard";
-
-import { numberWithCommas } from "utils";
+import TooltipCustom from "components/Tooltip";
 import { groupStatusList } from "utils/constants";
 import { formatDate } from "utils/formatDate";
 
-import { getStatisticDetail, resetState } from "redux/statisticDetail/slice";
+import { getCategoryByNameSelector } from "redux/groupsCategory/selector";
 import {
   getStatisticDetailSelector
   // getStatisticDetailTableSelector
 } from "redux/statisticDetail/selector";
-import { getCategoryByNameSelector } from "redux/groupsCategory/selector";
+import { getStatisticDetail, resetState } from "redux/statisticDetail/slice";
 
+import ExportButton from "./components/ExportButton";
 import InfoCardChart from "./components/InfoCardChart";
 // import statisticDetailTableData from "./data/statisticDetailTableData";
 // import ImportComboBox from "./components/ImportComboBox";
 import StatisticDetailTable from "./components/StatisticDetailTable";
-import ExportButton from "./components/ExportButton";
 
 function StatisticDetail() {
   /// --------------------- Khai báo Biến, State -------------

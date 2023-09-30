@@ -1,5 +1,6 @@
-import GroupCategoryApi from "api/GroupCategoryApi";
 import { ServerError } from "errors";
+import GroupCategoryApi from "api/GroupCategoryApi";
+
 import ErrorWrapper from "./ErrorServiceWrapper";
 
 const getAllCategories = () => GroupCategoryApi.all();

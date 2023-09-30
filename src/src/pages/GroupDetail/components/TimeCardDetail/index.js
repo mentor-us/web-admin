@@ -1,6 +1,7 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Card, Icon } from "@mui/material";
+import PropTypes from "prop-types";
+
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";

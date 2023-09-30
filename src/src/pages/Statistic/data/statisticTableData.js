@@ -3,8 +3,9 @@
 // import { NavLink } from "react-router-dom";
 // import MDBox from "components/MDComponents/MDBox";
 // import MDTypography from "components/MDComponents/MDTypography";
+import { compareDate, compareNumber, compareVietnameseWord, numberWithCommas } from "utils";
+
 import { groupStatusList } from "utils/constants";
-import { numberWithCommas, compareVietnameseWord, compareDate, compareNumber } from "utils";
 import { formatDate } from "utils/formatDate";
 
 export default function statisticTableData(data, currentPage, itemsPerPage, columnHeaders) {

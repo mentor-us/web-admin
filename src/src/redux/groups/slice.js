@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-param-reassign */
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import groupsServices from "service/groupsServices";
-import { addCheckedProp } from "utils";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
 import { ITEMS_PER_PAGE } from "config";
+import { addCheckedProp } from "utils";
+
+import groupsServices from "service/groupsServices";
 
 const columnHeaders = [
   { text: "Tên nhóm", textValue: "name", isShow: true },

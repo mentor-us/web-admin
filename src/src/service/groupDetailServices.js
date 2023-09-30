@@ -1,4 +1,5 @@
 import GroupApi from "api/GroupApi";
+
 import ServerError from "errors/ServerError";
 
 const getGroup = async (id) => {

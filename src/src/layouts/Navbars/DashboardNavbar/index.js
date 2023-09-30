@@ -1,37 +1,36 @@
-import { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { NavLink, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
+import Divider from "@mui/material/Divider";
 import Icon from "@mui/material/Icon";
+import IconButton from "@mui/material/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
+import Toolbar from "@mui/material/Toolbar";
+import PropTypes from "prop-types";
 
+import { setMiniSidenav, setTransparentNavbar } from "context";
+import { useMentorUs } from "hooks";
+import { translateToVNmeseByKey } from "routes";
+import { getValueOfList } from "utils";
+// import { WEB_URL } from "config";
+import admin from "assets/images/admin.png";
+
+import Breadcrumbs from "components/Breadcrumbs";
+import MDAvatar from "components/MDComponents/MDAvatar";
 // Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
-import MDAvatar from "components/MDComponents/MDAvatar";
 import MDTypography from "components/MDComponents/MDTypography";
-import Breadcrumbs from "components/Breadcrumbs";
 import TooltipCustom from "components/Tooltip";
-
-import { setTransparentNavbar, setMiniSidenav } from "context";
+import useBreadcrumbs from "hooks/useBreadcrumbs";
+import { roleAccountList } from "utils/constants";
 
 import { getCurrentUserSelector } from "redux/currentUser/selector";
 import { logout } from "redux/currentUser/slice";
 
-import { getValueOfList } from "utils";
-import { roleAccountList } from "utils/constants";
-// import { WEB_URL } from "config";
-import admin from "assets/images/admin.png";
-import { useMentorUs } from "hooks";
-import { translateToVNmeseByKey } from "routes";
-import useBreadcrumbs from "hooks/useBreadcrumbs";
-import { navbar, navbarContainer, navbarRow, navbarIconButton } from "./styles";
+import { navbar, navbarContainer, navbarIconButton, navbarRow } from "./styles";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   /// --------------------- Khai báo Biến, State -------------

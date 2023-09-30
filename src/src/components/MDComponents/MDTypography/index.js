@@ -1,13 +1,12 @@
 import { forwardRef } from "react";
-
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
-// Custom styles for MDTypography
-import MDTypographyRoot from "components/MDComponents/MDTypography/MDTypographyRoot";
-
 // Material Dashboard 2 React contexts
 import { useMentorUs } from "hooks";
+
+// Custom styles for MDTypography
+import MDTypographyRoot from "components/MDComponents/MDTypography/MDTypographyRoot";
 
 const MDTypography = forwardRef(
   (

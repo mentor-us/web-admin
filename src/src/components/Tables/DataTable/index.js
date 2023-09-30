@@ -1,33 +1,29 @@
 import { useMemo, useState } from "react";
-
-// prop-types is a library for typechecking of props
-import PropTypes from "prop-types";
-
 // react-table components
-import { useTable, usePagination, useAsyncDebounce, useGlobalFilter, useSortBy } from "react-table";
-
+import { useAsyncDebounce, useGlobalFilter, usePagination, useSortBy, useTable } from "react-table";
+import Autocomplete from "@mui/material/Autocomplete";
+import Icon from "@mui/material/Icon";
 // @mui material components
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import Icon from "@mui/material/Icon";
-import Autocomplete from "@mui/material/Autocomplete";
-
-// Material Dashboard 2 React components
-import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
-import MDInput from "components/MDComponents/MDInput";
-import MDPagination from "components/MDComponents/MDPagination";
-import HeaderFilter from "components/HeaderFilter";
+// prop-types is a library for typechecking of props
+import PropTypes from "prop-types";
 
 import { ITEMS_PER_PAGE } from "config";
 
+import HeaderFilter from "components/HeaderFilter";
+// Material Dashboard 2 React components
+import MDBox from "components/MDComponents/MDBox";
+import MDInput from "components/MDComponents/MDInput";
+import MDPagination from "components/MDComponents/MDPagination";
+import MDTypography from "components/MDComponents/MDTypography";
+
+import DataTableBodyCell from "./DataTableBodyCell";
 // Material Dashboard 2 React example components
 import DataTableHeadCell from "./DataTableHeadCell";
-import DataTableBodyCell from "./DataTableBodyCell";
-
 import "./style.css";
 
 function DataTable({

@@ -6,7 +6,6 @@
 
 // Material Dashboard 2 React Base Styles
 import colors from "assets/theme/base/colors";
-
 // Material Dashboard 2 React Helper Functions
 import boxShadow from "assets/theme/functions/boxShadow";
 

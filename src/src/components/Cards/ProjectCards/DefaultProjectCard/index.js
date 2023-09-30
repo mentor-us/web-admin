@@ -1,19 +1,17 @@
 // react-router-dom components
 import { Link } from "react-router-dom";
-
-// prop-types is a library for typechecking of props
-import PropTypes from "prop-types";
-
 // @mui material components
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import Tooltip from "@mui/material/Tooltip";
+// prop-types is a library for typechecking of props
+import PropTypes from "prop-types";
 
+import MDAvatar from "components/MDComponents/MDAvatar";
 // Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
 import MDButton from "components/MDComponents/MDButton";
-import MDAvatar from "components/MDComponents/MDAvatar";
+import MDTypography from "components/MDComponents/MDTypography";
 
 function DefaultProjectCard({ image, label, title, description, action, authors }) {
   const renderAuthors = authors.map(({ image: media, name }) => (

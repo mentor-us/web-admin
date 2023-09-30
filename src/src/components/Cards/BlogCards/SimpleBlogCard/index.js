@@ -1,17 +1,15 @@
 // react-router components
 import { Link } from "react-router-dom";
-
-// prop-types is a library for typechecking of props
-import PropTypes from "prop-types";
-
 // @mui material components
 import Card from "@mui/material/Card";
 import MuiLink from "@mui/material/Link";
+// prop-types is a library for typechecking of props
+import PropTypes from "prop-types";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
 import MDButton from "components/MDComponents/MDButton";
+import MDTypography from "components/MDComponents/MDTypography";
 
 function SimpleBlogCard({ image, title, description, action }) {
   return (

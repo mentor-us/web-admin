@@ -1,5 +1,6 @@
-import StatisticApi from "api/StatisticApi";
 import { ServerError } from "errors";
+import StatisticApi from "api/StatisticApi";
+
 import ErrorWrapper from "./ErrorServiceWrapper";
 
 const getGeneral = (req) => StatisticApi.getGeneral(req).then((response) => response.data);

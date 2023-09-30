@@ -1,11 +1,14 @@
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
 import { Provider as ReduxStoreProvider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import { MentorUSAppProvider } from "context/index";
 
 import "config";
-import { MentorUSAppProvider } from "context/index";
+
 import ensureEnvFileVar from "utils/ensureEnvVar";
+
 import store from "redux/store";
+
 import App from "./App";
 import "./index.css";
 

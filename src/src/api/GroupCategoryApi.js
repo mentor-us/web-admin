@@ -1,4 +1,5 @@
 import { makeRequestSearch } from "utils";
+
 import AxiosClient from "./AxiosClient";
 
 const GroupCategoryApi = {

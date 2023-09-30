@@ -1,14 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { TextField, Autocomplete } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 import PropTypes from "prop-types";
 
-import MDTypography from "components/MDComponents/MDTypography";
+import { getValueOfList, removeCategoryFromObject } from "utils";
+
 import MDBox from "components/MDComponents/MDBox";
+import MDTypography from "components/MDComponents/MDTypography";
 
 import { allCategoriesSelector } from "redux/groupsCategory/selector";
-
-import { removeCategoryFromObject, getValueOfList } from "utils";
 
 import "./styles.css";
 

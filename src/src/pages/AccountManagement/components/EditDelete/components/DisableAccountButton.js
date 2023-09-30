@@ -1,20 +1,20 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@mui/material";
-import MDTypography from "components/MDComponents/MDTypography";
-import MDBox from "components/MDComponents/MDBox";
-import MDButton from "components/MDComponents/MDButton";
-import TooltipCustom from "components/Tooltip";
-
-import { disableAccount } from "redux/accounts/slice";
-import { disableAccountDetail } from "redux/accountDetail/slice";
-import { getCurrentUserSelector } from "redux/currentUser/selector";
-
-import { SuccessAlert, ErrorAlert, WarningAlertConfirm } from "components/SweetAlert";
+import PropTypes from "prop-types";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
+
+import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
+import TooltipCustom from "components/Tooltip";
+
+import { disableAccountDetail } from "redux/accountDetail/slice";
+import { disableAccount } from "redux/accounts/slice";
+import { getCurrentUserSelector } from "redux/currentUser/selector";
 
 function DisableAccountButton({ data, setState, typeButton, isInDetail, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------

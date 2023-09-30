@@ -1,7 +1,11 @@
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import Divider from "@mui/material/Divider";
+import { useDispatch, useSelector } from "react-redux";
 import { Card, Icon } from "@mui/material";
+import Divider from "@mui/material/Divider";
+import { setOpenConfigurator } from "context/index";
+
+import { useMentorUs } from "hooks";
+import { isExpiredToken } from "utils";
 
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
@@ -11,14 +15,9 @@ import TooltipCustom from "components/Tooltip";
 import { getFromToRangeSelector } from "redux/configuration/selector";
 import { getAllConfiguration } from "redux/configuration/slice";
 
-import { isExpiredToken } from "utils";
-
-import { setOpenConfigurator } from "context/index";
-import { useMentorUs } from "hooks";
 import ConfiguratorRoot from "./ConfiguratorRoot";
-
-import "./styles.css";
 import EditConfiguratorButton from "./EditConfiguratorButton";
+import "./styles.css";
 
 function Configurator() {
   const [controller, dispatchContext] = useMentorUs();

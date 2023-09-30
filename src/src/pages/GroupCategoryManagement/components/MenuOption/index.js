@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { Icon, Menu, MenuItem } from "@mui/material";
+import PropTypes from "prop-types";
 
 import MDBox from "components/MDComponents/MDBox";
+
 import DeleteCategoryButton from "../DeleteCategoryButton";
 import EditCategoryButton from "../EditCategoryButton";
 

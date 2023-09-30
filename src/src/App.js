@@ -1,24 +1,21 @@
-import { CssBaseline } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-
-import theme from "assets/theme";
+import { CssBaseline } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
 
 import routes from "routes";
+import { isExpiredToken } from "utils";
+import theme from "assets/theme";
 
+import { getCurrentUserSelector } from "redux/currentUser/selector";
+import { getCurrentUserSlice } from "redux/currentUser/slice";
 import {
   allCategoriesSelector,
   getCategoryPermissionsSelector
 } from "redux/groupsCategory/selector";
 import { getAllCategory, getPermissions } from "redux/groupsCategory/slice";
 
-import { getCurrentUserSelector } from "redux/currentUser/selector";
-import { isExpiredToken } from "utils";
-
-import { getCurrentUserSlice } from "redux/currentUser/slice";
 import "./index.css";
 
 function App() {

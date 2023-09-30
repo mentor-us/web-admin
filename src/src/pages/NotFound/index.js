@@ -1,14 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
-// import BasicLayout from "pages/SignIn/components/BasicLayout/BasicLayout";
 
+// import BasicLayout from "pages/SignIn/components/BasicLayout/BasicLayout";
 import bgImage from "assets/images/hcmus.jpg";
 
-import "./styles.css";
 import FullPageLayout from "layouts/FullPageLayout";
+import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
+import MDTypography from "components/MDComponents/MDTypography";
+
+import "./styles.css";
 
 function PageNotFound() {
   const navigate = useNavigate();

@@ -79,4 +79,4 @@ const getAnotherDateFromToday = (currentDate = new Date(), value = -4, type = "y
   return date;
 };
 
-export { formatDateExcel, formatDate, formatDateFromDuration, getAnotherDateFromToday };
+export { formatDate, formatDateExcel, formatDateFromDuration, getAnotherDateFromToday };

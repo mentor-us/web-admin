@@ -1,6 +1,8 @@
-import { ErrorAlert } from "components/SweetAlert";
-import { ServerError } from "errors";
 import { Navigate, useLocation } from "react-router-dom";
+
+import { ServerError } from "errors";
+
+import { ErrorAlert } from "components/SweetAlert";
 
 function Auth() {
   const { search } = useLocation();

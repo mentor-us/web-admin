@@ -1,9 +1,11 @@
 import React from "react";
 import { PropTypes } from "prop-types";
-import MDButton from "components/MDComponents/MDButton";
-import logo from "assets/images/logo_mentorus.jpg";
+
 import chplay from "assets/images/google-play.png";
+import logo from "assets/images/logo_mentorus.jpg";
 import website from "assets/images/www.png";
+
+import MDButton from "components/MDComponents/MDButton";
 
 import "../../styles.css";
 

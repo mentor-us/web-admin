@@ -1,13 +1,13 @@
-import PropTypes from "prop-types";
+import { Icon } from "@mui/material";
 import Card from "@mui/material/Card";
+import PropTypes from "prop-types";
 
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
-// import MDAvatar from "components/MDComponents/MDAvatar";
 
+// import MDAvatar from "components/MDComponents/MDAvatar";
 import "./styles.css";
-import { Icon } from "@mui/material";
 
 function InfoNumberWhiteCard({ title, info, iconURL, style, color, isText }) {
   return (

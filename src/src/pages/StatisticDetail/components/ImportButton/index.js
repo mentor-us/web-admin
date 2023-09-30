@@ -1,30 +1,30 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { Backdrop, Box, Modal, Fade, Typography, Icon, Divider } from "@mui/material";
 import { useDispatch } from "react-redux";
+import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
+import PropTypes from "prop-types";
 
-import MDButton from "components/MDComponents/MDButton";
-import MDBox from "components/MDComponents/MDBox";
-// import MDInput from "components/MDComponents/MDInput";
-import MDTypography from "components/MDComponents/MDTypography";
-import { SuccessAlert, ErrorAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-import TooltipCustom from "components/Tooltip";
-import DropFileField from "components/DropFileField";
-
-import {
-  importGeneralDetail,
-  importTrainingPointFileDetail,
-  importStudyingPointFileDetail,
-  importEnglishCertFileDetail
-} from "redux/statisticDetail/slice";
 import { setLoading } from "context";
-
-import excel from "assets/images/excel.png";
-import update from "assets/images/update-statistic.png";
-import point from "assets/images/point.png";
+import { useMentorUs } from "hooks";
 import activity from "assets/images/activity.png";
 import certificate from "assets/images/certificate.png";
-import { useMentorUs } from "hooks";
+import excel from "assets/images/excel.png";
+import point from "assets/images/point.png";
+import update from "assets/images/update-statistic.png";
+
+import DropFileField from "components/DropFileField";
+import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
+// import MDInput from "components/MDComponents/MDInput";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
+import TooltipCustom from "components/Tooltip";
+
+import {
+  importEnglishCertFileDetail,
+  importGeneralDetail,
+  importStudyingPointFileDetail,
+  importTrainingPointFileDetail
+} from "redux/statisticDetail/slice";
 
 function ImportStatisticPointButton({ templateFileName, template, typeImport, setState }) {
   /// --------------------- Khai báo Biến, State -------------

@@ -1,37 +1,38 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  Autocomplete,
   Backdrop,
   Box,
-  Modal,
-  Fade,
-  Typography,
-  Icon,
   Divider,
-  RadioGroup,
+  Fade,
   FormControlLabel,
+  Icon,
+  Modal,
   Radio,
-  Autocomplete,
-  TextField
+  RadioGroup,
+  TextField,
+  Typography
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
 
-import MDButton from "components/MDComponents/MDButton";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+import { getValueOfList, isEmailValid } from "utils";
+
+import BasicDatePicker from "components/DatePicker";
 import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-import BasicDatePicker from "components/DatePicker";
 import TooltipCustom from "components/Tooltip";
-import { setLoading } from "context";
-import { useMentorUs } from "hooks";
 import { accountStatusList, genderList, roleAccountList } from "utils/constants";
-
-import { getCurrentUserSelector } from "redux/currentUser/selector";
-import { editAccount } from "redux/accounts/slice";
-import { editAccountDetail } from "redux/accountDetail/slice";
-import { getValueOfList, isEmailValid } from "utils";
 import { getAnotherDateFromToday } from "utils/formatDate";
+
+import { editAccountDetail } from "redux/accountDetail/slice";
+import { editAccount } from "redux/accounts/slice";
+import { getCurrentUserSelector } from "redux/currentUser/selector";
 // import { getEmailDomainsValidSelector } from "redux/configuration/selector";
 
 function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAccount }) {

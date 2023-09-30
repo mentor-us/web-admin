@@ -1,20 +1,20 @@
 import Icon from "@mui/material/Icon";
 
+import AccountDetail from "pages/AccountDetail";
+import AccountManagement from "pages/AccountManagement";
 // App pages
 import Auth from "pages/Auth";
 import ProtectedAuth from "pages/Auth/ProtectedAuth";
-import AccountDetail from "pages/AccountDetail";
-import AccountManagement from "pages/AccountManagement";
 import DeepLink from "pages/DeepLink";
 import GroupCategory from "pages/GroupCategoryManagement";
 import GroupDetail from "pages/GroupDetail";
 import GroupManagement from "pages/GroupManagement";
+import MobileLandingPage from "pages/LandingPage/Mobile";
+import WebLandingPage from "pages/LandingPage/Web";
 import PageNotFound from "pages/NotFound";
+import SignIn from "pages/SignIn";
 import Statistic from "pages/Statistic";
 import StatisticDetail from "pages/StatisticDetail";
-import SignIn from "pages/SignIn";
-import WebLandingPage from "pages/LandingPage/Web";
-import MobileLandingPage from "pages/LandingPage/Mobile";
 
 const pagesMap = {
   groups: "Quản lý nhóm",

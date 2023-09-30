@@ -1,11 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
+
+import accountDetailSlice from "./accountDetail/slice";
 import accountSlice from "./accounts/slice";
+import configurationSlice from "./configuration/slice";
+import currentUserSlice from "./currentUser/slice";
+import groupDetailSlice from "./groupDetail/slice";
 import groupsSlice from "./groups/slice";
 import groupCategoriesSlice from "./groupsCategory/slice";
-import groupDetailSlice from "./groupDetail/slice";
-import currentUserSlice from "./currentUser/slice";
-import accountDetailSlice from "./accountDetail/slice";
-import configurationSlice from "./configuration/slice";
 import statisticSlice from "./statistic/slice";
 import statisticDetailSlice from "./statisticDetail/slice";
 

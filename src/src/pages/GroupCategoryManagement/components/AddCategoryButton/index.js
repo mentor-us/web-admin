@@ -1,21 +1,22 @@
 import React, { useState } from "react";
-import { Backdrop, Box, Modal, Fade, Typography, Icon, Divider } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-
-import MDButton from "components/MDComponents/MDButton";
-import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
-import MDInput from "components/MDComponents/MDInput";
-import MDAvatar from "components/MDComponents/MDAvatar";
-import AutoCompleteCheckbox from "components/AutoComplete/AutoCompleteCheckbox";
+import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
-import { SuccessAlert, ErrorAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-import { addNewCategory } from "redux/groupsCategory/slice";
-import { getCategoryPermissionsSelector } from "redux/groupsCategory/selector";
 
+import AutoCompleteCheckbox from "components/AutoComplete/AutoCompleteCheckbox";
+import MDAvatar from "components/MDComponents/MDAvatar";
+import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
+import MDInput from "components/MDComponents/MDInput";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import { imageIconList } from "utils/constants";
+
+import { getCategoryPermissionsSelector } from "redux/groupsCategory/selector";
+import { addNewCategory } from "redux/groupsCategory/slice";
+
 import IconSelectButton from "../IconSelectButton";
 
 function AddCategoryButton() {

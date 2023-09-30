@@ -1,8 +1,10 @@
 import React from "react";
+
+import logo from "assets/images/logo.png";
+import typography from "assets/theme/base/typography";
+
 // import PropTypes from "prop-types";
 import MDBox from "components/MDComponents/MDBox";
-import typography from "assets/theme/base/typography";
-import logo from "assets/images/logo.png";
 
 function Footer() {
   const { size } = typography;

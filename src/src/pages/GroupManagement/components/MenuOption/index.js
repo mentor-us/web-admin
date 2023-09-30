@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { Icon, Menu, MenuItem } from "@mui/material";
+import PropTypes from "prop-types";
 
 import MDBox from "components/MDComponents/MDBox";
+
 import DeleteGroupButton from "../DeleteGroupButton";
-import EditGroupButton from "../EditGroupButton";
 import DisableGroupButton from "../DisableGroupButton/DisableGroupButton";
+import EditGroupButton from "../EditGroupButton";
 import EnableGroupButton from "../EnableGroupButton/EnableGroupButton";
 
 function MenuOption({ data }) {

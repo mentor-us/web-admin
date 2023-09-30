@@ -112,4 +112,4 @@ function collapseText(theme, ownerState) {
   };
 }
 
-export { collapseItem, collapseIconBox, collapseIcon, collapseText };
+export { collapseIcon, collapseIconBox, collapseItem, collapseText };

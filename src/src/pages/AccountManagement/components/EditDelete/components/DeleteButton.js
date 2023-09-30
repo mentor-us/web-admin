@@ -1,21 +1,20 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { Icon } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Icon } from "@mui/material";
+import PropTypes from "prop-types";
 
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
+import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
-import MDBox from "components/MDComponents/MDBox";
+import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
 
 import { deleteAccount, deleteMultipleAccount } from "redux/accounts/slice";
 import { getCurrentUserSelector } from "redux/currentUser/selector";
-
-import { SuccessAlert, ErrorAlert, WarningAlertConfirm } from "components/SweetAlert";
-
-import { setLoading } from "context";
-import { useMentorUs } from "hooks";
 
 function DeleteButton({ data, setState, typeButton, redirectURL, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------

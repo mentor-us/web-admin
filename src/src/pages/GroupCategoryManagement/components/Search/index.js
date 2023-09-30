@@ -1,32 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Autocomplete,
   Grid,
   Icon,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Autocomplete,
   TextField
 } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+import { getValueOfList } from "utils";
 
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert } from "components/SweetAlert";
+import { groupCategoryStatusList } from "utils/constants";
 
 import {
   getCategoryItemsPerPageSelector,
   getIsSearchCategorySelector
 } from "redux/groupsCategory/selector";
-import { searchCategory, searchByButton, updateSearchRequest } from "redux/groupsCategory/slice";
-
-import { setLoading } from "context";
-import { useMentorUs } from "hooks";
-import { getValueOfList } from "utils";
-import { groupCategoryStatusList } from "utils/constants";
-
-import { ErrorAlert } from "components/SweetAlert";
+import { searchByButton, searchCategory, updateSearchRequest } from "redux/groupsCategory/slice";
 
 function SearchBox() {
   /// --------------------- Khai báo Biến, State -------------

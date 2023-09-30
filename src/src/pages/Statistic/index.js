@@ -2,15 +2,17 @@
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import MDBox from "components/MDComponents/MDBox";
-import { getGeneral, getByMonth, resetState } from "redux/statistic/slice";
-import { getStatisticFilterValueSelector } from "redux/statistic/selector";
 
+import { getStatisticFilterValueSelector } from "redux/statistic/selector";
+import { getByMonth, getGeneral, resetState } from "redux/statistic/slice";
+
+import FilterBox from "./components/FilterBox/filterBox";
 import StatisticNumberAndChart from "./components/StatisticNumberAndChart";
 import StatisticTable from "./components/StatisticTable";
-import FilterBox from "./components/FilterBox/filterBox";
 
 function Statistic() {
   /// --------------------- Khai báo Biến, State -------------

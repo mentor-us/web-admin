@@ -1,18 +1,15 @@
 import React, { useState } from "react";
-
 import { Icon } from "@mui/material";
-
-import Configurator from "components/Configurator";
-import MDBox from "components/MDComponents/MDBox";
-
-import Sidenav from "layouts/Sidenav/index";
-import routes from "routes";
-
 import { setMiniSidenav, setOpenConfigurator } from "context/index";
-import { useMentorUs } from "hooks";
 
+import { useMentorUs } from "hooks";
+import routes from "routes";
 // Images
 import logo from "assets/images/logo_mentorus.jpg";
+
+import Sidenav from "layouts/Sidenav/index";
+import Configurator from "components/Configurator";
+import MDBox from "components/MDComponents/MDBox";
 
 function LayoutHelper() {
   const [controller, dispatchContext] = useMentorUs();

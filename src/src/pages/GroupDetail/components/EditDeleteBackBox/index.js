@@ -1,15 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Icon } from "@mui/material";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 
-import TooltipCustom from "components/Tooltip";
-import MDBox from "components/MDComponents/MDBox";
-import EditGroupButton from "pages/GroupManagement/components/EditGroupButton";
 import DeleteGroupButton from "pages/GroupManagement/components/DeleteGroupButton";
-import MDButton from "components/MDComponents/MDButton";
 import DisableGroupButton from "pages/GroupManagement/components/DisableGroupButton/DisableGroupButton";
+import EditGroupButton from "pages/GroupManagement/components/EditGroupButton";
 import EnableGroupButton from "pages/GroupManagement/components/EnableGroupButton/EnableGroupButton";
+import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
+import TooltipCustom from "components/Tooltip";
 
 function EditDeleteBackBox({ data }) {
   const navigate = useNavigate();

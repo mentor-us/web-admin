@@ -1,22 +1,23 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Divider, Card } from "@mui/material";
-import bgImage from "assets/images/hcmus.jpg";
-import google from "assets/images/google.png";
-import microsoft from "assets/images/microsoft.png";
+import { useNavigate } from "react-router-dom";
+import { Card, Divider } from "@mui/material";
 
 import { API_URL, WEB_URL } from "config";
+import { isExpiredToken } from "utils";
+import google from "assets/images/google.png";
+import bgImage from "assets/images/hcmus.jpg";
+import microsoft from "assets/images/microsoft.png";
+
+import MDButton from "components/MDComponents/MDButton";
 
 import { getCurrentUserSelector } from "redux/currentUser/selector";
 import { logout } from "redux/currentUser/slice";
-import { isExpiredToken } from "utils";
 
-import MDButton from "components/MDComponents/MDButton";
 import MDBox from "../../components/MDComponents/MDBox";
 import MDTypography from "../../components/MDComponents/MDTypography";
-import BasicLayout from "./components/BasicLayout/BasicLayout";
 
+import BasicLayout from "./components/BasicLayout/BasicLayout";
 import "./style.css";
 
 function SignIn() {

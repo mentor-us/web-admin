@@ -2,6 +2,7 @@
 /* eslint-disable react/function-component-definition */
 
 import { compareVietnameseWord } from "utils";
+
 import CustomCheckbox from "components/Checkbox";
 import { groupCategoryStatusList } from "utils/constants";
 

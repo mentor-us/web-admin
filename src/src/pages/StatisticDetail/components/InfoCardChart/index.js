@@ -1,9 +1,9 @@
-import PropTypes from "prop-types";
 import Card from "@mui/material/Card";
+import PropTypes from "prop-types";
 
+import MDAvatar from "components/MDComponents/MDAvatar";
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
-import MDAvatar from "components/MDComponents/MDAvatar";
 
 function InfoCardChart({ title, subtitle, iconURL, style }) {
   return (

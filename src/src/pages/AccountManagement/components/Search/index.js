@@ -1,33 +1,33 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Autocomplete,
   Grid,
   Icon,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Autocomplete,
   TextField
 } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+import { isEmailValid } from "utils";
 
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert } from "components/SweetAlert";
-
-import { setLoading } from "context";
-import { useMentorUs } from "hooks";
-import { searchAccount, searchByButton, updateSearchRequest } from "redux/accounts/slice";
-import {
-  getIsSearchAccountSelector,
-  getAccountItemsPerPageSelector
-} from "redux/accounts/selector";
 // import { getEmailDomainsValidSelector } from "redux/configuration/selector";
+import { accountStatusList, roleAccountList } from "utils/constants";
 
-import { roleAccountList, accountStatusList } from "utils/constants";
+import {
+  getAccountItemsPerPageSelector,
+  getIsSearchAccountSelector
+} from "redux/accounts/selector";
+import { searchAccount, searchByButton, updateSearchRequest } from "redux/accounts/slice";
 import { getCurrentUserSelector } from "redux/currentUser/selector";
-import { isEmailValid } from "utils";
 
 function SearchBox() {
   /// --------------------- Khai báo Biến, State -------------

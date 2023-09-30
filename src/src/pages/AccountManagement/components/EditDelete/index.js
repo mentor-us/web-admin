@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { Icon, Menu, MenuItem } from "@mui/material";
 import { useSelector } from "react-redux";
+import { Icon, Menu, MenuItem } from "@mui/material";
+import PropTypes from "prop-types";
+
+import MDBox from "components/MDComponents/MDBox";
 
 import { getCurrentUserSelector } from "redux/currentUser/selector";
 
-import MDBox from "components/MDComponents/MDBox";
 import DeleteButton from "./components/DeleteButton";
-import EditAccountButton from "./components/EditAccountButton";
 import DisableAccountButton from "./components/DisableAccountButton";
+import EditAccountButton from "./components/EditAccountButton";
 import EnableAccountButton from "./components/EnableAccountButton";
 
 function EditDelete({ data }) {

@@ -1,21 +1,22 @@
 import React from "react";
 import { useSelector } from "react-redux";
-
+import { Card, Grid } from "@mui/material";
 import PropTypes from "prop-types";
 
+import statisticDetailTableData from "pages/StatisticDetail/data/statisticDetailTableData";
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 import DataTable from "components/Tables/DataTable";
-import { Grid, Card } from "@mui/material";
-import statisticDetailTableData from "pages/StatisticDetail/data/statisticDetailTableData";
+
 import {
-  getStatisticDetailTableSelector,
   getAllStatisticDetailSearchSelector,
   getIsSearchStatisticDetailSelector,
-  getStatisticDetailColumnHeadersSelector
+  getStatisticDetailColumnHeadersSelector,
+  getStatisticDetailTableSelector
 } from "redux/statisticDetail/selector";
-import SearchBox from "../Search";
+
 import ExportDetailButton from "../ExportDetailButton";
+import SearchBox from "../Search";
 // import { getStatisticDetail } from "redux/statisticDetail/slice";
 // import ImportComboBox from "../ImportComboBox";
 

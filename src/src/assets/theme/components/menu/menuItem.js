@@ -1,8 +1,7 @@
 // Material Dashboard 2 React base styles
-import colors from "assets/theme/base/colors";
 import borders from "assets/theme/base/borders";
+import colors from "assets/theme/base/colors";
 import typography from "assets/theme/base/typography";
-
 // Material Dashboard 2 React helper functions
 import pxToRem from "assets/theme/functions/pxToRem";
 

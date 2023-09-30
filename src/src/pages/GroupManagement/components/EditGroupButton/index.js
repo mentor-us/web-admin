@@ -1,36 +1,37 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  Autocomplete,
   Backdrop,
   Box,
-  Modal,
+  Divider,
   Fade,
-  Typography,
   Icon,
-  Autocomplete,
+  Modal,
   TextField,
-  Divider
+  Typography
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
 
-import MDButton from "components/MDComponents/MDButton";
-import MDBox from "components/MDComponents/MDBox";
-import MDInput from "components/MDComponents/MDInput";
-import MDTypography from "components/MDComponents/MDTypography";
-import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-import BasicDatePicker from "components/DatePicker";
-import TooltipCustom from "components/Tooltip";
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
 // import { groupStatusList } from "utils/constants";
 import { getGroupStatusList } from "utils";
-import { allCategoriesSelector } from "redux/groupsCategory/selector";
-import { editGroup } from "redux/groups/slice";
-import { editDetail } from "redux/groupDetail/slice";
-import { getFromToRangeSelector } from "redux/configuration/selector";
 
-import { getAnotherDateFromToday } from "utils/formatDate";
+import BasicDatePicker from "components/DatePicker";
+import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
+import MDInput from "components/MDComponents/MDInput";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
+import TooltipCustom from "components/Tooltip";
 import groupsServices from "service/groupsServices";
+import { getAnotherDateFromToday } from "utils/formatDate";
+
+import { getFromToRangeSelector } from "redux/configuration/selector";
+import { editDetail } from "redux/groupDetail/slice";
+import { editGroup } from "redux/groups/slice";
+import { allCategoriesSelector } from "redux/groupsCategory/selector";
 
 function EditGroupButton({ data, setState, typeButton, isInDetail }) {
   /// --------------------- Khai báo Biến, State -------------

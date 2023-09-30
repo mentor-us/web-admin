@@ -4,11 +4,11 @@
 // import { NavLink } from "react-router-dom";
 // import MDTypography from "components/MDComponents/MDTypography";
 // import MDBox from "components/MDComponents/MDBox";
-import CustomCheckbox from "components/Checkbox";
+import { compareDate, compareVietnameseWord } from "utils";
 
-import { compareVietnameseWord, compareDate } from "utils";
-import { formatDate, formatDateFromDuration } from "utils/formatDate";
+import CustomCheckbox from "components/Checkbox";
 import { groupStatusList } from "utils/constants";
+import { formatDate, formatDateFromDuration } from "utils/formatDate";
 
 import { groupCheckboxAllChange, groupCheckboxSingleChange } from "redux/groups/slice";
 
