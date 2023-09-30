@@ -7,7 +7,7 @@ import MDTypography from "components/MDComponents/MDTypography";
 import bgImage from "assets/images/hcmus.jpg";
 
 import "./styles.css";
-import FullPageLayout from "layouts/LayoutContainers/FullPageLayout";
+import FullPageLayout from "layouts/FullPageLayout";
 import MDButton from "components/MDComponents/MDButton";
 
 function PageNotFound() {

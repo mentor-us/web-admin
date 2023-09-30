@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Card, Grid } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 
-import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
+import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 
 import MDBox from "components/MDComponents/MDBox";

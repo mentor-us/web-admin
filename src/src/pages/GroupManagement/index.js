@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Card, Grid } from "@mui/material";
 
 import "./style.css";
-import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
+import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";

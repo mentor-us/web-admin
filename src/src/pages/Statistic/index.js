@@ -2,7 +2,7 @@
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
+import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import MDBox from "components/MDComponents/MDBox";
 import { getGeneral, getByMonth, resetState } from "redux/statistic/slice";

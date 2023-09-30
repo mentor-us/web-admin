@@ -1,5 +1,5 @@
 import React from "react";
-import FullPageLayout from "layouts/LayoutContainers/FullPageLayout";
+import FullPageLayout from "layouts/FullPageLayout";
 import MDBox from "components/MDComponents/MDBox";
 
 import img1 from "assets/images/1.png";
