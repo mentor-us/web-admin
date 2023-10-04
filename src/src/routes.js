@@ -1,8 +1,9 @@
+import { Navigate } from "react-router-dom";
 import Icon from "@mui/material/Icon";
 
+// App pages
 import AccountDetail from "pages/AccountDetail";
 import AccountManagement from "pages/AccountManagement";
-// App pages
 import Auth from "pages/Auth";
 import ProtectedAuth from "pages/Auth/ProtectedAuth";
 import DeepLink from "pages/DeepLink";
@@ -29,6 +30,101 @@ const pagesMap = {
 export const translateToVNmeseByKey = (key) => {
   return pagesMap[key] ?? "";
 };
+
+export const privateRoutes = [
+  {
+    key: "groups",
+    name: translateToVNmeseByKey("groups"),
+    icon: <Icon fontSize="small">groups</Icon>,
+    path: "/groups",
+    element: <GroupManagement />
+  },
+  {
+    key: "group-category",
+    name: translateToVNmeseByKey("group-category"),
+    icon: <Icon fontSize="small">category</Icon>,
+    path: "/group-category",
+    element: <GroupCategory />
+  },
+  {
+    key: "group-detail",
+    name: translateToVNmeseByKey("group-detail"),
+    icon: null,
+    path: "/groups/group-detail/:id",
+    element: <GroupDetail />
+  },
+  {
+    key: "account-management",
+    name: translateToVNmeseByKey("account-management"),
+    icon: <Icon fontSize="small">account_circle</Icon>,
+    path: "/account-management",
+    element: <AccountManagement />
+  },
+  {
+    key: "account-detail",
+    name: translateToVNmeseByKey("account-detail"),
+    path: "/account-management/account-detail/:id",
+    element: <AccountDetail />
+  },
+  {
+    key: "statistic",
+    name: translateToVNmeseByKey("statistic"),
+    icon: <Icon fontSize="small">query_stats</Icon>,
+    path: "/statistic",
+    element: <Statistic />
+  },
+  {
+    key: "statistic-detail",
+    name: translateToVNmeseByKey("statistic-detail"),
+    path: "/statistic/statistic-detail/:id",
+    element: <StatisticDetail />
+  }
+];
+
+export const publicRoutes = [
+  {
+    key: "home",
+    path: "/",
+    element: <Navigate to="/groups" replace />
+  },
+  {
+    name: "Sign In",
+    key: "sign-in",
+    icon: <Icon fontSize="small">login</Icon>,
+    path: "/sign-in",
+    element: <SignIn />
+  },
+  {
+    name: "Authentication",
+    key: "auth",
+    path: "/auth/redirect",
+    element: <Auth />
+  },
+  {
+    name: "Link mở app",
+    key: "deep-link",
+    path: "/send-link/:type", // Open mobile app
+    element: <DeepLink />
+  },
+  {
+    name: "Web landing page",
+    key: "web-landing-page",
+    path: "/web-landing-page",
+    element: <WebLandingPage />
+  },
+  {
+    name: "App landing page",
+    key: "mobile-landing-page",
+    path: "/mobile-landing-page",
+    element: <MobileLandingPage />
+  },
+  {
+    name: "Trang không tồn tại",
+    key: "not-found",
+    path: "/not-found",
+    element: <PageNotFound />
+  }
+];
 
 const routes = [
   {
