@@ -1,17 +1,10 @@
 /* eslint-disable no-unused-vars */
-import jwtDecode from "jwt-decode";
-
 import { groupStatusList } from "./constants";
 
-export const isExpiredToken = (token) => {
-  if (!token) return true;
+export * from "./auth";
 
-  const decode = jwtDecode(token);
-  const expirationDate = decode.exp;
-  const currentTime = Date.now() / 1000;
-  if (expirationDate > currentTime) return false;
-
-  return true;
+export const isEmptyObject = (objectIns) => {
+  return objectIns && Object.keys(objectIns).length === 0 && objectIns.constructor === Object;
 };
 
 export const isEmailValid = (email) => {
