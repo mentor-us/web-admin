@@ -27,11 +27,11 @@ function AddCategoryButton() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [iconURL, setIconURL] = useState(imageIconList[0].src);
-  const [permission, setPermission] = useState([]);
+  const [selectedPermissions, setSelectedPermission] = useState([]);
   const [firstLoad, setFirstLoad] = useState({
     name: true
   });
-  const permissions = useSelector(getCategoryPermissionsSelector);
+  const initPermissions = useSelector(getCategoryPermissionsSelector);
 
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------
@@ -40,7 +40,7 @@ function AddCategoryButton() {
     setName("");
     setDescription("");
     setIconURL(imageIconList[0].src);
-    setPermission([]);
+    setSelectedPermission([]);
     setFirstLoad({
       name: true
     });
@@ -127,7 +127,7 @@ function AddCategoryButton() {
       name: name.toString().trim(),
       description: description.toString().trim(),
       iconUrl: iconURL,
-      permissions: permission.map((item) => item.name)
+      permissions: selectedPermissions.map((item) => item.name)
     };
     addCategory(req);
   };
@@ -218,25 +218,25 @@ function AddCategoryButton() {
                 />
                 <IconSelectButton setState={setIconURL} />
               </MDBox>
-              <MDBox className="relationship__searchBox-item" mb={2}>
-                <MDTypography
-                  variant="body2"
-                  fontWeight="regular"
-                  color="dark"
-                  sx={{ mr: 2, width: "30%" }}
-                >
-                  Quyền ứng dụng
-                </MDTypography>
-                {permissions.length > 0 && (
+              {initPermissions.length > 0 && (
+                <MDBox className="relationship__searchBox-item" mb={2}>
+                  <MDTypography
+                    variant="body2"
+                    fontWeight="regular"
+                    color="dark"
+                    sx={{ mr: 2, width: "30%" }}
+                  >
+                    Quyền ứng dụng
+                  </MDTypography>
                   <AutoCompleteCheckbox
-                    label="Chọn các quyền ứng dụng"
-                    data={permissions}
-                    styleCSS={{ width: "70%" }}
-                    value={permission}
-                    event={setPermission}
+                    placeholder="Chọn các quyền ứng dụng"
+                    options={initPermissions}
+                    sx={{ width: "70%" }}
+                    value={selectedPermissions}
+                    onChange={setSelectedPermission}
                   />
-                )}
-              </MDBox>
+                </MDBox>
+              )}
             </MDBox>
             <MDBox display="flex" flexDirection="row" justifyContent="center" mt={4}>
               <MDButton onClick={handleSubmit} variant="contained" color="info" sx={{ mx: 1 }}>

@@ -25,17 +25,17 @@ function EditCategoryButton({ data, setState }) {
   const dispatch = useDispatch();
   const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
-  const permissions = useSelector(getCategoryPermissionsSelector);
+  const currentPermissions = useSelector(getCategoryPermissionsSelector);
   const defaultValue = {
     name: data.name,
     description: data.description,
     iconURL: data.iconUrl,
-    permission: permissions.filter((item) => data.permissions.includes(item.name))
+    permissions: currentPermissions.filter((item) => data.permissions.includes(item.name))
   };
   const [name, setName] = useState(defaultValue.name);
   const [description, setDescription] = useState(defaultValue.description);
   const [iconURL, setIconURL] = useState(data.iconUrl);
-  const [permission, setPermission] = useState(defaultValue.permission);
+  const [permission, setPermission] = useState(defaultValue.permissions);
   const [firstLoad, setFirstLoad] = useState({
     name: true
   });
@@ -47,7 +47,7 @@ function EditCategoryButton({ data, setState }) {
     setName(data.name);
     setDescription(data.description);
     setIconURL(data.iconUrl);
-    setPermission(permissions.filter((item) => data.permissions.includes(item.name)));
+    setPermission(currentPermissions.filter((item) => data.permissions.includes(item.name)));
     setFirstLoad({
       name: true
     });
@@ -83,10 +83,10 @@ function EditCategoryButton({ data, setState }) {
   //     ? name === defaultValue.name &&
   //         iconURL === defaultValue.iconURL &&
   //         description === defaultValue.description &&
-  //         permission === defaultValue.permission
+  //         permission === defaultValue.permissions
   //     : name === defaultValue.name &&
   //         description === defaultValue.description &&
-  //         permission === defaultValue.permission;
+  //         permission === defaultValue.permissions;
   // };
 
   const isLostAllData = () => {
@@ -233,13 +233,13 @@ function EditCategoryButton({ data, setState }) {
                 >
                   Quyền ứng dụng
                 </MDTypography>
-                {permissions.length > 0 && (
+                {currentPermissions.length > 0 && (
                   <AutoCompleteCheckbox
-                    label="Chọn các quyền ứng dụng"
-                    data={permissions}
-                    styleCSS={{ width: "70%" }}
+                    placeholder="Chọn các quyền ứng dụng"
+                    options={currentPermissions}
+                    sx={{ width: "70%" }}
                     value={permission}
-                    event={setPermission}
+                    onChange={setPermission}
                   />
                 )}
               </MDBox>
