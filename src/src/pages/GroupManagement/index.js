@@ -1,5 +1,4 @@
-/* eslint-disable no-use-before-define */
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, Grid } from "@mui/material";
 
@@ -38,8 +37,8 @@ import {
 // import DataTable from "components/Tables/DataTable";
 import { allCategoriesSelector } from "redux/groupsCategory/selector";
 
+import AddNewGroupButton from "./components/AddNewGroupButton";
 import ExportButton from "./components/ExportButton";
-import AddModalButton from "./components/Modals/AddModalButton";
 import ImportModalButton from "./components/Modals/ImportModalButton";
 import SearchBox from "./components/Search";
 import groupTableData from "./data/groupTableData";
@@ -227,7 +226,7 @@ function GroupManagement() {
                   alignItems="center"
                 >
                   <SelectAllFeature type="groups" />
-                  <AddModalButton />
+                  <AddNewGroupButton />
                   <ImportModalButton />
                   <ExportButton isDisabled={isDisabledExport()} />
                 </MDBox>

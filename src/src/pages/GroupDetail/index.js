@@ -24,7 +24,7 @@ import {
 import { getGroup, resetState } from "redux/groupDetail/slice";
 import { getCategorySelector } from "redux/groupsCategory/selector";
 
-import AddDetailButton from "./components/AddDetailButton";
+import AddNewMemberButton from "./components/AddNewMemberButton";
 import EditDeleteBackBox from "./components/EditDeleteBackBox";
 import ExportButton from "./components/ExportButton";
 import InfoCardDetail from "./components/InfoCardDetail";
@@ -166,9 +166,9 @@ function GroupDetail() {
                       alignItems="center"
                     >
                       {groupDetail?.status !== "DELETED" && (
-                        <AddDetailButton
+                        <AddNewMemberButton
                           type={roleMemberEnum.mentor}
-                          data={[...mentors, ...mentees]}
+                          currentMembers={[...mentors, ...mentees]}
                         />
                       )}
                       <ExportButton
@@ -220,9 +220,9 @@ function GroupDetail() {
                       alignItems="center"
                     >
                       {groupDetail?.status !== "DELETED" && (
-                        <AddDetailButton
+                        <AddNewMemberButton
                           type={roleMemberEnum.mentee}
-                          data={[...mentors, ...mentees]}
+                          currentMembers={[...mentors, ...mentees]}
                         />
                       )}
                       <ExportButton

@@ -61,18 +61,17 @@ function ImportEmailButton({ setData }) {
     let data = emails
       .filter((item) => item[0] !== "STT" && item[0] !== undefined && item[1] !== undefined)
       .map((item) => item[1]);
-    data = data
-      .filter((item, index) => data.indexOf(item) === index)
-      .map((item) => {
-        return {
-          email: item
-        };
-      });
+    data = data.filter((item, index) => data.indexOf(item) === index);
+    // .map((item) => {
+    //   return {
+    //     email: item
+    //   };
+    // });
 
     if (data.length > 0) {
-      const checkEmailInvalid = data.filter((element) => !isEmailValid(element.email));
+      const checkEmailInvalid = data.filter((element) => !isEmailValid(element));
       if (checkEmailInvalid.length > 0) {
-        ErrorAlert(`Email ${checkEmailInvalid[0].email} trong tập tin tải lên không hợp lệ!`);
+        ErrorAlert(`Email ${checkEmailInvalid[0]} trong tập tin tải lên không hợp lệ!`);
       } else {
         setData((oldVal) => [...oldVal, ...data]);
       }
