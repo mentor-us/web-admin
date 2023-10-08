@@ -2,6 +2,14 @@ import PropTypes from "prop-types";
 
 import FullPageLayout from "layouts/FullPageLayout";
 
+/**
+ * FullBgImageLayout
+ * @description
+ * A layout that renders a full page (max width and height) with a background image
+ * @param {string} image - The image to be used as background
+ * @param {node} children - The children to be rendered
+ * @returns {React.JSX.Element}
+ */
 function FullBgImageLayout({ image, children }) {
   return (
     <FullPageLayout

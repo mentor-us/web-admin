@@ -2,6 +2,16 @@ import PropTypes from "prop-types";
 
 import MDBox from "components/MDComponents/MDBox";
 
+/**
+ * FullPageLayout
+ * @description
+ * A layout that renders a full page (max width and height) wrapping the children
+ * @param {?string} [background] - The image to be used as background
+ * @param {node} children - The children to be rendered
+ * @param {?object} sx - The sx prop from Theme UI
+ * @param {object} rest - The rest props
+ * @returns {React.JSX.Element}
+ */
 function FullPageLayout({ background, children, sx, ...rest }) {
   return (
     <MDBox
