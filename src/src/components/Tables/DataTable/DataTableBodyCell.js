@@ -1,9 +1,7 @@
-// prop-types is a library for typechecking of props
 import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import MDAvatar from "components/MDComponents/MDAvatar";
-// Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 

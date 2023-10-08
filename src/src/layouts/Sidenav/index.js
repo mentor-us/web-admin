@@ -1,28 +1,20 @@
 import { useEffect } from "react";
-// react-router-dom components
 import { NavLink, useLocation } from "react-router-dom";
 import Divider from "@mui/material/Divider";
 import Icon from "@mui/material/Icon";
-// @mui material components
 import List from "@mui/material/List";
-// Material Dashboard 2 React example components
 import { setMiniSidenav, setTransparentSidenav, setWhiteSidenav } from "context/index";
-// prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
 
 import { useMentorUs } from "hooks";
 
-// Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 
 import SlideNavCollapseList from "./components/SlidenavCollapseList";
 import sidenavLogoLabel from "./styles/sidenav";
 import SidenavCollapse from "./SidenavCollapse";
-// Custom styles for the Sidenav
 import SidenavRoot from "./SidenavRoot";
-
-// Material Dashboard 2 React context
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatchContext] = useMentorUs();

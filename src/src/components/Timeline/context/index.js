@@ -19,4 +19,3 @@ function useTimeline() {
 }
 
 export { TimelineProvider, useTimeline };
-/* eslint-enable react/prop-types */

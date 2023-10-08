@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Icon } from "@mui/material";
 import { setMiniSidenav, setOpenConfigurator } from "context/index";
 
 import { useMentorUs } from "hooks";
 import routes from "routes";
-// Images
 import logo from "assets/images/logo_mentorus.jpg";
 
 import Sidenav from "layouts/Sidenav/index";

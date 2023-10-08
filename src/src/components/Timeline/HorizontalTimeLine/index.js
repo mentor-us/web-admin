@@ -1,17 +1,12 @@
-// prop-types is a library for typechecking of props
-// @mui material components
 import Icon from "@mui/material/Icon";
 import PropTypes from "prop-types";
 
 import MDBox from "components/MDComponents/MDBox";
-// Material Dashboard 2 React components
 import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 
-// Timeline context
 import { useTimeline } from "../context/index";
 
-// Custom styles for the TimelineItem
 import horizontalTimelineItem from "./styles";
 
 function HorizontalTimelineItem({ color, icon, title, info, lastItem }) {

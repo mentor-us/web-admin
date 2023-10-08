@@ -1,12 +1,8 @@
-// prop-types is a library for typechecking of props.
-// @mui material components
 import Menu from "@mui/material/Menu";
 import PropTypes from "prop-types";
 
-// Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
 
-// Material Dashboard 2 React example components
 import DefaultNavbarLink from "./DefaultNavbarLink";
 
 function DefaultNavbarMobile({ open, close }) {

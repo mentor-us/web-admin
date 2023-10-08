@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Icon } from "@mui/material";
 import PropTypes from "prop-types";
 

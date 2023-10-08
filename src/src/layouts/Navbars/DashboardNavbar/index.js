@@ -20,7 +20,6 @@ import admin from "assets/images/admin.png";
 
 import Breadcrumbs from "components/Breadcrumbs";
 import MDAvatar from "components/MDComponents/MDAvatar";
-// Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 import TooltipCustom from "components/Tooltip";
@@ -178,7 +177,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
   };
 
   /// --------------------------------------------------------
-
   return (
     <AppBar
       position={absolute ? "absolute" : navbarType}

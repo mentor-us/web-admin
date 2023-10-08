@@ -1,14 +1,11 @@
 import { useEffect } from "react";
-// prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
 
-// Material Dashboard 2 React context
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
 
 import Footer from "layouts/Footer";
 import LayoutHelper from "layouts/LayoutHelpers";
-// Material Dashboard 2 React components
 import Loading from "components/Loading";
 import MDBox from "components/MDComponents/MDBox";
 

@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { Icon, Menu, MenuItem } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
 import { PropTypes } from "prop-types";
@@ -43,7 +43,7 @@ const StyledMenu = styled((props) => (
 }));
 
 function SelectMultiple({ label, icon, value, setValue }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

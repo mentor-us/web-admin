@@ -10,7 +10,6 @@ import PropTypes from "prop-types";
 
 import CustomPagination from "components/CustomPagination";
 import HeaderFilter from "components/HeaderFilter";
-// Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
@@ -185,7 +184,7 @@ function DataTableCustom({
   );
 }
 
-// Setting default values for the props of DataTable
+// Setting default values for the props of DataTableCustom
 DataTableCustom.defaultProps = {
   isSorted: true,
   noEndBorder: false,
@@ -193,7 +192,7 @@ DataTableCustom.defaultProps = {
   headerFilterType: false
 };
 
-// Typechecking props for the DataTable
+// Typechecking props for the DataTableCustom
 DataTableCustom.propTypes = {
   table: PropTypes.objectOf(PropTypes.instanceOf(Array)).isRequired,
   isSorted: PropTypes.bool,
