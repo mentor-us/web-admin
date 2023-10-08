@@ -1,5 +1,3 @@
-import React from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@mui/material";
 import PropTypes from "prop-types";
@@ -11,15 +9,31 @@ import EnableAccountButton from "pages/AccountManagement/components/EditDelete/c
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import TooltipCustom from "components/Tooltip";
-
-import { getCurrentUserSelector } from "redux/currentUser/selector";
+import useMyInfo from "hooks/useMyInfo";
 
 function EditDeleteBackBox({ data }) {
-  /// --------------------- Khai báo Biến, State -------------
-  const currentUser = useSelector(getCurrentUserSelector);
-  const isCurrentAccount = currentUser.id === data.id;
-  const isNotAllow = currentUser.role === "ADMIN" && data.role === "SUPER_ADMIN";
+  const myInfo = useMyInfo();
+  const isCurrentAccount = myInfo.id === data.id;
+  const isNotAllow = myInfo.role === "ADMIN" && data.role === "SUPER_ADMIN";
   const navigate = useNavigate();
+
+  const renderBlockButton = () => {
+    if (isCurrentAccount) return null;
+
+    if (data.status) {
+      return (
+        <MDBox mx={2}>
+          <DisableAccountButton data={data} setState={(e) => e} typeButton="modern" isInDetail />
+        </MDBox>
+      );
+    }
+
+    return (
+      <MDBox mx={2}>
+        <EnableAccountButton data={data} setState={(e) => e} typeButton="modern" isInDetail />
+      </MDBox>
+    );
+  };
 
   /// --------------------------------------------------------
   return (
@@ -52,21 +66,7 @@ function EditDeleteBackBox({ data }) {
               />
             </MDBox>
           )}
-          {!isCurrentAccount && data.status && (
-            <MDBox mx={2}>
-              <DisableAccountButton
-                data={data}
-                setState={(e) => e}
-                typeButton="modern"
-                isInDetail
-              />
-            </MDBox>
-          )}
-          {!isCurrentAccount && !data.status && (
-            <MDBox mx={2}>
-              <EnableAccountButton data={data} setState={(e) => e} typeButton="modern" isInDetail />
-            </MDBox>
-          )}
+          {renderBlockButton()}
         </>
       )}
     </MDBox>

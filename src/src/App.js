@@ -8,8 +8,6 @@ import { isAuthenticated } from "utils";
 
 import ProtectedAuth from "pages/Auth/ProtectedAuth";
 
-import { getCurrentUserSelector } from "redux/currentUser/selector";
-import { getCurrentUserSlice } from "redux/currentUser/slice";
 import {
   allCategoriesSelector,
   getCategoryPermissionsSelector
@@ -54,7 +52,6 @@ function App() {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const categories = useSelector(allCategoriesSelector);
-  const currentUser = useSelector(getCurrentUserSelector);
   const permissions = useSelector(getCategoryPermissionsSelector);
   const token = localStorage.getItem("access_token");
 
@@ -75,9 +72,6 @@ function App() {
       }
       if (permissions.length === 0) {
         dispatch(getPermissions());
-      }
-      if (Object.values(currentUser).length === 0) {
-        dispatch(getCurrentUserSlice());
       }
     }
   }, [token]);

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
 
 import { setLoading } from "context";
@@ -15,10 +15,10 @@ import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
+import useMyInfo from "hooks/useMyInfo";
 import { formatDateExcel } from "utils/formatDate";
 
 import { importAccount } from "redux/accounts/slice";
-import { getCurrentUserSelector } from "redux/currentUser/selector";
 
 export default function ImportAccountButton() {
   /// --------------------- Khai báo Biến, State -------------
@@ -28,7 +28,7 @@ export default function ImportAccountButton() {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
   const [firstLoad, setFirstLoad] = useState(true);
-  const currentUser = useSelector(getCurrentUserSelector);
+  const myInfo = useMyInfo();
 
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------
@@ -87,8 +87,7 @@ export default function ImportAccountButton() {
     const outputFilename = `MentorUS_Import_danh_sách_tài_khoản_${date}.xlsx`;
 
     const link = document.createElement("a");
-    link.href =
-      currentUser.role === "SUPER_ADMIN" ? importAccountAdminTemplate : importAccountTemplate;
+    link.href = myInfo.role === "SUPER_ADMIN" ? importAccountAdminTemplate : importAccountTemplate;
     link.setAttribute("download", outputFilename);
     document.body.appendChild(link);
     link.click();

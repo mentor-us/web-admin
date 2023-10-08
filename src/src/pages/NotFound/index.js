@@ -1,7 +1,5 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
-// import BasicLayout from "pages/SignIn/components/BasicLayout/BasicLayout";
 import bgImage from "assets/images/hcmus.jpg";
 
 import FullPageLayout from "layouts/FullPageLayout";

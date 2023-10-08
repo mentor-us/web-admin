@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch } from "react-redux";
 import { Icon } from "@mui/material";
 import PropTypes from "prop-types";
@@ -9,7 +8,7 @@ import { useMentorUs } from "hooks";
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
-// import { getCurrentUserSelector } from "redux/currentUser/selector";
+// import { getMyInfoSelector } from "redux/currentUser/selector";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
 

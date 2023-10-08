@@ -1,5 +1,4 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@mui/material";
 import PropTypes from "prop-types";
@@ -12,9 +11,9 @@ import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
+import useMyInfo from "hooks/useMyInfo";
 
 import { deleteAccount, deleteMultipleAccount } from "redux/accounts/slice";
-import { getCurrentUserSelector } from "redux/currentUser/selector";
 
 function DeleteButton({ data, setState, typeButton, redirectURL, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------
@@ -22,17 +21,17 @@ function DeleteButton({ data, setState, typeButton, redirectURL, isMultiple }) {
   const navigate = useNavigate();
   const [, dispatchContext] = useMentorUs();
   const dispatch = useDispatch();
-  const currentUser = useSelector(getCurrentUserSelector);
+  const myInfo = useMyInfo();
 
   const isDeleteCurrentAccount = () => {
     if (isMultiple) {
-      return data.some((item) => item.id === currentUser.id);
+      return data.some((item) => item.id === myInfo.id);
     }
-    return data.id === currentUser.id;
+    return data.id === myInfo.id;
   };
 
   const isDeleteAdminRole = () => {
-    if (currentUser.role === "ADMIN") {
+    if (myInfo.role === "ADMIN") {
       if (isMultiple) return data.find((item) => item.role === "ADMIN");
       return data.status === "ADMIN";
     }

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   Autocomplete,
   Backdrop,
@@ -27,12 +27,12 @@ import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
+import useMyInfo from "hooks/useMyInfo";
 import { accountStatusList, genderList, roleAccountList } from "utils/constants";
 import { getAnotherDateFromToday } from "utils/formatDate";
 
 import { editAccountDetail } from "redux/accountDetail/slice";
 import { editAccount } from "redux/accounts/slice";
-import { getCurrentUserSelector } from "redux/currentUser/selector";
 // import { getEmailDomainsValidSelector } from "redux/configuration/selector";
 
 function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAccount }) {
@@ -42,7 +42,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
   const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
 
-  const currentAccount = useSelector(getCurrentUserSelector);
+  const currentAccount = useMyInfo();
   const roleList =
     currentAccount.role === "SUPER_ADMIN"
       ? roleAccountList?.map((option) => option.role)

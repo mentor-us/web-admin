@@ -19,6 +19,7 @@ import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert } from "components/SweetAlert";
+import useMyInfo from "hooks/useMyInfo";
 // import { getEmailDomainsValidSelector } from "redux/configuration/selector";
 import { accountStatusList, roleAccountList } from "utils/constants";
 
@@ -27,7 +28,6 @@ import {
   getIsSearchAccountSelector
 } from "redux/accounts/selector";
 import { searchAccount, searchByButton, updateSearchRequest } from "redux/accounts/slice";
-import { getCurrentUserSelector } from "redux/currentUser/selector";
 
 function SearchBox() {
   /// --------------------- Khai báo Biến, State -------------
@@ -41,7 +41,7 @@ function SearchBox() {
   const [status, setStatus] = useState(null);
   // const emailDomainsValid = useSelector(getEmailDomainsValidSelector);
   const itemsPerPage = useSelector(getAccountItemsPerPageSelector);
-  const currentAccount = useSelector(getCurrentUserSelector);
+  const currentAccount = useMyInfo();
   const roleList =
     currentAccount.role === "SUPER_ADMIN"
       ? roleAccountList?.map((option) => option.role)
