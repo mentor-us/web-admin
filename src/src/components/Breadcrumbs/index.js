@@ -1,18 +1,25 @@
-// react-router-dom components
-import { memo } from "react";
 import { Link } from "react-router-dom";
-// @mui material components
 import { Breadcrumbs as MuiBreadcrumbs } from "@mui/material";
 import Icon from "@mui/material/Icon";
-// prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
 
 import { translateToVNmeseByKey } from "routes";
 
-// Material Dashboard 2 React components
 import MDTypography from "components/MDComponents/MDTypography";
 
+/**
+ * Breadcrumbs
+ * @description
+ * Breadcrumbs for pages header. Show current page and path to it.
+ * @param {PropTypes.node} icon - home icon
+ * @param {Object[]} routes - array of routes
+ * @param {boolean} light - light mode
+ * @returns {React.JSX.Element}
+ */
 function Breadcrumbs({ icon, routes, light }) {
+  const lastRoute = routes[routes.length - 1];
+  const remainRoutes = routes.slice(0, -1);
+
   return (
     <MuiBreadcrumbs
       sx={{
@@ -32,7 +39,7 @@ function Breadcrumbs({ icon, routes, light }) {
           <Icon fontSize="medium">{icon}</Icon>
         </MDTypography>
       </Link>
-      {routes.map((route) => (
+      {remainRoutes.map((route) => (
         <Link to={`/${route}`} key={route}>
           <MDTypography
             component="span"
@@ -46,21 +53,27 @@ function Breadcrumbs({ icon, routes, light }) {
           </MDTypography>
         </Link>
       ))}
+      <MDTypography
+        variant="button"
+        fontWeight="regular"
+        color={light ? "white" : "dark"}
+        sx={{ lineHeight: 0 }}
+      >
+        {translateToVNmeseByKey(lastRoute)}
+      </MDTypography>
     </MuiBreadcrumbs>
   );
 }
 
-// Setting default values for the props of Breadcrumbs
 Breadcrumbs.defaultProps = {
   light: false,
   icon: "home"
 };
 
-// Typechecking props for the Breadcrumbs
 Breadcrumbs.propTypes = {
   icon: PropTypes.node,
   routes: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Array)]).isRequired,
   light: PropTypes.bool
 };
 
-export default memo(Breadcrumbs);
+export default Breadcrumbs;
