@@ -17,6 +17,9 @@ const initialState = {
   sidenavColor: "info",
   transparentNavbar: true,
   fixedNavbar: false,
+  /**
+   * @deprecated since version 0.1.1
+   */
   openConfigurator: false,
   darkMode: false,
   loading: false
@@ -43,6 +46,7 @@ function appReducer(state, action) {
     case "FIXED_NAVBAR": {
       return { ...state, fixedNavbar: action.payload };
     }
+
     case "OPEN_CONFIGURATOR": {
       return { ...state, openConfigurator: action.payload };
     }
@@ -85,6 +89,9 @@ export const setSidenavColor = (dispatch, payload) => dispatch({ type: "SIDENAV_
 export const setTransparentNavbar = (dispatch, payload) =>
   dispatch({ type: "TRANSPARENT_NAVBAR", payload });
 export const setFixedNavbar = (dispatch, payload) => dispatch({ type: "FIXED_NAVBAR", payload });
+/**
+ * @deprecated since version 0.1.1
+ */
 export const setOpenConfigurator = (dispatch, payload) =>
   dispatch({ type: "OPEN_CONFIGURATOR", payload });
 export const setDarkMode = (dispatch, payload) => dispatch({ type: "DARKMODE", payload });
