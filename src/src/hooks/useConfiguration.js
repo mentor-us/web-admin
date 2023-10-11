@@ -19,10 +19,10 @@ export default function useConfiguration() {
 
   // Fetch configuration when user is authenticated and configuration is not fetched yet
   useEffect(() => {
-    if (configuration.status === "idle" && isAuthenticated()) {
+    if (isAuthenticated()) {
       dispatch(getAllConfiguration());
     }
-  }, [configuration.status]);
+  }, []);
 
   return configuration;
 }

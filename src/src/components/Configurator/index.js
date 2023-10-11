@@ -1,4 +1,6 @@
-import { Card, Icon } from "@mui/material";
+/* eslint-disable no-unused-vars */
+import { Card, Icon, Typography } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -15,31 +17,19 @@ import EditConfiguratorButton from "./EditConfiguratorButton";
 import "./styles.css";
 
 function Configurator({ open, onClose }) {
-  const { maxLearningYear, emailDomainsValid } = useConfiguration();
+  const { maxLearningYear, emailDomainsValid, status } = useConfiguration();
 
-  return (
-    <ConfiguratorDrawer open={open} onClose={onClose}>
-      <MDBox px={2} py={4}>
-        <MDBox display="flex" justifyContent="space-between" alignItems="center">
-          <MDBox>
-            <MDTypography variant="h5">Cấu hình MentorUS</MDTypography>
-          </MDBox>
-
-          <Icon
-            sx={({ typography: { size }, palette: { dark } }) => ({
-              fontSize: `${size.xl} !important`,
-              color: dark.main,
-              stroke: "currentColor",
-              cursor: "pointer"
-            })}
-            onClick={onClose}
-          >
-            close
-          </Icon>
+  const renderBody = () => {
+    if (status === "loading") {
+      return (
+        <MDBox display="flex" justifyContent="center">
+          <CircularProgress color="info" size="2rem" />
         </MDBox>
+      );
+    }
 
-        <Divider />
-
+    if (status === "succeeded") {
+      return (
         <MDBox className="configuration__container">
           <MDBox sx={{ mb: 2, width: "100%", gap: 2 }} display="flex" flexDirection="column">
             <Card sx={{ p: 2, background: "#DFF6FF" }}>
@@ -95,6 +85,44 @@ function Configurator({ open, onClose }) {
           </MDBox>
           <EditConfiguratorButton sx={{ mt: 1 }} />
         </MDBox>
+      );
+    }
+
+    return (
+      <MDBox display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+        <Typography color="error" variant="h6">
+          Có lỗi xảy ra
+        </Typography>
+        <Typography color="error" variant="h6">
+          Vui lòng thử lại sau
+        </Typography>
+      </MDBox>
+    );
+  };
+
+  return (
+    <ConfiguratorDrawer open={open} onClose={onClose}>
+      <MDBox px={2} py={4}>
+        <MDBox display="flex" justifyContent="space-between" alignItems="center">
+          <MDBox>
+            <MDTypography variant="h5">Cấu hình MentorUS</MDTypography>
+          </MDBox>
+
+          <Icon
+            sx={({ typography: { size }, palette: { dark } }) => ({
+              fontSize: `${size.xl} !important`,
+              color: dark.main,
+              stroke: "currentColor",
+              cursor: "pointer"
+            })}
+            onClick={onClose}
+          >
+            close
+          </Icon>
+        </MDBox>
+
+        <Divider />
+        {renderBody()}
       </MDBox>
     </ConfiguratorDrawer>
   );

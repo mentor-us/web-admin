@@ -84,7 +84,7 @@ function EditConfigurationModal({ open, onClose }) {
    * @returns {void}
    */
   const handleDeleteDomain = (index) => {
-    if (index === 0) {
+    if (validEmailDomains.length === 1) {
       setEmailDomainError("Phải có ít nhất 1 domain email đang hoạt động");
       return;
     }

@@ -83,7 +83,9 @@ function ExportButton({ groupId }) {
         outputFilename = `MentorUS_Báo_cáo_hoạt_động_nhóm_${date}.pdf`;
       } else {
         response = await statisticServices.exportLog(req);
-        outputFilename = `MentorUS_Chi_tiết_thông_tin_hoạt_động_nhóm_${date}.txt`;
+        // Wrong extension for excel file
+        // outputFilename = `MentorUS_Chi_tiết_thông_tin_hoạt_động_nhóm_${date}.txt`;
+        outputFilename = `MentorUS_Chi_tiết_thông_tin_hoạt_động_nhóm_${date}.xlsx`;
       }
 
       if (response) {

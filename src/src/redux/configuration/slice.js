@@ -74,6 +74,12 @@ const configurationSlice = createSlice({
   reducers: {},
   extraReducers: (builders) =>
     builders
+      .addCase(getAllConfiguration.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(getAllConfiguration.rejected, (state, action) => {
+        state.status = "failure";
+      })
       .addCase(getAllConfiguration.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.fromToRange = action.payload.fromToRange;
