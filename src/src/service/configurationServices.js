@@ -7,8 +7,15 @@ import ErrorWrapper from "./ErrorServiceWrapper";
 const getAllConfiguration = async () => {
   const response = await SystemConfigApi.getAll();
   const result = {
+    /**
+     * @deprecated since version 0.1.1 - use maxLearningYear instead
+     */
     fromToRange: {},
-    emailDomainsValid: {}
+    emailDomainsValid: {},
+    /**
+     * @since version 0.1.1
+     */
+    maxLearningYear: {}
   };
 
   response.data.forEach((element) => {
@@ -16,6 +23,7 @@ const getAllConfiguration = async () => {
       result.emailDomainsValid = element;
     } else if (element.key === "valid_max_year") {
       result.fromToRange = element;
+      result.maxLearningYear = element;
     }
   });
 

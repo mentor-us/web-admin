@@ -1,124 +1,110 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Card, Icon } from "@mui/material";
 import Divider from "@mui/material/Divider";
-import { setOpenConfigurator } from "context/index";
-
-import { useMentorUs } from "hooks";
-import { isExpiredToken } from "utils";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import PropTypes from "prop-types";
 
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 import TooltipCustom from "components/Tooltip";
+import useConfiguration from "hooks/useConfiguration";
 
-// getEmailDomainsValidSelector
-import { getFromToRangeSelector } from "redux/configuration/selector";
-import { getAllConfiguration } from "redux/configuration/slice";
-
-import ConfiguratorRoot from "./ConfiguratorRoot";
+import ConfiguratorDrawer from "./ConfiguratorDrawer";
 import EditConfiguratorButton from "./EditConfiguratorButton";
 import "./styles.css";
 
-function Configurator() {
-  const [controller, dispatchContext] = useMentorUs();
-  const { openConfigurator } = controller;
-  const dispatch = useDispatch();
-  const fromToRange = useSelector(getFromToRangeSelector);
-  // const emailDomainsValid = useSelector(getEmailDomainsValidSelector);
-  const token = localStorage.getItem("access_token");
-
-  useEffect(() => {
-    if (token && !isExpiredToken(token)) {
-      dispatch(getAllConfiguration());
-    }
-  }, []);
-
-  const handleCloseConfigurator = () => setOpenConfigurator(dispatchContext, false);
+function Configurator({ open, onClose }) {
+  const { maxLearningYear, emailDomainsValid } = useConfiguration();
 
   return (
-    <ConfiguratorRoot variant="permanent" ownerState={{ openConfigurator }}>
-      <MDBox
-        display="flex"
-        justifyContent="space-between"
-        alignItems="flex-start"
-        pt={4}
-        pb={0.5}
-        px={2}
-      >
-        <MDBox>
-          <MDTypography variant="h5">Cấu hình MentorUS</MDTypography>
+    <ConfiguratorDrawer open={open} onClose={onClose}>
+      <MDBox px={2} py={4}>
+        <MDBox display="flex" justifyContent="space-between" alignItems="center">
+          <MDBox>
+            <MDTypography variant="h5">Cấu hình MentorUS</MDTypography>
+          </MDBox>
+
+          <Icon
+            sx={({ typography: { size }, palette: { dark } }) => ({
+              fontSize: `${size.xl} !important`,
+              color: dark.main,
+              stroke: "currentColor",
+              cursor: "pointer"
+            })}
+            onClick={onClose}
+          >
+            close
+          </Icon>
         </MDBox>
 
-        <Icon
-          sx={({ typography: { size }, palette: { dark } }) => ({
-            fontSize: `${size.xl} !important`,
-            color: dark.main,
-            stroke: "currentColor",
-            strokeWidth: "2px",
-            cursor: "pointer",
-            transform: "translateY(5px)"
-          })}
-          onClick={handleCloseConfigurator}
-        >
-          close
-        </Icon>
-      </MDBox>
+        <Divider />
 
-      <Divider />
+        <MDBox className="configuration__container">
+          <MDBox sx={{ mb: 2, width: "100%", gap: 2 }} display="flex" flexDirection="column">
+            <Card sx={{ p: 2, background: "#DFF6FF" }}>
+              <MDBox
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="space-between"
+                mt={1}
+              >
+                <MDTypography variant="h6">Các domain email hợp lệ</MDTypography>
+                {emailDomainsValid.description && (
+                  <TooltipCustom placement="left" title={emailDomainsValid.description}>
+                    <Icon fontSize="xl" sx={{ cursor: "pointer" }}>
+                      info
+                    </Icon>
+                  </TooltipCustom>
+                )}
+              </MDBox>
+              <Divider />
+              {emailDomainsValid.value.length > 0 && (
+                <List dense>
+                  {emailDomainsValid.value.map((item) => (
+                    <ListItem key={item}>
+                      <ListItemText primary={item} />
+                    </ListItem>
+                  ))}
+                </List>
+              )}
+            </Card>
 
-      <MDBox pb={3} px={2} className="configuration__container">
-        <MDBox display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-          {/* <Card sx={{ my: 1, width: "100%", px: 2, py: 1, background: "#DFF6FF" }}>
-            <MDBox
-              display="flex"
-              flexDirection="row"
-              alignItems="center"
-              justifyContent="space-between"
-              mt={1}
-            >
-              <MDTypography variant="h6">Các domain email hợp lệ</MDTypography>
-              <TooltipCustom placement="left" title={emailDomainsValid.description}>
-                <Icon fontSize="xl" sx={{ cursor: "pointer" }}>
-                  info
-                </Icon>
-              </TooltipCustom>
-            </MDBox>
-            <Divider />
-            {emailDomainsValid.value.length > 0 && (
-              <List dense sx={{ mb: 1 }}>
-                {emailDomainsValid.value.map((item) => (
-                  <ListItem key={item} sx={{ my: 0.5 }}>
-                    <ListItemText primary={item} />
-                  </ListItem>
-                ))}
-              </List>
-            )}
-          </Card> */}
-          <Card sx={{ my: 1, width: "100%", px: 2, py: 1, background: "#DFF6FF" }}>
-            <MDBox
-              display="flex"
-              flexDirection="row"
-              alignItems="center"
-              justifyContent="space-between"
-              mt={1}
-            >
-              <MDTypography variant="h6">Khoảng thời gian tối đa</MDTypography>
-              <TooltipCustom placement="left" title={fromToRange.description ?? ""}>
-                <Icon fontSize="xl" sx={{ cursor: "pointer" }}>
-                  info
-                </Icon>
-              </TooltipCustom>
-            </MDBox>
-            <Divider />
-            <MDTypography variant="h6" sx={{ mb: 1, fontWeight: "300" }}>
-              {fromToRange.value} năm
-            </MDTypography>
-          </Card>
+            <Card sx={{ p: 2, background: "#DFF6FF" }}>
+              <MDBox
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <MDTypography variant="h6">Khoảng thời gian tối đa</MDTypography>
+                {maxLearningYear.description && (
+                  <TooltipCustom placement="left" title={maxLearningYear.description}>
+                    <Icon fontSize="xl" sx={{ cursor: "pointer" }}>
+                      info
+                    </Icon>
+                  </TooltipCustom>
+                )}
+              </MDBox>
+              <Divider />
+              <MDTypography variant="h6" sx={{ fontWeight: "300" }}>
+                {maxLearningYear.value} năm
+              </MDTypography>
+            </Card>
+          </MDBox>
+          <EditConfiguratorButton sx={{ mt: 1 }} />
         </MDBox>
-        <EditConfiguratorButton data={{ fromToRange }} />
       </MDBox>
-    </ConfiguratorRoot>
+    </ConfiguratorDrawer>
   );
 }
+
+Configurator.defaultProps = {};
+
+Configurator.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired
+};
 
 export default Configurator;
