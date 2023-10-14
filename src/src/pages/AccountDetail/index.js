@@ -1,33 +1,32 @@
 import React, { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { Card, Grid } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
 
-import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
+import { getValueOfList } from "utils";
+import user from "assets/images/user.png";
+
+import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
-
+import InfoCardDetail from "pages/GroupDetail/components/InfoCardDetail";
+import TimeCardDetail from "pages/GroupDetail/components/TimeCardDetail";
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 import DataTable from "components/Tables/DataTable";
-
-import user from "assets/images/user.png";
-import { getValueOfList } from "utils";
-import { formatDate } from "utils/formatDate";
 import { accountStatusList, genderList, roleAccountList, roleMemberEnum } from "utils/constants";
+import { formatDate } from "utils/formatDate";
 
 import {
-  getAccountDetailSelector,
-  getAccountDetailGroupsByTypeSelector,
   getAccountDetailColumnHeadersMenteeSelector,
-  getAccountDetailColumnHeadersMentorSelector
+  getAccountDetailColumnHeadersMentorSelector,
+  getAccountDetailGroupsByTypeSelector,
+  getAccountDetailSelector
 } from "redux/accountDetail/selector";
 import { getAccountDetail, resetState } from "redux/accountDetail/slice";
 
-import InfoCardDetail from "pages/GroupDetail/components/InfoCardDetail";
-import TimeCardDetail from "pages/GroupDetail/components/TimeCardDetail";
 import EditDeleteBackBox from "./components/EditDeleteBack";
-import accountDetailTableData from "./data/accountDetailTableData";
 import ExportButton from "./components/ExportButton";
+import accountDetailTableData from "./data/accountDetailTableData";
 
 function AccountDetail() {
   /// --------------------- Khai báo Biến, State -------------

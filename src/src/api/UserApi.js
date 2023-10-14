@@ -1,6 +1,6 @@
 import { makeRequestSearch } from "utils";
+
 import AxiosClient from "./AxiosClient";
-import ErrorWrapper from "./ErrorWrapper";
 
 const UserApi = {
   findById(userId) {
@@ -96,4 +96,4 @@ const UserApi = {
   }
 };
 
-export default ErrorWrapper(UserApi);
+export default UserApi;

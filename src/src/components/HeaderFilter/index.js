@@ -1,33 +1,34 @@
-import React from "react";
 import { useSelector } from "react-redux";
 import { PropTypes } from "prop-types";
-import { getGroupColumnHeadersSelector } from "redux/groups/selector";
-import { getCategoryColumnHeadersSelector } from "redux/groupsCategory/selector";
+
+import SelectMultiple from "components/SelectMultiple";
+
+import {
+  getAccountDetailColumnHeadersMenteeSelector,
+  getAccountDetailColumnHeadersMentorSelector
+} from "redux/accountDetail/selector";
+import {
+  updateAccountDetailColumnHeadersMentee,
+  updateAccountDetailColumnHeadersMentor
+} from "redux/accountDetail/slice";
 import { getAccountColumnHeadersSelector } from "redux/accounts/selector";
-import { getStatisticColumnHeadersSelector } from "redux/statistic/selector";
-import { getStatisticDetailColumnHeadersSelector } from "redux/statisticDetail/selector";
+import { updateAccountColumnHeaders } from "redux/accounts/slice";
 import {
   getGroupDetailColumnHeadersMenteeSelector,
   getGroupDetailColumnHeadersMentorSelector
 } from "redux/groupDetail/selector";
 import {
-  getAccountDetailColumnHeadersMentorSelector,
-  getAccountDetailColumnHeadersMenteeSelector
-} from "redux/accountDetail/selector";
-import { updateGroupColumnHeaders } from "redux/groups/slice";
-import { updateCategoryColumnHeaders } from "redux/groupsCategory/slice";
-import { updateAccountColumnHeaders } from "redux/accounts/slice";
-import { updateStatisticColumnHeaders } from "redux/statistic/slice";
-import { updateStatisticDetailColumnHeaders } from "redux/statisticDetail/slice";
-import {
   updateGroupDetailColumnHeadersMentee,
   updateGroupDetailColumnHeadersMentor
 } from "redux/groupDetail/slice";
-import {
-  updateAccountDetailColumnHeadersMentee,
-  updateAccountDetailColumnHeadersMentor
-} from "redux/accountDetail/slice";
-import SelectMultiple from "components/SelectMultiple";
+import { getGroupColumnHeadersSelector } from "redux/groups/selector";
+import { updateGroupColumnHeaders } from "redux/groups/slice";
+import { getCategoryColumnHeadersSelector } from "redux/groupsCategory/selector";
+import { updateCategoryColumnHeaders } from "redux/groupsCategory/slice";
+import { getStatisticColumnHeadersSelector } from "redux/statistic/selector";
+import { updateStatisticColumnHeaders } from "redux/statistic/slice";
+import { getStatisticDetailColumnHeadersSelector } from "redux/statisticDetail/selector";
+import { updateStatisticDetailColumnHeaders } from "redux/statisticDetail/slice";
 
 function HeaderFilter({ type }) {
   const renderComponent = () => {

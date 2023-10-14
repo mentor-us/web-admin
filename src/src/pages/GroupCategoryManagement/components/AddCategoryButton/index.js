@@ -1,36 +1,37 @@
 import React, { useState } from "react";
-import { Backdrop, Box, Modal, Fade, Typography, Icon, Divider } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
 
-import MDButton from "components/MDComponents/MDButton";
-import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
-import MDInput from "components/MDComponents/MDInput";
-import MDAvatar from "components/MDComponents/MDAvatar";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
 import AutoCompleteCheckbox from "components/AutoComplete/AutoCompleteCheckbox";
-
-import { useMaterialUIController, setLoading } from "context";
-
-import { SuccessAlert, ErrorAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-import { addNewCategory } from "redux/groupsCategory/slice";
-import { getCategoryPermissionsSelector } from "redux/groupsCategory/selector";
-
+import MDAvatar from "components/MDComponents/MDAvatar";
+import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
+import MDInput from "components/MDComponents/MDInput";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import { imageIconList } from "utils/constants";
+
+import { getCategoryPermissionsSelector } from "redux/groupsCategory/selector";
+import { addNewCategory } from "redux/groupsCategory/slice";
+
 import IconSelectButton from "../IconSelectButton";
 
 function AddCategoryButton() {
   /// --------------------- Khai báo Biến, State -------------
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [iconURL, setIconURL] = useState(imageIconList[0].src);
-  const [permission, setPermission] = useState([]);
+  const [selectedPermissions, setSelectedPermission] = useState([]);
   const [firstLoad, setFirstLoad] = useState({
     name: true
   });
-  const permissions = useSelector(getCategoryPermissionsSelector);
+  const initPermissions = useSelector(getCategoryPermissionsSelector);
 
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------
@@ -39,7 +40,7 @@ function AddCategoryButton() {
     setName("");
     setDescription("");
     setIconURL(imageIconList[0].src);
-    setPermission([]);
+    setSelectedPermission([]);
     setFirstLoad({
       name: true
     });
@@ -126,7 +127,7 @@ function AddCategoryButton() {
       name: name.toString().trim(),
       description: description.toString().trim(),
       iconUrl: iconURL,
-      permissions: permission.map((item) => item.name)
+      permissions: selectedPermissions.map((item) => item.name)
     };
     addCategory(req);
   };
@@ -217,25 +218,25 @@ function AddCategoryButton() {
                 />
                 <IconSelectButton setState={setIconURL} />
               </MDBox>
-              <MDBox className="relationship__searchBox-item" mb={2}>
-                <MDTypography
-                  variant="body2"
-                  fontWeight="regular"
-                  color="dark"
-                  sx={{ mr: 2, width: "30%" }}
-                >
-                  Quyền ứng dụng
-                </MDTypography>
-                {permissions.length > 0 && (
+              {initPermissions.length > 0 && (
+                <MDBox className="relationship__searchBox-item" mb={2}>
+                  <MDTypography
+                    variant="body2"
+                    fontWeight="regular"
+                    color="dark"
+                    sx={{ mr: 2, width: "30%" }}
+                  >
+                    Quyền ứng dụng
+                  </MDTypography>
                   <AutoCompleteCheckbox
-                    label="Chọn các quyền ứng dụng"
-                    data={permissions}
-                    styleCSS={{ width: "70%" }}
-                    value={permission}
-                    event={setPermission}
+                    placeholder="Chọn các quyền ứng dụng"
+                    options={initPermissions}
+                    sx={{ width: "70%" }}
+                    value={selectedPermissions}
+                    onChange={setSelectedPermission}
                   />
-                )}
-              </MDBox>
+                </MDBox>
+              )}
             </MDBox>
             <MDBox display="flex" flexDirection="row" justifyContent="center" mt={4}>
               <MDButton onClick={handleSubmit} variant="contained" color="info" sx={{ mx: 1 }}>

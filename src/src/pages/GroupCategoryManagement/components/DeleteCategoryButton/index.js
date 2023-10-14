@@ -1,22 +1,25 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { Icon, Modal, Fade, Backdrop, Box, Divider } from "@mui/material";
 import { useDispatch } from "react-redux";
+import { Backdrop, Box, Divider, Fade, Icon, Modal } from "@mui/material";
+import PropTypes from "prop-types";
 
-import MDTypography from "components/MDComponents/MDTypography";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
-import { SuccessAlert, ErrorAlert, WarningAlertConfirm } from "components/SweetAlert";
 
-import { deleteCategory, deleteMultipleCategories } from "redux/groupsCategory/slice";
 import { removeGroupWithRemovedCategory } from "redux/groups/slice";
-import { useMaterialUIController, setLoading } from "context";
+import { deleteCategory, deleteMultipleCategories } from "redux/groupsCategory/slice";
+
 import DeleteOptions from "./DeleteOptions";
 
 function DeleteCategoryButton({ data, setState, typeButton, isMultiple }) {
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
   const [deleteValue, setDeleteValue] = useState({
     type: "option 1",

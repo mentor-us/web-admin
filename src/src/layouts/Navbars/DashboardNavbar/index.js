@@ -1,35 +1,35 @@
-import { useState, useEffect } from "react";
-import { useLocation, NavLink, useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
-
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
+import Divider from "@mui/material/Divider";
 import Icon from "@mui/material/Icon";
+import IconButton from "@mui/material/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
+import Toolbar from "@mui/material/Toolbar";
+import PropTypes from "prop-types";
 
-// Material Dashboard 2 React components
-import MDBox from "components/MDComponents/MDBox";
-import MDAvatar from "components/MDComponents/MDAvatar";
-import MDTypography from "components/MDComponents/MDTypography";
-import Breadcrumbs from "components/Breadcrumbs";
-import TooltipCustom from "components/Tooltip";
-
-import { useMaterialUIController, setTransparentNavbar, setMiniSidenav } from "context";
-
-import { getCurrentUserSelector } from "redux/currentUser/selector";
-import { logout } from "redux/currentUser/slice";
-
+import { setMiniSidenav, setTransparentNavbar } from "context";
+import { useMentorUs } from "hooks";
+import { translateToVNmeseByKey } from "routes";
 import { getValueOfList } from "utils";
-import { roleAccountList } from "utils/constants";
 // import { WEB_URL } from "config";
-
 import admin from "assets/images/admin.png";
-import { navbar, navbarContainer, navbarRow, navbarIconButton } from "./styles";
+
+import Breadcrumbs from "components/Breadcrumbs";
+import MDAvatar from "components/MDComponents/MDAvatar";
+import MDBox from "components/MDComponents/MDBox";
+import MDTypography from "components/MDComponents/MDTypography";
+import TooltipCustom from "components/Tooltip";
+import useBreadcrumbs from "hooks/useBreadcrumbs";
+import useMyInfo from "hooks/useMyInfo";
+import { roleAccountList } from "utils/constants";
+
+import { logout } from "redux/myInfo/slice";
+
+import { navbar, navbarContainer, navbarIconButton, navbarRow } from "./styles";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   /// --------------------- Khai báo Biến, State -------------
@@ -38,22 +38,11 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [navbarType, setNavbarType] = useState();
-  const [controller, dispatchContext] = useMaterialUIController();
+  const [controller, dispatchContext] = useMentorUs();
   const { miniSidenav, transparentNavbar, fixedNavbar, darkMode } = controller;
-  const route = useLocation().pathname.split("/").slice(1);
-  const currentUser = useSelector(getCurrentUserSelector);
+  const myInfo = useMyInfo();
 
-  /// --------------------------------------------------------
-  /// --------------------- Các hàm thêm ---------------------
-
-  const getTitle = () => {
-    if (route.length > 1 && route.some((item) => item.includes("detail"))) {
-      route.pop();
-    }
-
-    return route[route.length - 1];
-  };
-
+  const { title, routes } = useBreadcrumbs();
   /// --------------------------------------------------------
   /// --------------------- Các hàm event ---------------------
 
@@ -140,7 +129,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
             lineHeight={1}
           >
             <MDAvatar
-              src={currentUser.imageUrl || admin}
+              src={myInfo.imageUrl || admin}
               alt="profile-image"
               shadow="sm"
               size="lg"
@@ -157,10 +146,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
               justifyContent="center"
             >
               <MDTypography variant="h5" fontWeight="medium" sx={{ mb: 1 }}>
-                {currentUser.name}{" "}
+                {myInfo.name}{" "}
               </MDTypography>
               <MDTypography variant="button" color="text" fontWeight="regular" fontSize="small">
-                {getValueOfList(roleAccountList, currentUser.role, "textValue", "role")}{" "}
+                {getValueOfList(roleAccountList, myInfo.role, "textValue", "role")}{" "}
               </MDTypography>
             </MDBox>
           </MDBox>
@@ -170,7 +159,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
           <ListItemIcon>
             <Icon fontSize="medium">account_circle</Icon>
           </ListItemIcon>
-          <NavLink key={currentUser.id} to={`/account-management/account-detail/${currentUser.id}`}>
+          <NavLink key={myInfo.id} to={`/account-management/account-detail/${myInfo.id}`}>
             <MDTypography variant="subtitle2" fontSize="medium">
               Hồ sơ cá nhân
             </MDTypography>
@@ -189,7 +178,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
   };
 
   /// --------------------------------------------------------
-
   return (
     <AppBar
       position={absolute ? "absolute" : navbarType}
@@ -198,7 +186,18 @@ function DashboardNavbar({ absolute, light, isMini }) {
     >
       <Toolbar sx={(theme) => navbarContainer(theme)}>
         <MDBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
-          <Breadcrumbs icon="home" title={getTitle()} route={route} light={light} />
+          <MDBox mr={{ xs: 0, xl: 8 }}>
+            <Breadcrumbs icon="home" routes={routes} light={light} />
+            <MDTypography
+              fontWeight="bold"
+              variant="h6"
+              color={light ? "white" : "dark"}
+              sx={{ mt: 0.5, fontSize: "1.12rem" }}
+              noWrap
+            >
+              {translateToVNmeseByKey(title)}
+            </MDTypography>
+          </MDBox>
         </MDBox>
         <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
           <MDBox color={light ? "white" : "inherit"}>
@@ -208,12 +207,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
               </IconButton>
             </TooltipCustom>
             <IconButton sx={navbarIconButton} size="medium" onClick={handleClick}>
-              <MDAvatar
-                src={currentUser.imageUrl || admin}
-                alt="profile-image"
-                size="sm"
-                shadow="sm"
-              />
+              <MDAvatar src={myInfo.imageUrl || admin} alt="profile-image" size="sm" shadow="sm" />
             </IconButton>
             {menuBox()}
           </MDBox>

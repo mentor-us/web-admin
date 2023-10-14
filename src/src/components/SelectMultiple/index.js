@@ -1,12 +1,13 @@
-import React from "react";
-import { PropTypes } from "prop-types";
+import { useState } from "react";
 import { Icon, Menu, MenuItem } from "@mui/material";
-import { styled, alpha } from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
+import { PropTypes } from "prop-types";
+
 // import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CustomCheckbox from "components/Checkbox";
+import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
-import MDBox from "components/MDComponents/MDBox";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -42,7 +43,7 @@ const StyledMenu = styled((props) => (
 }));
 
 function SelectMultiple({ label, icon, value, setValue }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

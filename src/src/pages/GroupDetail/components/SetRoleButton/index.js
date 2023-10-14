@@ -1,21 +1,23 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Icon } from "@mui/material";
-import { useDispatch } from "react-redux";
+import PropTypes from "prop-types";
 
-import MDTypography from "components/MDComponents/MDTypography";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
 import MDBox from "components/MDComponents/MDBox";
-import { WarningAlertConfirm, ErrorAlert } from "components/SweetAlert";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert, WarningAlertConfirm } from "components/SweetAlert";
 
-import { useMaterialUIController, setLoading } from "context";
 import { setRoleMember } from "redux/groupDetail/slice";
 
 function SetRoleButton({ type, data, setState }) {
   /// --------------------- Khai báo Biến, State -------------
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
 
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------

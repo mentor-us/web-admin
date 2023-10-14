@@ -1,6 +1,4 @@
 import React from "react";
-import PageLayout from "layouts/LayoutContainers/PageLayout";
-import MDBox from "components/MDComponents/MDBox";
 
 import img1 from "assets/images/1.png";
 import img2 from "assets/images/2.png";
@@ -13,10 +11,13 @@ import img8 from "assets/images/8.png";
 import img9 from "assets/images/9.png";
 import flow from "assets/images/flow.png";
 
+import FullPageLayout from "layouts/FullPageLayout";
+import MDBox from "components/MDComponents/MDBox";
+
+import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Home from "../components/Home";
 import Instruction from "../components/Instruction";
-import Footer from "../components/Footer";
 
 const info = [
   {
@@ -118,7 +119,7 @@ const info = [
 
 function WebLandingPage() {
   return (
-    <PageLayout>
+    <FullPageLayout>
       <MDBox width="100%" height="100vh" mx="auto">
         <Header isMobile={false} />
         <Home />
@@ -134,7 +135,7 @@ function WebLandingPage() {
         ))}
         <Footer />
       </MDBox>
-    </PageLayout>
+    </FullPageLayout>
   );
 }
 

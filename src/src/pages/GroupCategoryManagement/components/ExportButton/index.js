@@ -1,10 +1,16 @@
 import React from "react";
-import { Icon } from "@mui/material";
 import { useSelector } from "react-redux";
+import { Icon } from "@mui/material";
 import { PropTypes } from "prop-types";
+
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
 import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
-import { SuccessAlert, ErrorAlert } from "components/SweetAlert";
+import { ErrorAlert, SuccessAlert } from "components/SweetAlert";
+import groupsCategoryServices from "service/groupsCategoryServices";
+import { formatDateExcel } from "utils/formatDate";
 
 import {
   getCategoryColumnHeadersSelector,
@@ -12,13 +18,8 @@ import {
   getIsSearchCategorySelector
 } from "redux/groupsCategory/selector";
 
-import { useMaterialUIController, setLoading } from "context";
-
-import { formatDateExcel } from "utils/formatDate";
-import groupsCategoryServices from "service/groupsCategoryServices";
-
 function ExportButton({ isDisabled }) {
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const columnsHeaders = useSelector(getCategoryColumnHeadersSelector);
   const isSearch = useSelector(getIsSearchCategorySelector);
   const searchRequest = useSelector(getCategorySearchRequestSelector);

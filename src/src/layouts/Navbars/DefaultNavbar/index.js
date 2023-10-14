@@ -1,32 +1,21 @@
-import { useState, useEffect } from "react";
-
-// react-router components
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-// prop-types is a library for typechecking of props.
-import PropTypes from "prop-types";
-
-// @mui material components
 import Container from "@mui/material/Container";
 import Icon from "@mui/material/Icon";
+import PropTypes from "prop-types";
 
-// Material Dashboard 2 React components
-import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
-import MDButton from "components/MDComponents/MDButton";
-
-// Material Dashboard 2 React example components
+import { useMentorUs } from "hooks";
 import breakpoints from "assets/theme/base/breakpoints";
-import { useMaterialUIController } from "context/index";
+
+import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
+import MDTypography from "components/MDComponents/MDTypography";
+
 import DefaultNavbarLink from "./DefaultNavbarLink";
 import DefaultNavbarMobile from "./DefaultNavbarMobile";
 
-// Material Dashboard 2 React base styles
-
-// Material Dashboard 2 React context
-
 function DefaultNavbar({ transparent, light, action }) {
-  const [controller] = useMaterialUIController();
+  const [controller] = useMentorUs();
   const { darkMode } = controller;
 
   const [mobileNavbar, setMobileNavbar] = useState(false);

@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-param-reassign */
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import accountServices from "service/accountServices";
-import { addCheckedProp } from "utils";
-import { roleMemberEnum } from "utils/constants";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
 import { ITEMS_PER_PAGE } from "config";
+import { addCheckedProp } from "utils";
+
+import accountServices from "service/accountServices";
+import { roleMemberEnum } from "utils/constants";
 
 const columnHeaders = [
   { text: "Email", textValue: "email", isShow: true },

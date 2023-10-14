@@ -1,25 +1,25 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import {
   Backdrop,
   Box,
-  Modal,
+  Card,
+  Divider,
   Fade,
-  Typography,
   Icon,
   ImageList,
   ImageListItem,
-  Card,
-  Divider
+  Modal,
+  Typography
 } from "@mui/material";
+import PropTypes from "prop-types";
 
-import TooltipCustom from "components/Tooltip";
-import MDButton from "components/MDComponents/MDButton";
-import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
 import MDAvatar from "components/MDComponents/MDAvatar";
-
+import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
+import MDTypography from "components/MDComponents/MDTypography";
+import TooltipCustom from "components/Tooltip";
 import { imageIconList } from "utils/constants";
+
 import UploadIconButton from "./UploadIconButton";
 
 function IconSelectButton({ setState }) {

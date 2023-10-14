@@ -1,11 +1,9 @@
-import { forwardRef, createContext, useContext, useMemo } from "react";
-
+import { createContext, forwardRef, useContext, useMemo } from "react";
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
-
 // Custom styles for MDPagination
 import MDPaginationItemRoot from "components/MDComponents/MDPagination/MDPaginationItemRoot";
 

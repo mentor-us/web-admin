@@ -1,42 +1,43 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
+  Autocomplete,
   Backdrop,
   Box,
-  Modal,
+  Divider,
   Fade,
-  Typography,
   Icon,
-  Autocomplete,
+  Modal,
   TextField,
-  Divider
+  Typography
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import MDButton from "components/MDComponents/MDButton";
+
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+import { isEmailValid } from "utils";
+
 import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
+import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
-
-import { addNew } from "redux/accounts/slice";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 // import { getEmailDomainsValidSelector } from "redux/configuration/selector";
-import { getCurrentUserSelector } from "redux/currentUser/selector";
-
-import { useMaterialUIController, setLoading } from "context";
+import useMyInfo from "hooks/useMyInfo";
 import { roleAccountList } from "utils/constants";
 
-import { SuccessAlert, ErrorAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-import { isEmailValid } from "utils";
+import { addNew } from "redux/accounts/slice";
 // import UserApi from "api/UserApi";
 
 function AddAccountButton() {
   /// --------------------- Khai báo Biến, State -------------
 
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
 
-  const currentAccount = useSelector(getCurrentUserSelector);
+  const myInfo = useMyInfo();
   const roleList =
-    currentAccount.role === "SUPER_ADMIN"
+    myInfo.role === "SUPER_ADMIN"
       ? roleAccountList?.map((option) => option.role)
       : roleAccountList
           ?.filter((item) => item.textValue !== "SUPER_ADMIN")

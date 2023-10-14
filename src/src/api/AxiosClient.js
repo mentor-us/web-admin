@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import axios from "axios";
+import { API_URL } from "config";
 
 import { ErrorAlertConfirm } from "components/SweetAlert";
-import { API_URL } from "config";
 
 const AxiosClient = axios.create({
   baseURL: API_URL,

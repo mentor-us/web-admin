@@ -1,23 +1,25 @@
-import { useDispatch, useSelector } from "react-redux";
-import { allCategoriesSelector } from "redux/groupsCategory/selector";
-import MDBox from "components/MDComponents/MDBox";
-import { Autocomplete, Card, TextField } from "@mui/material";
-import MDTypography from "components/MDComponents/MDTypography";
-
-import { getValueOfList } from "utils";
 import { useState } from "react";
-import { setLoading, useMaterialUIController } from "context";
+import { useDispatch, useSelector } from "react-redux";
+import { Autocomplete, Card, TextField } from "@mui/material";
 
-import { filterStatistic, updateFilterValue } from "redux/statistic/slice";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+import { getValueOfList } from "utils";
+
+import MDBox from "components/MDComponents/MDBox";
+import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert } from "components/SweetAlert";
+
+import { allCategoriesSelector } from "redux/groupsCategory/selector";
 import { getStatisticItemsPerPageSelector } from "redux/statistic/selector";
+import { filterStatistic, updateFilterValue } from "redux/statistic/slice";
 
 function FilterBox() {
   const listCategories = useSelector(allCategoriesSelector);
 
   const allCategories = [{ id: "", name: "Tất cả" }, ...listCategories];
   const [category, setCategory] = useState("Tất cả");
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const dispatch = useDispatch();
   const itemsPerPage = useSelector(getStatisticItemsPerPageSelector);
 

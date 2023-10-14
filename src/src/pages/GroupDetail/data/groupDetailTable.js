@@ -4,6 +4,7 @@
 // import MDTypography from "components/MDComponents/MDTypography";
 
 import { compareVietnameseWord } from "utils";
+
 import MenuOption from "../components/MenuOption";
 
 export default function groupDetailTable(type, data, columnHeaders, isDeleted) {

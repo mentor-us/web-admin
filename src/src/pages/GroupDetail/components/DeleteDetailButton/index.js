@@ -1,20 +1,23 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 import { Icon } from "@mui/material";
-import MDTypography from "components/MDComponents/MDTypography";
-import MDBox from "components/MDComponents/MDBox";
-import { SuccessAlert, ErrorAlert, WarningAlertConfirm } from "components/SweetAlert";
+import PropTypes from "prop-types";
 
-import { useMaterialUIController, setLoading } from "context";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
+import MDBox from "components/MDComponents/MDBox";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
+
 import { deleteDetail } from "redux/groupDetail/slice";
 
 function DeleteDetailButton({ type, data, setState }) {
   /// --------------------- Khai báo Biến, State -------------
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
 
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------

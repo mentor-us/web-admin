@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-
+import { useState } from "react";
 import { Icon } from "@mui/material";
+import { setMiniSidenav } from "context/index";
 
+import { useMentorUs } from "hooks";
+import routes from "routes";
+import logo from "assets/images/logo_mentorus.jpg";
+
+import Sidenav from "layouts/Sidenav/index";
 import Configurator from "components/Configurator";
 import MDBox from "components/MDComponents/MDBox";
 
-import Sidenav from "layouts/Sidenav/index";
-import routes from "routes";
-
-import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context/index";
-// Images
-import logo from "assets/images/logo_mentorus.jpg";
-
 function LayoutHelper() {
-  const [controller, dispatchContext] = useMaterialUIController();
-  const { layout, miniSidenav, sidenavColor, openConfigurator } = controller;
+  const [controller, dispatchContext] = useMentorUs();
+  const [isConfigOpen, setIsConfigOpen] = useState(false);
+
+  const { miniSidenav, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
 
   const handleOnMouseEnter = () => {
@@ -31,48 +31,43 @@ function LayoutHelper() {
     }
   };
 
-  // Đóng mở cấu hình
-  const handleConfiguratorOpen = () => setOpenConfigurator(dispatchContext, !openConfigurator);
+  // Open and close configurator
+  const closeConfig = () => setIsConfigOpen(false);
+  const openConfig = () => setIsConfigOpen(true);
 
-  const configsButton = (
-    <MDBox
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      width="3.25rem"
-      height="3.25rem"
-      bgColor="#B9E9FC"
-      shadow="sm"
-      borderRadius="50%"
-      position="fixed"
-      right="2rem"
-      bottom="2.4rem"
-      zIndex={99}
-      color="dark"
-      sx={{ cursor: "pointer" }}
-      onClick={handleConfiguratorOpen}
-    >
-      <Icon fontSize="small" color="inherit">
-        settings
-      </Icon>
-    </MDBox>
-  );
   return (
-    localStorage.getItem("access_token") &&
-    layout === "dashboard" && (
-      <>
-        <Sidenav
-          color={sidenavColor}
-          brand={logo}
-          brandName="MentorUS"
-          routes={routes}
-          onMouseEnter={handleOnMouseEnter}
-          onMouseLeave={handleOnMouseLeave}
-        />
-        <Configurator />
-        {configsButton}
-      </>
-    )
+    <>
+      <Sidenav
+        color={sidenavColor}
+        brand={logo}
+        brandName="MentorUS"
+        routes={routes}
+        onMouseEnter={handleOnMouseEnter}
+        onMouseLeave={handleOnMouseLeave}
+      />
+      <MDBox
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        width="3.25rem"
+        height="3.25rem"
+        bgColor="#B9E9FC"
+        shadow="sm"
+        borderRadius="50%"
+        position="fixed"
+        right="2rem"
+        bottom="2.4rem"
+        zIndex={99}
+        color="dark"
+        sx={{ cursor: "pointer" }}
+        onClick={openConfig}
+      >
+        <Icon fontSize="small" color="inherit">
+          settings
+        </Icon>
+      </MDBox>
+      {isConfigOpen && <Configurator open={isConfigOpen} onClose={closeConfig} />}
+    </>
   );
 }
 

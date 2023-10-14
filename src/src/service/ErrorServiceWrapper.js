@@ -1,22 +1,26 @@
+import ClientError from "errors/ClientError";
+import ServerError from "errors/ServerError";
+
 /**
- * This function wrap async/await function with try catch block
- *
+ * This function wrap function with try catch block
+ * to throw specific error
  * @param {function(...args) : Promise<any> | any} fn
  * @returns {function(...args) : Promise<any>}
  */
 const wrapperFunction = (fn) => {
-  return async function _dummyFunc(...args) {
+  return function _dummyFunc(...args) {
     try {
-      const result = await fn.apply(this, args);
-      return result;
+      return fn.apply(this, args);
     } catch (error) {
-      throw new Error(error.message);
+      if (error instanceof ServerError) throw error;
+      else if (error instanceof ClientError) throw error;
+      else throw new ClientError(error.message);
     }
   };
 };
 
 /**
- * Wrap all function in object with try catch block
+ * Wrap all function in object with new function
  * Don't need to wrap function in object manually
  * @param {object} object
  * @returns {object}
@@ -24,7 +28,7 @@ const wrapperFunction = (fn) => {
 export default (object) => {
   const result = { ...object };
   Object.keys(result).forEach((key) => {
-    if (object[key] && typeof object[key] === "function") {
+    if (typeof object[key] === "function") {
       // Wrap function with try catch
       result[key] = wrapperFunction(object[key]);
     }

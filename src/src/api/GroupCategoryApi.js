@@ -1,6 +1,6 @@
 import { makeRequestSearch } from "utils";
+
 import AxiosClient from "./AxiosClient";
-import ErrorWrapper from "./ErrorWrapper";
 
 const GroupCategoryApi = {
   all() {
@@ -52,4 +52,4 @@ const GroupCategoryApi = {
   }
 };
 
-export default ErrorWrapper(GroupCategoryApi);
+export default GroupCategoryApi;

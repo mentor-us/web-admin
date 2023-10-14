@@ -1,10 +1,9 @@
-import React from "react";
-import { PropTypes } from "prop-types";
 import { Pagination } from "@mui/material";
+import { PropTypes } from "prop-types";
+
 import "./styles.css";
 
 function CustomPagination({ totalPages, pageIndex, handleChangePage }) {
-  /// --------------------- Khai báo Biến, State -------------
   const handleChange = (event, value) => {
     handleChangePage(value - 1);
   };

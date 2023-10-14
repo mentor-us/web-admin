@@ -1,23 +1,24 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { Icon } from "@mui/material";
-import MDTypography from "components/MDComponents/MDTypography";
+import PropTypes from "prop-types";
+
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert, SuccessAlert } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
 
-import { enableAccount } from "redux/accounts/slice";
 import { enableAccountDetail } from "redux/accountDetail/slice";
-
-import { SuccessAlert, ErrorAlert } from "components/SweetAlert";
-
-import { useMaterialUIController, setLoading } from "context";
+import { enableAccount } from "redux/accounts/slice";
 
 function EnableAccountButton({ data, setState, typeButton, isInDetail, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------
 
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const dispatch = useDispatch();
 
   /// --------------------------------------------------------

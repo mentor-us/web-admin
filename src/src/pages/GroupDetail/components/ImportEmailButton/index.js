@@ -1,22 +1,20 @@
 import React, { useState } from "react";
+import { Backdrop, Divider, Fade, Icon, Modal } from "@mui/material";
+
+import { isEmailValid } from "utils";
 // import { useSelector } from "react-redux";
 import * as XLSX from "xlsx";
-import { Icon, Modal, Fade, Backdrop, Divider } from "@mui/material";
+import excel from "assets/images/excel.png";
+// import { getEmailDomainsValidSelector } from "redux/configuration/selector";
+import template from "templates/Import_Emails_Group_Detail.xlsx";
 
+import DropFileField from "components/DropFileField";
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
-import TooltipCustom from "components/Tooltip";
-
-// import { getEmailDomainsValidSelector } from "redux/configuration/selector";
-
-import template from "templates/Import_Emails_Group_Detail.xlsx";
-import excel from "assets/images/excel.png";
-
-import { formatDateExcel } from "utils/formatDate";
-import { isEmailValid } from "utils";
 import { ErrorAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-import DropFileField from "components/DropFileField";
+import TooltipCustom from "components/Tooltip";
+import { formatDateExcel } from "utils/formatDate";
 
 // eslint-disable-next-line react/prop-types
 function ImportEmailButton({ setData }) {
@@ -63,18 +61,17 @@ function ImportEmailButton({ setData }) {
     let data = emails
       .filter((item) => item[0] !== "STT" && item[0] !== undefined && item[1] !== undefined)
       .map((item) => item[1]);
-    data = data
-      .filter((item, index) => data.indexOf(item) === index)
-      .map((item) => {
-        return {
-          email: item
-        };
-      });
+    data = data.filter((item, index) => data.indexOf(item) === index);
+    // .map((item) => {
+    //   return {
+    //     email: item
+    //   };
+    // });
 
     if (data.length > 0) {
-      const checkEmailInvalid = data.filter((element) => !isEmailValid(element.email));
+      const checkEmailInvalid = data.filter((element) => !isEmailValid(element));
       if (checkEmailInvalid.length > 0) {
-        ErrorAlert(`Email ${checkEmailInvalid[0].email} trong tập tin tải lên không hợp lệ!`);
+        ErrorAlert(`Email ${checkEmailInvalid[0]} trong tập tin tải lên không hợp lệ!`);
       } else {
         setData((oldVal) => [...oldVal, ...data]);
       }

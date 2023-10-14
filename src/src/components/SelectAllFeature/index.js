@@ -1,18 +1,18 @@
-import React from "react";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
+
+import DeleteButton from "pages/AccountManagement/components/EditDelete/components/DeleteButton";
+import DisableAccountButton from "pages/AccountManagement/components/EditDelete/components/DisableAccountButton";
+import EnableAccountButton from "pages/AccountManagement/components/EditDelete/components/EnableAccountButton";
+import DeleteCategoryButton from "pages/GroupCategoryManagement/components/DeleteCategoryButton";
+import DeleteGroupButton from "pages/GroupManagement/components/DeleteGroupButton";
+import DisableGroupButton from "pages/GroupManagement/components/DisableGroupButton/DisableGroupButton";
+import EnableGroupButton from "pages/GroupManagement/components/EnableGroupButton/EnableGroupButton";
+import MDBox from "components/MDComponents/MDBox";
 
 import { getAccountCheckedSelector } from "redux/accounts/selector";
 import { getGroupsCheckedSelector } from "redux/groups/selector";
 import { getGroupsCategoryCheckedSelector } from "redux/groupsCategory/selector";
-import DeleteButton from "pages/AccountManagement/components/EditDelete/components/DeleteButton";
-import EnableAccountButton from "pages/AccountManagement/components/EditDelete/components/EnableAccountButton";
-import DisableAccountButton from "pages/AccountManagement/components/EditDelete/components/DisableAccountButton";
-import MDBox from "components/MDComponents/MDBox";
-import DeleteGroupButton from "pages/GroupManagement/components/DeleteGroupButton";
-import DeleteCategoryButton from "pages/GroupCategoryManagement/components/DeleteCategoryButton";
-import EnableGroupButton from "pages/GroupManagement/components/EnableGroupButton/EnableGroupButton";
-import DisableGroupButton from "pages/GroupManagement/components/DisableGroupButton/DisableGroupButton";
 
 function SelectAllFeature(type) {
   const myState = useSelector((state) => state);

@@ -1,20 +1,19 @@
 import { useMemo } from "react";
-import PropTypes from "prop-types";
 import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  BarController,
-  BarElement,
-  LinearScale,
-  Title,
-  Legend,
-  Tooltip
-} from "chart.js";
-
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
 import Icon from "@mui/material/Icon";
+import {
+  BarController,
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  Title,
+  Tooltip
+} from "chart.js";
+import PropTypes from "prop-types";
 
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";

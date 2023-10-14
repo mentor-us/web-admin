@@ -1,18 +1,19 @@
-import React, { useRef, useState } from "react";
-import PropTypes from "prop-types";
+import { useRef, useState } from "react";
 import { Icon } from "@mui/material";
+import PropTypes from "prop-types";
 
-import xlsx from "assets/images/xlsx.png";
+import { formatBytes } from "utils";
 import cloud from "assets/images/cloud.png";
 import image from "assets/images/image.png";
+import xlsx from "assets/images/xlsx.png";
 
-import "./styles.css";
 import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert } from "components/SweetAlert";
-import MDButton from "components/MDComponents/MDButton";
-import { formatBytes } from "utils";
 import { imageExtensionList } from "utils/constants";
+
+import "./styles.css";
 
 function DropFileField({ setState, maxSize, accept }) {
   const wrapperRef = useRef(null);

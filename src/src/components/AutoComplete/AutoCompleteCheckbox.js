@@ -1,28 +1,35 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import * as React from "react";
-import PropTypes from "prop-types";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import Autocomplete from "@mui/material/Autocomplete";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import PropTypes from "prop-types";
 
 import "./styles.css";
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
-function AutoCompleteCheckbox({ label, value, event, data, styleCSS }) {
+/**
+ * AutoCompleteCheckbox
+ * @description
+ * Use this component to select multiple options from a list of options
+ *
+ * @param {string} placeholder - placeholder text for the input when no value is selected
+ * @param {Array} options - array of options to select from
+ * @param {Array} value - array of current selected values
+ * @param {Object} sx - material ui sx prop
+ * @param {Function} onChange - callback function when the value changes
+ * @returns {React.JSX.Element}
+ */
+function AutoCompleteCheckbox({ placeholder, options, value, sx, onChange }) {
   return (
     <Autocomplete
       noOptionsText="Trống"
       multiple
       limitTags={1}
-      options={data}
-      sx={styleCSS}
-      value={value || []}
+      options={options}
+      sx={sx}
+      value={value}
       onChange={(e, newValue) => {
-        event(newValue);
+        onChange(newValue);
       }}
       disableCloseOnSelect
       selectOnFocus
@@ -30,10 +37,11 @@ function AutoCompleteCheckbox({ label, value, event, data, styleCSS }) {
       handleHomeEndKeys
       getOptionLabel={(option) => option?.description}
       renderOption={(props, option, { selected }) => (
+        // eslint-disable-next-line react/jsx-props-no-spreading
         <li {...props}>
           <Checkbox
-            icon={icon}
-            checkedIcon={checkedIcon}
+            icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+            checkedIcon={<CheckBoxIcon fontSize="small" />}
             style={{ marginRight: 8 }}
             checked={selected}
           />
@@ -41,25 +49,25 @@ function AutoCompleteCheckbox({ label, value, event, data, styleCSS }) {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} placeholder={value.length > 0 ? "" : label} size="small" />
+        <TextField {...params} placeholder={value.length > 0 ? "" : placeholder} size="small" />
       )}
     />
   );
 }
 
-// Setting default values for the props of Breadcrumbs
+// Setting default values for the props of AutoCompleteCheckbox
 AutoCompleteCheckbox.defaultProps = {
-  label: "",
+  placeholder: "",
   value: [],
-  styleCSS: {}
+  sx: {}
 };
 
 AutoCompleteCheckbox.propTypes = {
-  label: PropTypes.string,
+  placeholder: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Array)]),
-  event: PropTypes.func.isRequired,
-  data: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Array)]).isRequired,
-  styleCSS: PropTypes.instanceOf(Object)
+  options: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Array)]).isRequired,
+  sx: PropTypes.instanceOf(Object),
+  onChange: PropTypes.func.isRequired
 };
 
 export default AutoCompleteCheckbox;

@@ -1,21 +1,20 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import { useState } from "react";
 import { Icon, Menu, MenuItem } from "@mui/material";
-import { useSelector } from "react-redux";
-
-import { getCurrentUserSelector } from "redux/currentUser/selector";
+import PropTypes from "prop-types";
 
 import MDBox from "components/MDComponents/MDBox";
+import useMyInfo from "hooks/useMyInfo";
+
 import DeleteButton from "./components/DeleteButton";
-import EditAccountButton from "./components/EditAccountButton";
 import DisableAccountButton from "./components/DisableAccountButton";
+import EditAccountButton from "./components/EditAccountButton";
 import EnableAccountButton from "./components/EnableAccountButton";
 
 function EditDelete({ data }) {
   const [menu, setMenu] = useState(null);
-  const currentUser = useSelector(getCurrentUserSelector);
-  const isCurrentAccount = currentUser.id === data.id;
-  const canDelete = !isCurrentAccount && !(currentUser.role === "ADMIN" && data.role === "ADMIN");
+  const myInfo = useMyInfo();
+  const isCurrentAccount = myInfo.id === data.id;
+  const canDelete = !isCurrentAccount && !(myInfo.role === "ADMIN" && data.role === "ADMIN");
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);

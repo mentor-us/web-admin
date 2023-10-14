@@ -1,13 +1,11 @@
 import { forwardRef } from "react";
-
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
-// Material Dashboard 2 React components
-import MDTypography from "components/MDComponents/MDTypography";
-
 // Custom styles for MDProgress
 import MDProgressRoot from "components/MDComponents/MDProgress/MDProgressRoot";
+// Material Dashboard 2 React components
+import MDTypography from "components/MDComponents/MDTypography";
 
 const MDProgress = forwardRef(({ variant, color, value, label, ...rest }, ref) => (
   <>

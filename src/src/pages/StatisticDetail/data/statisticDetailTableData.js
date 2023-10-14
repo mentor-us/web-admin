@@ -3,12 +3,13 @@
 // import { NavLink } from "react-router-dom";
 // import MDTypography from "components/MDComponents/MDTypography";
 import {
-  getValueOfList,
-  numberWithCommas,
-  compareVietnameseWord,
   compareDate,
-  compareNumber
+  compareNumber,
+  compareVietnameseWord,
+  getValueOfList,
+  numberWithCommas
 } from "utils";
+
 import { roleMemberList } from "utils/constants";
 import { formatDate } from "utils/formatDate";
 // import UpdateStatisticDetail from "../components/UpdateStatisticDetail";

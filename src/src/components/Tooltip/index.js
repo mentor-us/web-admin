@@ -1,7 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
 import { styled } from "@mui/material";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import PropTypes from "prop-types";
 
 const LightTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className, arrow: { backgroundColor: "white" } }} />

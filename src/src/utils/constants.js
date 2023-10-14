@@ -1,14 +1,18 @@
-import mentorus from "assets/images/mentor_us.png";
-import mentor from "assets/images/mentor.png";
-import mentoring from "assets/images/mentoring.png";
-import mentorship from "assets/images/mentorship.png";
-import teamwork from "assets/images/teamwork.png";
-import training from "assets/images/training.png";
+import { API_URL, WEB_URL } from "config";
 import coaching from "assets/images/coaching.png";
 import group from "assets/images/group.png";
-import png from "assets/images/png.png";
 import jpeg from "assets/images/jpeg.png";
 import jpg from "assets/images/jpg.png";
+import mentor from "assets/images/mentor.png";
+import mentorus from "assets/images/mentor_us.png";
+import mentoring from "assets/images/mentoring.png";
+import mentorship from "assets/images/mentorship.png";
+import png from "assets/images/png.png";
+import teamwork from "assets/images/teamwork.png";
+import training from "assets/images/training.png";
+
+export const googleSignInURL = `${API_URL}oauth2/authorize/google?redirect_uri=${WEB_URL}auth/redirect`;
+export const microsoftSignInURL = `${API_URL}oauth2/authorize/azure?redirect_uri=${WEB_URL}auth/redirect`;
 
 export const imageExtensionList = [
   { src: png, name: "png.png", type: "png" },

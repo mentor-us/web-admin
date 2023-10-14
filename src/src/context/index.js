@@ -1,46 +1,60 @@
-import { createContext, useContext, useReducer, useMemo } from "react";
-
-// prop-types is a library for typechecking of props
+import { createContext, useReducer } from "react";
 import PropTypes from "prop-types";
 
-// Material Dashboard 2 React main context
-const MaterialUI = createContext();
+// MentorUs React app context
+export const MentorUsContext = createContext(null);
+export const MentorUsDispatchContext = createContext(null);
 
 // Setting custom name for the context which is visible on react dev tools
-MaterialUI.displayName = "MaterialUIContext";
+MentorUsContext.displayName = "MentorUsContext";
+MentorUsDispatchContext.displayName = "MentorUsDispatchContext";
 
-// Material Dashboard 2 React reducer
-function reducer(state, action) {
+// App initial state
+const initialState = {
+  miniSidenav: false,
+  transparentSidenav: false,
+  whiteSidenav: true,
+  sidenavColor: "info",
+  transparentNavbar: true,
+  fixedNavbar: false,
+  /**
+   * @deprecated since version 0.1.1
+   */
+  openConfigurator: false,
+  darkMode: false,
+  loading: false
+};
+
+// App reducer
+function appReducer(state, action) {
   switch (action.type) {
     case "MINI_SIDENAV": {
-      return { ...state, miniSidenav: action.value };
+      return { ...state, miniSidenav: action.payload };
     }
     case "TRANSPARENT_SIDENAV": {
-      return { ...state, transparentSidenav: action.value };
+      return { ...state, transparentSidenav: action.payload };
     }
     case "WHITE_SIDENAV": {
-      return { ...state, whiteSidenav: action.value };
+      return { ...state, whiteSidenav: action.payload };
     }
     case "SIDENAV_COLOR": {
-      return { ...state, sidenavColor: action.value };
+      return { ...state, sidenavColor: action.payload };
     }
     case "TRANSPARENT_NAVBAR": {
-      return { ...state, transparentNavbar: action.value };
+      return { ...state, transparentNavbar: action.payload };
     }
     case "FIXED_NAVBAR": {
-      return { ...state, fixedNavbar: action.value };
+      return { ...state, fixedNavbar: action.payload };
     }
+
     case "OPEN_CONFIGURATOR": {
-      return { ...state, openConfigurator: action.value };
-    }
-    case "LAYOUT": {
-      return { ...state, layout: action.value };
+      return { ...state, openConfigurator: action.payload };
     }
     case "DARKMODE": {
-      return { ...state, darkMode: action.value };
+      return { ...state, darkMode: action.payload };
     }
     case "LOADING": {
-      return { ...state, loading: action.value };
+      return { ...state, loading: action.payload };
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
@@ -48,74 +62,37 @@ function reducer(state, action) {
   }
 }
 
-// Material Dashboard 2 React context provider
-function MaterialUIControllerProvider({ children }) {
-  const initialState = {
-    miniSidenav: false,
-    transparentSidenav: false,
-    whiteSidenav: true,
-    sidenavColor: "info",
-    transparentNavbar: true,
-    fixedNavbar: false,
-    openConfigurator: false,
-    layout: "dashboard",
-    darkMode: false,
-    loading: false
-  };
+// App context provider
+export function MentorUSAppProvider({ children }) {
+  const [states, dispatch] = useReducer(appReducer, initialState);
 
-  const [controller, dispatchContext] = useReducer(reducer, initialState);
-
-  const value = useMemo(() => [controller, dispatchContext], [controller, dispatchContext]);
-
-  return <MaterialUI.Provider value={value}>{children}</MaterialUI.Provider>;
+  return (
+    <MentorUsContext.Provider value={states}>
+      <MentorUsDispatchContext.Provider value={dispatch}>
+        {children}
+      </MentorUsDispatchContext.Provider>
+    </MentorUsContext.Provider>
+  );
 }
 
-// Material Dashboard 2 React custom hook for using context
-function useMaterialUIController() {
-  const context = useContext(MaterialUI);
-
-  if (!context) {
-    throw new Error(
-      "useMaterialUIController should be used inside the MaterialUIControllerProvider."
-    );
-  }
-
-  return context;
-}
-
-// Typechecking props for the MaterialUIControllerProvider
-MaterialUIControllerProvider.propTypes = {
+// Typechecking props for the MentorUSAppProvider
+MentorUSAppProvider.propTypes = {
   children: PropTypes.node.isRequired
 };
 
-// Context module functions
-const setMiniSidenav = (dispatchContext, value) => dispatchContext({ type: "MINI_SIDENAV", value });
-const setTransparentSidenav = (dispatchContext, value) =>
-  dispatchContext({ type: "TRANSPARENT_SIDENAV", value });
-const setWhiteSidenav = (dispatchContext, value) =>
-  dispatchContext({ type: "WHITE_SIDENAV", value });
-const setSidenavColor = (dispatchContext, value) =>
-  dispatchContext({ type: "SIDENAV_COLOR", value });
-const setTransparentNavbar = (dispatchContext, value) =>
-  dispatchContext({ type: "TRANSPARENT_NAVBAR", value });
-const setFixedNavbar = (dispatchContext, value) => dispatchContext({ type: "FIXED_NAVBAR", value });
-const setOpenConfigurator = (dispatchContext, value) =>
-  dispatchContext({ type: "OPEN_CONFIGURATOR", value });
-const setLayout = (dispatchContext, value) => dispatchContext({ type: "LAYOUT", value });
-const setDarkMode = (dispatchContext, value) => dispatchContext({ type: "DARKMODE", value });
-const setLoading = (dispatchContext, value) => dispatchContext({ type: "LOADING", value });
-
-export {
-  MaterialUIControllerProvider,
-  useMaterialUIController,
-  setMiniSidenav,
-  setTransparentSidenav,
-  setWhiteSidenav,
-  setSidenavColor,
-  setTransparentNavbar,
-  setFixedNavbar,
-  setOpenConfigurator,
-  setLayout,
-  setDarkMode,
-  setLoading
-};
+// App actions list
+export const setMiniSidenav = (dispatch, payload) => dispatch({ type: "MINI_SIDENAV", payload });
+export const setTransparentSidenav = (dispatch, payload) =>
+  dispatch({ type: "TRANSPARENT_SIDENAV", payload });
+export const setWhiteSidenav = (dispatch, payload) => dispatch({ type: "WHITE_SIDENAV", payload });
+export const setSidenavColor = (dispatch, payload) => dispatch({ type: "SIDENAV_COLOR", payload });
+export const setTransparentNavbar = (dispatch, payload) =>
+  dispatch({ type: "TRANSPARENT_NAVBAR", payload });
+export const setFixedNavbar = (dispatch, payload) => dispatch({ type: "FIXED_NAVBAR", payload });
+/**
+ * @deprecated since version 0.1.1
+ */
+export const setOpenConfigurator = (dispatch, payload) =>
+  dispatch({ type: "OPEN_CONFIGURATOR", payload });
+export const setDarkMode = (dispatch, payload) => dispatch({ type: "DARKMODE", payload });
+export const setLoading = (dispatch, payload) => dispatch({ type: "LOADING", payload });

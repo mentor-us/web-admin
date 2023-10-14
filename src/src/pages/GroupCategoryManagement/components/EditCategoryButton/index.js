@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import { Backdrop, Box, Modal, Fade, Typography, Icon, Divider } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
-import MDButton from "components/MDComponents/MDButton";
-import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
-import MDInput from "components/MDComponents/MDInput";
-import MDAvatar from "components/MDComponents/MDAvatar";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
 import AutoCompleteCheckbox from "components/AutoComplete/AutoCompleteCheckbox";
+import MDAvatar from "components/MDComponents/MDAvatar";
+import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
+import MDInput from "components/MDComponents/MDInput";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 
-import { useMaterialUIController, setLoading } from "context";
-
-import { SuccessAlert, ErrorAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-import { editCategory } from "redux/groupsCategory/slice";
 import { getCategoryPermissionsSelector } from "redux/groupsCategory/selector";
+import { editCategory } from "redux/groupsCategory/slice";
 
 import IconSelectButton from "../IconSelectButton";
 
@@ -22,19 +23,19 @@ function EditCategoryButton({ data, setState }) {
   /// --------------------- Khai báo Biến, State -------------
 
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
-  const permissions = useSelector(getCategoryPermissionsSelector);
+  const currentPermissions = useSelector(getCategoryPermissionsSelector);
   const defaultValue = {
     name: data.name,
     description: data.description,
     iconURL: data.iconUrl,
-    permission: permissions.filter((item) => data.permissions.includes(item.name))
+    permissions: currentPermissions.filter((item) => data.permissions.includes(item.name))
   };
   const [name, setName] = useState(defaultValue.name);
   const [description, setDescription] = useState(defaultValue.description);
   const [iconURL, setIconURL] = useState(data.iconUrl);
-  const [permission, setPermission] = useState(defaultValue.permission);
+  const [permission, setPermission] = useState(defaultValue.permissions);
   const [firstLoad, setFirstLoad] = useState({
     name: true
   });
@@ -46,7 +47,7 @@ function EditCategoryButton({ data, setState }) {
     setName(data.name);
     setDescription(data.description);
     setIconURL(data.iconUrl);
-    setPermission(permissions.filter((item) => data.permissions.includes(item.name)));
+    setPermission(currentPermissions.filter((item) => data.permissions.includes(item.name)));
     setFirstLoad({
       name: true
     });
@@ -82,10 +83,10 @@ function EditCategoryButton({ data, setState }) {
   //     ? name === defaultValue.name &&
   //         iconURL === defaultValue.iconURL &&
   //         description === defaultValue.description &&
-  //         permission === defaultValue.permission
+  //         permission === defaultValue.permissions
   //     : name === defaultValue.name &&
   //         description === defaultValue.description &&
-  //         permission === defaultValue.permission;
+  //         permission === defaultValue.permissions;
   // };
 
   const isLostAllData = () => {
@@ -232,13 +233,13 @@ function EditCategoryButton({ data, setState }) {
                 >
                   Quyền ứng dụng
                 </MDTypography>
-                {permissions.length > 0 && (
+                {currentPermissions.length > 0 && (
                   <AutoCompleteCheckbox
-                    label="Chọn các quyền ứng dụng"
-                    data={permissions}
-                    styleCSS={{ width: "70%" }}
+                    placeholder="Chọn các quyền ứng dụng"
+                    options={currentPermissions}
+                    sx={{ width: "70%" }}
                     value={permission}
-                    event={setPermission}
+                    onChange={setPermission}
                   />
                 )}
               </MDBox>

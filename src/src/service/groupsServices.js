@@ -1,130 +1,84 @@
-import GroupApi from "api/GroupApi";
 import { calculateDays } from "utils";
-import getMessage from "utils/message";
+import GroupApi from "api/GroupApi";
 
-const getAllGroups = async (req) => {
-  try {
-    const response = await GroupApi.all(req);
-    return response.data;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+import ServerError from "errors/ServerError";
 
-const getGroup = async (id) => {
-  try {
-    const response = await GroupApi.findById(id);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+import ErrorWrapper from "./ErrorServiceWrapper";
+
+const getAllGroups = (req) => GroupApi.all(req).then((res) => res.data);
+
+const getGroup = (id) => GroupApi.findById(id);
 
 const searchGroup = async (req) => {
-  try {
-    const response = await GroupApi.search(req);
-    if (response.returnCode === 200) {
-      return response.data;
-    }
+  const response = await GroupApi.search(req);
 
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const addNewGroup = async (req) => {
-  let response;
-  try {
-    response = await GroupApi.add(req);
+  const response = await GroupApi.add(req);
 
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-
-    throw new Error(response.returnCode);
-  } catch (error) {
-    const errorCode = parseInt(error.message, 10);
-    if (errorCode === 210) {
-      throw new Error(getMessage(errorCode, response.data.join(", ")));
-    } else {
-      throw new Error(getMessage(errorCode));
-    }
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode, response.data);
   }
+
+  return response.data;
 };
 
 const enableGroup = async (req) => {
-  try {
-    const response = await GroupApi.enableGroup(req);
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  const response = await GroupApi.enableGroup(req);
+
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const disableGroup = async (req) => {
-  try {
-    const response = await GroupApi.disableGroup(req);
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  const response = await GroupApi.disableGroup(req);
+
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const importGroups = async (req) => {
-  try {
-    const response = await GroupApi.importSheet(req);
+  const response = await GroupApi.importSheet(req);
 
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const editGroup = async (id, req) => {
-  try {
-    const response = await GroupApi.update(id, req);
-    if (response.returnCode === 200) {
-      return response.data;
-    }
+  const response = await GroupApi.update(id, req);
 
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
-const getTemplate = async () => {
-  try {
-    const response = await GroupApi.getTemplate();
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const getTemplate = () => GroupApi.getTemplate();
 
 const deleteGroup = async (req) => {
-  try {
-    const response = await GroupApi.delete(req);
+  const response = await GroupApi.delete(req);
 
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const checkRequestDataCreateGroup = (req, fromToRange) => {
@@ -191,53 +145,22 @@ const checkRequestDataEditGroup = (req, fromToRange) => {
 };
 
 const deleteMultipleGroups = async (req) => {
-  try {
-    const response = await GroupApi.deleteMultiple(req);
-    if (response.returnCode === 200) {
-      return response.data;
-    }
+  const response = await GroupApi.deleteMultiple(req);
 
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
-const exportGroup = async (req) => {
-  try {
-    const response = await GroupApi.exportGroup(req);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const exportGroup = (req) => GroupApi.exportGroup(req);
 
-const exportGroupMentee = async (id, req) => {
-  try {
-    const response = await GroupApi.exportGroupMentee(id, req);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const exportGroupMentee = (id, req) => GroupApi.exportGroupMentee(id, req);
 
-const exportGroupMentor = async (id, req) => {
-  try {
-    const response = await GroupApi.exportGroupMentor(id, req);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const exportGroupMentor = (id, req) => GroupApi.exportGroupMentor(id, req);
 
-const exportGroupSearch = async (req) => {
-  try {
-    const response = await GroupApi.exportGroupSearch(req);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const exportGroupSearch = (req) => GroupApi.exportGroupSearch(req);
 
 const groupsServices = {
   getAllGroups,
@@ -258,4 +181,4 @@ const groupsServices = {
   exportGroupMentor,
   exportGroupSearch
 };
-export default groupsServices;
+export default ErrorWrapper(groupsServices);

@@ -1,49 +1,48 @@
-/* eslint-disable no-use-before-define */
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Card, Grid } from "@mui/material";
 
-import "./style.css";
-import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
+import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 import SelectAllFeature from "components/SelectAllFeature";
 import { ErrorAlert } from "components/SweetAlert";
 import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
-// import DataTable from "components/Tables/DataTable";
 
-import { allCategoriesSelector } from "redux/groupsCategory/selector";
 import {
   allGroupsSelector,
-  getGroupsSelectAllSelector,
   getAllGroupsSearchSelector,
-  getIsSearchGroupSelector,
-  getGroupCurrentPageSelector,
-  getGroupTotalPagesSelector,
-  getGroupTotalItemsSelector,
-  getGroupItemsPerPageSelector,
+  getGroupColumnHeadersSelector,
   getGroupCurrentPageSearchSelector,
-  getGroupTotalPagesSearchSelector,
-  getGroupTotalItemsSearchSelector,
-  getGroupsSelectAllSearchSelector,
+  getGroupCurrentPageSelector,
+  getGroupItemsPerPageSelector,
   getGroupSearchRequestSelector,
-  getGroupColumnHeadersSelector
+  getGroupsSelectAllSearchSelector,
+  getGroupsSelectAllSelector,
+  getGroupTotalItemsSearchSelector,
+  getGroupTotalItemsSelector,
+  getGroupTotalPagesSearchSelector,
+  getGroupTotalPagesSelector,
+  getIsSearchGroupSelector
 } from "redux/groups/selector";
 import {
   getAllGroups,
   groupItemsPerPageChange,
-  searchGroup,
+  resetState,
   searchByButton,
-  updateSelectAll,
-  resetState
+  searchGroup,
+  updateSelectAll
 } from "redux/groups/slice";
+// import DataTable from "components/Tables/DataTable";
+import { allCategoriesSelector } from "redux/groupsCategory/selector";
 
-import groupTableData from "./data/groupTableData";
-import SearchBox from "./components/Search";
-import AddModalButton from "./components/Modals/AddModalButton";
-import ImportModalButton from "./components/Modals/ImportModalButton";
+import AddNewGroupButton from "./components/AddNewGroupButton";
 import ExportButton from "./components/ExportButton";
+import ImportModalButton from "./components/Modals/ImportModalButton";
+import SearchBox from "./components/Search";
+import groupTableData from "./data/groupTableData";
+import "./style.css";
 
 function GroupManagement() {
   /// --------------------- Khai báo Biến, State -------------
@@ -227,7 +226,7 @@ function GroupManagement() {
                   alignItems="center"
                 >
                   <SelectAllFeature type="groups" />
-                  <AddModalButton />
+                  <AddNewGroupButton />
                   <ImportModalButton />
                   <ExportButton isDisabled={isDisabledExport()} />
                 </MDBox>

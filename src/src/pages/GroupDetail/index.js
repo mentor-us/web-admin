@@ -1,39 +1,36 @@
 import React, { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { Card, Grid } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
-import "./style.css";
 
-import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
+import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
-
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 import DataTable from "components/Tables/DataTable";
+import { groupStatusList, roleMemberEnum } from "utils/constants";
+import { formatDate, formatDateFromDuration } from "utils/formatDate";
 
-import { getCategorySelector } from "redux/groupsCategory/selector";
 import {
   getAccountMenteesDetailSelector,
   getAccountMentorsDetailSelector
 } from "redux/accounts/selector";
 import { loadByIds } from "redux/accounts/slice";
-
-import { roleMemberEnum, groupStatusList } from "utils/constants";
-import { formatDate, formatDateFromDuration } from "utils/formatDate";
-
 import {
   getGroupDetail,
   getGroupDetailColumnHeadersMenteeSelector,
   getGroupDetailColumnHeadersMentorSelector
 } from "redux/groupDetail/selector";
 import { getGroup, resetState } from "redux/groupDetail/slice";
+import { getCategorySelector } from "redux/groupsCategory/selector";
 
-import groupDetailTable from "./data/groupDetailTable";
-import AddDetailButton from "./components/AddDetailButton";
-import InfoCardDetail from "./components/InfoCardDetail";
-import TimeCardDetail from "./components/TimeCardDetail";
+import AddNewMemberButton from "./components/AddNewMemberButton";
 import EditDeleteBackBox from "./components/EditDeleteBackBox";
 import ExportButton from "./components/ExportButton";
+import InfoCardDetail from "./components/InfoCardDetail";
+import TimeCardDetail from "./components/TimeCardDetail";
+import groupDetailTable from "./data/groupDetailTable";
+import "./style.css";
 
 function GroupDetail() {
   /// --------------------- Khai báo Biến, State -------------
@@ -169,9 +166,9 @@ function GroupDetail() {
                       alignItems="center"
                     >
                       {groupDetail?.status !== "DELETED" && (
-                        <AddDetailButton
+                        <AddNewMemberButton
                           type={roleMemberEnum.mentor}
-                          data={[...mentors, ...mentees]}
+                          currentMembers={[...mentors, ...mentees]}
                         />
                       )}
                       <ExportButton
@@ -223,9 +220,9 @@ function GroupDetail() {
                       alignItems="center"
                     >
                       {groupDetail?.status !== "DELETED" && (
-                        <AddDetailButton
+                        <AddNewMemberButton
                           type={roleMemberEnum.mentee}
-                          data={[...mentors, ...mentees]}
+                          currentMembers={[...mentors, ...mentees]}
                         />
                       )}
                       <ExportButton

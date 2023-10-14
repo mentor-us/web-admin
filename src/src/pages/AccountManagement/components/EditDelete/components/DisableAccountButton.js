@@ -1,36 +1,37 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Icon } from "@mui/material";
-import MDTypography from "components/MDComponents/MDTypography";
+import PropTypes from "prop-types";
+
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
+import useMyInfo from "hooks/useMyInfo";
 
-import { disableAccount } from "redux/accounts/slice";
 import { disableAccountDetail } from "redux/accountDetail/slice";
-import { getCurrentUserSelector } from "redux/currentUser/selector";
-
-import { SuccessAlert, ErrorAlert, WarningAlertConfirm } from "components/SweetAlert";
-
-import { useMaterialUIController, setLoading } from "context";
+import { disableAccount } from "redux/accounts/slice";
 
 function DisableAccountButton({ data, setState, typeButton, isInDetail, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------
 
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const dispatch = useDispatch();
 
-  const currentUser = useSelector(getCurrentUserSelector);
+  const myInfo = useMyInfo();
 
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------
 
   const isDisableCurrentAccount = () => {
     if (isMultiple) {
-      return data.some((item) => item.id === currentUser.id);
+      return data.some((item) => item.id === myInfo.id);
     }
-    return data.id === currentUser.id;
+    return data.id === myInfo.id;
   };
 
   const changeStatus = async () => {

@@ -14,19 +14,18 @@ Coded by www.creative-tim.com
 */
 
 import { forwardRef } from "react";
-
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
+
+// Material Dashboard 2 React contexts
+import { useMentorUs } from "hooks";
 
 // Custom styles for MDButton
 import MDButtonRoot from "components/MDComponents/MDButton/MDButtonRoot";
 
-// Material Dashboard 2 React contexts
-import { useMaterialUIController } from "context/index";
-
 const MDButton = forwardRef(
   ({ color, variant, size, circular, iconOnly, children, ...rest }, ref) => {
-    const [controller] = useMaterialUIController();
+    const [controller] = useMentorUs();
     const { darkMode } = controller;
 
     return (

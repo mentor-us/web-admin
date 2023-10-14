@@ -1,10 +1,16 @@
 import React from "react";
-import { Icon } from "@mui/material";
 import { useSelector } from "react-redux";
+import { Icon } from "@mui/material";
 import { PropTypes } from "prop-types";
+
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
 import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
-import { SuccessAlert, ErrorAlert } from "components/SweetAlert";
+import { ErrorAlert, SuccessAlert } from "components/SweetAlert";
+import groupsServices from "service/groupsServices";
+import { formatDateExcel } from "utils/formatDate";
 
 import {
   getGroupColumnHeadersSelector,
@@ -12,13 +18,8 @@ import {
   getIsSearchGroupSelector
 } from "redux/groups/selector";
 
-import { useMaterialUIController, setLoading } from "context";
-
-import { formatDateExcel } from "utils/formatDate";
-import groupsServices from "service/groupsServices";
-
 function ExportButton({ isDisabled }) {
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const columnsHeaders = useSelector(getGroupColumnHeadersSelector);
   const searchRequest = useSelector(getGroupSearchRequestSelector);
   const isSearch = useSelector(getIsSearchGroupSelector);

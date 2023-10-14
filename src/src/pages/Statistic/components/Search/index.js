@@ -1,42 +1,47 @@
 /* eslint-disable no-unused-vars */
-import { ErrorAlert } from "components/SweetAlert";
-import { useMaterialUIController, setLoading } from "context";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { allCategoriesSelector } from "redux/groupsCategory/selector";
 import {
-  getIsSearchStatisticSelector,
-  getStatisticItemsPerPageSelector,
-  getStatisticFilterRequestSelector,
-  getStatisticFilterValueSelector
-} from "redux/statistic/selector";
-import { searchStatistic, updateSearchRequest, searchByButton } from "redux/statistic/slice";
-import { calculateDays, getValueOfList } from "utils";
-import { groupStatusList } from "utils/constants";
-import MDBox from "components/MDComponents/MDBox";
-import MDButton from "components/MDComponents/MDButton";
-import MDInput from "components/MDComponents/MDInput";
-import MDTypography from "components/MDComponents/MDTypography";
-import BasicDatePicker from "components/DatePicker";
-import PropTypes from "prop-types";
-import {
+  Autocomplete,
   Grid,
   Icon,
-  Autocomplete,
   TextField
   // Accordion,
   // AccordionSummary,
   // AccordionDetails
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import "./index.css";
-import { getAnotherDateFromToday } from "utils/formatDate";
+import PropTypes from "prop-types";
+
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+import { calculateDays, getValueOfList } from "utils";
+
 import CustomCheckbox from "components/Checkbox";
+import BasicDatePicker from "components/DatePicker";
+import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
+import MDInput from "components/MDComponents/MDInput";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert } from "components/SweetAlert";
+import { groupStatusList } from "utils/constants";
+import { getAnotherDateFromToday } from "utils/formatDate";
+
+// import { allCategoriesSelector } from "redux/groupsCategory/selector";
+import {
+  getIsSearchStatisticSelector,
+  getStatisticFilterRequestSelector,
+  getStatisticFilterValueSelector,
+  getStatisticItemsPerPageSelector
+} from "redux/statistic/selector";
+import { searchByButton, searchStatistic, updateSearchRequest } from "redux/statistic/slice";
+
+import "./index.css";
 
 function SearchBox() {
   /// --------------------- Khai báo Biến, State -------------
   const today = new Date();
   const isSearch = useSelector(getIsSearchStatisticSelector);
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const dispatch = useDispatch();
   const [groupName, setGroupName] = useState("");
   const [status, setStatus] = useState(null);

@@ -1,42 +1,41 @@
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Card, Grid } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
 
-import DashboardLayout from "layouts/LayoutContainers/DashboardLayout";
+import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 import SelectAllFeature from "components/SelectAllFeature";
-import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
-import DataTable from "components/Tables/DataTable";
-
 import { ErrorAlert } from "components/SweetAlert";
+import DataTable from "components/Tables/DataTable";
+import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
 
 import {
   allCategoriesSelector,
+  getAllCategoriesSearchSelector,
   getCategoriesSelectAllSelector,
-  getCategoryItemsPerPageSelector,
-  getCategorySelectAllSearchSelector,
+  getCategoryColumnHeadersSelector,
   getCategoryCurrentPageSearchSelector,
+  getCategoryItemsPerPageSelector,
+  getCategorySearchRequestSelector,
+  getCategorySelectAllSearchSelector,
   getCategoryTotalItemsSearchSelector,
   getCategoryTotalPagesSearchSelector,
-  getCategorySearchRequestSelector,
-  getIsSearchCategorySelector,
-  getAllCategoriesSearchSelector,
-  getCategoryColumnHeadersSelector
+  getIsSearchCategorySelector
 } from "redux/groupsCategory/selector";
 import {
-  searchCategory,
   categoryItemsPerPageChange,
+  resetState,
   searchByButton,
-  updateSelectAll,
-  resetState
+  searchCategory,
+  updateSelectAll
 } from "redux/groupsCategory/slice";
 
-import categoryTableData from "./data/categoryTableData";
 import AddCategoryButton from "./components/AddCategoryButton";
-import SearchBox from "./components/Search";
 import ExportButton from "./components/ExportButton";
+import SearchBox from "./components/Search";
+import categoryTableData from "./data/categoryTableData";
 
 function GroupCategory() {
   /// --------------------- Khai báo Biến, State -------------

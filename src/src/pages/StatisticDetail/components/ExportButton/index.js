@@ -1,17 +1,17 @@
 import React, { useState } from "react";
+import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
 import { PropTypes } from "prop-types";
-import { Backdrop, Box, Modal, Fade, Typography, Icon, Divider } from "@mui/material";
-// import { useDispatch } from "react-redux";
 
-import MDButton from "components/MDComponents/MDButton";
-import MDBox from "components/MDComponents/MDBox";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
 import CustomCheckbox from "components/Checkbox";
+import MDBox from "components/MDComponents/MDBox";
+// import { useDispatch } from "react-redux";
+import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
-import { SuccessAlert, ErrorAlert } from "components/SweetAlert";
+import { ErrorAlert, SuccessAlert } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
-
-import { useMaterialUIController, setLoading } from "context";
-
 import statisticServices from "service/statisticService";
 import { formatDateExcel } from "utils/formatDate";
 
@@ -19,7 +19,7 @@ function ExportButton({ groupId }) {
   /// --------------------- Khai báo Biến, State -------------
 
   // const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
 
   const [meetingChecked, setMeetingChecked] = useState(true);
@@ -83,7 +83,9 @@ function ExportButton({ groupId }) {
         outputFilename = `MentorUS_Báo_cáo_hoạt_động_nhóm_${date}.pdf`;
       } else {
         response = await statisticServices.exportLog(req);
-        outputFilename = `MentorUS_Chi_tiết_thông_tin_hoạt_động_nhóm_${date}.txt`;
+        // Wrong extension for excel file
+        // outputFilename = `MentorUS_Chi_tiết_thông_tin_hoạt_động_nhóm_${date}.txt`;
+        outputFilename = `MentorUS_Chi_tiết_thông_tin_hoạt_động_nhóm_${date}.xlsx`;
       }
 
       if (response) {

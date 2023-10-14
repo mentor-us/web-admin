@@ -1,47 +1,48 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import {
+  Autocomplete,
   Backdrop,
   Box,
-  Modal,
-  Fade,
-  Typography,
-  Icon,
   Divider,
-  RadioGroup,
+  Fade,
   FormControlLabel,
+  Icon,
+  Modal,
   Radio,
-  Autocomplete,
-  TextField
+  RadioGroup,
+  TextField,
+  Typography
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
 
-import MDButton from "components/MDComponents/MDButton";
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+import { getValueOfList, isEmailValid } from "utils";
+
+import BasicDatePicker from "components/DatePicker";
 import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-import BasicDatePicker from "components/DatePicker";
 import TooltipCustom from "components/Tooltip";
-import { useMaterialUIController, setLoading } from "context";
-
+import useMyInfo from "hooks/useMyInfo";
 import { accountStatusList, genderList, roleAccountList } from "utils/constants";
-
-import { getCurrentUserSelector } from "redux/currentUser/selector";
-import { editAccount } from "redux/accounts/slice";
-import { editAccountDetail } from "redux/accountDetail/slice";
-import { getValueOfList, isEmailValid } from "utils";
 import { getAnotherDateFromToday } from "utils/formatDate";
+
+import { editAccountDetail } from "redux/accountDetail/slice";
+import { editAccount } from "redux/accounts/slice";
 // import { getEmailDomainsValidSelector } from "redux/configuration/selector";
 
 function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAccount }) {
   /// --------------------- Khai báo Biến, State -------------
 
   const dispatch = useDispatch();
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
 
-  const currentAccount = useSelector(getCurrentUserSelector);
+  const currentAccount = useMyInfo();
   const roleList =
     currentAccount.role === "SUPER_ADMIN"
       ? roleAccountList?.map((option) => option.role)

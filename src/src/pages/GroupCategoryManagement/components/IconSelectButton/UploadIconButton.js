@@ -1,13 +1,12 @@
 import React, { useState } from "react";
+import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
 import PropTypes from "prop-types";
-import { Backdrop, Box, Modal, Fade, Typography, Icon, Divider } from "@mui/material";
 
-import MDButton from "components/MDComponents/MDButton";
-import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
-
-import { WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import DropFileField from "components/DropFileField";
+import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
+import MDTypography from "components/MDComponents/MDTypography";
+import { WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 
 function UploadIconButton({ setState, setAnotherState }) {
   /// --------------------- Khai báo Biến, State -------------

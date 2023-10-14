@@ -1,17 +1,11 @@
 import { forwardRef } from "react";
-
-// prop-types is a library for typechecking of props.
+import Link from "@mui/material/Link";
+import MenuItem from "@mui/material/MenuItem";
 import PropTypes from "prop-types";
 
-// @mui material components
-import MenuItem from "@mui/material/MenuItem";
-import Link from "@mui/material/Link";
-
-// Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 
-// custom styles for the NotificationItem
 import menuItem from "./styles";
 
 const NotificationItem = forwardRef(({ icon, title, ...rest }, ref) => (

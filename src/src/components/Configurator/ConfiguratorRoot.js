@@ -1,7 +1,16 @@
-// @mui material components
 import Drawer from "@mui/material/Drawer";
 import { styled } from "@mui/material/styles";
 
+/**
+ * ConfiguratorRoot
+ * @deprecated since version 0.1.1 - use ConfiguratorDrawer instead
+ * @description
+ * This is a custom styled component for Drawer MUI component.
+ *
+ * It inherits all the props available for Drawer component in MUI.
+ * @param {object} ownerState - state open or close of configurator drawer
+ * @returns StyledDrawer
+ */
 export default styled(Drawer)(({ theme, ownerState }) => {
   const { boxShadows, functions, transitions } = theme;
   const { openConfigurator } = ownerState;

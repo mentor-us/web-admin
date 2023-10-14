@@ -101,4 +101,4 @@ const navbarMobileMenu = ({ breakpoints }) => ({
   }
 });
 
-export { navbar, navbarContainer, navbarRow, navbarIconButton, navbarMobileMenu };
+export { navbar, navbarContainer, navbarIconButton, navbarMobileMenu, navbarRow };

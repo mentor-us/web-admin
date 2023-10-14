@@ -1,8 +1,9 @@
 import React from "react";
-// import PropTypes from "prop-types";
-import MDBox from "components/MDComponents/MDBox";
-import typography from "assets/theme/base/typography";
+
 import logo from "assets/images/logo.png";
+import typography from "assets/theme/base/typography";
+
+import MDBox from "components/MDComponents/MDBox";
 
 function Footer() {
   const { size } = typography;
@@ -35,13 +36,5 @@ function Footer() {
     </MDBox>
   );
 }
-
-// Setting default values for the props of Footer
-// Footer.defaultProps = {
-// };
-
-// Typechecking props for the Footer
-// Footer.propTypes = {
-// };
 
 export default Footer;

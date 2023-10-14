@@ -1,24 +1,25 @@
 import React from "react";
-import { Icon } from "@mui/material";
 import { useSelector } from "react-redux";
+import { Icon } from "@mui/material";
 import { PropTypes } from "prop-types";
+
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
 import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
-import { SuccessAlert, ErrorAlert } from "components/SweetAlert";
+import { ErrorAlert, SuccessAlert } from "components/SweetAlert";
+import statisticServices from "service/statisticService";
+import { formatDateExcel } from "utils/formatDate";
 
 import {
-  getStatisticColumnHeadersSelector,
   getIsSearchStatisticSelector,
+  getStatisticColumnHeadersSelector,
   getStatisticSearchRequestSelector
 } from "redux/statistic/selector";
 
-import { useMaterialUIController, setLoading } from "context";
-
-import { formatDateExcel } from "utils/formatDate";
-import statisticServices from "service/statisticService";
-
 function ExportButton({ isDisabled }) {
-  const [, dispatchContext] = useMaterialUIController();
+  const [, dispatchContext] = useMentorUs();
   const columnsHeaders = useSelector(getStatisticColumnHeadersSelector);
   const isSearch = useSelector(getIsSearchStatisticSelector);
   const searchRequest = useSelector(getStatisticSearchRequestSelector);

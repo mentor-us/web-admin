@@ -1,22 +1,15 @@
-// react-routers components
 import { Link } from "react-router-dom";
-
-// prop-types is library for typechecking of props
-import PropTypes from "prop-types";
-
-// @mui material components
 import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
-import Tooltip from "@mui/material/Tooltip";
 import Icon from "@mui/material/Icon";
+import Tooltip from "@mui/material/Tooltip";
+import PropTypes from "prop-types";
 
-// Material Dashboard 2 React components
-import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
-
-// Material Dashboard 2 React base styles
 import colors from "assets/theme/base/colors";
 import typography from "assets/theme/base/typography";
+
+import MDBox from "components/MDComponents/MDBox";
+import MDTypography from "components/MDComponents/MDTypography";
 
 function ProfileInfoCard({ title, description, info, social, action, shadow }) {
   const labels = [];

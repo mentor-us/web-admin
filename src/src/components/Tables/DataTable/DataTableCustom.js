@@ -1,25 +1,22 @@
 import { useMemo } from "react";
-import PropTypes from "prop-types";
-import { useTable, useSortBy, usePagination } from "react-table";
-
+import { usePagination, useSortBy, useTable } from "react-table";
+import { Autocomplete } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import { Autocomplete } from "@mui/material";
+import PropTypes from "prop-types";
 
-// Material Dashboard 2 React components
+import CustomPagination from "components/CustomPagination";
+import HeaderFilter from "components/HeaderFilter";
 import MDBox from "components/MDComponents/MDBox";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
-import CustomPagination from "components/CustomPagination";
-import HeaderFilter from "components/HeaderFilter";
-// import { ITEMS_PER_PAGE } from "config";
 
-import DataTableHeadCell from "./DataTableHeadCell";
 import DataTableBodyCell from "./DataTableBodyCell";
-
+// import { ITEMS_PER_PAGE } from "config";
+import DataTableHeadCell from "./DataTableHeadCell";
 import "./style.css";
 
 function DataTableCustom({
@@ -187,7 +184,7 @@ function DataTableCustom({
   );
 }
 
-// Setting default values for the props of DataTable
+// Setting default values for the props of DataTableCustom
 DataTableCustom.defaultProps = {
   isSorted: true,
   noEndBorder: false,
@@ -195,7 +192,7 @@ DataTableCustom.defaultProps = {
   headerFilterType: false
 };
 
-// Typechecking props for the DataTable
+// Typechecking props for the DataTableCustom
 DataTableCustom.propTypes = {
   table: PropTypes.objectOf(PropTypes.instanceOf(Array)).isRequired,
   isSorted: PropTypes.bool,

@@ -129,11 +129,11 @@ const WarningAlertConfirmNotSavingData = (title = null, html = null, anotherProp
 };
 
 export {
-  SuccessAlert,
-  SuccessAlertConfirm,
   ErrorAlert,
   ErrorAlertConfirm,
   ErrorAlertYesNo,
+  SuccessAlert,
+  SuccessAlertConfirm,
   WarningAlertConfirm,
   WarningAlertConfirmNotSavingData
 };

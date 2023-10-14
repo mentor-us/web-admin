@@ -1,28 +1,28 @@
 import React, { useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+// @mui material components
+import { Collapse, Icon, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
-import { NavLink, useLocation } from "react-router-dom";
 
-// @mui material components
-import { Collapse, List, ListItem, ListItemIcon, ListItemText, Icon } from "@mui/material";
+// Custom styles for the SidenavCollapse
+import { useMentorUs } from "hooks";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDComponents/MDBox";
 
-// Custom styles for the SidenavCollapse
-import { useMaterialUIController } from "context/index";
+import SidenavCollapse from "../SidenavCollapse";
 import {
-  collapseItem,
-  collapseIconBox,
   collapseIcon,
+  collapseIconBox,
+  collapseItem,
   collapseText
 } from "../styles/sidenavCollapse";
-import SidenavCollapse from "../SidenavCollapse";
 
 // Material Dashboard 2 React context
 
 function SlideNavCollapseList({ collapse, icon, name, active, ...rest }) {
-  const [controller] = useMaterialUIController();
+  const [controller] = useMentorUs();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
   const [open, setOpen] = useState(active);
   const location = useLocation();
