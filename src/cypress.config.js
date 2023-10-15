@@ -1,17 +1,29 @@
 const { defineConfig } = require("cypress");
+const fs = require("fs");
 
 require("dotenv").config();
 
 module.exports = defineConfig({
+  video: true,
   e2e: {
-    baseUrl: process.env.REACT_APP_WEB_URL || "http://localhost:3000",
+    setupNodeEvents(on) {
+      on("after:spec", (spec, results) => {
+        if (results && results.video) {
+          // Do we have failures for any retry attempts?
+          const failures = results.tests.some((test) =>
+            test.attempts.some((attempt) => attempt.state === "failed")
+          );
+          if (!failures) {
+            // delete the video if the spec passed and no tests retried
+            fs.unlinkSync(results.video);
+          }
+        }
+      });
+    },
+    baseUrl: "http://localhost:3000/",
     experimentalStudio: true,
     env: {
-      BACKEND_URL: process.env.REACT_APP_BACKEND_URL || "http://localhost:8080",
-      WEB_URL: process.env.REACT_APP_WEB_URL || "http://localhost:3000",
-      googleRefreshToken: process.env.GOOGLE_REFRESH_TOKEN,
-      googleClientId: process.env.REACT_APP_GOOGLE_CLIENTID,
-      googleClientSecret: process.env.REACT_APP_GOOGLE_CLIENT_SECRET
+      BACKEND_URL: "https://mentorus.hieucckha.me/"
     }
   },
 

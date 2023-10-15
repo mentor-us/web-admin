@@ -39,3 +39,7 @@ packages/react-devtools-timeline/dist
 
 # Local Env
 .env.*local
+
+# Cypress
+*/cypress/screenshots 
+*/cypress/videos
