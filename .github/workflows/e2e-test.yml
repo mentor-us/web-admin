@@ -1,31 +1,30 @@
-name: Run Cypress tests
+name: End-to-end Testings
 
 on:
   push:
     branches:
       - feature/MU-41-Create-test-base
+    paths:
+      - src
+      - .github/workflows/e2e-test.yml
+      
+  workflow_dispatch:
 
 jobs:
-  cypress-run:
+  e2e-testing:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        uses: cypress-io/github-action@v6
-        with:
-          working-directory: src
-          runTests: false
-
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          install: false
           working-directory: src
           start: npm run dev
           wait-on: 'http://localhost:3000'
-
+    
+      # Upload screenshots and videos as artifacts if the tests fail
       - uses: actions/upload-artifact@v3
         if: failure()
         with:

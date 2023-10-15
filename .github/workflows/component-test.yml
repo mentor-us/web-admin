@@ -1,0 +1,37 @@
+name: Component Testings
+
+on:
+  push:
+    branches:
+      - feature/MU-41-Create-test-base
+    paths:
+      - src
+      - .github/workflows/component-test.yml
+      
+  workflow_dispatch:
+
+jobs:
+  component-testing:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: src
+          component: true
+    
+      # Upload screenshots and videos as artifacts if the tests fail
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+          if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
+      - uses: actions/upload-artifact@v3
+        with:
+          name: cypress-videos
+          path: cypress/videos
+          if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
