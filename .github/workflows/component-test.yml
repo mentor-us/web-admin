@@ -17,14 +17,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cypress run
+      - name: Run tests
         uses: cypress-io/github-action@v6
         with:
           working-directory: src
           component: true
     
       # Upload screenshots and videos as artifacts if the tests fail
-      - uses: actions/upload-artifact@v3
+      - name: Upload failed screenshots and videos as artifacts
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: cypress-screenshots
