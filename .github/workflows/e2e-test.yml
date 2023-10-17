@@ -3,7 +3,7 @@ name: End-to-end Testings
 on:
   push:
     branches:
-      - feature/**
+      - 'feature/**'
     paths:
       - src
       - .github/workflows/e2e-test.yml
