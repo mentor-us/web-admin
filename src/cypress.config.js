@@ -13,7 +13,7 @@ module.exports = defineConfig({
           const failures = results.tests.some((test) =>
             test.attempts.some((attempt) => attempt.state === "failed")
           );
-          if (!failures) {
+          if (!failures && fs.existsSync(results.video)) {
             // delete the video if the spec passed and no tests retried
             fs.unlinkSync(results.video);
           }

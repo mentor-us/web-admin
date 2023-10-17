@@ -1,6 +1,10 @@
 describe("Group Management Page", () => {
   beforeEach(() => {
     cy.loginWithPassword();
+    cy.intercept({
+      method: "GET",
+      url: `${Cypress.env("BACKEND_URL")}api/groups?type=admin&page=0&pageSize=10`
+    }).as("fetchGroups");
     cy.visit("/groups");
   });
 
@@ -11,11 +15,6 @@ describe("Group Management Page", () => {
   });
 
   it("show all groups list", () => {
-    cy.intercept({
-      method: "GET",
-      url: `${Cypress.env("BACKEND_URL")}api/groups?type=admin&page=0&pageSize=10`
-    }).as("fetchGroups");
-
     cy.get("table").find("tr").should("have.length.at.least", 1);
     cy.wait("@fetchGroups")
       .its("response.body.data.totalItems")
