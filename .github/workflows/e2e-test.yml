@@ -39,7 +39,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          install-command: yarn install --frozen-lockfile
+          install-command: yarn install
           working-directory: src
           start: yarn dev
           wait-on: 'http://localhost:3000'
