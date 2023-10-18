@@ -34,10 +34,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "dev": "env-cmd -f .env.dev npm start",
+    "dev": "env-cmd -f .env.dev yarn start",
     "build": "react-scripts build",
-    "build:dev": "env-cmd -f .env.dev npm run build",
-    "build:prod": "env-cmd -f .env.production npm run build",
+    "build:dev": "env-cmd -f .env.dev yarn run build",
+    "build:prod": "env-cmd -f .env.production yarn run build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "cy:component": "cypress run --component",

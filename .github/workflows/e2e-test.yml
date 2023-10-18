@@ -22,13 +22,26 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+      
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Restore node_modules from cache
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
+          install-command: yarn install --frozen-lockfile
           working-directory: src
-          start: npm run dev
-          start-windows: sh -l -v -c "npm run dev"
+          start: yarn dev
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
           browser: ${{ matrix.browser }}
