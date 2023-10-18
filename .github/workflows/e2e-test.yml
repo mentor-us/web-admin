@@ -28,7 +28,7 @@ jobs:
         with:
           working-directory: src
           start: npm run dev
-          start-windows: sh --login -i -c "npm run dev"
+          start-windows: start "" sh -l -v -c "npm run dev"
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
           browser: ${{ matrix.browser }}
