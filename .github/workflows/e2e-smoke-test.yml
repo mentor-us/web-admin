@@ -1,22 +1,28 @@
-name: Component Testings
+name: End-to-end Smoke Testings
 
 on:
   push:
     branches:
-      - feature/MU-41-Create-test-base
+      - 'feature/**'
     paths:
-      - src
-      - .github/workflows/component-test.yml
+      - "src/**"
+      - .github/workflows/e2e-smoke-test.yml
       
   workflow_dispatch:
 
 jobs:
-  component-testing:
-    runs-on: ubuntu-22.04
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ubuntu-latest]
+        browser: [chrome, firefox, edge]
+    runs-on: ${{ matrix.platform }}
+    name: ${{ matrix.platform }} - Run test on ${{ matrix.browser }} 
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v4
-      
+
       - name: Decode Cypress env json
         uses: timheuer/base64-to-file@v1
         id: cypress_env_json
@@ -24,22 +30,31 @@ jobs:
           fileName: "cypress.env.json"
           fileDir: "./src/"
           encodedString: ${{ secrets.CYPRESS_ENV_JSON }}
-
-      - name: Run tests
+      
+      - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
+          install-command: yarn --frozen-lockfile --network-timeout 100000
           working-directory: src
-          component: true
-    
+          start: yarn dev
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 180
+          browser: ${{ matrix.browser }}
+          auto-cancel-after-failures: 1
+          spec: cypress/e2e/smoke_test/*.cy.js
+
       # Upload screenshots and videos as artifacts if the tests fail
-      - name: Upload failed screenshots and videos as artifacts
+      - name: Upload failed screenshots as artifacts
         uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: cypress-screenshots
           path: cypress/screenshots
           if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
-      - uses: actions/upload-artifact@v3
+      
+      - name: Upload failed videos as artifacts
+        uses: actions/upload-artifact@v3
+        if: failure()
         with:
           name: cypress-videos
           path: cypress/videos

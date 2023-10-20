@@ -1,3 +1,7 @@
+/* eslint-disable import/no-import-module-exports */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-restricted-syntax */
+
 // ***********************************************************
 // This example support/e2e.js is processed and
 // loaded automatically before your test files.
@@ -12,9 +16,4 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
-
-// Import commands.js using ES2015 syntax:
-import './commands'
-
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+import "./commands";

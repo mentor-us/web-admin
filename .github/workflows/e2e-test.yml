@@ -22,6 +22,14 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
+      - name: Decode Cypress env json
+        uses: timheuer/base64-to-file@v1
+        id: cypress_env_json
+        with:
+          fileName: "cypress.env.json"
+          fileDir: "./src/"
+          encodedString: ${{ secrets.CYPRESS_ENV_JSON }}
       
       - name: Cypress run
         uses: cypress-io/github-action@v6
@@ -32,6 +40,7 @@ jobs:
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 180
           browser: ${{ matrix.browser }}
+          spec: cypress/e2e/*.cy.js
 
       # Upload screenshots and videos as artifacts if the tests fail
       - name: Upload failed screenshots as artifacts
