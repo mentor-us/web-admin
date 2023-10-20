@@ -40,7 +40,6 @@ jobs:
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 180
           browser: ${{ matrix.browser }}
-          auto-cancel-after-failures: 1
           spec: cypress/e2e/smoke_test/*.cy.js
 
       # Upload screenshots and videos as artifacts if the tests fail
