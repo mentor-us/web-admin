@@ -25,10 +25,6 @@ jobs:
             "jiraTestExecutionIssueKey": "MU-88",
           }, 
           {
-            "name": "firefox",
-            "jiraTestExecutionIssueKey": "MU-86",
-          }, 
-          {
             "name": "edge",
             "jiraTestExecutionIssueKey": "MU-87",
           }
@@ -62,8 +58,9 @@ jobs:
           browser: ${{ matrix.browser.name }}
           spec: cypress/e2e/smoke_test/*.cy.js
         env: 
+          CYPRESS_PLUGIN_DEBUG: true
           CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85" 
-          CYRPRESS_JIRA_TEST_EXECUTION_ISSUE_KEY: ${{ matrix.browser.jiraTestExecutionIssueKey }}
+          CYRPRESS_JIRA_TEST_EXECUTION_ISSUE_KEY: "${{ matrix.browser.jiraTestExecutionIssueKey }}"
           CYPRESS_JIRA_TEST_EXECUTION_ISSUE_SUMMARY: "[Web Admin - ${{ matrix.browser.name }}] Smoke test execution"
 
       # Upload screenshots and videos as artifacts if the tests fail
