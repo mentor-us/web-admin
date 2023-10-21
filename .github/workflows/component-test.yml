@@ -1,0 +1,50 @@
+name: Component Testings
+
+on:
+  push:
+    branches:
+      - "feature/**"
+      - "develop"
+    paths:
+      - "src/**"
+      - .github/workflows/component-test.yml
+      
+  workflow_dispatch:
+
+jobs:
+  component-testing:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Decode Cypress env json
+        uses: timheuer/base64-to-file@v1
+        id: cypress_env_json
+        with:
+          fileName: "cypress.env.json"
+          fileDir: "./src/"
+          encodedString: ${{ secrets.CYPRESS_ENV_JSON }}
+
+      - name: Run tests
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: src
+          component: true
+    
+      # Upload screenshots and videos as artifacts if the tests fail
+      - name: Upload failed screenshots as artifacts
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+          if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
+      
+      - name: Upload failed videos as artifacts
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-videos
+          path: cypress/videos
+          if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`

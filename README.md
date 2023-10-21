@@ -1,5 +1,8 @@
 # mentorus-web-admin
 
+[![Component Testings](https://github.com/mentor-us/web-admin/actions/workflows/component-test.yml/badge.svg)](https://github.com/mentor-us/web-admin/actions/workflows/component-test.yml)
+
+[![End-to-end Smoke Testings](https://github.com/mentor-us/web-admin/actions/workflows/e2e-smoke-test.yml/badge.svg)](https://github.com/mentor-us/web-admin/actions/workflows/e2e-smoke-test.yml)
 | Development                                                                                                                                                                                                                         | Production |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
 | [![Build and deploy development](https://github.com/hieucckha/mentorus-web-admin/actions/workflows/build-and-deploy-dev.yml/badge.svg)](https://github.com/hieucckha/mentorus-web-admin/actions/workflows/build-and-deploy-dev.yml) |            |

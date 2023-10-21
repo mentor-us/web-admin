@@ -39,3 +39,14 @@ packages/react-devtools-timeline/dist
 
 # Local Env
 .env.*local
+
+# Cypress
+*/cypress/screenshots 
+*/cypress/videos
+cypress.env.json
+
+# Cypress Xray Plugin
+logs/
+
+# Mongo data folder
+*/mongo-data

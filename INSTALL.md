@@ -4,16 +4,17 @@
 - Install Visual Studio Code: https://code.visualstudio.com/download
 - Install NodeJS: https://nodejs.org/en/download
   - Checking NodeJS installed correctly: `node -v`
-  - Checking NPM installed correctly: `npm -v`
+- Install Yarn: `npm install -g yarn`
+  - Checking Yarn installed correctly: `yarn -v`
 
-## Start the project on local server
+## Start the project on local server (Migrated to Yarn)
 - Run backend server local
 - Open the project: `cd <project folder>/src`
-- Install dependencies: `npm install`
+- Install dependencies: `yarn install`
 - Configure vars in `.env` file
   - `REACT_APP_BACKEND_URL = 'http://localhost:8080/'` - Url to BE Server on local 
   - `REACT_APP_WEB_URL = 'http://localhost:3000/'` - Url to FE Server on local
-- Run the project: `npm start`
+- Run the project: `yarn start`
 - Open the project in browser: http://localhost:3000
 
 ## Deploy the project on dev server with Docker
@@ -32,6 +33,6 @@
 - Error: [BABEL] ... Cannot find module '@babel/plugin-proposal-private-property-in-object' ...
   - Solution: 
     - Delete `node_modules` folder
-    - Delete `package-lock.json` file
-    - Run `npm install`
-    - Retry `npm start`
+    - Delete `yarn-lock.json` file
+    - Run `yarn install`
+    - Retry `yarn start`
