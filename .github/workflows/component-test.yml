@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "feature/**"
+      - "develop"
     paths:
       - "src/**"
       - .github/workflows/component-test.yml
