@@ -16,7 +16,7 @@ on:
       platform:
         description: 'Platform'
         type: choice
-        required: false
+        required: true
         default: 'ubuntu-latest'
         options:
           - 'ubuntu-latest'
@@ -27,25 +27,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # platform: ${{ fromJson(format('[{0}]', inputs.platform || 'ubuntu-latest')) }}
-        platform: ['ubuntu-latest']
+        platform: ${{ fromJson(format('[{0}]', inputs.platform || 'ubuntu-latest')) }}
+        # platform: ['ubuntu-latest']
         browser: [
           {
             "name": "chrome",
-            "jiraTestExecutionIssueKey": "MU-82",
+            "jiraTestExecutionIssueKey": "MU-88",
           }, 
           {
             "name": "firefox",
-            "jiraTestExecutionIssueKey": "MU-83",
+            "jiraTestExecutionIssueKey": "MU-86",
           }, 
           {
             "name": "edge",
-            "jiraTestExecutionIssueKey": "MU-84",
+            "jiraTestExecutionIssueKey": "MU-87",
           }
         ]
 
     runs-on: ${{ matrix.platform }}
-    name: ${{ matrix.platform }} - Run test on ${{ matrix.browser }} 
+    name: ${{ matrix.platform }} - Run test on ${{ matrix.browser.name }} 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -58,20 +58,24 @@ jobs:
           fileDir: "./src/"
           encodedString: ${{ secrets.CYPRESS_ENV_JSON }}
       
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          install-command: yarn --frozen-lockfile --network-timeout 100000
-          working-directory: src
-          start: yarn dev
-          wait-on: 'http://localhost:3000'
-          wait-on-timeout: 180
-          browser: ${{ matrix.browser.name }}
-          spec: cypress/e2e/smoke_test/*.cy.js
-        env: 
-          CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85"
-          CYRPRESS_JIRA_TEST_EXECUTION_ISSUE_KEY: ${{ matrix.browser.jiraTestExecutionIssueKey }}
-          CYPRESS_JIRA_TEST_EXECUTION_ISSUE_SUMMARY: "[Web Admin - ${{ matrix.browser.name }}] Smoke test execution"
+      - name: Print issue key
+        run: echo ${{ matrix.browser.jiraTestExecutionIssueKey }}
+      
+      # - name: Cypress run
+      #   uses: cypress-io/github-action@v6
+      #   with:
+      #     install-command: yarn --frozen-lockfile --network-timeout 100000
+      #     working-directory: src
+      #     start: yarn dev
+      #     wait-on: 'http://localhost:3000'
+      #     wait-on-timeout: 180
+      #     browser: ${{ matrix.browser.name }}
+      #     spec: cypress/e2e/smoke_test/*.cy.js
+      #   env: 
+      #     CYPRESS_XRAY_UPLOAD_RESULTS: false
+      #     CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85" 
+      #     CYRPRESS_JIRA_TEST_EXECUTION_ISSUE_KEY: ${{ matrix.browser.jiraTestExecutionIssueKey }}
+      #     CYPRESS_JIRA_TEST_EXECUTION_ISSUE_SUMMARY: "[Web Admin - ${{ matrix.browser.name }}] Smoke test execution"
 
       # Upload screenshots and videos as artifacts if the tests fail
       - name: Upload failed screenshots as artifacts

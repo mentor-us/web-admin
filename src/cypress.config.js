@@ -39,7 +39,6 @@ module.exports = defineConfig({
           attachVideos: true
         },
         xray: {
-          uploadResults: true,
           uploadScreenshots: true
         },
         plugin: {
