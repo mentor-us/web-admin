@@ -44,9 +44,6 @@ jobs:
           fileDir: "./src/"
           encodedString: ${{ secrets.CYPRESS_ENV_JSON }}
       
-      - name: Print issue key
-        run: echo ${{ matrix.browser.jiraTestExecutionIssueKey }}
-      
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
