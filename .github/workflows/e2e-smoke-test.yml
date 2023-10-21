@@ -12,23 +12,13 @@ on:
     - cron: '30 5,17 * * 1'
 
   workflow_dispatch:
-    inputs:
-      platform:
-        description: 'Platform'
-        type: choice
-        required: true
-        default: 'ubuntu-latest'
-        options:
-          - 'ubuntu-latest'
-          - 'windows-latest'
 
 jobs:
   test:
     strategy:
       fail-fast: false
       matrix:
-        platform: ${{ fromJson(format('[{0}]', inputs.platform || 'ubuntu-latest')) }}
-        # platform: ['ubuntu-latest']
+        platform: ['ubuntu-latest']
         browser: [
           {
             "name": "chrome",
