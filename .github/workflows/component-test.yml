@@ -3,9 +3,9 @@ name: Component Testings
 on:
   push:
     branches:
-      - feature/MU-41-Create-test-base
+      - "feature/**"
     paths:
-      - src
+      - "src/**"
       - .github/workflows/component-test.yml
       
   workflow_dispatch:
@@ -30,6 +30,8 @@ jobs:
         with:
           working-directory: src
           component: true
+        env:
+          CYPRESS_XRAY_UPLOAD_RESULTS: false
     
       # Upload screenshots and videos as artifacts if the tests fail
       - name: Upload failed screenshots and videos as artifacts
