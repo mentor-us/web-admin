@@ -57,10 +57,10 @@ jobs:
           wait-on-timeout: 180
           browser: ${{ matrix.browser.name }}
           spec: cypress/e2e/smoke_test/*.cy.js
+          env: JIRA_TEST_EXECUTION_ISSUE_KEY=${{ matrix.browser.jiraTestExecutionIssueKey }}
         env: 
           CYPRESS_PLUGIN_DEBUG: true
           CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85" 
-          CYRPRESS_JIRA_TEST_EXECUTION_ISSUE_KEY: "${{ matrix.browser.jiraTestExecutionIssueKey }}"
           CYPRESS_JIRA_TEST_EXECUTION_ISSUE_SUMMARY: "[Web Admin - ${{ matrix.browser.name }}] Smoke test execution"
 
       # Upload screenshots and videos as artifacts if the tests fail
