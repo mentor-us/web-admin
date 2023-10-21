@@ -3,7 +3,7 @@ describe("Group Management Page", () => {
     cy.loginWithPassword();
     cy.intercept({
       method: "GET",
-      url: `${Cypress.env("BACKEND_URL")}api/groups?type=admin&page=0&pageSize=10`
+      url: `${Cypress.env("BACKEND_URL")}api/groups?type=admin&page=*&pageSize=*`
     }).as("fetchGroups");
     cy.visit("/groups");
   });

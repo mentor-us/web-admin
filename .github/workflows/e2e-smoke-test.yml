@@ -3,13 +3,13 @@ name: End-to-end Smoke Testings
 on:
   push:
     branches:
-      - 'feature/**'
-      - 'develop'
+      - "feature/**"
+      - "develop"
     paths:
       - "src/**"
       - .github/workflows/e2e-smoke-test.yml
   schedule:
-    - cron: '30 5,17 * * 1'
+    - cron: "30 5,17 * * 1"
 
   workflow_dispatch:
 
@@ -18,20 +18,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: ['ubuntu-latest']
-        browser: [
-          {
-            "name": "chrome",
-            "jiraTestExecutionIssueKey": "MU-88",
-          }, 
-          {
-            "name": "edge",
-            "jiraTestExecutionIssueKey": "MU-87",
-          }
-        ]
+        platform: ["ubuntu-latest"]
+        browser:
+          [
+            { "name": "chrome", "jiraTestExecutionIssueKey": "MU-88" },
+            { "name": "edge", "jiraTestExecutionIssueKey": "MU-87" },
+          ]
 
     runs-on: ${{ matrix.platform }}
-    name: ${{ matrix.platform }} - Run test on ${{ matrix.browser.name }} 
+    name: ${{ matrix.platform }} - Run test on ${{ matrix.browser.name }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -43,21 +38,21 @@ jobs:
           fileName: "cypress.env.json"
           fileDir: "./src/"
           encodedString: ${{ secrets.CYPRESS_ENV_JSON }}
-      
+
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
           install-command: yarn --frozen-lockfile --network-timeout 100000
           working-directory: src
-          start: yarn dev
-          wait-on: 'http://localhost:3000'
+          start: yarn startTest
+          wait-on: "http://localhost:3000"
           wait-on-timeout: 180
           browser: ${{ matrix.browser.name }}
           spec: cypress/e2e/smoke_test/*.cy.js
           env: JIRA_TEST_EXECUTION_ISSUE_KEY=${{ matrix.browser.jiraTestExecutionIssueKey }}
-        env: 
+        env:
           CYPRESS_PLUGIN_DEBUG: true
-          CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85" 
+          CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85"
           CYPRESS_JIRA_TEST_EXECUTION_ISSUE_SUMMARY: "[Web Admin - ${{ matrix.browser.name }}] Smoke test execution"
 
       # Upload screenshots and videos as artifacts if the tests fail
@@ -68,7 +63,7 @@ jobs:
           name: cypress-screenshots
           path: cypress/screenshots
           if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
-      
+
       - name: Upload failed videos as artifacts
         uses: actions/upload-artifact@v3
         if: failure()
@@ -76,3 +71,4 @@ jobs:
           name: cypress-videos
           path: cypress/videos
           if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
+

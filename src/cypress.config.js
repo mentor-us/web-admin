@@ -49,7 +49,8 @@ module.exports = defineConfig({
       // ------------------------------------
     },
     baseUrl: "http://localhost:3000/",
-    experimentalStudio: true
+    experimentalStudio: true,
+    experimentalModifyObstructiveThirdPartyCode: true
   },
 
   component: {

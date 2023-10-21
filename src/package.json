@@ -34,7 +34,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "dev": "env-cmd -f .env.dev yarn start",
+    "startTest": "env-cmd -f .env.test yarn start",
     "build": "react-scripts build",
     "build:dev": "env-cmd -f .env.dev yarn run build",
     "build:prod": "env-cmd -f .env.production yarn run build",
