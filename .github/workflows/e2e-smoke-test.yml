@@ -4,19 +4,45 @@ on:
   push:
     branches:
       - 'feature/**'
+      - 'develop'
     paths:
       - "src/**"
       - .github/workflows/e2e-smoke-test.yml
-      
+  schedule:
+    - cron: '30 5,17 * * 1'
+
   workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform'
+        type: choice
+        required: false
+        default: 'ubuntu-latest'
+        options:
+          - 'ubuntu-latest'
+          - 'windows-latest'
 
 jobs:
   test:
     strategy:
       fail-fast: false
       matrix:
-        platform: [ubuntu-latest]
-        browser: [chrome, firefox, edge]
+        platform: ${{ fromJson(format('[{0}]', inputs.platform || 'ubuntu-latest')) }}
+        browser: [
+          {
+            "name": "chrome",
+            "jiraTestExecutionIssueKey": "MU-82",
+          }, 
+          {
+            "name": "firefox",
+            "jiraTestExecutionIssueKey": "MU-83",
+          }, 
+          {
+            "name": "edge",
+            "jiraTestExecutionIssueKey": "MU-84",
+          }
+        ]
+
     runs-on: ${{ matrix.platform }}
     name: ${{ matrix.platform }} - Run test on ${{ matrix.browser }} 
     steps:
@@ -39,8 +65,12 @@ jobs:
           start: yarn dev
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 180
-          browser: ${{ matrix.browser }}
+          browser: ${{ matrix.browser.name }}
           spec: cypress/e2e/smoke_test/*.cy.js
+        env: 
+          CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85"
+          CYRPRESS_JIRA_TEST_EXECUTION_ISSUE_KEY: ${{ matrix.browser.jiraTestExecutionIssueKey }}
+          CYPRESS_JIRA_TEST_EXECUTION_ISSUE_SUMMARY: "[Web Admin - ${{ matrix.browser.name }}] Smoke test execution"
 
       # Upload screenshots and videos as artifacts if the tests fail
       - name: Upload failed screenshots as artifacts

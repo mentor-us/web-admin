@@ -1,12 +1,15 @@
+const { configureXrayPlugin, addXrayResultUpload } = require("cypress-xray-plugin");
+
 const { defineConfig } = require("cypress");
 const fs = require("fs");
 const { dumpDB, restoreDB } = require("./cypress/support/db");
+
 require("dotenv").config();
 
 module.exports = defineConfig({
   video: true,
   e2e: {
-    setupNodeEvents(on, config) {
+    async setupNodeEvents(on, config) {
       on("after:spec", (spec, results) => {
         if (results && results.video) {
           // Do we have failures for any retry attempts?
@@ -25,9 +28,26 @@ module.exports = defineConfig({
           return dumpDB(filename, config.env.DB_URI, config.env.DB_NAME);
         },
         restoreDB(filename) {
-          return restoreDB(filename, "mongodb://127.0.0.1", "test");
+          return restoreDB(filename, config.env.DB_URI, config.env.DB_NAME);
         }
       });
+
+      // Xray plugin config
+      // ------------------------------------
+      await configureXrayPlugin(config, {
+        jira: {
+          attachVideos: true
+        },
+        xray: {
+          uploadResults: true,
+          uploadScreenshots: true
+        },
+        plugin: {
+          normalizeScreenshotNames: true
+        }
+      });
+      await addXrayResultUpload(on);
+      // ------------------------------------
     },
     baseUrl: "http://localhost:3000/",
     experimentalStudio: true

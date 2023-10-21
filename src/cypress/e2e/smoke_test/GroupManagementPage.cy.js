@@ -8,7 +8,7 @@ describe("Group Management Page", () => {
     cy.visit("/groups");
   });
 
-  it("show all groups list", () => {
+  it("MU-60 show all groups list", () => {
     cy.get(".css-1n8f1nf > .MuiBox-root > .MuiTypography-h6")
       .should("be.visible")
       .should("have.text", "Quản lý nhóm");
