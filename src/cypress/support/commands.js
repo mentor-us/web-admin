@@ -55,6 +55,10 @@ Cypress.Commands.add(
       },
       {
         validate: () => {
+          cy.visit("/");
+          cy.get(".css-1n8f1nf > .MuiBox-root > .MuiTypography-h6")
+            .should("be.visible")
+            .should("have.text", "Quản lý nhóm");
           expect(window.localStorage.getItem("access_token")).to.be.a("string");
         },
         cacheAcrossSpecs: true
@@ -117,6 +121,10 @@ Cypress.Commands.add(
       {
         validate: () => {
           expect(window.localStorage.getItem("access_token")).to.be.a("string");
+          cy.url().should("equal", "http://localhost:3000/groups");
+          cy.get(".css-1n8f1nf > .MuiBox-root > .MuiTypography-h6")
+            .should("be.visible")
+            .should("have.text", "Quản lý nhóm");
         },
         cacheAcrossSpecs: true
       }
@@ -188,6 +196,10 @@ Cypress.Commands.add(
       {
         validate: () => {
           expect(window.localStorage.getItem("access_token")).to.be.a("string");
+          cy.url().should("equal", "http://localhost:3000/groups");
+          cy.get(".css-1n8f1nf > .MuiBox-root > .MuiTypography-h6")
+            .should("be.visible")
+            .should("have.text", "Quản lý nhóm");
         },
         cacheAcrossSpecs: true
       }

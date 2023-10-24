@@ -1,5 +1,7 @@
 describe("Login Page", () => {
   before(() => {
+    cy.clearAllCookies();
+    cy.clearAllLocalStorage();
     Cypress.session.clearAllSavedSessions();
   });
 
