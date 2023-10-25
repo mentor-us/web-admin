@@ -23,6 +23,7 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+import "cypress-file-upload";
 
 Cypress.Commands.add(
   "loginWithPassword",
@@ -162,11 +163,13 @@ function logIntoGoogle(username, password) {
         log: false
       });
       // NOTE: The element exists on the original form but is hidden and gets rerendered, which leads to intermittent detached DOM issues
-      cy.contains("Next").click().wait(4000);
-      cy.get('[type="password"]').type(password, {
+      cy.get("#identifierNext").should("be.visible");
+      cy.get("#identifierNext").click();
+      cy.get('input[type="password"]').should("be.visible");
+      cy.get('input[type="password"]').first().type(password, {
         log: false
       });
-      cy.contains("Next").click().wait(4000);
+      cy.get("#passwordNext").click();
     }
   );
   cy.url().should("equal", "http://localhost:3000/groups");

@@ -5,7 +5,7 @@ describe("Login Page", () => {
     Cypress.session.clearAllSavedSessions();
   });
 
-  it("MU-43 Login to Web Admin with Google Account", () => {
+  it("MU-43 Login to Web Admin with Google Account", { defaultCommandTimeout: 20000 }, () => {
     cy.loginWithGoogle(Cypress.env("gg_username"), Cypress.env("gg_password"));
   });
 

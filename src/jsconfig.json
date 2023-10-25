@@ -4,7 +4,8 @@
     "baseUrl": "./src",
     "paths": {
       "*": ["./*"]
-    }
+    },
+    "types":  ["cypress", "cypress-file-upload","cy-verify-downloads"]
   },
   "include": ["cypress", "src/**/*", "jest.config.js"],
   "exclude": ["node_modules", "**/node_modules", "build", "**/build"]

@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 const { configureXrayPlugin, addXrayResultUpload } = require("cypress-xray-plugin");
-
+const { verifyDownloadTasks } = require("cy-verify-downloads");
 const { defineConfig } = require("cypress");
 const fs = require("fs");
 const { dumpDB, restoreDB } = require("./cypress/support/db");
@@ -11,18 +11,19 @@ module.exports = defineConfig({
   video: true,
   e2e: {
     async setupNodeEvents(on, config) {
-      on("before:browser:launch", (browser = {}, launchOptions) => {
+      on("before:browser:launch", async (browser = {}, launchOptions) => {
         if (browser.name === "chrome") {
-          config.env.JIRA_TEST_EXECUTION_ISSUE_KEY =
-            config.env.CHROME_JIRA_TEST_EXECUTION_ISSUE_KEY;
-        } else if (browser.name === "edge") {
-          config.env.JIRA_TEST_EXECUTION_ISSUE_KEY = config.env.EDGE_JIRA_TEST_EXECUTION_ISSUE_KEY;
           launchOptions.args.push("--inprivate");
           launchOptions.args.push("--profile-directory=Default");
+        } else if (browser.name === "edge") {
+          launchOptions.args.push("--inprivate");
+          launchOptions.args.push("--profile-directory=Default");
+        } else if (browser.name === "firefox") {
         }
 
         return launchOptions;
       });
+
       on("after:spec", (spec, results) => {
         if (results && results.video) {
           // Do we have failures for any retry attempts?
@@ -45,7 +46,8 @@ module.exports = defineConfig({
         },
         downloads: (downloadspath) => {
           return fs.readdirSync(downloadspath);
-        }
+        },
+        ...verifyDownloadTasks
       });
 
       // Xray plugin config

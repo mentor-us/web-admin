@@ -52,7 +52,6 @@ jobs:
           env: JIRA_TEST_EXECUTION_ISSUE_KEY=${{ matrix.browser.jiraTestExecutionIssueKey }}
         env:
           CYPRESS_PLUGIN_DEBUG: true
-          CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85"
           CYPRESS_JIRA_TEST_EXECUTION_ISSUE_SUMMARY: "[Web Admin - ${{ matrix.browser.name }}] Smoke test execution"
 
       # Upload screenshots and videos as artifacts if the tests fail

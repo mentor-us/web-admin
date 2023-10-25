@@ -4629,6 +4629,16 @@ csstype@^3.0.2, csstype@^3.1.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.2.tgz#1d4bf9d572f11c14031f0436e1c10bc1f571f50b"
   integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
 
+cy-verify-downloads@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/cy-verify-downloads/-/cy-verify-downloads-0.2.2.tgz#c5eb96724f1abdaf3456a3ca5669030be52da01c"
+  integrity sha512-Cr4U38xg5z8AK8XiYuEcbAy1rfgtkZTdUFTWkG5NM+BxKSjRlpGt6LpylLpHp9B6ikKCBPotpeewW7fOuBFKlA==
+
+cypress-file-upload@^5.0.8:
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/cypress-file-upload/-/cypress-file-upload-5.0.8.tgz#d8824cbeaab798e44be8009769f9a6c9daa1b4a1"
+  integrity sha512-+8VzNabRk3zG6x8f8BWArF/xA/W0VK4IZNx3MV0jFWrJS/qKn8eHfa5nU73P9fOQAgwHFJx7zjg4lwOnljMO8g==
+
 cypress-xray-plugin@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/cypress-xray-plugin/-/cypress-xray-plugin-5.2.0.tgz#54f10c3f3ff44b4dd383e06dfc49209a79750498"
@@ -4644,10 +4654,10 @@ cypress-xray-plugin@^5.2.0:
   optionalDependencies:
     "@badeball/cypress-cucumber-preprocessor" "^18.0.6"
 
-cypress@13.3.2:
-  version "13.3.2"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-13.3.2.tgz#b4baa64ce37d7874f6bdd8efbc28a9c722c0686f"
-  integrity sha512-ArLmZObcLC+xxCp7zJZZbhby9FUf5CueLej9dUM4+5j37FTS4iMSgHxQLDu01PydFUvDXcNoIVRCYrHHxD7Ybg==
+cypress@13.3.3:
+  version "13.3.3"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-13.3.3.tgz#353e69b6543aee8aee4e91fa39bcecbab26ab564"
+  integrity sha512-mbdkojHhKB1xbrj7CrKWHi22uFx9P9vQFiR0sYDZZoK99OMp9/ZYN55TO5pjbXmV7xvCJ4JwBoADXjOJK8aCJw==
   dependencies:
     "@cypress/request" "^3.0.0"
     "@cypress/xvfb" "^1.2.4"
