@@ -32,7 +32,9 @@ Cypress.Commands.add("dumpDataTest", () => {
 
 Cypress.Commands.add("dumpCurrentData", () => {
   cy.log("DUMB LATEST DB DATA");
-  cy.task("dumpDB", DB_DUMP_CURRENT);
+  cy.task("dumpDB", DB_DUMP_CURRENT, {
+    timeout: 120000
+  });
 });
 
 Cypress.Commands.add("restoreCurrentData", () => {
