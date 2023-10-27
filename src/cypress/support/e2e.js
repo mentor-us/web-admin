@@ -45,6 +45,10 @@ Cypress.Commands.add("listFileDownloaded", (filename) => {
   return cy.task("downloads", downloadsFolder);
 });
 
+const dbDumpExclude = [/LoginPage/];
+
+const isSpecMustDumpDB = !dbDumpExclude.some((regex) => regex.test(Cypress.spec.fileName));
+
 before(() => {
   if (Cypress.config("isInteractive")) {
     // cypress open
@@ -53,6 +57,11 @@ before(() => {
     // cypress run
     cy.log("RUN IN CLI");
   }
+  if (isSpecMustDumpDB) {
+    cy.log(Cypress.spec.fileName);
+    cy.dumpCurrentData();
+  }
+
   // cy.task("dumpDB", "backup.tar");
   // cy.task("restoreDB", "backup.tar"); // Manually restore db if test error when design test
 });
@@ -64,5 +73,9 @@ after(() => {
   } else {
     // cypress run
     cy.log("RUN IN CLI MODE");
+  }
+  if (isSpecMustDumpDB) {
+    cy.log(Cypress.spec.fileName);
+    cy.restoreCurrentData();
   }
 });

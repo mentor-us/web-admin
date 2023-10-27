@@ -1,11 +1,6 @@
 describe("Categories Management Page", () => {
   before(() => {
-    cy.dumpCurrentData();
     cy.restoreDataTest();
-  });
-
-  after(() => {
-    cy.restoreCurrentData();
   });
 
   beforeEach(() => {

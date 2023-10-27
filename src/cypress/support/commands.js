@@ -77,15 +77,26 @@ function loginViaAAD(username, password) {
     "login.microsoftonline.com",
     {
       args: {
-        username,
-        password
+        username
       }
     },
-    ({ username, password }) => {
+    ({ username }) => {
       cy.get('input[type="email"]').type(username, {
         log: false
       });
       cy.get('input[type="submit"]').click();
+    }
+  );
+
+  // depending on the user and how they are registered with Microsoft, the origin may go to live.com
+  cy.origin(
+    "login.live.com",
+    {
+      args: {
+        password
+      }
+    },
+    ({ password }) => {
       cy.get('input[type="password"]').type(password, {
         log: false
       });
