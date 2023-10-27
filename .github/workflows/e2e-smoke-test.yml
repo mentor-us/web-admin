@@ -1,13 +1,6 @@
 name: End-to-end Smoke Testings
 
 on:
-  push:
-    branches:
-      - "feature/**"
-      - "develop"
-    paths:
-      - "src/**"
-      - .github/workflows/e2e-smoke-test.yml
   schedule:
     - cron: "30 5,17 * * 1"
 
@@ -49,6 +42,7 @@ jobs:
           wait-on-timeout: 180
           browser: ${{ matrix.browser.name }}
           spec: cypress/e2e/smoke_test/*.cy.js
+          headed: true
           env: JIRA_TEST_EXECUTION_ISSUE_KEY=${{ matrix.browser.jiraTestExecutionIssueKey }}
         env:
           CYPRESS_PLUGIN_DEBUG: true
