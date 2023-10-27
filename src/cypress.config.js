@@ -45,6 +45,9 @@ module.exports = defineConfig({
           return restoreDB(filename, config.env.DB_URI, config.env.DB_NAME);
         },
         downloads: (downloadspath) => {
+          if (!fs.existsSync(downloadspath)) {
+            fs.mkdirSync(downloadspath);
+          }
           return fs.readdirSync(downloadspath);
         },
         ...verifyDownloadTasks
@@ -65,6 +68,8 @@ module.exports = defineConfig({
       });
       await addXrayResultUpload(on);
       // ------------------------------------
+
+      return config;
     },
     baseUrl: "http://localhost:3000/",
     experimentalStudio: true,
