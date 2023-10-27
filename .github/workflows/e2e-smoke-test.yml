@@ -2,7 +2,7 @@ name: End-to-end Smoke Testings
 
 on:
   schedule:
-    - cron: "30 5,17 * * 1"
+    - cron: "30 5 * * 1,5" # Run on 5:30 at Mon,Fri
 
   workflow_dispatch:
 
@@ -12,11 +12,6 @@ jobs:
       fail-fast: false
       matrix:
         platform: ["ubuntu-latest"]
-        browser:
-          [
-            { "name": "chrome", "jiraTestExecutionIssueKey": "MU-88" },
-            { "name": "edge", "jiraTestExecutionIssueKey": "MU-87" },
-          ]
 
     runs-on: ${{ matrix.platform }}
     name: ${{ matrix.platform }} - Run test on ${{ matrix.browser.name }}
@@ -24,13 +19,30 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Decode Cypress env json
-        uses: timheuer/base64-to-file@v1
-        id: cypress_env_json
+      - name: Install 1Password CLI
+        uses: 1password/install-cli-action@v1
+
+      - name: Load secret
+        id: op-load-secret
+        uses: 1password/load-secrets-action@v1
         with:
-          fileName: "cypress.env.json"
-          fileDir: "./src/"
-          encodedString: ${{ secrets.CYPRESS_ENV_JSON }}
+          export-env: false
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          PAT_GITHUB_TOKEN: op://mentorus/github-pat-publish-package/token
+
+      - name: Inject secret with 1Password
+        run: |
+          export OP_SERVICE_ACCOUNT_TOKEN=${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          op inject -i ./src/cypress.env.json.tpl -o ./src/cypress.env.json
+
+      # - name: Decode Cypress env json
+      #   uses: timheuer/base64-to-file@v1
+      #   id: cypress_env_json
+      #   with:
+      #     fileName: "cypress.env.json"
+      #     fileDir: "./src/"
+      #     encodedString: ${{ secrets.CYPRESS_ENV_JSON }}
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
@@ -40,13 +52,12 @@ jobs:
           start: yarn startTest
           wait-on: "http://localhost:3000"
           wait-on-timeout: 180
-          browser: ${{ matrix.browser.name }}
+          browser: chrome
           spec: cypress/e2e/smoke_test/*.cy.js
           headed: true
-          env: JIRA_TEST_EXECUTION_ISSUE_KEY=${{ matrix.browser.jiraTestExecutionIssueKey }}
         env:
           CYPRESS_PLUGIN_DEBUG: true
-          CYPRESS_JIRA_TEST_EXECUTION_ISSUE_SUMMARY: "[Web Admin - ${{ matrix.browser.name }}] Smoke test execution"
+          CYPRESS_JIRA_TEST_EXECUTION_ISSUE_SUMMARY: "[Web Admin - Chrome] Smoke test execution"
 
       # Upload screenshots and videos as artifacts if the tests fail
       - name: Upload failed screenshots as artifacts
