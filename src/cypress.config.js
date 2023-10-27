@@ -7,6 +7,8 @@ const { dumpDB, restoreDB } = require("./cypress/support/db");
 
 require("dotenv").config();
 
+const packageVersion = require("./package.json").version;
+
 module.exports = defineConfig({
   video: true,
   e2e: {
@@ -75,8 +77,8 @@ module.exports = defineConfig({
     experimentalStudio: true,
     experimentalModifyObstructiveThirdPartyCode: true,
     env: {
-      PROJECT_VERSION: process.env.npm_package_version,
-      DB_DUMP_TEST: `data_dump_test_${process.env.npm_package_version}.tar` // Data test filename - use for test
+      PROJECT_VERSION: packageVersion,
+      DB_DUMP_TEST: `data_dump_test_${packageVersion}.tar` // Data test filename - use for test
     }
   },
 
