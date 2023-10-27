@@ -146,10 +146,8 @@ describe("Group Management Page", () => {
     cy.get("button").should("be.visible").contains(/khóa/i).click();
     cy.get(".swal2-confirm").click();
     cy.get("@colElements").contains("Bị khóa ").should("be.visible");
-    cy.reload();
-    cy.get("@checkbox").check();
     cy.get("@checkbox").should("be.checked");
-    cy.contains("Mở khóa").click();
+    cy.contains("Mở khóa").should("be.visible").click();
   });
 
   it("MU-69 Unblock groups (one or many)", () => {
@@ -175,10 +173,8 @@ describe("Group Management Page", () => {
     cy.get("button").should("be.visible").contains(/khóa/i).click();
     cy.get(".swal2-confirm").click();
     cy.get("@colElements").contains("Bị khóa ").should("be.visible");
-    cy.reload();
-    cy.get("@checkbox").check();
     cy.get("@checkbox").should("be.checked");
-    cy.contains("Mở khóa").click();
+    cy.contains("Mở khóa").should("be.visible").click();
   });
 
   it("MU-71 Export all groups list to Excel", () => {
