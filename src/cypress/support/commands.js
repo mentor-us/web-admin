@@ -224,3 +224,14 @@ Cypress.Commands.add(
 Cypress.Commands.add("logout", () => {
   window.localStorage.removeItem("access_token");
 });
+
+Cypress.Commands.add("getMany", (names) => {
+  const values = [];
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const arg of names) {
+    cy.get(arg).then((value) => values.push(value));
+  }
+
+  return cy.wrap(values);
+});

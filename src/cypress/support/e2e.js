@@ -17,6 +17,7 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 import "./commands";
+import "cypress-if";
 
 require("cy-verify-downloads").addCustomCommand();
 
@@ -47,7 +48,7 @@ Cypress.Commands.add("listFileDownloaded", (filename) => {
   return cy.task("downloads", downloadsFolder);
 });
 
-const dbDumpExclude = [/LoginPage/];
+const dbDumpExclude = [/LoginPage/, /SystemConfig/, /StatisticPage/, /AccountManagementPage/];
 
 const isSpecMustDumpDB = !dbDumpExclude.some((regex) => regex.test(Cypress.spec.fileName));
 

@@ -4639,6 +4639,13 @@ cypress-file-upload@^5.0.8:
   resolved "https://registry.yarnpkg.com/cypress-file-upload/-/cypress-file-upload-5.0.8.tgz#d8824cbeaab798e44be8009769f9a6c9daa1b4a1"
   integrity sha512-+8VzNabRk3zG6x8f8BWArF/xA/W0VK4IZNx3MV0jFWrJS/qKn8eHfa5nU73P9fOQAgwHFJx7zjg4lwOnljMO8g==
 
+cypress-if@^1.10.5:
+  version "1.10.5"
+  resolved "https://registry.yarnpkg.com/cypress-if/-/cypress-if-1.10.5.tgz#c48dc26a8260bed3046de98dfcb50c6b8b2db14b"
+  integrity sha512-7EJSTvoUM+6XumIA7T0cU69dkkdUEmncvIuFFgQ3ry57m2kXc9vtNTCdGjfnGQgMBDRR6vtx7no1ZDDg8IOICA==
+  dependencies:
+    debug "^4.3.4"
+
 cypress-xray-plugin@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/cypress-xray-plugin/-/cypress-xray-plugin-5.2.0.tgz#54f10c3f3ff44b4dd383e06dfc49209a79750498"

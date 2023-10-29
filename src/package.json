@@ -73,6 +73,7 @@
     "cy-verify-downloads": "^0.2.2",
     "cypress": "13.3.3",
     "cypress-file-upload": "^5.0.8",
+    "cypress-if": "^1.10.5",
     "cypress-xray-plugin": "^5.2.0",
     "eslint": "^8.30.0",
     "eslint-config-airbnb": "^19.0.4",
