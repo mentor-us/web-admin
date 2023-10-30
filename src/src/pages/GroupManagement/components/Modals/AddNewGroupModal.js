@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Autocomplete,
@@ -28,7 +28,6 @@ import groupsServices from "service/groupsServices";
 import { getAnotherDateFromToday } from "utils/formatDate";
 
 import { getAccountsTableSelector } from "redux/accounts/selector";
-import { loadByEmail } from "redux/accounts/slice";
 import { getFromToRangeSelector } from "redux/configuration/selector";
 import { addNewGroup } from "redux/groups/slice";
 import { allCategoriesSelector } from "redux/groupsCategory/selector";
@@ -69,20 +68,6 @@ function AddNewGroupModal({ open, onClose }) {
     endDate: true,
     startDate: true
   });
-
-  useEffect(() => {
-    const loadUserForAdd = async () => {
-      try {
-        await dispatch(loadByEmail("")).unwrap();
-      } catch (error) {
-        if (error?.message !== "401") {
-          ErrorAlert(error?.message);
-        }
-      }
-    };
-
-    loadUserForAdd();
-  }, []);
 
   const filteredUserEmails = useMemo(() => {
     return allUserEmails
