@@ -3,6 +3,7 @@ const { configureXrayPlugin, addXrayResultUpload } = require("cypress-xray-plugi
 const { verifyDownloadTasks } = require("cy-verify-downloads");
 const { defineConfig } = require("cypress");
 const fs = require("fs");
+const cypressSplit = require("cypress-split");
 const { dumpDB, restoreDB } = require("./cypress/support/db");
 
 require("dotenv").config();
@@ -21,6 +22,7 @@ module.exports = defineConfig({
           launchOptions.args.push("--inprivate");
           launchOptions.args.push("--profile-directory=Default");
         } else if (browser.name === "firefox") {
+          /* empty */
         }
 
         return launchOptions;
@@ -71,6 +73,8 @@ module.exports = defineConfig({
       await addXrayResultUpload(on);
       // ------------------------------------
 
+      // Cypress split plugin config
+      cypressSplit(on, config);
       return config;
     },
     baseUrl: "http://localhost:3000/",
