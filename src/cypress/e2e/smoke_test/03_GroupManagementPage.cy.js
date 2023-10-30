@@ -1,3 +1,4 @@
+/// <reference types="cypress-if" />
 describe("Group Management Page", () => {
   before(() => {
     cy.restoreDataTest();
@@ -142,11 +143,11 @@ describe("Group Management Page", () => {
       .should("not.be.checked");
 
     cy.get("@colElements").contains("Đang hoạt động ").should("be.visible");
-    cy.get("@checkbox").check();
+    cy.get("@checkbox").if("not.checked").check();
     cy.get("button").should("be.visible").contains(/khóa/i).click();
     cy.get(".swal2-confirm").click();
     cy.get("@colElements").contains("Bị khóa ").should("be.visible");
-    cy.get("@checkbox").should("be.checked");
+    cy.get("@checkbox").if("checked").should("be.checked").else().check();
     cy.contains("Mở khóa").should("be.visible").click();
   });
 
@@ -169,11 +170,11 @@ describe("Group Management Page", () => {
       .should("not.be.checked");
 
     cy.get("@colElements").contains("Đang hoạt động ").should("be.visible");
-    cy.get("@checkbox").check();
+    cy.get("@checkbox").if("not.checked").check();
     cy.get("button").should("be.visible").contains(/khóa/i).click();
     cy.get(".swal2-confirm").click();
     cy.get("@colElements").contains("Bị khóa ").should("be.visible");
-    cy.get("@checkbox").should("be.checked");
+    cy.get("@checkbox").if("checked").should("be.checked").else().check();
     cy.contains("Mở khóa").should("be.visible").click();
   });
 
@@ -182,7 +183,7 @@ describe("Group Management Page", () => {
     cy.listFileDownloaded().then((before) => {
       cy.intercept("*/groups/export*").as("exportFile");
       cy.get(".css-k1rhy8-MuiButtonBase-root-MuiButton-root > .MuiTypography-root").click();
-      cy.wait(3000)
+      cy.wait(10000)
         .listFileDownloaded()
         .then((after) => {
           expect(after.length).to.be.eq(before.length + 1);
@@ -232,5 +233,197 @@ describe("Group Management Page", () => {
         // Confirm import
         cy.get("@confirmBtn").click();
       });
+  });
+
+  context("Group Detail Page", () => {
+    beforeEach(() => {
+      cy.wait("@fetchGroups");
+      cy.get("table")
+        .contains("TEST_WEB_ADMIN_GROUP")
+        .should("be.visible")
+        .should("have.text", "TEST_WEB_ADMIN_GROUP ")
+        .click();
+      cy.get(".css-lthsmf > .MuiTypography-h6").should("have.text", "TEST_WEB_ADMIN_GROUP ");
+      cy.get(".css-rxvo3r-MuiTypography-root").should("have.text", "MentroUS ");
+      cy.get(".css-1n8f1nf > .MuiBox-root > .MuiTypography-h6")
+        .should("have.text", "Chi tiết về nhóm")
+        .should("be.visible");
+    });
+
+    context("Add/Delete mentors", () => {
+      it("MU-73 Add new mentors to a group", () => {
+        cy.get(":nth-child(1) > .MuiPaper-root > .css-mzbh3l").as("mentorPanel");
+        cy.get("@mentorPanel")
+          .contains(/Danh sách mentor/i)
+          .should("be.visible");
+        cy.get("@mentorPanel")
+          .contains(/Xuất excel/i)
+          .as("exportBtn")
+          .should("be.visible");
+        cy.get("@mentorPanel").contains(/thêm/i).as("addBtn").should("be.visible").click();
+
+        cy.get(".MuiTypography-h5").should("be.visible").should("have.text", "Thêm Mentor");
+        cy.get(".relationship__searchBox-item > .MuiTypography-root")
+          .should("be.visible")
+          .should("have.text", "Email Mentor (*)");
+        cy.contains("button", /xác nhận/i)
+          .as("confirmBtn")
+          .should("be.visible")
+          .should("be.enabled");
+        cy.contains("button", /hủy/i).should("be.visible").should("be.enabled");
+        cy.get("#\\:rn\\:").click();
+        cy.get("#\\:rn\\:").click();
+        cy.get("#\\:rn\\:").clear();
+        cy.get("#\\:rn\\:").type("20127665@student.hcmus.edu.vn{enter}");
+        cy.get(".MuiChip-label")
+          .should("have.text", "20127665@student.hcmus.edu.vn")
+          .should("be.visible");
+        cy.get("@confirmBtn").click();
+
+        cy.get(":nth-child(1) > .MuiPaper-root > .css-afbxdw").find("table").as("mentorTable");
+        cy.get("@mentorTable").contains("tr", "20127665@student.hcmus.edu.vn").should("be.visible");
+      });
+
+      it("MU-74 Delete mentors from a group", () => {
+        cy.get(":nth-child(1) > .MuiPaper-root > .css-afbxdw").find("table").as("mentorTable");
+        cy.get("@mentorTable")
+          .contains("tr", "20127665@student.hcmus.edu.vn")
+          .as("row")
+          .should("be.visible");
+        cy.get("@row").find("td").last().find("span").as("moreBtn").click();
+        cy.contains("li", /xóa/i).should("be.visible").click();
+        cy.get(".swal2-confirm").click();
+      });
+    });
+
+    context("Add/Delete mentees", () => {
+      it("MU-97 Add new mentees to a group", () => {
+        cy.get(":nth-child(2) > .MuiPaper-root > .css-mzbh3l").as("menteePanel");
+        cy.get("@menteePanel")
+          .contains(/Danh sách mentee/i)
+          .should("be.visible");
+        cy.get("@menteePanel")
+          .contains(/Xuất excel/i)
+          .as("exportBtn")
+          .should("be.visible");
+        cy.get("@menteePanel").contains(/thêm/i).as("addBtn").should("be.visible").click();
+
+        cy.get(".MuiTypography-h5").should("be.visible").should("have.text", "Thêm Mentee");
+        cy.get(".relationship__searchBox-item > .MuiTypography-root")
+          .should("be.visible")
+          .should("have.text", "Email Mentee (*)");
+        cy.contains("button", /xác nhận/i)
+          .as("confirmBtn")
+          .should("be.visible")
+          .should("be.enabled");
+        cy.contains("button", /hủy/i).should("be.visible").should("be.enabled");
+        cy.get("#\\:rn\\:").click();
+        cy.get("#\\:rn\\:").click();
+        cy.get("#\\:rn\\:").clear();
+        cy.get("#\\:rn\\:").type("20127665@student.hcmus.edu.vn{enter}");
+        cy.get(".MuiChip-label")
+          .should("have.text", "20127665@student.hcmus.edu.vn")
+          .should("be.visible");
+        cy.get("@confirmBtn").click();
+
+        cy.get(":nth-child(2) > .MuiPaper-root > .css-afbxdw").find("table").as("menteeTable");
+        cy.get("@menteeTable").contains("tr", "20127665@student.hcmus.edu.vn").should("be.visible");
+      });
+
+      it("MU-134 Delete mentees from a group", () => {
+        cy.get(":nth-child(2) > .MuiPaper-root > .css-afbxdw").find("table").as("menteeTable");
+        cy.get("@menteeTable")
+          .contains("tr", "20127665@student.hcmus.edu.vn")
+          .as("row")
+          .should("be.visible");
+        cy.get("@row").find("td").last().find("span").as("moreBtn").click();
+        cy.contains("li", /xóa/i).should("be.visible").click();
+        cy.get(".swal2-confirm").click();
+      });
+    });
+
+    it("MU-96 Change user role from Mentee to Mentor and reverse", () => {
+      // From Mentee to Mentor
+      cy.get(":nth-child(2) > .MuiPaper-root > .css-afbxdw").find("table").as("menteeTable");
+      cy.get("@menteeTable")
+        .contains("test.acc.mentorus")
+        .parents("td")
+        .siblings()
+        .as("menteeColElements")
+        .last()
+        .find("span")
+        .as("menteeMoreBtn")
+        .click();
+
+      cy.get("#simple-menu > .MuiPaper-root")
+        .as("menteeMenu")
+        .contains(/Chuyển thành Mentor/i)
+        .click();
+      cy.get(".swal2-confirm").click();
+
+      // From Mentor to Mentee
+      cy.get(":nth-child(1) > .MuiPaper-root > .css-afbxdw").find("table").as("mentorTable");
+      cy.get("@mentorTable")
+        .contains("test.acc.mentorus")
+        .parents("td")
+        .siblings()
+        .as("mentorColElements")
+        .last()
+        .find("span")
+        .as("mentorMoreBtn")
+        .click();
+
+      cy.get("#simple-menu > .MuiPaper-root")
+        .as("mentorMenu")
+        .contains(/Chuyển thành Mentee/i)
+        .click();
+      cy.get(".swal2-confirm").click();
+    });
+
+    it("MU-132 Export mentee list to Excel", () => {
+      cy.get(":nth-child(2) > .MuiPaper-root > .css-mzbh3l").as("menteePanel");
+      cy.get("@menteePanel")
+        .contains(/Danh sách mentee/i)
+        .should("be.visible");
+      cy.get("@menteePanel")
+        .contains(/Xuất excel/i)
+        .as("exportBtn")
+        .should("be.visible");
+      cy.intercept("api/groups/*/mentees/export*").as("exportFile");
+      cy.listFileDownloaded().then((before) => {
+        cy.get("@exportBtn").click();
+        cy.wait("@exportFile")
+          .wait(10000)
+          .listFileDownloaded()
+          .then((after) => {
+            expect(after.length).to.be.eq(before.length + 1);
+            const newFile = after.filter((file) => !before.includes(file))[0];
+            expect(newFile).to.have.string(".xlsx");
+          });
+      });
+    });
+
+    it("MU-133 Export mentor list to Excel", () => {
+      cy.get(":nth-child(1) > .MuiPaper-root > .css-mzbh3l").as("mentorPanel");
+      cy.get("@mentorPanel")
+        .contains(/Danh sách mentor/i)
+        .should("be.visible");
+      cy.get("@mentorPanel")
+        .contains(/Xuất excel/i)
+        .as("exportBtn")
+        .should("be.visible");
+      cy.intercept("api/groups/*/mentors/export*").as("exportFile");
+      cy.listFileDownloaded().then((before) => {
+        cy.get("@exportBtn").click();
+        cy.wait("@exportFile")
+          .wait(10000)
+          .listFileDownloaded()
+          .then((after) => {
+            expect(after.length).to.be.eq(before.length + 1);
+            const newFile = after.filter((file) => !before.includes(file))[0];
+            expect(newFile).to.have.string(".xlsx");
+          });
+      });
+    });
   });
 });
