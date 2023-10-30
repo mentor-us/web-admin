@@ -46,12 +46,12 @@ jobs:
           headed: true
           spec: |
             **/smoke_test/*.cs*
+          env: JIRA_TEST_EXECUTION_ISSUE_KEY="MU-88"
         env:
           SPLIT: ${{ strategy.job-total }}
           SPLIT_INDEX: ${{ strategy.job-index }}
           CYPRESS_PLUGIN_DEBUG: true
           CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85"
-          CYPRESS_JIRA_TEST_EXECUTION_ISSUE_KEY": "MU-88"
           
       # Upload screenshots and videos as artifacts if the tests fail
       - name: Upload failed screenshots as artifacts
@@ -104,10 +104,10 @@ jobs:
           browser: chrome
           spec: |
             **/smoke_test/!(*.cs*)
+          env: JIRA_TEST_EXECUTION_ISSUE_KEY="MU-88"
         env:
           CYPRESS_PLUGIN_DEBUG: true
           CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85"
-          CYPRESS_JIRA_TEST_EXECUTION_ISSUE_KEY": "MU-88"
           
       # Upload screenshots and videos as artifacts if the tests fail
       - name: Upload failed screenshots as artifacts
