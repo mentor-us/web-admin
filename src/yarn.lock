@@ -4752,6 +4752,11 @@ cypress-if@^1.10.5:
   dependencies:
     debug "^4.3.4"
 
+cypress-on-fix@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/cypress-on-fix/-/cypress-on-fix-1.0.2.tgz#2bf2d87f1f8403936956653fe915286fda521811"
+  integrity sha512-oN/PW7FsC3Y7xC9Z76KzAVXWH5VNPrt+FWjMlSYDPQtEOYedVNBLu7dz9CEU6Ntt5kD0MHuXAyO8Ov2YNBf9lg==
+
 cypress-split@^1.15.4:
   version "1.15.4"
   resolved "https://registry.yarnpkg.com/cypress-split/-/cypress-split-1.15.4.tgz#68e9f14f4060730f50a2852908b74520cc521914"

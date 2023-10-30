@@ -3,6 +3,7 @@ const { configureXrayPlugin, addXrayResultUpload } = require("cypress-xray-plugi
 const { verifyDownloadTasks } = require("cy-verify-downloads");
 const { defineConfig } = require("cypress");
 const fs = require("fs");
+const cypressOnFix = require("cypress-on-fix");
 const cypressSplit = require("cypress-split");
 const { dumpDB, restoreDB } = require("./cypress/support/db");
 
@@ -13,7 +14,8 @@ const packageVersion = require("./package.json").version;
 module.exports = defineConfig({
   video: true,
   e2e: {
-    async setupNodeEvents(on, config) {
+    async setupNodeEvents(cypressOn, config) {
+      const on = cypressOnFix(cypressOn);
       on("before:browser:launch", async (browser = {}, launchOptions) => {
         if (browser.name === "chrome") {
           launchOptions.args.push("--inprivate");

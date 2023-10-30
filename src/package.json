@@ -74,6 +74,7 @@
     "cypress": "13.3.3",
     "cypress-file-upload": "^5.0.8",
     "cypress-if": "^1.10.5",
+    "cypress-on-fix": "^1.0.2",
     "cypress-split": "^1.15.4",
     "cypress-xray-plugin": "^5.2.0",
     "eslint": "^8.30.0",
