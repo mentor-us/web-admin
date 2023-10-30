@@ -12,6 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         platform: ["ubuntu-latest"]
+        containers: [1, 2, 3]
 
     runs-on: ${{ matrix.platform }}
     name: ${{ matrix.platform }} - Run test on Chrome
@@ -36,15 +37,22 @@ jobs:
           export OP_SERVICE_ACCOUNT_TOKEN=${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           op inject -i ./src/cypress.env.json.tpl -o ./src/cypress.env.json
 
-      # - name: Decode Cypress env json
-      #   uses: timheuer/base64-to-file@v1
-      #   id: cypress_env_json
+      # - name: Cypress run
+      #   uses: cypress-io/github-action@v6
       #   with:
-      #     fileName: "cypress.env.json"
-      #     fileDir: "./src/"
-      #     encodedString: ${{ secrets.CYPRESS_ENV_JSON }}
+      #     install-command: yarn --frozen-lockfile --network-timeout 100000
+      #     working-directory: src
+      #     start: yarn startTest
+      #     wait-on: "http://localhost:3000"
+      #     wait-on-timeout: 180
+      #     browser: chrome
+      #     spec: cypress/e2e/smoke_test/*.cy.js
+      #     headed: true
+      #   env:
+      #     CYPRESS_PLUGIN_DEBUG: true
+      #     CYPRESS_JIRA_TEST_EXECUTION_ISSUE_SUMMARY: "[Web Admin - Chrome] Smoke test execution"
 
-      - name: Cypress run
+      - name: Cypress run split
         uses: cypress-io/github-action@v6
         with:
           install-command: yarn --frozen-lockfile --network-timeout 100000
@@ -53,12 +61,19 @@ jobs:
           wait-on: "http://localhost:3000"
           wait-on-timeout: 180
           browser: chrome
-          spec: cypress/e2e/smoke_test/*.cy.js
           headed: true
+          spec: |
+            **/smoke_test/*LoginPage.cy.js
+            **/smoke_test/*StatisticPage.cy.js
+            **/smoke_test/*SystemConfig.cy.js
+            **/smoke_test/*MyProfile.cy.js
         env:
+          DEBUG: 'cypress-split,find-cypress-specs'
+          SPLIT: ${{ strategy.job-total }}
+          SPLIT_INDEX: ${{ strategy.job-index }}
           CYPRESS_PLUGIN_DEBUG: true
           CYPRESS_JIRA_TEST_EXECUTION_ISSUE_SUMMARY: "[Web Admin - Chrome] Smoke test execution"
-
+          
       # Upload screenshots and videos as artifacts if the tests fail
       - name: Upload failed screenshots as artifacts
         uses: actions/upload-artifact@v3
