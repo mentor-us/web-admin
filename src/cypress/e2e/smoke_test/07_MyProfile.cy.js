@@ -1,11 +1,12 @@
 describe("My Profile", () => {
   beforeEach(() => {
     cy.loginWithPassword();
+    cy.intercept("api/users/*/detail").as("getUserDetail");
     cy.visit("/groups");
+    cy.wait("@getUserDetail").its("response.statusCode").should("eq", 200);
   });
 
   const viewMyProfile = () => {
-    cy.intercept("api/users/*/detail").as("getUserDetail");
     cy.get(".MuiAvatar-img").should("be.visible").click();
     cy.get("#account-menu > .MuiPaper-root").as("menu").should("be.visible");
     cy.get('.MuiList-root > [tabindex="0"]')
@@ -15,7 +16,7 @@ describe("My Profile", () => {
     cy.get("#account-menu > .MuiPaper-root > .MuiList-root > :nth-child(4)")
       .should("be.visible")
       .and("have.text", "logoutĐăng xuất");
-    cy.wait("@getUserDetail").its("response.statusCode").should("eq", 200);
+    cy.get("@getUserDetail").its("response.statusCode").should("eq", 200);
     cy.get("@getUserDetail")
       .its("response.body.data")
       .then((data) => {
