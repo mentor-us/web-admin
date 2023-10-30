@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  test-split:
     strategy:
       fail-fast: false
       matrix:
@@ -15,9 +15,8 @@ jobs:
         containers: [1, 2, 3]
 
     runs-on: ${{ matrix.platform }}
-    name: ${{ matrix.platform }} - Run test on Chrome
     steps:
-      - name: Checkout repo
+      - name: Checkout 🛎
         uses: actions/checkout@v4
 
       - name: Install 1Password CLI
@@ -55,7 +54,6 @@ jobs:
       - name: Cypress run split
         uses: cypress-io/github-action@v6
         with:
-          install-command: yarn --frozen-lockfile --network-timeout 100000
           working-directory: src
           start: yarn startTest
           wait-on: "http://localhost:3000"
@@ -90,4 +88,12 @@ jobs:
           name: cypress-videos
           path: cypress/videos
           if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
+  
+  after:
+    needs: [test-split]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v4
+      - run: ls -la
 
