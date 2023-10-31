@@ -10,6 +10,9 @@ describe("Group Management Page", () => {
       method: "GET",
       url: `${Cypress.env("BACKEND_URL")}api/groups?type=admin&page=*&pageSize=*`
     }).as("fetchGroups");
+    cy.intercept("PATCH", "api/groups/enable").as("enableGroup");
+    cy.intercept("PATCH", "api/groups/disable").as("disableGroup");
+
     cy.visit("/groups");
   });
 
@@ -124,7 +127,7 @@ describe("Group Management Page", () => {
     cy.restoreDataTest();
   });
 
-  it("MU-68 Block groups (one or many)", () => {
+  it("MU-68 Block groups (one or many)", { defaultCommandTimeout: 10000 }, () => {
     cy.get("table")
       .contains("TEST_WEB_ADMIN_GROUP")
       .as("groupTest")
@@ -146,13 +149,15 @@ describe("Group Management Page", () => {
     cy.get("@checkbox").if("not.checked").check();
     cy.get("button").should("be.visible").contains(/khóa/i).click();
     cy.get(".swal2-confirm").click();
+    cy.wait("@disableGroup").wait("@fetchGroups");
     cy.get("@colElements").contains("Bị khóa ").should("be.visible");
     cy.get("@checkbox").if("checked").should("be.checked").else().check();
     cy.contains("Mở khóa").should("be.visible").click();
     cy.get("@colElements").contains("Đang hoạt động ").should("be.visible");
+    cy.wait("@enableGroup");
   });
 
-  it("MU-69 Unblock groups (one or many)", () => {
+  it("MU-69 Unblock groups (one or many)", { defaultCommandTimeout: 10000 }, () => {
     cy.get("table")
       .contains("TEST_WEB_ADMIN_GROUP")
       .as("groupTest")
@@ -174,10 +179,12 @@ describe("Group Management Page", () => {
     cy.get("@checkbox").if("not.checked").check();
     cy.get("button").should("be.visible").contains(/khóa/i).click();
     cy.get(".swal2-confirm").click();
+    cy.wait("@disableGroup").wait("@fetchGroups");
     cy.get("@colElements").contains("Bị khóa ").should("be.visible");
     cy.get("@checkbox").if("checked").should("be.checked").else().check();
     cy.contains("Mở khóa").should("be.visible").click();
     cy.get("@colElements").contains("Đang hoạt động ").should("be.visible");
+    cy.wait("@enableGroup");
   });
 
   it("MU-71 Export all groups list to Excel", () => {
@@ -240,6 +247,9 @@ describe("Group Management Page", () => {
   context("Group Detail Page", () => {
     beforeEach(() => {
       cy.wait("@fetchGroups");
+      cy.intercept("PATCH", "api/groups/*/mentees/*").as("addMentee");
+      cy.intercept("PATCH", "api/groups/*/mentors/*").as("addMentor");
+      cy.intercept("GET", "api/users/*").as("fetchUser");
       cy.get("table")
         .contains("TEST_WEB_ADMIN_GROUP")
         .should("be.visible")
@@ -344,43 +354,57 @@ describe("Group Management Page", () => {
       });
     });
 
-    it("MU-96 Change user role from Mentee to Mentor and reverse", () => {
-      // From Mentee to Mentor
-      cy.get(":nth-child(2) > .MuiPaper-root > .css-afbxdw").find("table").as("menteeTable");
-      cy.get("@menteeTable")
-        .contains("test.acc.mentorus")
-        .parents("td")
-        .siblings()
-        .as("menteeColElements")
-        .last()
-        .find("span")
-        .as("menteeMoreBtn")
-        .click();
+    it(
+      "MU-96 Change user role from Mentee to Mentor and reverse",
+      { defaultCommandTimeout: 10000 },
+      () => {
+        cy.wait("@fetchUser");
+        // From Mentee to Mentor
+        cy.get(":nth-child(2) > .MuiPaper-root > .css-afbxdw").find("table").as("menteeTable");
+        cy.get("@menteeTable")
+          .contains("test.acc.mentorus")
+          .parents("td")
+          .siblings()
+          .as("menteeColElements")
+          .last()
+          .find("span")
+          .as("menteeMoreBtn")
+          .click();
 
-      cy.get("#simple-menu > .MuiPaper-root")
-        .as("menteeMenu")
-        .contains(/Chuyển thành Mentor/i)
-        .click();
-      cy.get(".swal2-confirm").click();
+        cy.get("#simple-menu > .MuiPaper-root")
+          .as("menteeMenu")
+          .contains(/Chuyển thành Mentor/i)
+          .click();
+        cy.get(".swal2-confirm").click();
+        cy.wait("@addMentor");
+        cy.reload();
 
-      // From Mentor to Mentee
-      cy.get(":nth-child(1) > .MuiPaper-root > .css-afbxdw").find("table").as("mentorTable");
-      cy.get("@mentorTable")
-        .contains("test.acc.mentorus")
-        .parents("td")
-        .siblings()
-        .as("mentorColElements")
-        .last()
-        .find("span")
-        .as("mentorMoreBtn")
-        .click();
+        cy.wait("@fetchUser");
+        cy.get("@menteeTable").contains("test.acc.mentorus").should("not.exist");
+        // From Mentor to Mentee
+        cy.get(":nth-child(1) > .MuiPaper-root > .css-afbxdw").find("table").as("mentorTable");
+        cy.get("@mentorTable")
+          .contains("test.acc.mentorus")
+          .parents("td")
+          .siblings()
+          .as("mentorColElements")
+          .last()
+          .find("span")
+          .as("mentorMoreBtn")
+          .click();
+        cy.get("@mentorTable").contains("test.acc.mentorus").should("be.visible");
 
-      cy.get("#simple-menu > .MuiPaper-root")
-        .as("mentorMenu")
-        .contains(/Chuyển thành Mentee/i)
-        .click();
-      cy.get(".swal2-confirm").click();
-    });
+        cy.get("#simple-menu > .MuiPaper-root")
+          .as("mentorMenu")
+          .contains(/Chuyển thành Mentee/i)
+          .click();
+        cy.get(".swal2-confirm").click();
+        cy.wait("@addMentee");
+        cy.reload();
+        cy.get("@menteeTable").contains("test.acc.mentorus").should("be.visible");
+        cy.get("@mentorTable").contains("test.acc.mentorus").should("not.exist");
+      }
+    );
 
     it("MU-132 Export mentee list to Excel", () => {
       cy.get(":nth-child(2) > .MuiPaper-root > .css-mzbh3l").as("menteePanel");
