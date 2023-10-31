@@ -14,6 +14,7 @@ jobs:
         containers: [1, 2, 3]
 
     runs-on: "ubuntu-latest"
+    name: "E2E Smoke Testing Split"
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@v4
@@ -46,6 +47,7 @@ jobs:
           headed: true
           spec: |
             **/smoke_test/*.cs*
+          publish-summary: false
           env: JIRA_TEST_EXECUTION_ISSUE_KEY="MU-88"
         env:
           SPLIT: ${{ strategy.job-total }}
@@ -73,7 +75,8 @@ jobs:
   smoke-test-has-backup:
     runs-on: "ubuntu-latest"
     needs: [smoke-test-split]
-    name: "E2E Smoke Testing with Backup"
+    if: always()
+    name: "E2E Smoke Testing with Backup Data"
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@v4
