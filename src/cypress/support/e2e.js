@@ -48,13 +48,7 @@ Cypress.Commands.add("listFileDownloaded", (filename) => {
   return cy.task("downloads", downloadsFolder);
 });
 
-const dbDumpExclude = [
-  /LoginPage/,
-  /SystemConfig/,
-  /StatisticPage/,
-  /AccountManagementPage/,
-  /MyProfile/
-];
+const dbDumpExclude = [/LoginPage/, /SystemConfig/, /StatisticPage/, /MyProfile/];
 
 const isSpecMustDumpDB = !dbDumpExclude.some((regex) => regex.test(Cypress.spec.fileName));
 

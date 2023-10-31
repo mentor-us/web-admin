@@ -39,7 +39,7 @@ describe("Account Management Page", () => {
         cy.contains(filteredData[0].email).should("be.visible");
         cy.contains(filteredData[0].name).should("be.visible");
         cy.get("span")
-          .contains(filteredData[0].status ? "Hoạt động" : "Bị khoá")
+          .contains(filteredData[0].status ? "Hoạt động" : "Bị khóa")
           .should("be.visible");
       });
   };
