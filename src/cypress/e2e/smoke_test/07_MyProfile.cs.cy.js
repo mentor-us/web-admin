@@ -2,12 +2,22 @@ describe("My Profile", () => {
   beforeEach(() => {
     cy.loginWithPassword();
     cy.intercept("api/users/*/detail").as("getUserDetail");
+    cy.intercept("api/groups*").as("getGroups");
     cy.visit("/groups");
     cy.wait("@getUserDetail").its("response.statusCode").should("eq", 200);
   });
 
   const viewMyProfile = () => {
-    cy.get(".MuiAvatar-img").should("be.visible").click();
+    cy.wait("@getGroups").its("response.statusCode").should("eq", 200);
+    cy.get("@getUserDetail")
+      .its("response.body.data.imageUrl")
+      .then((imageUrl) => {
+        cy.get(`img[alt="profile-image"][src$="${imageUrl}"]`)
+          .parents("button")
+          .should("be.visible")
+          .should("be.enabled")
+          .click();
+      });
     cy.get("#account-menu > .MuiPaper-root").as("menu").should("be.visible");
     cy.get('.MuiList-root > [tabindex="0"]')
       .as("viewMyProfile")
@@ -59,7 +69,16 @@ describe("My Profile", () => {
   });
 
   it("MU-47 Logout account", () => {
-    cy.get(".MuiAvatar-img").click();
+    cy.wait("@getGroups").its("response.statusCode").should("eq", 200);
+    cy.get("@getUserDetail")
+      .its("response.body.data.imageUrl")
+      .then((imageUrl) => {
+        cy.get(`img[alt="profile-image"][src$="${imageUrl}"]`)
+          .parents("button")
+          .should("be.visible")
+          .should("be.enabled")
+          .click();
+      });
     cy.get("#account-menu > .MuiPaper-root > .MuiList-root > :nth-child(4)").click();
     cy.contains("Đăng nhập").should("be.visible");
     cy.url().should("include", "/sign-in");
