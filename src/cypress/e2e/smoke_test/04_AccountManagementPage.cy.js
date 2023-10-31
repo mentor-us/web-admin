@@ -1,7 +1,7 @@
 /// <reference types="cypress-if" />
 describe("Account Management Page", () => {
   before(() => {
-    // cy.restoreDataTest();
+    cy.restoreDataTest();
   });
 
   const viewAccountsTable = () => {
@@ -26,49 +26,30 @@ describe("Account Management Page", () => {
       });
   };
 
-  const viewAccountDetail = () => {
-    cy.get("table").find("tr").as("tableRows").should("have.length.at.least", 2);
-    cy.get("@tableRows").eq(1).as("firstRow").click();
-    cy.get("@firstRow")
-      .find("td")
-      .eq(1)
-      .as("rowEmail")
-      .should("be.visible")
-      .invoke("text")
-      .invoke("trim")
-      .as("email")
-      .then(cy.log);
-    cy.get("@firstRow")
-      .find("td")
-      .eq(2)
-      .as("rowName")
-      .should("be.visible")
-      .invoke("text")
-      .invoke("trim")
-      .as("name")
-      .then(cy.log);
-    cy.get("@firstRow")
-      .find("td")
-      .eq(4)
-      .as("rowStatus")
-      .should("be.visible")
-      .invoke("text")
-      .invoke("trim")
-      .as("status")
-      .then(cy.log);
-    cy.get("@rowEmail").click();
-    cy.wait("@getUserDetail").its("response.statusCode").should("eq", 200);
-    cy.getMany(["@email", "@name", "@status"]).then(([userEmail, userName, userStatus]) => {
-      cy.contains(userEmail).should("be.visible");
-      cy.contains(userName).should("be.visible");
-      cy.get("span").contains(userStatus).should("be.visible");
-    });
+  const viewAccountDetail = (inputEmail = "20127665") => {
+    cy.wait("@getAllAccounts").its("response.statusCode").should("eq", 200);
+    cy.get("@getAllAccounts")
+      .its("response.body.data")
+      .should("not.be.empty")
+      .then(({ content }) => {
+        const filteredData = content.filter((item) => item.email.includes(inputEmail));
+        cy.wrap(filteredData).should("have.length.at.least", 1);
+        cy.visit(`/account-management/account-detail/${filteredData[0].id}`);
+        cy.wait("@getUserDetail").its("response.statusCode").should("eq", 200);
+        cy.contains(filteredData[0].email).should("be.visible");
+        cy.contains(filteredData[0].name).should("be.visible");
+        cy.get("span")
+          .contains(filteredData[0].status ? "Hoạt động" : "Bị khoá")
+          .should("be.visible");
+      });
   };
 
   beforeEach(() => {
     cy.loginWithPassword();
     cy.intercept("api/users/all-paging*").as("getAllAccounts");
     cy.intercept("api/users/*/detail").as("getUserDetail");
+    cy.intercept("DELETE", "api/users*").as("deleteAccount");
+    cy.intercept("POST", "api/users*").as("addAccount");
     cy.visit("/account-management");
     viewAccountsTable();
   });
@@ -107,91 +88,77 @@ describe("Account Management Page", () => {
     viewAccountDetail();
   });
 
-  // it("MU-109 Add new account to system", () => {
-  //   cy.get("table").find("tr").as("tableRows").should("have.length.at.least", 2);
-  //   cy.get("@tableRows").eq(1).as("firstRow").click();
-  //   cy.get("@firstRow")
-  //     .find("td")
-  //     .eq(1)
-  //     .as("rowEmail")
-  //     .should("be.visible")
-  //     .invoke("text")
-  //     .invoke("trim")
-  //     .as("email")
-  //     .then(cy.log);
-  //   cy.get("@firstRow")
-  //     .find("td")
-  //     .eq(2)
-  //     .as("rowName")
-  //     .should("be.visible")
-  //     .invoke("text")
-  //     .invoke("trim")
-  //     .as("name")
-  //     .then(cy.log);
-  //   cy.get("@firstRow")
-  //     .find("td")
-  //     .eq(4)
-  //     .as("rowStatus")
-  //     .should("be.visible")
-  //     .invoke("text")
-  //     .invoke("trim")
-  //     .as("status")
-  //     .then(cy.log);
-  //   cy.get("@rowEmail").click();
-  //   cy.wait("@getUserDetail").its("response.statusCode").should("eq", 200);
-  //   cy.getMany(["@email", "@name", "@status"]).then(([userEmail, userName, userStatus]) => {
-  //     cy.contains(userEmail).should("be.visible");
-  //     cy.contains(userName).should("be.visible");
-  //     cy.get("span").contains(userStatus).should("be.visible");
-  //   });
-  // });
+  it("MU-109 Add new account to system", () => {
+    cy.contains("button", /thêm/i).as("addBtn").should("be.visible").should("be.enabled").click();
+    cy.get(".group-modal__container").as("addModal").should("be.visible");
+    cy.get("@addModal")
+      .contains(/thêm tài khoản mới/i)
+      .should("be.visible");
+    cy.get("@addModal").contains("button", /hủy/i).should("be.visible").should("be.enabled");
+    cy.get("@addModal")
+      .contains("button", /xác nhận/i)
+      .as("confirmBtn")
+      .should("be.visible")
+      .should("be.enabled");
+    cy.get("@addModal")
+      .contains(/họ tên/i)
+      .should("be.visible");
+    cy.get("@addModal").contains(/email/i).should("be.visible");
+    cy.get("@addModal")
+      .contains(/vai trò/i)
+      .should("be.visible");
+    cy.get("@addModal")
+      .find("input[placeholder='Nhập họ tên chủ tài khoản']")
+      .as("nameInput")
+      .should("be.visible");
+    cy.get("@addModal")
+      .find("input[placeholder='Nhập email']")
+      .as("emailInput")
+      .should("be.visible");
 
-  // it("MU-110 Delete accounts", () => {
-  //   cy.get("table").find("tr").as("tableRows").should("have.length.at.least", 2);
-  //   cy.get("@tableRows").eq(1).as("firstRow").click();
-  //   cy.get("@firstRow")
-  //     .find("td")
-  //     .eq(1)
-  //     .as("rowEmail")
-  //     .should("be.visible")
-  //     .invoke("text")
-  //     .invoke("trim")
-  //     .as("email")
-  //     .then(cy.log);
-  //   cy.get("@firstRow")
-  //     .find("td")
-  //     .eq(2)
-  //     .as("rowName")
-  //     .should("be.visible")
-  //     .invoke("text")
-  //     .invoke("trim")
-  //     .as("name")
-  //     .then(cy.log);
-  //   cy.get("@firstRow")
-  //     .find("td")
-  //     .eq(4)
-  //     .as("rowStatus")
-  //     .should("be.visible")
-  //     .invoke("text")
-  //     .invoke("trim")
-  //     .as("status")
-  //     .then(cy.log);
-  //   cy.get("@rowEmail").click();
-  //   cy.wait("@getUserDetail").its("response.statusCode").should("eq", 200);
-  //   cy.getMany(["@email", "@name", "@status"]).then(([userEmail, userName, userStatus]) => {
-  //     cy.contains(userEmail).should("be.visible");
-  //     cy.contains(userName).should("be.visible");
-  //     cy.get("span").contains(userStatus).should("be.visible");
-  //   });
-  // });
+    cy.get("@nameInput").clear();
+    cy.get("@nameInput").type("ADD_ACCOUNT");
+
+    cy.get("@emailInput").clear();
+    cy.get("@emailInput").type("smoktest@gmail.com");
+    cy.get("@confirmBtn").click();
+    cy.wait("@addAccount").its("response.statusCode").should("eq", 200);
+    cy.wait("@getAllAccounts").its("response.statusCode").should("eq", 200);
+
+    cy.restoreDataTest();
+  });
+
+  it("MU-110 Delete accounts", () => {
+    cy.intercept({
+      url: "api/users/all-paging*",
+      times: 1
+    }).as("getAllAccounts");
+    cy.intercept({ url: "api/users/all-paging*", times: 1 }).as("getAllAccountsRecall");
+
+    cy.get("table").find("tr").as("tableRows").should("have.length.at.least", 2);
+    cy.get("@tableRows").contains("20127665").parents("tr").as("testRows").should("be.visible");
+    cy.get("@testRows")
+      .contains(/Hoạt động/i)
+      .should("be.visible");
+
+    cy.get("@testRows").find("input[type=checkbox]").as("checkbox").click();
+    cy.contains("button", "Xóa").as("deleteBtn").should("be.enabled").should("be.visible");
+    cy.get("@deleteBtn").click();
+    cy.get(".swal2-confirm").click();
+    cy.wait("@deleteAccount").its("response.statusCode").should("eq", 200);
+    cy.wait("@getAllAccounts").its("response.statusCode").should("eq", 200);
+    cy.wait("@getAllAccountsRecall")
+      .its("response.body.data.content")
+      .then((content) => {
+        const filteredData = content.filter((item) => item.email.includes("20127665"));
+        cy.wrap(filteredData).should("have.length", 0);
+      });
+    cy.restoreDataTest();
+  });
 
   it("MU-111 Block/Unblock accounts", () => {
     cy.get("table").find("tr").as("tableRows").should("have.length.at.least", 2);
-    cy.get("@tableRows")
-      .contains("test.acc.mentorus@gmail.com")
-      .parents("tr")
-      .as("testRows")
-      .should("be.visible");
+    cy.get("@tableRows").contains("20127665").parents("tr").as("testRows").should("be.visible");
     cy.get("@testRows")
       .contains(/Hoạt động/i)
       .should("be.visible");
@@ -225,74 +192,52 @@ describe("Account Management Page", () => {
   });
 
   context("Account Detail Actions", () => {
-    beforeEach(() => {
-      viewAccountDetail();
-    });
+    beforeEach(() => {});
 
     it("MU-113 Update account info", () => {
+      viewAccountDetail("20127665");
+
       cy.get(".css-1w97t8w > :nth-child(2) > .MuiButtonBase-root")
         .should("be.visible")
         .should("be.enabled")
         .should("have.text", "edit");
       cy.get(".css-1w97t8w > :nth-child(2) > .MuiButtonBase-root").click();
-      cy.get(".MuiTypography-h5").should("be.visible").should("have.text", "Chỉnh sửa Tài khoản");
-      cy.get(".css-1s0ycc1 > .MuiTypography-root")
-        .should("be.visible")
-        .should("have.text", "Cập nhật thông tin cho email test.acc.mentorus@gmail.com");
-      cy.get(".css-1qoos23 > :nth-child(1) > .MuiTypography-root")
-        .should("be.visible")
-        .should("have.text", "Email cá nhân");
-      cy.get(".css-1qoos23 > :nth-child(2) > .MuiTypography-root")
-        .should("be.visible")
-        .should("have.text", "Số điện thoại");
-      cy.get(".css-1qoos23 > :nth-child(3) > .MuiTypography-root")
-        .should("be.visible")
-        .should("have.text", "Ngày sinh");
-      cy.get(":nth-child(4) > .MuiTypography-root")
-        .should("be.visible")
-        .should("have.text", "Họ và tên (*)");
-      cy.get(":nth-child(5) > .MuiTypography-body2")
-        .should("be.visible")
-        .should("have.text", "Giới tính (*)");
-      cy.get(":nth-child(6) > .MuiTypography-body2")
-        .should("be.visible")
-        .should("have.text", "Trạng thái (*)");
-      cy.get(":nth-child(7) > .MuiTypography-root")
-        .should("be.visible")
-        .should("have.text", "Vai trò (*)");
-      cy.get("#\\:rl\\:").as("userName").should("be.visible").should("have.value", "Test accounts");
-      cy.get("#\\:ri\\:").as("personalEmail").clear();
+      cy.contains("Chỉnh sửa Tài khoản").should("be.visible");
+      cy.contains("Cập nhật thông tin cho email ").should("be.visible");
+      cy.contains("Email cá nhân").should("be.visible");
+      cy.contains("Số điện thoại").should("be.visible");
+      cy.contains("Ngày sinh").should("be.visible");
+      cy.contains("Họ và tên (*)").should("be.visible");
+      cy.contains("Giới tính (*)").should("be.visible");
+      cy.contains("Trạng thái (*)").should("be.visible");
+      cy.contains("Vai trò (*)").should("be.visible");
+      cy.get("input[placeholder='Nhập email cá nhân']").as("personalEmail").clear();
       cy.get("@personalEmail").type("duongquangvinh2210@gmail.com");
-      cy.get("#\\:rj\\:").as("phoneNumber").clear();
+      cy.get("input[placeholder='Nhập số điện thoại']").as("phoneNumber").clear();
       cy.get("@phoneNumber").type("0972360214");
-      cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root")
+      cy.contains("button", /Xác nhận/i)
         .should("be.visible")
         .should("be.enabled")
         .should("have.text", "checkXác nhận");
       cy.get(":nth-child(5) > .MuiBox-root > .MuiFormGroup-root").click();
-      cy.get(".css-13cnr6h-MuiButtonBase-root-MuiButton-root")
+      cy.contains("button", /Hủy/i)
         .should("be.enabled")
         .should("be.visible")
         .should("have.text", "closeHủy");
       cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root").click();
-      cy.get(
-        '.css-11ptvp6 > [style="margin-top: 1rem; height: 4.5rem;"] > .css-13oxgqj > .css-q1o7qq > .MuiTypography-button > strong'
-      )
-        .should("be.visible")
-        .should("have.text", "0972360214");
-      cy.get(
-        ':nth-child(3) > [style="margin-top: 1rem; height: 4.5rem;"] > .css-13oxgqj > .css-q1o7qq > .MuiTypography-button > strong'
-      )
-        .should("be.visible")
-        .should("have.text", "duongquangvinh2210@gmail.com");
+      cy.contains("strong", "0972360214").should("be.visible");
+      cy.contains("strong", "duongquangvinh2210@gmail.com").should("be.visible");
+
       cy.get(".css-1w97t8w > :nth-child(2) > .MuiButtonBase-root").click();
-      cy.get("#\\:rq\\:").click();
-      cy.get("#\\:rq\\:").clear("duongquangvinh2210@gmail.com");
-      cy.get("#\\:rr\\:").clear("0972360214");
+      cy.get("@personalEmail").click();
+      cy.get("@personalEmail").clear("duongquangvinh2210@gmail.com");
+      cy.get("@phoneNumber").clear("0972360214");
       cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root > .MuiTypography-root").click();
     });
 
     it("MU-114 Block/Unblock account", () => {
+      viewAccountDetail("20127665");
+
       cy.get("strong").contains("Hoạt động").should("be.visible").should("have.text", "Hoạt động");
       cy.get(":nth-child(4) > .MuiButtonBase-root")
         .should("be.visible")
@@ -311,9 +256,24 @@ describe("Account Management Page", () => {
 
     // it("MU-115 ...", () => {});
 
-    // it("MU-116 Delete account", () => {});
+    it("MU-116 Delete account", () => {
+      viewAccountDetail("20127665");
+      cy.intercept("DELETE", "api/users/*").as("deleteAccount");
+
+      cy.get(":nth-child(3) > .MuiButtonBase-root").as("deleteBtn").should("be.visible").click();
+      cy.contains("Xóa tài khoản?").should("be.visible");
+      cy.contains("Bạn chắc chắn muốn xóa tài khoản có email").should("be.visible");
+      cy.contains("button", /Đồng ý/i)
+        .should("be.visible")
+        .should("be.enabled")
+        .click();
+      cy.wait("@deleteAccount").its("response.statusCode").should("eq", 200);
+      cy.restoreDataTest();
+    });
 
     it("MU-117 Export groups that account is Mentor", () => {
+      viewAccountDetail("test.acc.mentorus@gmail.com");
+
       cy.get(":nth-child(1) > .MuiPaper-root > .css-mzbh3l")
         .as("mentorGroupTable")
         .should("be.visible")
@@ -340,6 +300,8 @@ describe("Account Management Page", () => {
     });
 
     it("MU-118 Export groups that account is Mentee", () => {
+      viewAccountDetail("test.acc.mentorus@gmail.com");
+
       cy.get(":nth-child(2) > .MuiPaper-root > .css-mzbh3l")
         .as("menteeGroupTable")
         .should("be.visible")
