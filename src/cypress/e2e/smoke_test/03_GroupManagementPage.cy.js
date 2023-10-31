@@ -149,6 +149,7 @@ describe("Group Management Page", () => {
     cy.get("@colElements").contains("Bị khóa ").should("be.visible");
     cy.get("@checkbox").if("checked").should("be.checked").else().check();
     cy.contains("Mở khóa").should("be.visible").click();
+    cy.get("@colElements").contains("Đang hoạt động ").should("be.visible");
   });
 
   it("MU-69 Unblock groups (one or many)", () => {
@@ -176,6 +177,7 @@ describe("Group Management Page", () => {
     cy.get("@colElements").contains("Bị khóa ").should("be.visible");
     cy.get("@checkbox").if("checked").should("be.checked").else().check();
     cy.contains("Mở khóa").should("be.visible").click();
+    cy.get("@colElements").contains("Đang hoạt động ").should("be.visible");
   });
 
   it("MU-71 Export all groups list to Excel", () => {
