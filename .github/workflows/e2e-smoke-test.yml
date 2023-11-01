@@ -3,131 +3,178 @@ name: End-to-end Smoke Testings
 on:
   schedule:
     - cron: "30 5 * * 1,5" # Run on 5:30 at Mon,Fri
+  push:
+    paths: 
+      - ".github/workflows/e2e-smoke-test.yml"
 
   workflow_dispatch:
 
 jobs:
-  smoke-test-split:
+  prepare:
+    runs-on: ubuntu-latest
+    name: "Prepare"
+    services:
+      mongodb:  
+        image: mongo:latest
+        ports:
+        - 27017:27017
+        env:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: password
+            MONGO_INITDB_DATABASE: mentordb
+            
+    steps:
+      - uses: ./.github/workflows/build-server-local.yml
+
+      - name: Checkout 🛎
+        uses: actions/checkout@v4
+
+      - uses: cypress-io/github-action@v5
+        with:
+          # just perform install
+          runTests: false
+    
+  test:
+    runs-on: ubuntu-latest
+    needs: [prepare]
     strategy:
       fail-fast: false
       matrix:
         containers: [1, 2, 3]
-
-    runs-on: "ubuntu-latest"
-    name: "E2E Smoke Testing Split"
     steps:
-      - name: Checkout 🛎
-        uses: actions/checkout@v4
-
-      - name: Install 1Password CLI 🔒
-        uses: 1password/install-cli-action@v1
-
-      - name: Load secret
-        id: op-load-secret
-        uses: 1password/load-secrets-action@v1
+      - uses: actions/download-artifact@v3
         with:
-          export-env: false
-        env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          PAT_GITHUB_TOKEN: op://mentorus/github-pat-publish-package/token
-
-      - name: Inject secret with 1Password
-        run: |
-          export OP_SERVICE_ACCOUNT_TOKEN=${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          op inject -i ./src/cypress.env.json.tpl -o ./src/cypress.env.json
+          name: server_local
+          path: server
       
-      - name: Cypress run split 🧪
-        uses: cypress-io/github-action@v6
-        with:
-          working-directory: src
-          start: yarn startTest
-          wait-on: "http://localhost:3000"
-          wait-on-timeout: 180
-          browser: chrome
-          headed: true
-          spec: |
-            **/smoke_test/*.cs*
-          publish-summary: false
-          env: JIRA_TEST_EXECUTION_ISSUE_KEY="MU-88"
-        env:
-          SPLIT: ${{ strategy.job-total }}
-          SPLIT_INDEX: ${{ strategy.job-index }}
-          CYPRESS_PLUGIN_DEBUG: true
-          CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85"
-          
-      # Upload screenshots and videos as artifacts if the tests fail
-      - name: Upload failed screenshots as artifacts
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-          if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
-
-      - name: Upload failed videos as artifacts
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: cypress-videos
-          path: cypress/videos
-          if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
-  
-  smoke-test-has-backup:
-    runs-on: "ubuntu-latest"
-    needs: [smoke-test-split]
-    if: always()
-    name: "E2E Smoke Testing with Backup Data"
-    steps:
-      - name: Checkout 🛎
-        uses: actions/checkout@v4
-
-      - name: Install 1Password CLI 🔒
-        uses: 1password/install-cli-action@v1
-
-      - name: Load secret
-        id: op-load-secret
-        uses: 1password/load-secrets-action@v1
-        with:
-          export-env: false
-        env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          PAT_GITHUB_TOKEN: op://mentorus/github-pat-publish-package/token
-
-      - name: Inject secret with 1Password
+      - name: Run Local Server
         run: |
-          export OP_SERVICE_ACCOUNT_TOKEN=${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          op inject -i ./src/cypress.env.json.tpl -o ./src/cypress.env.json
-
-      - name: Cypress run has backup 🧪
-        uses: cypress-io/github-action@v6
-        with:
-          working-directory: src
-          start: yarn startTest
-          wait-on: "http://localhost:3000"
-          wait-on-timeout: 180
-          browser: chrome
-          headed: true
-          spec: |
-            **/smoke_test/!(*.cs*)
-          env: JIRA_TEST_EXECUTION_ISSUE_KEY="MU-88"
-        env:
-          CYPRESS_PLUGIN_DEBUG: true
-          CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85"
+          cd server
+          ls -la
+          java -Djarmode=layertools -jar app.jar extract
+          java org.springframework.boot.loader.JarLauncher
           
-      # Upload screenshots and videos as artifacts if the tests fail
-      - name: Upload failed screenshots as artifacts
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-          if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
+  # smoke-test-split:
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       containers: [1, 2, 3]
 
-      - name: Upload failed videos as artifacts
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: cypress-videos
-          path: cypress/videos
-          if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
+  #   runs-on: "ubuntu-latest"
+  #   name: "E2E Smoke Testing Split"
+  #   steps:
+  #     - name: Checkout 🛎
+  #       uses: actions/checkout@v4
+
+  #     - name: Install 1Password CLI 🔒
+  #       uses: 1password/install-cli-action@v1
+
+  #     - name: Load secret
+  #       id: op-load-secret
+  #       uses: 1password/load-secrets-action@v1
+  #       with:
+  #         export-env: false
+  #       env:
+  #         OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+  #         PAT_GITHUB_TOKEN: op://mentorus/github-pat-publish-package/token
+
+  #     - name: Inject secret with 1Password
+  #       run: |
+  #         export OP_SERVICE_ACCOUNT_TOKEN=${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+  #         op inject -i ./src/cypress.env.json.tpl -o ./src/cypress.env.json
+      
+  #     - name: Cypress run split 🧪
+  #       uses: cypress-io/github-action@v6
+  #       with:
+  #         working-directory: src
+  #         start: yarn startTest
+  #         wait-on: "http://localhost:3000"
+  #         wait-on-timeout: 180
+  #         browser: chrome
+  #         headed: true
+  #         spec: |
+  #           **/smoke_test/*.cs*
+  #         publish-summary: false
+  #         env: JIRA_TEST_EXECUTION_ISSUE_KEY="MU-88"
+  #       env:
+  #         SPLIT: ${{ strategy.job-total }}
+  #         SPLIT_INDEX: ${{ strategy.job-index }}
+  #         CYPRESS_PLUGIN_DEBUG: true
+  #         CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85"
+          
+  #     # Upload screenshots and videos as artifacts if the tests fail
+  #     - name: Upload failed screenshots as artifacts
+  #       uses: actions/upload-artifact@v3
+  #       if: failure()
+  #       with:
+  #         name: cypress-screenshots
+  #         path: cypress/screenshots
+  #         if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
+
+  #     - name: Upload failed videos as artifacts
+  #       uses: actions/upload-artifact@v3
+  #       if: failure()
+  #       with:
+  #         name: cypress-videos
+  #         path: cypress/videos
+  #         if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
+  
+  # smoke-test-has-backup:
+  #   runs-on: "ubuntu-latest"
+  #   needs: [smoke-test-split]
+  #   if: always()
+  #   name: "E2E Smoke Testing with Backup Data"
+  #   steps:
+  #     - name: Checkout 🛎
+  #       uses: actions/checkout@v4
+
+  #     - name: Install 1Password CLI 🔒
+  #       uses: 1password/install-cli-action@v1
+
+  #     - name: Load secret
+  #       id: op-load-secret
+  #       uses: 1password/load-secrets-action@v1
+  #       with:
+  #         export-env: false
+  #       env:
+  #         OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+  #         PAT_GITHUB_TOKEN: op://mentorus/github-pat-publish-package/token
+
+  #     - name: Inject secret with 1Password
+  #       run: |
+  #         export OP_SERVICE_ACCOUNT_TOKEN=${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+  #         op inject -i ./src/cypress.env.json.tpl -o ./src/cypress.env.json
+
+  #     - name: Cypress run has backup 🧪
+  #       uses: cypress-io/github-action@v6
+  #       with:
+  #         working-directory: src
+  #         start: yarn startTest
+  #         wait-on: "http://localhost:3000"
+  #         wait-on-timeout: 180
+  #         browser: chrome
+  #         headed: true
+  #         spec: |
+  #           **/smoke_test/!(*.cs*)
+  #         env: JIRA_TEST_EXECUTION_ISSUE_KEY="MU-88"
+  #       env:
+  #         CYPRESS_PLUGIN_DEBUG: true
+  #         CYPRESS_JIRA_TEST_PLAN_ISSUE_KEY: "MU-85"
+          
+  #     # Upload screenshots and videos as artifacts if the tests fail
+  #     - name: Upload failed screenshots as artifacts
+  #       uses: actions/upload-artifact@v3
+  #       if: failure()
+  #       with:
+  #         name: cypress-screenshots
+  #         path: cypress/screenshots
+  #         if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
+
+  #     - name: Upload failed videos as artifacts
+  #       uses: actions/upload-artifact@v3
+  #       if: failure()
+  #       with:
+  #         name: cypress-videos
+  #         path: cypress/videos
+  #         if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
 

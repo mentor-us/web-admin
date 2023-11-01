@@ -1,8 +1,6 @@
 name: Build Server Local
 
 on:
-  push:
-    paths: ".github/workflows/build-server-local.yml"
   workflow_call: 
 
 env:
@@ -50,7 +48,6 @@ jobs:
         run: |
             mvn -B package --file pom.xml
             mv "target/$JAR_NAME-$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout).jar" "target/app.jar"
-            ls -la target
 
       - name: Upload build artifact 📦
         uses: actions/upload-artifact@v3
