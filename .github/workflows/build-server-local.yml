@@ -1,0 +1,57 @@
+name: Build Server Local
+
+on:
+  push:
+    paths: "./github/workflows/build-server-local.yml"
+  workflow_call: 
+
+jobs:
+  build:
+    runs-on: "ubuntu-latest"
+    defaults:
+        run:
+            working-directory: "src"
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v4
+        with:
+          repository: 'mentor-us/backend'
+          ref: 'develop'
+          sparse-checkout: src
+
+      - run: ls -la && cd src && ls -la
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: "maven"
+
+      - name: Install 1Password CLI 🔒
+        uses: 1password/install-cli-action@v1
+
+      - name: Load secret
+        id: op-load-secret
+        uses: 1password/load-secrets-action@v1
+        with:
+          export-env: false
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          PAT_GITHUB_TOKEN: op://mentorus/github-pat-publish-package/token
+
+      - name: Inject secret with 1Password 🔒
+        run: |
+          export OP_SERVICE_ACCOUNT_TOKEN=${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          APP_ENV=local op inject -i ./src/main/resources/application.yml.tpl -o ./src/main/resources/application.yml
+    
+      - name: Build with Maven 🔧
+        run: |
+            mvn -B package --file pom.xml
+            mv "target/$JAR_NAME-$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout).jar" "target/app.jar"
+
+      - name: Upload build artifact 📦
+        uses: actions/upload-artifact@v3
+        with:
+          name: server_build
+          path: target/app.jar
