@@ -1,8 +1,4 @@
 describe("Categories Management Page", () => {
-  before(() => {
-    cy.restoreDataTest();
-  });
-
   beforeEach(() => {
     cy.loginWithPassword();
     cy.intercept("GET", "/api/group-categories").as("fetchCategories");

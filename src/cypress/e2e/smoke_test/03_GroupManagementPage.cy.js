@@ -1,14 +1,10 @@
 /// <reference types="cypress-if" />
 describe("Group Management Page", () => {
-  before(() => {
-    cy.restoreDataTest();
-  });
-
   beforeEach(() => {
     cy.loginWithPassword();
     cy.intercept({
       method: "GET",
-      url: `${Cypress.env("BACKEND_URL")}api/groups?type=admin&page=*&pageSize=*`
+      url: `api/groups?type=admin&page=*&pageSize=*`
     }).as("fetchGroups");
     cy.intercept("PATCH", "api/groups/enable").as("enableGroup");
     cy.intercept("PATCH", "api/groups/disable").as("disableGroup");
@@ -34,7 +30,7 @@ describe("Group Management Page", () => {
   });
 
   it("MU-61 Search groups", () => {
-    cy.intercept("GET", `${Cypress.env("BACKEND_URL")}api/groups/find*`).as("findGroups");
+    cy.intercept("GET", `api/groups/find*`).as("findGroups");
     cy.get("div.MuiButtonBase-root").click();
     cy.get("#\\:r1\\:").click();
     cy.get("#\\:r1\\:").type("Test");

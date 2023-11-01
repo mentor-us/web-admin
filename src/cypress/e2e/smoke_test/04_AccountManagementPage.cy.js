@@ -1,9 +1,5 @@
 /// <reference types="cypress-if" />
 describe("Account Management Page", () => {
-  before(() => {
-    cy.restoreDataTest();
-  });
-
   const viewAccountsTable = () => {
     cy.get(".css-1n8f1nf > .MuiBox-root > .MuiTypography-h6")
       .should("be.visible")

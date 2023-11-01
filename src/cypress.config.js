@@ -83,6 +83,7 @@ module.exports = defineConfig({
     experimentalStudio: true,
     experimentalModifyObstructiveThirdPartyCode: true,
     env: {
+      BACKEND_URL: "http://localhost:8080/",
       PROJECT_VERSION: packageVersion,
       DB_DUMP_TEST: `data_dump_test_${packageVersion}.tar` // Data test filename - use for test
     }

@@ -1,7 +1,6 @@
 {
   "DB_URI": "op://mentorus/cypress-env-json/DB_URI",
   "DB_NAME": "op://mentorus/cypress-env-json/DB_NAME",
-  "BACKEND_URL": "https://mentorus.hieucckha.me/",
 
   "JIRA_PROJECT_KEY": "op://mentorus/cypress-env-json/JIRA_PROJECT_KEY",
   "JIRA_URL": "op://mentorus/cypress-env-json/JIRA_URL",
@@ -19,6 +18,6 @@
   "basic_username": "op://mentorus/cypress-env-json/TEST_ACC",
   "basic_password": "op://mentorus/cypress-env-json/TEST_PASS_DEFAULT",
 
-  "XRAY_UPLOAD_RESULTS": true,
+  "XRAY_UPLOAD_RESULTS": false,
   "PLUGIN_DEBUG": true
 }
