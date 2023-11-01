@@ -50,9 +50,10 @@ jobs:
         run: |
             mvn -B package --file pom.xml
             mv "target/$JAR_NAME-$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout).jar" "target/app.jar"
+            ls -la target
 
       - name: Upload build artifact 📦
         uses: actions/upload-artifact@v3
         with:
           name: server_build
-          path: target/app.jar
+          path: src/target/app.jar
