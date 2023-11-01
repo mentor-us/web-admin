@@ -3,10 +3,10 @@ name: End-to-end Testings
 on:
   push:
     branches:
-      - 'feature/**'
       - 'develop'
-    paths:
-      - "src/**"
+    paths: 
+      - "src/src/**"
+      - "src/cypress/e2e/*.cy.js"
       
   workflow_dispatch:
     inputs:
