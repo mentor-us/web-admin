@@ -24,10 +24,10 @@ jobs:
             MONGO_INITDB_DATABASE: mentordb
             
     steps:
-      - uses: ./.github/workflows/build-server-local.yml
-
       - name: Checkout 🛎
         uses: actions/checkout@v4
+
+      - uses: ./.github/workflows/build-server-local.yml
 
       - uses: cypress-io/github-action@v5
         with:
