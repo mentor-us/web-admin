@@ -10,9 +10,26 @@ on:
   workflow_dispatch:
 
 jobs:
+  build-server-local:
+    uses: ./.github/workflows/build-server-local.yml
+
   prepare:
+    runs-on: ubuntu-latest    
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v4
+
+      - uses: cypress-io/github-action@v5
+        with:
+          runTests: false
+    
+  test:
     runs-on: ubuntu-latest
-    name: "Prepare"
+    needs: [prepare, build-server-local]
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3]
     services:
       mongodb:  
         image: mongo:latest
@@ -22,25 +39,6 @@ jobs:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: password
             MONGO_INITDB_DATABASE: mentordb
-            
-    steps:
-      - name: Checkout 🛎
-        uses: actions/checkout@v4
-      - run: ls -la && cd .github && ls -la && cd workflows && ls -la
-      - uses: ./.github/workflows/build-server-local.yml
-
-      - uses: cypress-io/github-action@v5
-        with:
-          # just perform install
-          runTests: false
-    
-  test:
-    runs-on: ubuntu-latest
-    needs: [prepare]
-    strategy:
-      fail-fast: false
-      matrix:
-        containers: [1, 2, 3]
     steps:
       - uses: actions/download-artifact@v3
         with:
