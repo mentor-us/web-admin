@@ -12,6 +12,7 @@ on:
 jobs:
   build-server-local:
     uses: ./.github/workflows/build-server-local.yml
+    secrets: inherit
 
   prepare:
     runs-on: ubuntu-latest    
@@ -21,6 +22,7 @@ jobs:
 
       - uses: cypress-io/github-action@v5
         with:
+          working-directory: src
           runTests: false
     
   test:
@@ -39,6 +41,11 @@ jobs:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: password
             MONGO_INITDB_DATABASE: mentordb
+
+    defaults:
+      run:
+        working-directory: src
+
     steps:
       - uses: actions/download-artifact@v3
         with:
