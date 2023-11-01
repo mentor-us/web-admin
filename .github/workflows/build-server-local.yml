@@ -2,7 +2,7 @@ name: Build Server Local
 
 on:
   push:
-    paths: "./github/workflows/build-server-local.yml"
+    paths: ".github/workflows/build-server-local.yml"
   workflow_call: 
 
 jobs:
