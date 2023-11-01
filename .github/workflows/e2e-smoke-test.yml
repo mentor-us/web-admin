@@ -49,7 +49,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: server_local
+          name: ${{ needs.build-server-local.outputs.artifact-name }}
           path: server
       
       - name: Run Local Server

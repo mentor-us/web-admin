@@ -2,6 +2,9 @@ name: Build Server Local
 
 on:
   workflow_call: 
+    outputs:
+      artifact_name: 
+        value: server_build
 
 env:
   JAR_NAME: backend
