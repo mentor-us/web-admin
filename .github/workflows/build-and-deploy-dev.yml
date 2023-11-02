@@ -38,7 +38,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
           source: "./src/build/*"
-          target: "/var/www/admin-mentorus.hieucckha.me/html"
+          target: "/var/www/mentor.somesandwich.rocks/html"
           rm: true
 
       - name: Remove all old file
@@ -50,5 +50,5 @@ jobs:
           key: ${{ secrets.SSHKEY }}
           script: |
             # Move all file to root folder
-            mv /var/www/admin-mentorus.hieucckha.me/html/src/build/* /var/www/admin-mentorus.hieucckha.me/html
-            rm -rf /var/www/admin-mentorus.hieucckha.me/html/src
+            mv /var/www/mentor.somesandwich.rocks/html/src/build/* /var/www/mentor.somesandwich.rocks/html
+            rm -rf /var/www/mentor.somesandwich.rocks/html/src
