@@ -6,7 +6,7 @@ on:
       - "feature/**"
       - "develop"
     paths:
-      - "src/**"
+      - "src/src/**"
       - .github/workflows/component-test.yml
       
   workflow_dispatch:
@@ -18,14 +18,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Decode Cypress env json
-        uses: timheuer/base64-to-file@v1
-        id: cypress_env_json
-        with:
-          fileName: "cypress.env.json"
-          fileDir: "./src/"
-          encodedString: ${{ secrets.CYPRESS_ENV_JSON }}
-
       - name: Run tests
         uses: cypress-io/github-action@v6
         with:

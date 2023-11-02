@@ -21,12 +21,18 @@ async function dumpDB(filename, uri = "", dbname = "") {
     connection: {
       uri,
       dbname
+    },
+    assource: {
+      bulk_read_size: 500 * 1024
     }
   });
 
   const local = new LocalFileSystemDuplexConnector({
     connection: {
       path: pathDb
+    },
+    astarget: {
+      bulk_write_size: 500 * 1024
     }
   });
 

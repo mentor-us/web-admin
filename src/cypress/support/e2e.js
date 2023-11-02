@@ -17,3 +17,54 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 import "./commands";
+import "cypress-if";
+
+require("cy-verify-downloads").addCustomCommand();
+
+const DB_DUMP_CURRENT = `current_data_${Cypress.env("PROJECT_VERSION")}.tar`; // Current test data filename - use for restore data live
+
+Cypress.Commands.add("restoreDataTest", () => {
+  cy.task("restoreDB", Cypress.env("DB_DUMP_TEST"));
+});
+
+Cypress.Commands.add("dumpDataTest", () => {
+  cy.task("dumpDB", Cypress.env("DB_DUMP_TEST"));
+});
+
+Cypress.Commands.add("dumpCurrentData", () => {
+  cy.log("DUMB LATEST DB DATA");
+  cy.task("dumpDB", DB_DUMP_CURRENT, {
+    timeout: 120000
+  });
+});
+
+Cypress.Commands.add("restoreCurrentData", () => {
+  cy.log("RESTORE LASTEST DB DATA");
+  cy.task("restoreDB", DB_DUMP_CURRENT);
+});
+
+Cypress.Commands.add("listFileDownloaded", (filename) => {
+  const downloadsFolder = Cypress.config("downloadsFolder");
+  return cy.task("downloads", downloadsFolder);
+});
+
+before(() => {
+  if (Cypress.config("isInteractive")) {
+    // cypress open
+    cy.log("RUN IN UI MODE");
+  } else {
+    // cypress run
+    cy.log("RUN IN CLI");
+    cy.restoreDataTest();
+  }
+});
+
+after(() => {
+  if (Cypress.config("isInteractive")) {
+    // cypress open
+    cy.log("RUN IN UI MODE");
+  } else {
+    // cypress run
+    cy.log("RUN IN CLI MODE");
+  }
+});

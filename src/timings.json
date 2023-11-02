@@ -1,0 +1,32 @@
+{
+  "durations": [
+    {
+      "spec": "cypress/e2e/smoke_test/01_LoginPage.cs.cy.js",
+      "duration": 48227
+    },
+    {
+      "spec": "cypress/e2e/smoke_test/04_AccountManagementPage.cy.js",
+      "duration": 167211
+    },
+    {
+      "spec": "cypress/e2e/smoke_test/07_MyProfile.cs.cy.js",
+      "duration": 29808
+    },
+    {
+      "spec": "cypress/e2e/smoke_test/02_CategoriesManagementPage.cy.js",
+      "duration": 88978
+    },
+    {
+      "spec": "cypress/e2e/smoke_test/05_StatisticPage.cs.cy.js",
+      "duration": 108805
+    },
+    {
+      "spec": "cypress/e2e/smoke_test/03_GroupManagementPage.cy.js",
+      "duration": 170200
+    },
+    {
+      "spec": "cypress/e2e/smoke_test/06_SystemConfig.cs.cy.js",
+      "duration": 19209
+    }
+  ]
+}

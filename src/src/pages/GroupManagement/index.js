@@ -10,6 +10,7 @@ import SelectAllFeature from "components/SelectAllFeature";
 import { ErrorAlert } from "components/SweetAlert";
 import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
 
+import { loadByEmail } from "redux/accounts/slice";
 import {
   allGroupsSelector,
   getAllGroupsSearchSelector,
@@ -46,7 +47,6 @@ import "./style.css";
 
 function GroupManagement() {
   /// --------------------- Khai báo Biến, State -------------
-
   const dispatch = useDispatch();
   const allGroups = useSelector(allGroupsSelector);
   const isSelectAll = useSelector(getGroupsSelectAllSelector);
@@ -94,6 +94,20 @@ function GroupManagement() {
 
   /// --------------------------------------------------------
   /// --------------------- Các hàm event ---------------------
+  useEffect(() => {
+    const loadUserForAdd = async () => {
+      try {
+        await dispatch(loadByEmail("")).unwrap();
+      } catch (error) {
+        if (error?.message !== "401") {
+          ErrorAlert(error?.message);
+        }
+      }
+    };
+
+    loadUserForAdd();
+  }, []);
+
   useEffect(() => {
     return () => {
       dispatch(resetState());
