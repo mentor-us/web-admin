@@ -3,12 +3,12 @@
 // import { NavLink } from "react-router-dom";
 // import MDTypography from "components/MDComponents/MDTypography";
 // import MDBox from "components/MDComponents/MDBox";
+import { accountCheckboxAllChange, accountCheckboxSingleChange } from "features/accounts/slice";
+
 import { compareVietnameseWord, getValueOfList } from "utils";
 
 import CustomCheckbox from "components/Checkbox";
 import { accountStatusList, roleAccountList } from "utils/constants";
-
-import { accountCheckboxAllChange, accountCheckboxSingleChange } from "redux/accounts/slice";
 
 import EditDelete from "../components/EditDelete";
 

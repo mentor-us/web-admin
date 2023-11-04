@@ -9,6 +9,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
+import { logout } from "features/myInfo/slice";
 import PropTypes from "prop-types";
 
 import { setMiniSidenav, setTransparentNavbar } from "context";
@@ -26,8 +27,6 @@ import TooltipCustom from "components/Tooltip";
 import useBreadcrumbs from "hooks/useBreadcrumbs";
 import useMyInfo from "hooks/useMyInfo";
 import { roleAccountList } from "utils/constants";
-
-import { logout } from "redux/myInfo/slice";
 
 import { navbar, navbarContainer, navbarIconButton, navbarRow } from "./styles";
 

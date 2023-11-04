@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
+import { selectConfiguration } from "features/configuration/selector";
+import {
+  updateDomainConfiguration,
+  updateMaxLearningYearConfiguration
+} from "features/configuration/slice";
 import isEqual from "lodash/isEqual";
 import PropTypes from "prop-types";
 
@@ -14,12 +19,6 @@ import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
-
-import { selectConfiguration } from "redux/configuration/selector";
-import {
-  updateDomainConfiguration,
-  updateMaxLearningYearConfiguration
-} from "redux/configuration/slice";
 
 /**
  * EditConfigurationModal

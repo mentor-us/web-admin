@@ -10,6 +10,14 @@ import {
   // AccordionSummary,
   // AccordionDetails
 } from "@mui/material";
+// import { allCategoriesSelector } from "features/groupsCategory/selector";
+import {
+  getIsSearchStatisticSelector,
+  getStatisticFilterRequestSelector,
+  getStatisticFilterValueSelector,
+  getStatisticItemsPerPageSelector
+} from "features/statistic/selector";
+import { searchByButton, searchStatistic, updateSearchRequest } from "features/statistic/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -25,15 +33,6 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert } from "components/SweetAlert";
 import { groupStatusList } from "utils/constants";
 import { getAnotherDateFromToday } from "utils/formatDate";
-
-// import { allCategoriesSelector } from "redux/groupsCategory/selector";
-import {
-  getIsSearchStatisticSelector,
-  getStatisticFilterRequestSelector,
-  getStatisticFilterValueSelector,
-  getStatisticItemsPerPageSelector
-} from "redux/statistic/selector";
-import { searchByButton, searchStatistic, updateSearchRequest } from "redux/statistic/slice";
 
 import "./index.css";
 

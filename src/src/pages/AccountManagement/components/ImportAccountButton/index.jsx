@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
+import { importAccount } from "features/accounts/slice";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
@@ -17,8 +18,6 @@ import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "comp
 import TooltipCustom from "components/Tooltip";
 import useMyInfo from "hooks/useMyInfo";
 import { formatDateExcel } from "utils/formatDate";
-
-import { importAccount } from "redux/accounts/slice";
 
 export default function ImportAccountButton() {
   /// --------------------- Khai báo Biến, State -------------

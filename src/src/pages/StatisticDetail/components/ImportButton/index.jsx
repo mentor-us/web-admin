@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
+import {
+  importEnglishCertFileDetail,
+  importGeneralDetail,
+  importStudyingPointFileDetail,
+  importTrainingPointFileDetail
+} from "features/statisticDetail/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -18,13 +24,6 @@ import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
-
-import {
-  importEnglishCertFileDetail,
-  importGeneralDetail,
-  importStudyingPointFileDetail,
-  importTrainingPointFileDetail
-} from "redux/statisticDetail/slice";
 
 function ImportStatisticPointButton({ templateFileName, template, typeImport, setState }) {
   /// --------------------- Khai báo Biến, State -------------

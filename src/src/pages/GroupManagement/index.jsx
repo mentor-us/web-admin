@@ -1,16 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, Grid } from "@mui/material";
-
-import DashboardLayout from "layouts/DashboardLayout";
-import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
-import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
-import SelectAllFeature from "components/SelectAllFeature";
-import { ErrorAlert } from "components/SweetAlert";
-import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
-
-import { loadByEmail } from "redux/accounts/slice";
+import { loadByEmail } from "features/accounts/slice";
 import {
   allGroupsSelector,
   getAllGroupsSearchSelector,
@@ -26,7 +17,7 @@ import {
   getGroupTotalPagesSearchSelector,
   getGroupTotalPagesSelector,
   getIsSearchGroupSelector
-} from "redux/groups/selector";
+} from "features/groups/selector";
 import {
   getAllGroups,
   groupItemsPerPageChange,
@@ -34,9 +25,17 @@ import {
   searchByButton,
   searchGroup,
   updateSelectAll
-} from "redux/groups/slice";
+} from "features/groups/slice";
 // import DataTable from "components/Tables/DataTable";
-import { allCategoriesSelector } from "redux/groupsCategory/selector";
+import { allCategoriesSelector } from "features/groupsCategory/selector";
+
+import DashboardLayout from "layouts/DashboardLayout";
+import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
+import MDBox from "components/MDComponents/MDBox";
+import MDTypography from "components/MDComponents/MDTypography";
+import SelectAllFeature from "components/SelectAllFeature";
+import { ErrorAlert } from "components/SweetAlert";
+import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
 
 import AddNewGroupButton from "./components/AddNewGroupButton";
 import ExportButton from "./components/ExportButton";

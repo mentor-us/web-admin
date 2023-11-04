@@ -2,13 +2,12 @@
 /* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getStatisticFilterValueSelector } from "features/statistic/selector";
+import { getByMonth, getGeneral, resetState } from "features/statistic/slice";
 
 import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import MDBox from "components/MDComponents/MDBox";
-
-import { getStatisticFilterValueSelector } from "redux/statistic/selector";
-import { getByMonth, getGeneral, resetState } from "redux/statistic/slice";
 
 import FilterBox from "./components/FilterBox/filterBox";
 import StatisticNumberAndChart from "./components/StatisticNumberAndChart";

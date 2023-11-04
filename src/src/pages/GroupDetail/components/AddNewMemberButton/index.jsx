@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Icon } from "@mui/material";
+import { getAccountsTableSelector } from "features/accounts/selector";
 import PropTypes from "prop-types";
 
 import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
-
-import { getAccountsTableSelector } from "redux/accounts/selector";
 
 import AddNewMemberModal from "../Modal/AddNewMemberModal";
 

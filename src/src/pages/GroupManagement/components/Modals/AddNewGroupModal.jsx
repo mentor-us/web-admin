@@ -11,6 +11,10 @@ import {
   TextField,
   Typography
 } from "@mui/material";
+import { getAccountsTableSelector } from "features/accounts/selector";
+import { getFromToRangeSelector } from "features/configuration/selector";
+import { addNewGroup } from "features/groups/slice";
+import { allCategoriesSelector } from "features/groupsCategory/selector";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -26,11 +30,6 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import groupsServices from "service/groupsServices";
 import { getAnotherDateFromToday } from "utils/formatDate";
-
-import { getAccountsTableSelector } from "redux/accounts/selector";
-import { getFromToRangeSelector } from "redux/configuration/selector";
-import { addNewGroup } from "redux/groups/slice";
-import { allCategoriesSelector } from "redux/groupsCategory/selector";
 
 import "./style.css";
 

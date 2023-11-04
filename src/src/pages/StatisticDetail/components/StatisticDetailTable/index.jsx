@@ -1,6 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Card, Grid } from "@mui/material";
+import {
+  getAllStatisticDetailSearchSelector,
+  getIsSearchStatisticDetailSelector,
+  getStatisticDetailColumnHeadersSelector,
+  getStatisticDetailTableSelector
+} from "features/statisticDetail/selector";
 import PropTypes from "prop-types";
 
 import statisticDetailTableData from "pages/StatisticDetail/data/statisticDetailTableData";
@@ -8,16 +14,9 @@ import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 import DataTable from "components/Tables/DataTable";
 
-import {
-  getAllStatisticDetailSearchSelector,
-  getIsSearchStatisticDetailSelector,
-  getStatisticDetailColumnHeadersSelector,
-  getStatisticDetailTableSelector
-} from "redux/statisticDetail/selector";
-
 import ExportDetailButton from "../ExportDetailButton";
 import SearchBox from "../Search";
-// import { getStatisticDetail } from "redux/statisticDetail/slice";
+// import { getStatisticDetail } from "features/statisticDetail/slice";
 // import ImportComboBox from "../ImportComboBox";
 
 function StatisticDetailTable({ groupId }) {

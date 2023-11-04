@@ -11,6 +11,10 @@ import {
   TextField,
   Typography
 } from "@mui/material";
+import { getFromToRangeSelector } from "features/configuration/selector";
+import { editDetail } from "features/groupDetail/slice";
+import { editGroup } from "features/groups/slice";
+import { allCategoriesSelector } from "features/groupsCategory/selector";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -27,11 +31,6 @@ import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "comp
 import TooltipCustom from "components/Tooltip";
 import groupsServices from "service/groupsServices";
 import { getAnotherDateFromToday } from "utils/formatDate";
-
-import { getFromToRangeSelector } from "redux/configuration/selector";
-import { editDetail } from "redux/groupDetail/slice";
-import { editGroup } from "redux/groups/slice";
-import { allCategoriesSelector } from "redux/groupsCategory/selector";
 
 function EditGroupButton({ data, setState, typeButton, isInDetail }) {
   /// --------------------- Khai báo Biến, State -------------

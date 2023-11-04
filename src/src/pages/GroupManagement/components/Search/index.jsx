@@ -9,6 +9,9 @@ import {
   Icon,
   TextField
 } from "@mui/material";
+import { getGroupItemsPerPageSelector, getIsSearchGroupSelector } from "features/groups/selector";
+import { searchByButton, searchGroup, updateSearchRequest } from "features/groups/slice";
+import { allCategoriesSelector } from "features/groupsCategory/selector";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
@@ -23,10 +26,6 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert } from "components/SweetAlert";
 import { groupStatusList } from "utils/constants";
 import { getAnotherDateFromToday } from "utils/formatDate";
-
-import { getGroupItemsPerPageSelector, getIsSearchGroupSelector } from "redux/groups/selector";
-import { searchByButton, searchGroup, updateSearchRequest } from "redux/groups/slice";
-import { allCategoriesSelector } from "redux/groupsCategory/selector";
 
 import "./styles.css";
 

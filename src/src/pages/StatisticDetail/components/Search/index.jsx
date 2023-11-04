@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getIsSearchStatisticDetailSelector } from "features/statisticDetail/selector";
+import { searchStatisticDetail, updateSearchRequest } from "features/statisticDetail/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -10,9 +12,6 @@ import CustomCheckbox from "components/Checkbox";
 import BasicDatePicker from "components/DatePicker";
 import { ErrorAlert } from "components/SweetAlert";
 import { getAnotherDateFromToday } from "utils/formatDate";
-
-import { getIsSearchStatisticDetailSelector } from "redux/statisticDetail/selector";
-import { searchStatisticDetail, updateSearchRequest } from "redux/statisticDetail/slice";
 
 const {
   // Accordion,

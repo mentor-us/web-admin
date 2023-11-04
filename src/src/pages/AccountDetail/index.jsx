@@ -2,6 +2,13 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Card, Grid } from "@mui/material";
+import {
+  getAccountDetailColumnHeadersMenteeSelector,
+  getAccountDetailColumnHeadersMentorSelector,
+  getAccountDetailGroupsByTypeSelector,
+  getAccountDetailSelector
+} from "features/accountDetail/selector";
+import { getAccountDetail, resetState } from "features/accountDetail/slice";
 
 import { getValueOfList } from "utils";
 import user from "assets/images/user.png";
@@ -15,14 +22,6 @@ import MDTypography from "components/MDComponents/MDTypography";
 import DataTable from "components/Tables/DataTable";
 import { accountStatusList, genderList, roleAccountList, roleMemberEnum } from "utils/constants";
 import { formatDate } from "utils/formatDate";
-
-import {
-  getAccountDetailColumnHeadersMenteeSelector,
-  getAccountDetailColumnHeadersMentorSelector,
-  getAccountDetailGroupsByTypeSelector,
-  getAccountDetailSelector
-} from "redux/accountDetail/selector";
-import { getAccountDetail, resetState } from "redux/accountDetail/slice";
 
 import EditDeleteBackBox from "./components/EditDeleteBack";
 import ExportButton from "./components/ExportButton";

@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { logout } from "features/myInfo/slice";
 
 import { isAuthenticated, isEmptyObject } from "utils";
 import bgImage from "assets/images/hcmus.jpg";
@@ -7,8 +8,6 @@ import bgImage from "assets/images/hcmus.jpg";
 import FullPageCenter from "layouts/components/FullPageCenter";
 import FullBgImageLayout from "layouts/FullBgImageLayout";
 import useMyInfo from "hooks/useMyInfo";
-
-import { logout } from "redux/myInfo/slice";
 
 import ConfirmLogout from "./components/ConfirmLogout";
 import SignInCard from "./components/SignInCard";

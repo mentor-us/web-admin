@@ -2,6 +2,18 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Card, Grid } from "@mui/material";
+import {
+  getAccountMenteesDetailSelector,
+  getAccountMentorsDetailSelector
+} from "features/accounts/selector";
+import { loadByIds } from "features/accounts/slice";
+import {
+  getGroupDetail,
+  getGroupDetailColumnHeadersMenteeSelector,
+  getGroupDetailColumnHeadersMentorSelector
+} from "features/groupDetail/selector";
+import { getGroup, resetState } from "features/groupDetail/slice";
+import { getCategorySelector } from "features/groupsCategory/selector";
 
 import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
@@ -10,19 +22,6 @@ import MDTypography from "components/MDComponents/MDTypography";
 import DataTable from "components/Tables/DataTable";
 import { groupStatusList, roleMemberEnum } from "utils/constants";
 import { formatDate, formatDateFromDuration } from "utils/formatDate";
-
-import {
-  getAccountMenteesDetailSelector,
-  getAccountMentorsDetailSelector
-} from "redux/accounts/selector";
-import { loadByIds } from "redux/accounts/slice";
-import {
-  getGroupDetail,
-  getGroupDetailColumnHeadersMenteeSelector,
-  getGroupDetailColumnHeadersMentorSelector
-} from "redux/groupDetail/selector";
-import { getGroup, resetState } from "redux/groupDetail/slice";
-import { getCategorySelector } from "redux/groupsCategory/selector";
 
 import AddNewMemberButton from "./components/AddNewMemberButton";
 import EditDeleteBackBox from "./components/EditDeleteBackBox";

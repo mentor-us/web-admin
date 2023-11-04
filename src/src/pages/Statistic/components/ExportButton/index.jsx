@@ -1,6 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Icon } from "@mui/material";
+import {
+  getIsSearchStatisticSelector,
+  getStatisticColumnHeadersSelector,
+  getStatisticSearchRequestSelector
+} from "features/statistic/selector";
 import { PropTypes } from "prop-types";
 
 import { setLoading } from "context";
@@ -11,12 +16,6 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert } from "components/SweetAlert";
 import statisticServices from "service/statisticService";
 import { formatDateExcel } from "utils/formatDate";
-
-import {
-  getIsSearchStatisticSelector,
-  getStatisticColumnHeadersSelector,
-  getStatisticSearchRequestSelector
-} from "redux/statistic/selector";
 
 function ExportButton({ isDisabled }) {
   const [, dispatchContext] = useMentorUs();

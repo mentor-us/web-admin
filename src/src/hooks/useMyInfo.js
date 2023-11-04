@@ -1,10 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getMyInfo, selectMyInfo } from "features/myInfo/slice";
 
 import { isEmptyObject } from "utils";
-
-import { getMyInfo, selectMyInfo } from "redux/myInfo/slice";
 
 export default function useMyInfo() {
   const dispatch = useDispatch();

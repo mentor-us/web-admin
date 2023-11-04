@@ -1,16 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, Grid } from "@mui/material";
-
-import DashboardLayout from "layouts/DashboardLayout";
-import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
-import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
-// import DataTable from "components/Tables/DataTable";
-import SelectAllFeature from "components/SelectAllFeature";
-import { ErrorAlert } from "components/SweetAlert";
-import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
-
 import {
   allAccountSelector,
   getAccountColumnHeadersSelector,
@@ -26,7 +16,7 @@ import {
   getAllAccountSearchSelector,
   getIsSearchAccountSelector,
   getSelectAllSelector
-} from "redux/accounts/selector";
+} from "features/accounts/selector";
 import {
   getAllUserPaging,
   itemsPerPageChange,
@@ -34,7 +24,16 @@ import {
   searchAccount,
   searchByButton,
   updateSelectAll
-} from "redux/accounts/slice";
+} from "features/accounts/slice";
+
+import DashboardLayout from "layouts/DashboardLayout";
+import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
+import MDBox from "components/MDComponents/MDBox";
+import MDTypography from "components/MDComponents/MDTypography";
+// import DataTable from "components/Tables/DataTable";
+import SelectAllFeature from "components/SelectAllFeature";
+import { ErrorAlert } from "components/SweetAlert";
+import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
 
 import AddAccountButton from "./components/AddAccountButton";
 import ExportButton from "./components/ExportButton";

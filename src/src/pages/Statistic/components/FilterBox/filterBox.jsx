@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Autocomplete, Card, TextField } from "@mui/material";
+import { allCategoriesSelector } from "features/groupsCategory/selector";
+import { getStatisticItemsPerPageSelector } from "features/statistic/selector";
+import { filterStatistic, updateFilterValue } from "features/statistic/slice";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
@@ -9,10 +12,6 @@ import { getValueOfList } from "utils";
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert } from "components/SweetAlert";
-
-import { allCategoriesSelector } from "redux/groupsCategory/selector";
-import { getStatisticItemsPerPageSelector } from "redux/statistic/selector";
-import { filterStatistic, updateFilterValue } from "redux/statistic/slice";
 
 function FilterBox() {
   const listCategories = useSelector(allCategoriesSelector);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
+import { importGroups } from "features/groups/slice";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
@@ -15,8 +16,6 @@ import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "comp
 import TooltipCustom from "components/Tooltip";
 import groupsServices from "service/groupsServices";
 import { formatDateExcel } from "utils/formatDate";
-
-import { importGroups } from "redux/groups/slice";
 
 import "./style.css";
 

@@ -1,6 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Icon } from "@mui/material";
+import { disableAccountDetail } from "features/accountDetail/slice";
+import { disableAccount } from "features/accounts/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -12,9 +14,6 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
 import useMyInfo from "hooks/useMyInfo";
-
-import { disableAccountDetail } from "redux/accountDetail/slice";
-import { disableAccount } from "redux/accounts/slice";
 
 function DisableAccountButton({ data, setState, typeButton, isInDetail, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------

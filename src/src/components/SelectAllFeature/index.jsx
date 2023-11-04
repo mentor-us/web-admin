@@ -1,4 +1,7 @@
 import { useSelector } from "react-redux";
+import { getAccountCheckedSelector } from "features/accounts/selector";
+import { getGroupsCheckedSelector } from "features/groups/selector";
+import { getGroupsCategoryCheckedSelector } from "features/groupsCategory/selector";
 import PropTypes from "prop-types";
 
 import DeleteButton from "pages/AccountManagement/components/EditDelete/components/DeleteButton";
@@ -9,10 +12,6 @@ import DeleteGroupButton from "pages/GroupManagement/components/DeleteGroupButto
 import DisableGroupButton from "pages/GroupManagement/components/DisableGroupButton/DisableGroupButton";
 import EnableGroupButton from "pages/GroupManagement/components/EnableGroupButton/EnableGroupButton";
 import MDBox from "components/MDComponents/MDBox";
-
-import { getAccountCheckedSelector } from "redux/accounts/selector";
-import { getGroupsCheckedSelector } from "redux/groups/selector";
-import { getGroupsCategoryCheckedSelector } from "redux/groupsCategory/selector";
 
 function SelectAllFeature(type) {
   const myState = useSelector((state) => state);

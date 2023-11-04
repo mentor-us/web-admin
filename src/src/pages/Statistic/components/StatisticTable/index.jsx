@@ -1,13 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, Grid } from "@mui/material";
-
-import statisticTableData from "pages/Statistic/data/statisticTableData";
-import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
-import { ErrorAlert } from "components/SweetAlert";
-import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
-
 import {
   getAllStatisticSearchSelector,
   getIsSearchStatisticSelector,
@@ -22,14 +15,20 @@ import {
   getStatisticTotalItemsSelector,
   getStatisticTotalPagesSearchSelector,
   getStatisticTotalPagesSelector
-} from "redux/statistic/selector";
+} from "features/statistic/selector";
 import {
   getGroupsStatisticTableData,
   groupItemsPerPageChange,
   searchStatistic
   // filterTableStatistic
-} from "redux/statistic/slice";
-import {} from "redux/statisticDetail/selector";
+} from "features/statistic/slice";
+import {} from "features/statisticDetail/selector";
+
+import statisticTableData from "pages/Statistic/data/statisticTableData";
+import MDBox from "components/MDComponents/MDBox";
+import MDTypography from "components/MDComponents/MDTypography";
+import { ErrorAlert } from "components/SweetAlert";
+import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
 
 import ExportButton from "../ExportButton";
 import SearchBox from "../Search";

@@ -14,6 +14,8 @@ import {
   TextField,
   Typography
 } from "@mui/material";
+import { editAccountDetail } from "features/accountDetail/slice";
+import { editAccount } from "features/accounts/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -30,10 +32,7 @@ import TooltipCustom from "components/Tooltip";
 import useMyInfo from "hooks/useMyInfo";
 import { accountStatusList, genderList, roleAccountList } from "utils/constants";
 import { getAnotherDateFromToday } from "utils/formatDate";
-
-import { editAccountDetail } from "redux/accountDetail/slice";
-import { editAccount } from "redux/accounts/slice";
-// import { getEmailDomainsValidSelector } from "redux/configuration/selector";
+// import { getEmailDomainsValidSelector } from "features/configuration/selector";
 
 function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAccount }) {
   /// --------------------- Khai báo Biến, State -------------

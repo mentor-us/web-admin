@@ -5,7 +5,7 @@ import { isEmailValid } from "utils";
 // import { useSelector } from "react-redux";
 import * as XLSX from "xlsx";
 import excel from "assets/images/excel.png";
-// import { getEmailDomainsValidSelector } from "redux/configuration/selector";
+// import { getEmailDomainsValidSelector } from "features/configuration/selector";
 import template from "templates/Import_Emails_Group_Detail.xlsx";
 
 import DropFileField from "components/DropFileField";

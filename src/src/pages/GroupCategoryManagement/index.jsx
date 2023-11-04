@@ -1,16 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, Grid } from "@mui/material";
-
-import DashboardLayout from "layouts/DashboardLayout";
-import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
-import MDBox from "components/MDComponents/MDBox";
-import MDTypography from "components/MDComponents/MDTypography";
-import SelectAllFeature from "components/SelectAllFeature";
-import { ErrorAlert } from "components/SweetAlert";
-import DataTable from "components/Tables/DataTable";
-import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
-
 import {
   allCategoriesSelector,
   getAllCategoriesSearchSelector,
@@ -23,14 +13,23 @@ import {
   getCategoryTotalItemsSearchSelector,
   getCategoryTotalPagesSearchSelector,
   getIsSearchCategorySelector
-} from "redux/groupsCategory/selector";
+} from "features/groupsCategory/selector";
 import {
   categoryItemsPerPageChange,
   resetState,
   searchByButton,
   searchCategory,
   updateSelectAll
-} from "redux/groupsCategory/slice";
+} from "features/groupsCategory/slice";
+
+import DashboardLayout from "layouts/DashboardLayout";
+import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
+import MDBox from "components/MDComponents/MDBox";
+import MDTypography from "components/MDComponents/MDTypography";
+import SelectAllFeature from "components/SelectAllFeature";
+import { ErrorAlert } from "components/SweetAlert";
+import DataTable from "components/Tables/DataTable";
+import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
 
 import AddCategoryButton from "./components/AddCategoryButton";
 import ExportButton from "./components/ExportButton";

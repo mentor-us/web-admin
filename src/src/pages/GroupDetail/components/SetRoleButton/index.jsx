@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Icon } from "@mui/material";
+import { setRoleMember } from "features/groupDetail/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -10,8 +11,6 @@ import { useMentorUs } from "hooks";
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, WarningAlertConfirm } from "components/SweetAlert";
-
-import { setRoleMember } from "redux/groupDetail/slice";
 
 function SetRoleButton({ type, data, setState }) {
   /// --------------------- Khai báo Biến, State -------------

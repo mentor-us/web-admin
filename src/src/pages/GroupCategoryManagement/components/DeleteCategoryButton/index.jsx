@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Backdrop, Box, Divider, Fade, Icon, Modal } from "@mui/material";
+import { removeGroupWithRemovedCategory } from "features/groups/slice";
+import { deleteCategory, deleteMultipleCategories } from "features/groupsCategory/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -11,9 +13,6 @@ import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
-
-import { removeGroupWithRemovedCategory } from "redux/groups/slice";
-import { deleteCategory, deleteMultipleCategories } from "redux/groupsCategory/slice";
 
 import DeleteOptions from "./DeleteOptions";
 

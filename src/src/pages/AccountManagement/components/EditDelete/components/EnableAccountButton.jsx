@@ -1,6 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Icon } from "@mui/material";
+import { enableAccountDetail } from "features/accountDetail/slice";
+import { enableAccount } from "features/accounts/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -11,9 +13,6 @@ import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
-
-import { enableAccountDetail } from "redux/accountDetail/slice";
-import { enableAccount } from "redux/accounts/slice";
 
 function EnableAccountButton({ data, setState, typeButton, isInDetail, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------

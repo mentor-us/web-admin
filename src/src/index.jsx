@@ -4,13 +4,12 @@ import { BrowserRouter } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { MentorUSAppProvider } from "context/index";
+import store from "features/store";
 
 import "config";
 import theme from "assets/theme";
 
 import ensureEnvFileVar from "utils/ensureEnvVar";
-
-import store from "redux/store";
 
 import App from "./App";
 import "./index.css";

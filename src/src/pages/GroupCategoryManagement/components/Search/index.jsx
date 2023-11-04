@@ -9,6 +9,11 @@ import {
   Icon,
   TextField
 } from "@mui/material";
+import {
+  getCategoryItemsPerPageSelector,
+  getIsSearchCategorySelector
+} from "features/groupsCategory/selector";
+import { searchByButton, searchCategory, updateSearchRequest } from "features/groupsCategory/slice";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
@@ -20,12 +25,6 @@ import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert } from "components/SweetAlert";
 import { groupCategoryStatusList } from "utils/constants";
-
-import {
-  getCategoryItemsPerPageSelector,
-  getIsSearchCategorySelector
-} from "redux/groupsCategory/selector";
-import { searchByButton, searchCategory, updateSearchRequest } from "redux/groupsCategory/slice";
 
 function SearchBox() {
   /// --------------------- Khai báo Biến, State -------------

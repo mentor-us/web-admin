@@ -1,6 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Icon } from "@mui/material";
+import { enableGroupDetail } from "features/groupDetail/slice";
+import { enableGroup } from "features/groups/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -11,9 +13,6 @@ import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
-
-import { enableGroupDetail } from "redux/groupDetail/slice";
-import { enableGroup } from "redux/groups/slice";
 
 function EnableGroupButton({ data, setState, typeButton, isInDetail, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------

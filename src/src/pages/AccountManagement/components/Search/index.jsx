@@ -9,6 +9,11 @@ import {
   Icon,
   TextField
 } from "@mui/material";
+import {
+  getAccountItemsPerPageSelector,
+  getIsSearchAccountSelector
+} from "features/accounts/selector";
+import { searchAccount, searchByButton, updateSearchRequest } from "features/accounts/slice";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
@@ -20,14 +25,8 @@ import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert } from "components/SweetAlert";
 import useMyInfo from "hooks/useMyInfo";
-// import { getEmailDomainsValidSelector } from "redux/configuration/selector";
+// import { getEmailDomainsValidSelector } from "features/configuration/selector";
 import { accountStatusList, roleAccountList } from "utils/constants";
-
-import {
-  getAccountItemsPerPageSelector,
-  getIsSearchAccountSelector
-} from "redux/accounts/selector";
-import { searchAccount, searchByButton, updateSearchRequest } from "redux/accounts/slice";
 
 function SearchBox() {
   /// --------------------- Khai báo Biến, State -------------

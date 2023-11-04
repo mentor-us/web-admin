@@ -12,6 +12,7 @@ import {
   RadioGroup,
   Typography
 } from "@mui/material";
+import { updateMemberStatisticDetail } from "features/statisticDetail/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -23,8 +24,6 @@ import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
-
-import { updateMemberStatisticDetail } from "redux/statisticDetail/slice";
 
 function UpdateStatisticDetail({ data }) {
   /// --------------------- Khai báo Biến, State -------------

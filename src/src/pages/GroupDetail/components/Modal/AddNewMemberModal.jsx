@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
+import { addMember } from "features/groupDetail/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -13,8 +14,6 @@ import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import { roleMemberEnum } from "utils/constants";
-
-import { addMember } from "redux/groupDetail/slice";
 
 import ImportEmailButton from "../ImportEmailButton";
 /**

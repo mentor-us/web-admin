@@ -2,6 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Card, Grid, Icon } from "@mui/material";
+import { getCategoryByNameSelector } from "features/groupsCategory/selector";
+import {
+  getStatisticDetailSelector
+  // getStatisticDetailTableSelector
+} from "features/statisticDetail/selector";
+import { getStatisticDetail, resetState } from "features/statisticDetail/slice";
 
 import { numberWithCommas } from "utils";
 
@@ -16,13 +22,6 @@ import HorizontalTimelineItem from "components/Timeline/HorizontalTimeLine";
 import TooltipCustom from "components/Tooltip";
 import { groupStatusList } from "utils/constants";
 import { formatDate } from "utils/formatDate";
-
-import { getCategoryByNameSelector } from "redux/groupsCategory/selector";
-import {
-  getStatisticDetailSelector
-  // getStatisticDetailTableSelector
-} from "redux/statisticDetail/selector";
-import { getStatisticDetail, resetState } from "redux/statisticDetail/slice";
 
 import ExportButton from "./components/ExportButton";
 import InfoCardChart from "./components/InfoCardChart";

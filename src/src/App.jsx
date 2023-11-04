@@ -2,17 +2,16 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import {
+  allCategoriesSelector,
+  getCategoryPermissionsSelector
+} from "features/groupsCategory/selector";
+import { getAllCategory, getPermissions } from "features/groupsCategory/slice";
 
 import { privateRoutes, publicRoutes } from "routes";
 import { isAuthenticated } from "utils";
 
 import ProtectedAuth from "pages/Auth/ProtectedAuth";
-
-import {
-  allCategoriesSelector,
-  getCategoryPermissionsSelector
-} from "redux/groupsCategory/selector";
-import { getAllCategory, getPermissions } from "redux/groupsCategory/slice";
 
 import "./index.css";
 

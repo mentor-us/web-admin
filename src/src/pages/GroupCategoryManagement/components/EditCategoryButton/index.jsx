@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
+import { getCategoryPermissionsSelector } from "features/groupsCategory/selector";
+import { editCategory } from "features/groupsCategory/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -13,9 +15,6 @@ import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-
-import { getCategoryPermissionsSelector } from "redux/groupsCategory/selector";
-import { editCategory } from "redux/groupsCategory/slice";
 
 import IconSelectButton from "../IconSelectButton";
 

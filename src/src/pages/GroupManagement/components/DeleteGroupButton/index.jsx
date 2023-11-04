@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@mui/material";
+import { deleteGroup, deleteMultipleGroups } from "features/groups/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -12,8 +13,6 @@ import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
-
-import { deleteGroup, deleteMultipleGroups } from "redux/groups/slice";
 
 function DeleteGroupButton({ data, setState, typeButton, redirectURL, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------

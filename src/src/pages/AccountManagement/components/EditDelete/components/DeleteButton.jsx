@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@mui/material";
+import { deleteAccount, deleteMultipleAccount } from "features/accounts/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -12,8 +13,6 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
 import useMyInfo from "hooks/useMyInfo";
-
-import { deleteAccount, deleteMultipleAccount } from "redux/accounts/slice";
 
 function DeleteButton({ data, setState, typeButton, redirectURL, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------
