@@ -1,12 +1,9 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "baseUrl": "./src",
-    "paths": {
-      "*": ["./*"]
-    },
-    "types":  ["cypress", "cypress-file-upload","cy-verify-downloads"]
+    "baseUrl": "src",
+    "types": ["cypress", "cypress-file-upload", "cy-verify-downloads"]
   },
-  "include": ["cypress", "src/**/*", "jest.config.js"],
-  "exclude": ["node_modules", "**/node_modules", "build", "**/build"]
+  "include": ["cypress", "src"],
+  "exclude": ["node_modules", "build"]
 }
