@@ -1,4 +1,4 @@
-import { API_URL, WEB_URL } from "config";
+import { API_URL } from "config";
 import coaching from "assets/images/coaching.png";
 import group from "assets/images/group.png";
 import jpeg from "assets/images/jpeg.png";
@@ -11,8 +11,8 @@ import png from "assets/images/png.png";
 import teamwork from "assets/images/teamwork.png";
 import training from "assets/images/training.png";
 
-export const googleSignInURL = `${API_URL}oauth2/authorize/google?redirect_uri=${WEB_URL}auth/redirect`;
-export const microsoftSignInURL = `${API_URL}oauth2/authorize/azure?redirect_uri=${WEB_URL}auth/redirect`;
+export const googleSignInURL = `${API_URL}oauth2/authorize/google?redirect_uri=${window.location.origin}/auth/redirect`;
+export const microsoftSignInURL = `${API_URL}oauth2/authorize/azure?redirect_uri=${window.location.origin}/auth/redirect`;
 
 export const imageExtensionList = [
   { src: png, name: "png.png", type: "png" },

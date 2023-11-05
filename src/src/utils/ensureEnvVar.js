@@ -1,7 +1,7 @@
 export default () => {
-  const reactEnv = process.env;
+  const reactEnv = import.meta.env;
   const reactPrefix = "REACT_APP_";
-  const requiredEnvVars = ["BACKEND_URL", "ITEMS_PER_PAGE", "WEB_URL"];
+  const requiredEnvVars = ["BACKEND_URL", "ITEMS_PER_PAGE"];
   const missingEnvVars = requiredEnvVars.filter((key) => !reactEnv[`${reactPrefix}${key}`]);
   if (missingEnvVars.length > 0) {
     throw new Error(

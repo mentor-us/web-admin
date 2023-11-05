@@ -76,7 +76,7 @@
       }
     },
     {
-      "files": ["./src/redux/**/*.js", "./redux/**/*.js"],
+      "files": ["./src/features/**/*.js", "./features/**/*.js"],
       "rules": { "no-param-reassign": ["error", { "props": false }] }
     }
   ]
