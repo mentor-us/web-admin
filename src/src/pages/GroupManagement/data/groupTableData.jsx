@@ -121,7 +121,7 @@ export default function groupTableData(
   });
 
   const rows =
-    data === []
+    data.length === 0
       ? []
       : data?.map((item, index) => {
           const status = data && groupStatusList.find((i) => i.textValue === item.status);

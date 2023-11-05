@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  Autocomplete,
+  // AccordionDetails,
+  Grid,
+  // Accordion,
+  // AccordionSummary,
+  Icon,
+  TextField
+} from "@mui/material";
 import { getIsSearchStatisticDetailSelector } from "features/statisticDetail/selector";
 import { searchStatisticDetail, updateSearchRequest } from "features/statisticDetail/slice";
 import PropTypes from "prop-types";
@@ -10,23 +19,13 @@ import { calculateDays, getValueOfList } from "utils";
 
 import CustomCheckbox from "components/Checkbox";
 import BasicDatePicker from "components/DatePicker";
+import MDBox from "components/MDComponents/MDBox";
+import MDButton from "components/MDComponents/MDButton";
+import MDInput from "components/MDComponents/MDInput";
+import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert } from "components/SweetAlert";
+import { roleMemberList } from "utils/constants";
 import { getAnotherDateFromToday } from "utils/formatDate";
-
-const {
-  // Accordion,
-  // AccordionSummary,
-  Icon,
-  // AccordionDetails,
-  Grid,
-  TextField,
-  Autocomplete
-} = require("@mui/material");
-const { default: MDBox } = require("components/MDComponents/MDBox");
-const { default: MDButton } = require("components/MDComponents/MDButton");
-const { default: MDInput } = require("components/MDComponents/MDInput");
-const { default: MDTypography } = require("components/MDComponents/MDTypography");
-const { roleMemberList } = require("utils/constants");
 
 function SearchBox({ groupId }) {
   /// --------------------- Khai báo Biến, State -------------

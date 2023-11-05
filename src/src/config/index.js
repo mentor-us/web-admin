@@ -1,3 +1,2 @@
-export const API_URL = process.env.REACT_APP_BACKEND_URL;
-export const ITEMS_PER_PAGE = process.env.REACT_APP_ITEMS_PER_PAGE;
-export const WEB_URL = process.env.REACT_APP_WEB_URL;
+export const API_URL = import.meta.env.REACT_APP_BACKEND_URL;
+export const ITEMS_PER_PAGE = import.meta.env.REACT_APP_ITEMS_PER_PAGE;

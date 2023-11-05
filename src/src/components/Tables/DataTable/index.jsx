@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useAsyncDebounce, useGlobalFilter, usePagination, useSortBy, useTable } from "react-table";
+import { useGlobalFilter, usePagination, useSortBy, useTable } from "react-table";
 import Autocomplete from "@mui/material/Autocomplete";
 import Icon from "@mui/material/Icon";
 import Table from "@mui/material/Table";
@@ -59,7 +59,6 @@ function DataTable({
     nextPage,
     previousPage,
     setPageSize,
-    setGlobalFilter,
     state: { pageIndex, pageSize, globalFilter }
   } = tableInstance;
 
@@ -91,9 +90,11 @@ function DataTable({
   // Search input value state
   const [search, setSearch] = useState(globalFilter);
   // Search input state handle
-  const onSearchChange = useAsyncDebounce((value) => {
-    setGlobalFilter(value || undefined);
-  }, 100);
+
+  // BUG: useAsyncDebounce - Don't work in jsx vite
+  // const onSearchChange = useAsyncDebounce((value) => {
+  //   setGlobalFilter(value || undefined);
+  // }, 100);
 
   // A function that sets the sorted value for the table
   const setSortedValue = (column) => {
@@ -160,7 +161,7 @@ function DataTable({
               fullWidth
               onChange={(e) => {
                 setSearch(e.target.value);
-                onSearchChange(e.target.value);
+                // onSearchChange(e.target.value);
               }}
             />
           </MDBox>

@@ -16,7 +16,6 @@ import { setMiniSidenav, setTransparentNavbar } from "context";
 import { useMentorUs } from "hooks";
 import { translateToVNmeseByKey } from "routes";
 import { getValueOfList } from "utils";
-// import { WEB_URL } from "config";
 import admin from "assets/images/admin.png";
 
 import Breadcrumbs from "components/Breadcrumbs";
