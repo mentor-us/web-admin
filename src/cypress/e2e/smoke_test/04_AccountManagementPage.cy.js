@@ -177,7 +177,7 @@ describe("Account Management Page", () => {
     cy.listFileDownloaded().then((before) => {
       cy.get("button").contains("Xuất excel").click();
       cy.wait("@exportFile")
-        .wait(10000)
+        .wait(5000)
         .listFileDownloaded()
         .then((after) => {
           expect(after.length).to.be.eq(before.length + 1);
@@ -212,6 +212,7 @@ describe("Account Management Page", () => {
       cy.get("input[placeholder='Nhập số điện thoại']").as("phoneNumber").clear();
       cy.get("@phoneNumber").type("0972360214");
       cy.contains("button", /Xác nhận/i)
+        .as("confirmBtn")
         .should("be.visible")
         .should("be.enabled")
         .should("have.text", "checkXác nhận");
@@ -220,7 +221,7 @@ describe("Account Management Page", () => {
         .should("be.enabled")
         .should("be.visible")
         .should("have.text", "closeHủy");
-      cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root").click();
+      cy.get("@confirmBtn").click();
       cy.contains("strong", "0972360214").should("be.visible");
       cy.contains("strong", "duongquangvinh2210@gmail.com").should("be.visible");
 
@@ -228,7 +229,7 @@ describe("Account Management Page", () => {
       cy.get("@personalEmail").click();
       cy.get("@personalEmail").clear("duongquangvinh2210@gmail.com");
       cy.get("@phoneNumber").clear("0972360214");
-      cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root > .MuiTypography-root").click();
+      cy.get("@confirmBtn").click();
     });
 
     it("MU-114 Block/Unblock account", () => {
@@ -285,7 +286,7 @@ describe("Account Management Page", () => {
       cy.listFileDownloaded().then((before) => {
         cy.get("@exportBtn").click();
         cy.wait("@exportFile")
-          .wait(10000)
+          .wait(5000)
           .listFileDownloaded()
           .then((after) => {
             expect(after.length).to.be.eq(before.length + 1);
@@ -313,7 +314,7 @@ describe("Account Management Page", () => {
       cy.listFileDownloaded().then((before) => {
         cy.get("@exportBtn").click();
         cy.wait("@exportFile")
-          .wait(10000)
+          .wait(5000)
           .listFileDownloaded()
           .then((after) => {
             expect(after.length).to.be.eq(before.length + 1);
