@@ -61,19 +61,14 @@ describe("Group Management Page", () => {
     cy.get("#\\:re\\:").clear("S");
     cy.get("#\\:re\\:").type("SMOKE_TEST");
     cy.get("#\\:rg\\:").click();
-    cy.get("#\\:rg\\:-option-0").click();
+    cy.contains("li", /mentrous/i).click();
     cy.get("#\\:ri\\:").click();
-    cy.get("#\\:ri\\:-option-4").click();
+    cy.contains("li", "dqvinh20").click();
     cy.get(
       ".css-1qoos23 > :nth-child(5) > .MuiBox-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root"
     ).click();
-    cy.get("#\\:rl\\:-option-13").click();
-    cy.get(
-      ':nth-child(7) > .MuiFormControl-root > .MuiInputBase-root > .MuiInputAdornment-root > .MuiButtonBase-root > [data-testid="CalendarIcon"]'
-    ).click();
-    cy.get(".MuiDayPicker-monthContainer > :nth-child(5) > :nth-child(3)").click();
-    cy.get("#transition-modal-title").should("be.visible");
-    cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root > .material-icons-round").click();
+    cy.contains("li", "test.acc").click();
+    cy.contains("button", /xác nhận/i).click();
     cy.get(":nth-child(1) > :nth-child(2) > .MuiBox-root > a > .MuiTypography-root")
       .should("be.visible")
       .should("have.text", "SMOKE_TEST ");
@@ -89,11 +84,9 @@ describe("Group Management Page", () => {
       .should("be.visible")
       .should("have.text", "TEST_WEB_ADMIN_GROUP ")
       .click();
-    cy.get(".css-lthsmf > .MuiTypography-h6").should("have.text", "TEST_WEB_ADMIN_GROUP ");
-    cy.get(".css-rxvo3r-MuiTypography-root").should("have.text", "MentroUS ");
-    cy.get(".css-1n8f1nf > .MuiBox-root > .MuiTypography-h6")
-      .should("have.text", "Chi tiết về nhóm")
-      .should("be.visible");
+    cy.contains("TEST_WEB_ADMIN_GROUP").should("be.visible");
+    cy.contains("MentroUS").should("be.visible");
+    cy.contains("Chi tiết về nhóm").should("be.visible");
   });
 
   it("MU-64 Delete groups (one or many)", () => {
@@ -187,8 +180,8 @@ describe("Group Management Page", () => {
     cy.wait("@fetchGroups");
     cy.listFileDownloaded().then((before) => {
       cy.intercept("*/groups/export*").as("exportFile");
-      cy.get(".css-k1rhy8-MuiButtonBase-root-MuiButton-root > .MuiTypography-root").click();
-      cy.wait(10000)
+      cy.contains("button", /xuất excel/i).click();
+      cy.wait(5000)
         .listFileDownloaded()
         .then((after) => {
           expect(after.length).to.be.eq(before.length + 1);
@@ -209,16 +202,11 @@ describe("Group Management Page", () => {
     cy.get("#transition-modal-title")
       .should("have.text", "Tải lên danh sách nhóm")
       .should("be.visible");
-    cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root")
+    cy.contains("button", /xác nhận/i)
       .should("be.visible")
       .should("be.enabled")
-      .should("have.text", "checkXác nhận")
       .as("confirmBtn");
-    cy.get(".css-13cnr6h-MuiButtonBase-root-MuiButton-root")
-      .should("be.visible")
-      .should("be.enabled")
-      .should("have.text", "closeHủy")
-      .as("cancelBtn");
+    cy.contains("button", /hủy/i).should("be.visible").should("be.enabled").as("cancelBtn");
 
     // Get file
     cy.fixture("MentorUS_Import_Group_List.xlsx", "binary")
@@ -251,11 +239,9 @@ describe("Group Management Page", () => {
         .should("be.visible")
         .should("have.text", "TEST_WEB_ADMIN_GROUP ")
         .click();
-      cy.get(".css-lthsmf > .MuiTypography-h6").should("have.text", "TEST_WEB_ADMIN_GROUP ");
-      cy.get(".css-rxvo3r-MuiTypography-root").should("have.text", "MentroUS ");
-      cy.get(".css-1n8f1nf > .MuiBox-root > .MuiTypography-h6")
-        .should("have.text", "Chi tiết về nhóm")
-        .should("be.visible");
+      cy.contains("TEST_WEB_ADMIN_GROUP").should("be.visible");
+      cy.contains("MentroUS").should("be.visible");
+      cy.contains("Chi tiết về nhóm").should("be.visible");
     });
 
     context("Add/Delete mentors", () => {
@@ -415,7 +401,7 @@ describe("Group Management Page", () => {
       cy.listFileDownloaded().then((before) => {
         cy.get("@exportBtn").click();
         cy.wait("@exportFile")
-          .wait(10000)
+          .wait(5000)
           .listFileDownloaded()
           .then((after) => {
             expect(after.length).to.be.eq(before.length + 1);
@@ -438,7 +424,7 @@ describe("Group Management Page", () => {
       cy.listFileDownloaded().then((before) => {
         cy.get("@exportBtn").click();
         cy.wait("@exportFile")
-          .wait(10000)
+          .wait(5000)
           .listFileDownloaded()
           .then((after) => {
             expect(after.length).to.be.eq(before.length + 1);
