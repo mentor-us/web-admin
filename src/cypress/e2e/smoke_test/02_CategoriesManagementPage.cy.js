@@ -66,7 +66,8 @@ describe("Categories Management Page", () => {
   });
 
   it("MU-67 Add new category", () => {
-    cy.get(".css-j60lp5-MuiButtonBase-root-MuiButton-root").click();
+    cy.contains("button", /thêm/i).click();
+
     // Check popup modal
     cy.get(".group-modal__container > .MuiTypography-h5")
       .as("title")
@@ -82,12 +83,11 @@ describe("Categories Management Page", () => {
       .should("have.text", "Biểu tượng (*)")
       .should("be.visible");
     cy.get(":nth-child(4) > .MuiTypography-root").should("have.text", "Quyền ứng dụng");
-    cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root")
+    cy.contains("button", /xác nhận/i)
       .as("confirmBtn")
       .should("be.visible")
-      .should("be.enabled")
-      .should("have.text", "checkXác nhận");
-    cy.get(".css-13cnr6h-MuiButtonBase-root-MuiButton-root")
+      .should("be.enabled");
+    cy.contains("button", /hủy/i)
       .should("be.enabled")
       .should("be.visible")
       .should("have.text", "closeHủy");
@@ -144,12 +144,11 @@ describe("Categories Management Page", () => {
       .should("be.visible")
       .should("have.text", "Quyền ứng dụng");
     cy.get("#\\:r6\\:").should("have.value", "MentroUS").should("be.visible").should("be.enabled");
-    cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root")
-      .should("have.text", "checkXác nhận")
+    cy.contains("button", /xác nhận/i)
+      .as("confirmBtn")
+      .should("be.visible")
       .should("be.enabled");
-    cy.get(".css-13cnr6h-MuiButtonBase-root-MuiButton-root")
-      .should("be.enabled")
-      .should("have.text", "closeHủy");
+    cy.contains("button", /hủy/i).should("be.enabled").should("be.visible");
     cy.get(":nth-child(3) > .MuiButtonBase-root")
       .should("have.text", "edit")
       .should("be.visible")
@@ -158,7 +157,7 @@ describe("Categories Management Page", () => {
     cy.get("#\\:r6\\:").clear();
     cy.get("#\\:r6\\:").type("NEW_NAME");
     cy.get("#\\:r7\\:").type("NEW_DESCRIPTION");
-    cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root > .MuiTypography-root").click();
+    cy.get("@confirmBtn").click();
     cy.contains("NEW_NAME ").as("editedCategory").should("have.text", "NEW_NAME ");
     cy.get(".MuiTableRow-root > :nth-child(2) > .MuiBox-root > .MuiTypography-root").should(
       "be.visible"
@@ -171,7 +170,7 @@ describe("Categories Management Page", () => {
     cy.get("#\\:rb\\:").type("MentroUS");
     cy.get("#\\:rc\\:").click();
     cy.get("#\\:rc\\:").clear();
-    cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root > .MuiTypography-root").click();
+    cy.get("@confirmBtn").click();
     cy.contains(/MentroUS/)
       .as("mentroUs")
       .should("be.visible")
@@ -179,7 +178,8 @@ describe("Categories Management Page", () => {
   });
 
   const createCategory = (name, desc) => {
-    cy.get(".css-j60lp5-MuiButtonBase-root-MuiButton-root").click();
+    cy.contains("button", /thêm/i).click();
+
     // Check popup modal
     cy.get(".group-modal__container > .MuiTypography-h5")
       .as("title")
@@ -195,15 +195,11 @@ describe("Categories Management Page", () => {
       .should("have.text", "Biểu tượng (*)")
       .should("be.visible");
     cy.get(":nth-child(4) > .MuiTypography-root").should("have.text", "Quyền ứng dụng");
-    cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root")
+    cy.contains("button", /xác nhận/i)
       .as("confirmBtn")
       .should("be.visible")
-      .should("be.enabled")
-      .should("have.text", "checkXác nhận");
-    cy.get(".css-13cnr6h-MuiButtonBase-root-MuiButton-root")
-      .should("be.enabled")
-      .should("be.visible")
-      .should("have.text", "closeHủy");
+      .should("be.enabled");
+    cy.contains("button", /hủy/i).should("be.enabled").should("be.visible");
 
     // Input data
     cy.get("#\\:r6\\:").clear();
@@ -244,9 +240,12 @@ describe("Categories Management Page", () => {
       "Xóa tất cả các nhóm thuộc loại nhóm hiện tại."
     );
     cy.get(":nth-child(1) > .delete-options__form-radio-input").should("be.checked");
-    cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root").should("be.enabled");
-    cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root").should("have.text", "checkXác nhận");
-    cy.get(".css-uv3wtg-MuiButtonBase-root-MuiButton-root > .MuiTypography-root").click();
+    cy.contains("button", /xác nhận/i)
+      .as("confirmBtn")
+      .should("be.visible")
+      .should("be.enabled");
+    cy.contains("button", /hủy/i).should("be.enabled").should("be.visible");
+    cy.get("@confirmBtn").click();
     cy.get(".swal2-confirm").click();
     cy.contains("MU_78_Category1").as("cat1").should("be.visible");
     cy.get("@cat1")
@@ -276,8 +275,8 @@ describe("Categories Management Page", () => {
       '.css-4ndtpb > :nth-child(2) > .MuiBox-root > .MuiAutocomplete-root > .MuiFormControl-root > .MuiInputBase-root > .MuiAutocomplete-endAdornment > .MuiButtonBase-root > [data-testid="ArrowDropDownIcon"]'
     ).click();
     cy.get("li").contains("MU_79_Category2").click();
-    cy.contains(/xác nhận/i).click();
-    cy.contains(/đồng ý/i).click();
+    cy.contains("button", /xác nhận/i).click();
+    cy.contains("button", /đồng ý/i).click();
     cy.get("@cat1")
       .parents("td")
       .siblings()
@@ -288,9 +287,9 @@ describe("Categories Management Page", () => {
   it("MU-99 Export categories to Excel", () => {
     cy.intercept("/api/group-categories/export*").as("exportFile");
     cy.listFileDownloaded().then((before) => {
-      cy.get(".css-k1rhy8-MuiButtonBase-root-MuiButton-root > .MuiTypography-root").click();
+      cy.contains("button", /xuất excel/i).click();
       cy.wait("@exportFile")
-        .wait(10000)
+        .wait(5000)
         .listFileDownloaded()
         .then((after) => {
           expect(after.length).to.be.eq(before.length + 1);
