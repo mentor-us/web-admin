@@ -1,0 +1,54 @@
+name: Build and deploy development
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - src/**
+      - .github/workflows/build-and-deploy-dev.yml
+
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up NodeJS 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "yarn"
+          cache-dependency-path: src/yarn.lock
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn build:staging
+
+      - name: Copy file via ssh
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSHKEY }}
+          source: "./src/build/*"
+          target: "/var/www/mentor.somesandwich.rocks/html"
+          rm: true
+
+      - name: Remove all old file
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          script_stop: true
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSHKEY }}
+          script: |
+            # Move all file to root folder
+            mv /var/www/mentor.somesandwich.rocks/html/src/build/* /var/www/mentor.somesandwich.rocks/html
+            rm -rf /var/www/mentor.somesandwich.rocks/html/src

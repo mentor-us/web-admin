@@ -1,9 +1,8 @@
 // Material Dashboard 2 React base styles
 import colors from "assets/theme-dark/base/colors";
-
+import pxToRem from "assets/theme-dark/functions/pxToRem";
 // Material Dashboard 2 React helper functions
 import rgba from "assets/theme-dark/functions/rgba";
-import pxToRem from "assets/theme-dark/functions/pxToRem";
 
 const { dark, transparent, white } = colors;
 

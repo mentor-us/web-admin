@@ -1,60 +1,50 @@
 import GroupApi from "api/GroupApi";
-import getMessage from "utils/message";
+
+import ServerError from "errors/ServerError";
 
 const getGroup = async (id) => {
-  try {
-    const response = await GroupApi.findById(id);
+  const response = await GroupApi.findById(id);
 
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const addMember = async (id, req, type) => {
-  try {
-    const response = await GroupApi.addDetail(id, req, type);
+  const response = await GroupApi.addDetail(id, req, type);
 
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const setRoleMember = async (id, req, type) => {
-  try {
-    const response =
-      type === 0 ? await GroupApi.promoteToMentor(id, req) : await GroupApi.demoteToMentee(id, req);
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  let response;
+  if (type === 0) {
+    response = await GroupApi.promoteToMentor(id, req);
+  } else {
+    response = await GroupApi.demoteToMentee(id, req);
   }
+
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
+  }
+
+  return response.data;
 };
 
 const deleteDetail = async (idGroup, idUser, type) => {
-  try {
-    const response = await GroupApi.deleteDetail(idGroup, idUser, type);
+  const response = await GroupApi.deleteDetail(idGroup, idUser, type);
 
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const groupDetailServices = {

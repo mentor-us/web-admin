@@ -1,103 +1,55 @@
-import { API_URL } from "config";
 import { makeRequestSearch } from "utils";
+
 import AxiosClient from "./AxiosClient";
 
-export default class GroupCategoryApi {
-  static async all() {
-    let categories = [];
-    try {
-      const response = await AxiosClient.get(`${API_URL}api/group-categories`);
-      categories = response.data;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-    return categories;
-  }
+const GroupCategoryApi = {
+  all() {
+    return AxiosClient.get(`api/group-categories`).then((response) => response.data);
+  },
 
-  static async findById(categoryID) {
-    try {
-      const response = await AxiosClient.get(`${API_URL}api/group-categories/${categoryID}`);
-      return response.data;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  findById(categoryID) {
+    return AxiosClient.get(`api/group-categories/${categoryID}`).then((response) => response.data);
+  },
 
-  static async add(data) {
-    try {
-      return await AxiosClient.post(`${API_URL}api/group-categories`, data);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  add(data) {
+    return AxiosClient.post(`api/group-categories`, data);
+  },
 
-  static async update(categoryID, data) {
-    try {
-      return await AxiosClient.patch(`${API_URL}api/group-categories/${categoryID}`, data);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  update(categoryID, data) {
+    return AxiosClient.patch(`api/group-categories/${categoryID}`, data);
+  },
 
-  static async delete(categoryID, req) {
-    try {
-      return await AxiosClient.delete(`${API_URL}api/group-categories/${categoryID}`, {
-        data: req
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  delete(categoryID, req) {
+    return AxiosClient.delete(`api/group-categories/${categoryID}`, {
+      data: req
+    });
+  },
 
-  static async deleteMultiple(req) {
-    try {
-      return await AxiosClient.delete(`${API_URL}api/group-categories`, {
-        data: req
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  deleteMultiple(req) {
+    return AxiosClient.delete(`api/group-categories`, {
+      data: req
+    });
+  },
 
-  static async search(req) {
-    const reqUri = makeRequestSearch(req);
+  search(req) {
+    return AxiosClient.get(`api/group-categories/find?${makeRequestSearch(req)}`);
+  },
 
-    const url = `${API_URL}api/group-categories/find?${reqUri}`;
-    try {
-      return await AxiosClient.get(url);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  exportGroupCategory(req) {
+    return AxiosClient.get(`api/group-categories/export?${makeRequestSearch(req)}`, {
+      responseType: "blob"
+    });
+  },
 
-  static async exportGroupCategory(req) {
-    const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`${API_URL}api/group-categories/export?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  getPermissions() {
+    return AxiosClient.get(`api/group-categories/permissions`);
+  },
 
-  static async getPermissions() {
-    try {
-      const response = await AxiosClient.get(`${API_URL}api/group-categories/permissions`);
-      return response;
-    } catch (error) {
-      throw new Error(error.message);
-    }
+  exportGroupCategorySearch(req) {
+    return AxiosClient.get(`api/group-categories/export/search?${makeRequestSearch(req)}`, {
+      responseType: "blob"
+    });
   }
+};
 
-  static async exportGroupCategorySearch(req) {
-    const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`${API_URL}api/group-categories/export/search?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-}
+export default GroupCategoryApi;

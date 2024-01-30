@@ -36,3 +36,19 @@ packages/react-devtools-extensions/.tempUserDataDir
 packages/react-devtools-inline/dist
 packages/react-devtools-shell/dist
 packages/react-devtools-timeline/dist
+
+# Local Env
+.env.*local
+
+# Cypress
+*/cypress/screenshots 
+*/cypress/videos
+*/cypress/downloads
+cypress.env.json
+
+# Cypress Xray Plugin
+logs/
+
+# Mongo data folder
+*/mongo-data/current_data_*.tar
+*/mongo-data/backup.tar

@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
 import axios from "axios";
+import { API_URL } from "config";
+
 import { ErrorAlertConfirm } from "components/SweetAlert";
 
 const AxiosClient = axios.create({
-  baseURL: "http://localhost:8080/",
+  baseURL: API_URL,
   headers: {
     "Content-Type": "application/json"
   }

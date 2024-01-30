@@ -1,6 +1,5 @@
 // Material Dashboard 2 React Base Styles
 import borders from "assets/theme/base/borders";
-
 // Material Dashboard 2 React Helper Functions
 import pxToRem from "assets/theme/functions/pxToRem";
 

@@ -1,47 +1,28 @@
-import { API_URL } from "config";
-import { roleMemberEnum } from "utils/constants";
 import { makeRequestSearch } from "utils";
+
+import { roleMemberEnum } from "utils/constants";
 
 import AxiosClient from "./AxiosClient";
 
-export default class GroupApi {
-  static async all(req) {
+const GroupApi = {
+  all(req) {
     const { page, size } = req;
-    try {
-      return await AxiosClient.get(`${API_URL}api/groups?type=admin&page=${page}&pageSize=${size}`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+    return AxiosClient.get(`api/groups?type=admin&page=${page}&pageSize=${size}`);
+  },
 
-  static async findById(id) {
-    try {
-      return await AxiosClient.get(`${API_URL}api/groups/${id}`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  findById(id) {
+    return AxiosClient.get(`api/groups/${id}`);
+  },
 
-  static async add(data) {
-    try {
-      return await AxiosClient.post(`${API_URL}api/groups`, data);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+  add(data) {
+    return AxiosClient.post(`api/groups`, data);
+  },
 
-  static async search(req) {
-    const reqUri = makeRequestSearch(req);
+  search(req) {
+    return AxiosClient.get(`api/groups/find?${makeRequestSearch(req)}`);
+  },
 
-    const url = `${API_URL}api/groups/find?${reqUri}`;
-    try {
-      return await AxiosClient.get(url);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async importSheet(file) {
+  importSheet(file) {
     const data = new FormData();
     data.append("file", file);
     const config = {
@@ -50,154 +31,79 @@ export default class GroupApi {
       }
     };
 
-    let response;
-    try {
-      response = await AxiosClient.post(`${API_URL}api/groups/import`, data, config);
-    } catch (error) {
-      throw new Error(error.message);
-    }
+    return AxiosClient.post(`api/groups/import`, data, config);
+  },
 
-    return response;
+  addDetail(id, data, type) {
+    return AxiosClient.post(
+      `api/groups/${id}/${type === roleMemberEnum.mentee ? "mentees" : "mentors"}`,
+      data
+    );
+  },
+
+  deleteDetail(id, idUser, type) {
+    return AxiosClient.delete(
+      `api/groups/${id}/${type === roleMemberEnum.mentee ? "mentees" : "mentors"}/${idUser}`
+    );
+  },
+
+  promoteToMentor(id, idUser) {
+    return AxiosClient.patch(`api/groups/${id}/mentors/${idUser}`);
+  },
+
+  demoteToMentee(id, idUser) {
+    return AxiosClient.patch(`api/groups/${id}/mentees/${idUser}`);
+  },
+
+  update(id, data) {
+    return AxiosClient.patch(`api/groups/${id}`, data);
+  },
+
+  delete(id) {
+    return AxiosClient.delete(`api/groups/${id}`);
+  },
+
+  getTemplate() {
+    return AxiosClient.get(`api/groups/import`, {
+      responseType: "blob"
+    });
+  },
+
+  deleteMultiple(req) {
+    return AxiosClient.delete(`api/groups`, { data: req });
+  },
+
+  disableGroup(req) {
+    return AxiosClient.patch(`api/groups/disable`, req);
+  },
+
+  enableGroup(req) {
+    return AxiosClient.patch(`api/groups/enable`, req);
+  },
+
+  exportGroup(req) {
+    return AxiosClient.get(`api/groups/export?${makeRequestSearch(req)}`, {
+      responseType: "blob"
+    });
+  },
+
+  async exportGroupMentee(id, req) {
+    return AxiosClient.get(`api/groups/${id}/mentees/export?${makeRequestSearch(req)}`, {
+      responseType: "blob"
+    });
+  },
+
+  exportGroupMentor(id, req) {
+    return AxiosClient.get(`api/groups/${id}/mentors/export?${makeRequestSearch(req)}`, {
+      responseType: "blob"
+    });
+  },
+
+  exportGroupSearch(req) {
+    return AxiosClient.get(`api/groups/export/search?${makeRequestSearch(req)}`, {
+      responseType: "blob"
+    });
   }
+};
 
-  static async addDetail(id, data, type) {
-    const url =
-      type === roleMemberEnum.mentee
-        ? `${API_URL}api/groups/${id}/mentees`
-        : `${API_URL}api/groups/${id}/mentors`;
-    try {
-      return await AxiosClient.post(url, data);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async deleteDetail(id, idUser, type) {
-    const url =
-      type === roleMemberEnum.mentee
-        ? `${API_URL}api/groups/${id}/mentees/${idUser}`
-        : `${API_URL}api/groups/${id}/mentors/${idUser}`;
-    try {
-      return await AxiosClient.delete(url);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async promoteToMentor(id, idUser) {
-    const url = `${API_URL}api/groups/${id}/mentors/${idUser}`;
-    try {
-      return await AxiosClient.patch(url);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async demoteToMentee(id, idUser) {
-    const url = `${API_URL}api/groups/${id}/mentees/${idUser}`;
-    try {
-      return await AxiosClient.patch(url);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async update(id, data) {
-    try {
-      return await AxiosClient.patch(`${API_URL}api/groups/${id}`, data);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async delete(id) {
-    try {
-      return await AxiosClient.delete(`${API_URL}api/groups/${id}`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async getTemplate() {
-    try {
-      const response = await AxiosClient.get(`${API_URL}api/groups/import`, {
-        responseType: "blob"
-      });
-
-      return response;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async deleteMultiple(req) {
-    try {
-      const response = await AxiosClient.delete(`${API_URL}api/groups`, { data: req });
-      return response;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async disableGroup(req) {
-    try {
-      const response = await AxiosClient.patch(`${API_URL}api/groups/disable`, req);
-      return response;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async enableGroup(req) {
-    try {
-      const response = await AxiosClient.patch(`${API_URL}api/groups/enable`, req);
-      return response;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async exportGroup(req) {
-    const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`${API_URL}api/groups/export?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async exportGroupMentee(id, req) {
-    const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`${API_URL}api/groups/${id}/mentees/export?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async exportGroupMentor(id, req) {
-    const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`${API_URL}api/groups/${id}/mentors/export?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  static async exportGroupSearch(req) {
-    const reqUri = makeRequestSearch(req);
-    try {
-      return await AxiosClient.get(`${API_URL}api/groups/export/search?${reqUri}`, {
-        responseType: "blob"
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-}
+export default GroupApi;

@@ -1,211 +1,98 @@
+import { ServerError } from "errors";
 import StatisticApi from "api/StatisticApi";
-import getMessage from "utils/message";
 
-const getGeneral = async (req) => {
-  try {
-    const response = await StatisticApi.getGeneral(req);
-    return response.data;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+import ErrorWrapper from "./ErrorServiceWrapper";
 
-const getByMonth = async (req) => {
-  try {
-    const response = await StatisticApi.getByMonth(req);
-    return response.data.data;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const getGeneral = (req) => StatisticApi.getGeneral(req).then((response) => response.data);
 
-const getGroupsStatisticTableData = async (req) => {
-  try {
-    const response = await StatisticApi.getGroupsStatisticTableData(req);
+const getByMonth = (req) => StatisticApi.getByMonth(req).then((response) => response.data.data);
 
-    return response.data;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const getGroupsStatisticTableData = async (req) =>
+  StatisticApi.getGroupsStatisticTableData(req).then((response) => response.data);
 
-const getStatisticDetail = async (req) => {
-  try {
-    const response = await StatisticApi.findById(req);
-    return response.data;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const getStatisticDetail = async (req) =>
+  StatisticApi.findById(req).then((response) => response.data);
 
-const updateUserStatistic = async (id, req) => {
-  try {
-    const response = await StatisticApi.updateUserStatistic(id, req);
-    return response.data;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const updateUserStatistic = async (id, req) =>
+  StatisticApi.updateUserStatistic(id, req).then((response) => response.data);
 
 const importGeneral = async (req) => {
-  let response;
-  try {
-    response = await StatisticApi.importGeneral(req);
+  const response = await StatisticApi.importGeneral(req);
 
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-
-    throw new Error(response.returnCode);
-  } catch (error) {
-    const errorCode = parseInt(error.message, 10);
-    if (errorCode === 903 || errorCode === 904) {
-      throw new Error(getMessage(errorCode, response.data[0].email));
-    } else {
-      throw new Error(getMessage(errorCode));
-    }
+  if (response.returnCode !== 200) {
+    // Code 903 | 904
+    throw new ServerError(response.returnCode, response?.data[0]?.email);
   }
+
+  return response.data;
 };
 
 const importTrainingPointFile = async (req) => {
-  let response;
-  try {
-    response = await StatisticApi.importTrainingPointFile(req);
+  const response = await StatisticApi.importTrainingPointFile(req);
 
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-
-    throw new Error(response.returnCode);
-  } catch (error) {
-    const errorCode = parseInt(error.message, 10);
-
-    if (errorCode === 903 || errorCode === 904) {
-      throw new Error(getMessage(errorCode, Object.keys(response.data)[0]));
-    } else {
-      throw new Error(getMessage(errorCode));
-    }
+  if (response.returnCode !== 200) {
+    // Code 903 | 904
+    throw new ServerError(response.returnCode, Object.keys(response.data)[0]);
   }
+
+  return response.data;
 };
 
 const importStudyingPointFile = async (req) => {
-  let response;
-  try {
-    response = await StatisticApi.importStudyingPointFile(req);
+  const response = await StatisticApi.importStudyingPointFile(req);
 
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-
-    throw new Error(response.returnCode);
-  } catch (error) {
-    const errorCode = parseInt(error.message, 10);
-    if (errorCode === 903 || errorCode === 904) {
-      throw new Error(getMessage(errorCode, Object.keys(response.data)[0]));
-    } else {
-      throw new Error(getMessage(errorCode));
-    }
+  if (response.returnCode !== 200) {
+    // Code 903 | 904
+    throw new ServerError(response.returnCode, Object.keys(response.data)[0]);
   }
+
+  return response.data;
 };
 
 const importEnglishCertFile = async (req) => {
-  let response;
-  try {
-    response = await StatisticApi.importEnglishCertFile(req);
+  const response = await StatisticApi.importEnglishCertFile(req);
 
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-
-    throw new Error(response.returnCode);
-  } catch (error) {
-    const errorCode = parseInt(error.message, 10);
-    if (errorCode === 903 || errorCode === 904) {
-      throw new Error(getMessage(errorCode, Object.keys(response.data)[0]));
-    } else {
-      throw new Error(getMessage(errorCode));
-    }
+  if (response.returnCode === 200) {
+    // Code 903 | 904
+    throw new ServerError(response.returnCode, Object.keys(response.data)[0]);
   }
+
+  return response.data;
 };
 
 const searchStatistic = async (req) => {
-  try {
-    const response = await StatisticApi.search(req);
+  const response = await StatisticApi.search(req);
 
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
 const searchStatisticDetail = async (id, req) => {
-  try {
-    const response = await StatisticApi.searchDetail(id, req);
-    if (response.returnCode === 200) {
-      return response.data;
-    }
-    throw new Error(response.returnCode);
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
+  const response = await StatisticApi.searchDetail(id, req);
+
+  if (response.returnCode !== 200) {
+    throw new ServerError(response.returnCode);
   }
+
+  return response.data;
 };
 
-const exportLog = async (req) => {
-  try {
-    const response = await StatisticApi.exportLog(req);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const exportLog = (req) => StatisticApi.exportLog(req);
 
-const exportStatistic = async (req) => {
-  try {
-    const response = await StatisticApi.exportStatistic(req);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const exportStatistic = (req) => StatisticApi.exportStatistic(req);
 
-const exportGroupStatistic = async (req) => {
-  try {
-    const response = await StatisticApi.exportGroupStatistic(req);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const exportGroupStatistic = (req) => StatisticApi.exportGroupStatistic(req);
 
-const exportGroupStatisticSearch = async (req) => {
-  try {
-    const response = await StatisticApi.exportGroupStatisticSearch(req);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const exportGroupStatisticSearch = (req) => StatisticApi.exportGroupStatisticSearch(req);
 
-const exportGroupStatisticDetail = async (req, groupID) => {
-  try {
-    const response = await StatisticApi.exportGroupStatisticDetail(req, groupID);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const exportGroupStatisticDetail = (req, groupID) =>
+  StatisticApi.exportGroupStatisticDetail(req, groupID);
 
-const exportGroupStatisticDetailSearch = async (req, groupID) => {
-  try {
-    const response = await StatisticApi.exportGroupStatisticDetailSearch(req, groupID);
-    return response;
-  } catch (error) {
-    throw new Error(getMessage(parseInt(error.message, 10)));
-  }
-};
+const exportGroupStatisticDetailSearch = (req, groupID) =>
+  StatisticApi.exportGroupStatisticDetailSearch(req, groupID);
 
 const statisticServices = {
   getGeneral,
@@ -227,4 +114,5 @@ const statisticServices = {
   exportGroupStatisticSearch,
   exportGroupStatisticDetailSearch
 };
-export default statisticServices;
+
+export default ErrorWrapper(statisticServices);
