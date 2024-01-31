@@ -32,7 +32,7 @@ function Configurator({ open, onClose }) {
       return (
         <MDBox className="configuration__container">
           <MDBox sx={{ mb: 2, width: "100%", gap: 2 }} display="flex" flexDirection="column">
-            <Card sx={{ p: 2, background: "#DFF6FF" }}>
+            {/* <Card sx={{ p: 2, background: "#DFF6FF" }}>
               <MDBox
                 display="flex"
                 flexDirection="row"
@@ -59,7 +59,7 @@ function Configurator({ open, onClose }) {
                   ))}
                 </List>
               )}
-            </Card>
+            </Card> */}
 
             <Card sx={{ p: 2, background: "#DFF6FF" }}>
               <MDBox

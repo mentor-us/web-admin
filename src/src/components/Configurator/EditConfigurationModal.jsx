@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
@@ -225,7 +226,7 @@ function EditConfigurationModal({ open, onClose }) {
           </Typography>
           <Divider />
           <MDBox mt={3} mb={2}>
-            <MDBox className="relationship__searchBox-item" mb={2}>
+            {/* <MDBox className="relationship__searchBox-item" mb={2}>
               <MDTypography
                 variant="body2"
                 fontWeight="regular"
@@ -269,7 +270,7 @@ function EditConfigurationModal({ open, onClose }) {
                 </MDBox>
               </MDBox>
             </MDBox>
-            <Divider />
+            <Divider /> */}
             <MDBox className="relationship__searchBox-item" mb={2}>
               <MDBox
                 sx={{ width: "40%" }}
