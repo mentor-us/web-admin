@@ -1,5 +1,4 @@
-import React from "react";
-
+import { SUPPORT_EMAIL } from "config";
 import img1 from "assets/images/app-1.png";
 import img2 from "assets/images/app-2.png";
 import img3 from "assets/images/app-3.png";
@@ -15,15 +14,13 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Home from "../components/Home";
 import Instruction from "../components/Instruction";
-import Register from "../components/Register";
 
 const info = [
   {
     title: "Kiểm tra lời mời qua Gmail/Outlook",
     description:
       "Sau khi có thông tin về các tài khoản email, nhóm sẽ được tạo lập bởi người quản lý của hệ thống, ta sẽ nhận được mail mời vào nhóm trong ứng dụng MentorUS.",
-    subDescription:
-      "Các mail được gửi bởi tài khoản mentorus.hcmus@gmail.com sẽ có lúc được đưa vào Thư rác (Email rác). Bạn vui lòng kiểm tra trong mục này để nhận được lời mời vào nhóm cùng các thông báo khác sau này của ứng dụng và xác nhận không phải spam để email được chuyển đến hộp thư đến.",
+    subDescription: `Các mail được gửi bởi tài khoản ${SUPPORT_EMAIL} sẽ có lúc được đưa vào Thư rác (Email rác). Bạn vui lòng kiểm tra trong mục này để nhận được lời mời vào nhóm cùng các thông báo khác sau này của ứng dụng và xác nhận không phải spam để email được chuyển đến hộp thư đến.`,
     isReverse: false,
     imgWidth: false,
     image: img1
@@ -92,7 +89,6 @@ function MobileLandingPage() {
       <MDBox width="100%" height="100vh" mx="auto">
         <Header isMobile />
         <Home isMobile />
-        <Register link="https://forms.gle/91Jtk7iHvNggpLQc9" />
         {info.map((item) => (
           <Instruction
             title={item.title}
