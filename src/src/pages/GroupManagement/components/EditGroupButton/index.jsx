@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Autocomplete,
@@ -431,7 +431,13 @@ function EditGroupButton({ data, setState, typeButton, isInDetail }) {
               </MDBox>
             </MDBox>
             <MDBox display="flex" flexDirection="row" justifyContent="center" mt={4}>
-              <MDButton onClick={handleSubmit} variant="contained" color="info" sx={{ mx: 1 }}>
+              <MDButton
+                onClick={handleSubmit}
+                variant="contained"
+                color="info"
+                sx={{ mx: 1 }}
+                disabled={!isAllReqDataHasValue()}
+              >
                 <Icon sx={{ fontWeight: "bold" }}>check</Icon>
                 <MDTypography variant="body2" fontWeight="regular" color="white" sx={{ pl: 0.5 }}>
                   Xác nhận
