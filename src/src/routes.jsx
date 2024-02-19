@@ -10,6 +10,7 @@ import DeepLink from "pages/DeepLink";
 import GroupCategory from "pages/GroupCategoryManagement";
 import GroupDetail from "pages/GroupDetail";
 import GroupManagement from "pages/GroupManagement";
+import GuideLine from "pages/GuideLine";
 import MobileLandingPage from "pages/LandingPage/Mobile";
 import WebLandingPage from "pages/LandingPage/Web";
 import PageNotFound from "pages/NotFound";
@@ -86,6 +87,11 @@ export const publicRoutes = [
     key: "mobile-landing-page",
     path: "/",
     element: <MobileLandingPage />
+  },
+  {
+    key: "user-guide",
+    path: "/user-guide",
+    element: <GuideLine />
   },
   {
     key: "home",
