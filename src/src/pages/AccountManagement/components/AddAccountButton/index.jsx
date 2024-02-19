@@ -22,10 +22,8 @@ import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-// import { getEmailDomainsValidSelector } from "features/configuration/selector";
 import useMyInfo from "hooks/useMyInfo";
 import { roleAccountList } from "utils/constants";
-// import UserApi from "api/UserApi";
 
 function AddAccountButton() {
   /// --------------------- Khai báo Biến, State -------------

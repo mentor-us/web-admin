@@ -186,8 +186,9 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
 
   const handlePhoneChange = (e) => {
     const { value } = e.target;
-    if (value.length <= 10) {
-      setPhone(value);
+    const newValue = value.replace(/[^a-zA-Z0-9]/g, "");
+    if (newValue?.length <= 10) {
+      setPhone(newValue);
     }
   };
 
@@ -298,6 +299,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
                   value={phone || ""}
                   onChange={handlePhoneChange}
                   inputProps={{ maxLength: 10 }}
+                  pattern="[0-9]{10}"
                 />
               </MDBox>
 
