@@ -18,7 +18,7 @@ import MDBox from "components/MDComponents/MDBox";
 
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-// import Home from "../components/Home";
+import Home from "../components/Home";
 import Instruction from "../components/Instruction";
 
 const info = [
@@ -172,7 +172,7 @@ function MobileUserGuide() {
     <FullPageLayout>
       <MDBox width="100%" height="100vh" mx="auto">
         <Header isMobile />
-        {/* <Home isMobile /> */}
+        <Home isMobile />
         {info.map((item) => (
           <Instruction
             title={item.title}
