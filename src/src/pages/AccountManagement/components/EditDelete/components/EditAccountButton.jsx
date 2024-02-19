@@ -133,6 +133,18 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
     return false;
   };
 
+  const isValidData = () => {
+    const isValidBirthDate = birthDate && birthDate.toString() !== "Invalid Date";
+
+    const isValidName = name && name.length > 0;
+
+    const isValidEmail = personalEmail === "" || isEmailValid(personalEmail);
+
+    const isValidPhoneNumber = phone === "" || phone.length === 10;
+
+    return isValidBirthDate && isValidName && isValidEmail && isValidPhoneNumber;
+  };
+
   const EditAccount = async (req) => {
     setLoading(dispatchContext, true);
 
@@ -400,7 +412,13 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
               )}
             </MDBox>
             <MDBox display="flex" flexDirection="row" justifyContent="center" mt={4}>
-              <MDButton onClick={handleSubmit} variant="contained" color="info" sx={{ mx: 1 }}>
+              <MDButton
+                onClick={handleSubmit}
+                variant="contained"
+                color="info"
+                sx={{ mx: 1 }}
+                disabled={!isValidData()}
+              >
                 <Icon sx={{ fontWeight: "bold" }}>check</Icon>
                 <MDTypography variant="body2" fontWeight="regular" color="white" sx={{ pl: 0.5 }}>
                   Xác nhận
