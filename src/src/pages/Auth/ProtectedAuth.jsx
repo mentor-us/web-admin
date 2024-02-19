@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { isAuthenticated } from "utils";
 
 function ProtectedAuth({ children }) {
-  return isAuthenticated() ? children : <Navigate to="/sign-in" replace />;
+  return isAuthenticated() ? children : <Navigate to="/admin/sign-in" replace />;
 }
 
 ProtectedAuth.propTypes = {

@@ -20,7 +20,7 @@ function SignIn() {
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     dispatch(logout());
-    navigate("/sign-in", { replace: true });
+    navigate("/admin/sign-in", { replace: true });
 
     // if (myInfo.provider === "google") {
     //   window.location.assign(

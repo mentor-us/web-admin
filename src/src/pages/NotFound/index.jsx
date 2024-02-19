@@ -52,7 +52,7 @@ function PageNotFound() {
             variant="gradient"
             color="info"
             sx={{ mt: 1, fontSize: "1rem", textTransform: "none" }}
-            onClick={() => navigate("/groups", { replace: true })}
+            onClick={() => navigate("/admin/groups", { replace: true })}
           >
             Quay lại trang chủ
           </MDButton>

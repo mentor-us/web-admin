@@ -80,7 +80,7 @@ function App() {
       {publicRoutesRender(publicRoutes)}
       {privateRoutesRender(privateRoutes)}
       {/* {getRoutes(routes)} */}
-      <Route path="/" element={<Navigate to="/groups" replace />} />
+      <Route path="/" element={<Navigate to="/admin/groups" replace />} />
       <Route path="*" element={<Navigate to="/not-found" replace />} />
     </Routes>
   );

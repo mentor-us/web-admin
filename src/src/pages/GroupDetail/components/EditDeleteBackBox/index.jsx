@@ -32,7 +32,7 @@ function EditDeleteBackBox({ data }) {
               data={data}
               setState={(e) => e}
               typeButton="modern"
-              redirectURL="/groups"
+              redirectURL="/admin/groups"
             />
           </MDBox>
           {data.status !== "DISABLED" && (
