@@ -42,7 +42,7 @@ AxiosClient.interceptors.response.use(
         (result) => {
           if (result.isConfirmed) {
             localStorage.removeItem("access_token");
-            window.location.assign("/sign-in");
+            window.location.assign("/admin/sign-in");
           }
         }
       );

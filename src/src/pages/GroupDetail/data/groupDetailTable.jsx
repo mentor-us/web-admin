@@ -59,7 +59,7 @@ export default function groupDetailTable(type, data, columnHeaders, isDeleted) {
 
           return {
             no: numberOrder,
-            href: `/account-management/account-detail/${value.id}`,
+            href: `/admin/account-management/account-detail/${value.id}`,
             email: value.email,
             name: value.name,
             action: <MenuOption type={type} data={value} isDeleted={isDeleted} />

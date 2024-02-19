@@ -93,7 +93,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
     // } else {
     //   navigate("/sign-in", { replace: true });
     // }
-    navigate("/sign-in", { replace: true });
+    navigate("/admin/sign-in", { replace: true });
   };
 
   const menuBox = () => {
@@ -157,7 +157,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
           <ListItemIcon>
             <Icon fontSize="medium">account_circle</Icon>
           </ListItemIcon>
-          <NavLink key={myInfo.id} to={`/account-management/account-detail/${myInfo.id}`}>
+          <NavLink key={myInfo.id} to={`/admin/account-management/account-detail/${myInfo.id}`}>
             <MDTypography variant="subtitle2" fontSize="medium">
               Hồ sơ cá nhân
             </MDTypography>

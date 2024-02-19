@@ -62,7 +62,7 @@ function EditDeleteBackBox({ data }) {
                 data={data}
                 setState={(e) => e}
                 typeButton="modern"
-                redirectURL="/account-management"
+                redirectURL="/admin/account-management"
               />
             </MDBox>
           )}

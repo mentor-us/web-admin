@@ -114,7 +114,7 @@ export default function statisticDetailTableData(data, columnHeaders) {
 
           return {
             no: numberOrder,
-            href: `/account-management/account-detail/${item.id}`,
+            href: `/admin/account-management/account-detail/${item.id}`,
             email: item.email,
             name: item.name,
             role: getValueOfList(roleMemberList, item.role, "textValue", "role"),
