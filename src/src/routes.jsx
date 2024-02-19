@@ -16,6 +16,7 @@ import PageNotFound from "pages/NotFound";
 import SignIn from "pages/SignIn";
 import Statistic from "pages/Statistic";
 import StatisticDetail from "pages/StatisticDetail";
+import MobileUserGuide from "pages/UserGuide/Mobile";
 
 const pagesMap = {
   groups: "Quản lý nhóm",
@@ -86,6 +87,11 @@ export const publicRoutes = [
     key: "mobile-landing-page",
     path: "/",
     element: <MobileLandingPage />
+  },
+  {
+    key: "user-guide-mobile",
+    path: "/user-guide-mobile",
+    element: <MobileUserGuide />
   },
   {
     key: "home",
@@ -270,6 +276,14 @@ const routes = [
     route: "/about/mobile", // invitation, meeting, task
     slideNavShow: false,
     component: <MobileLandingPage />
+  },
+  {
+    type: "collapse",
+    name: "App user guide",
+    key: "user-guide-mobile",
+    route: "/user-guide-mobile", // invitation, meeting, task
+    slideNavShow: false,
+    component: <MobileUserGuide />
   }
 ];
 
