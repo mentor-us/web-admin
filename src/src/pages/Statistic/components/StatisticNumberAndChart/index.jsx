@@ -272,7 +272,7 @@ function StatisticNumberAndChart() {
                           label="Năm"
                           value={year}
                           onChange={(value) => {
-                            if (value?.isValid() || Number.isNaN(value?.$y) || value?.$y < 2023) {
+                            if (!value?.isValid() || Number.isNaN(value?.$y) || value?.$y < 2023) {
                               return;
                             }
 

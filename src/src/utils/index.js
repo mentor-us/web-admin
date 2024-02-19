@@ -8,8 +8,9 @@ export const isEmptyObject = (objectIns) => {
 };
 
 export const isEmailValid = (email) => {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
+  // const re = /^[^\s@]+@[^\s@]+\.[^a-zA-z@]+$/;
+  const re1 = /^(?!\d+@)\w+([-+.']\w+)*@(?!\d+\.)\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+  return re1.test(email);
 };
 
 export const getGroupStatusList = (removedStatus = "") => {
