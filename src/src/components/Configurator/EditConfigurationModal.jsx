@@ -1,13 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
 import { selectConfiguration } from "features/configuration/selector";
-import {
-  updateDomainConfiguration,
-  updateMaxLearningYearConfiguration
-} from "features/configuration/slice";
-import isEqual from "lodash/isEqual";
+import { updateMaxLearningYearConfiguration } from "features/configuration/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -18,7 +14,6 @@ import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-import TooltipCustom from "components/Tooltip";
 
 /**
  * EditConfigurationModal
@@ -126,12 +121,9 @@ function EditConfigurationModal({ open, onClose }) {
     return parseInt(maxLearningYear, 10) !== configuration.maxLearningYear.value;
   };
 
-  const isEmailDomainEdit = () =>
-    !isEqual(validEmailDomains, configuration.emailDomainsValid.value);
-
   const handleClose = () => {
     // Ask user if they want to close without saving
-    if (isMaxLearningYearEdit() || isEmailDomainEdit()) {
+    if (isMaxLearningYearEdit()) {
       WarningAlertConfirmNotSavingData().then((result) => {
         if (result.isDenied) {
           onClose();
@@ -144,15 +136,10 @@ function EditConfigurationModal({ open, onClose }) {
   };
 
   const isValidData = () => {
-    if (maxLearningYearError || emailDomainError) return false;
+    if (maxLearningYearError) return false;
 
     if (maxLearningYear <= 0 || maxLearningYear >= 100) {
       setMaxLearningYearError("Thời gian học tối đa phải lớn hơn 0 và nhỏ hơn 100!");
-      return false;
-    }
-
-    if (validEmailDomains.length === 0) {
-      setEmailDomainError("Vui lòng nhập ít nhất 1 domain email");
       return false;
     }
 
@@ -169,14 +156,14 @@ function EditConfigurationModal({ open, onClose }) {
     setLoading(dispatchContext, true);
 
     try {
-      if (isEmailDomainEdit()) {
-        await dispatch(
-          updateDomainConfiguration({
-            id: configuration.emailDomainsValid.id,
-            req: validEmailDomains
-          })
-        ).unwrap();
-      }
+      // if (isEmailDomainEdit()) {
+      //   await dispatch(
+      //     updateDomainConfiguration({
+      //       id: configuration.emailDomainsValid.id,
+      //       req: validEmailDomains
+      //     })
+      //   ).unwrap();
+      // }
 
       if (isMaxLearningYearEdit()) {
         await dispatch(
@@ -201,7 +188,7 @@ function EditConfigurationModal({ open, onClose }) {
     // Disable confirm button when:
     // - data is not valid
     // - data is not changed
-    return !isValidData() || (!isMaxLearningYearEdit() && !isEmailDomainEdit());
+    return !isValidData() || !isMaxLearningYearEdit();
   };
 
   // -------------------------------------
@@ -225,7 +212,7 @@ function EditConfigurationModal({ open, onClose }) {
           </Typography>
           <Divider />
           <MDBox mt={3} mb={2}>
-            <MDBox className="relationship__searchBox-item" mb={2}>
+            {/* <MDBox className="relationship__searchBox-item" mb={2}>
               <MDTypography
                 variant="body2"
                 fontWeight="regular"
@@ -269,7 +256,7 @@ function EditConfigurationModal({ open, onClose }) {
                 </MDBox>
               </MDBox>
             </MDBox>
-            <Divider />
+            <Divider /> */}
             <MDBox className="relationship__searchBox-item" mb={2}>
               <MDBox
                 sx={{ width: "40%" }}
