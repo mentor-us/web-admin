@@ -52,7 +52,7 @@ export const privateRoutes = [
     key: "group-detail",
     name: translateToVNmeseByKey("group-detail"),
     icon: null,
-    path: "/groups/group-detail/:id",
+    path: "/admin/groups/group-detail/:id",
     element: <GroupDetail />
   },
   {
@@ -193,7 +193,7 @@ const routes = [
     name: translateToVNmeseByKey("group-detail"),
     key: "group-detail",
     icon: null,
-    route: "/groups/group-detail/:id",
+    route: "/admin/groups/group-detail/:id",
     slideNavShow: false,
     component: (
       <ProtectedAuth>

@@ -50,7 +50,7 @@ export default function accountDetailTableData(data, columnHeaders) {
 
           return {
             no: numberOrder,
-            href: `/groups/group-detail/${value.id}`,
+            href: `/admin/groups/group-detail/${value.id}`,
             name: value.name,
             groupCategory: value.groupCategory
           };

@@ -128,7 +128,7 @@ export default function groupTableData(
           const numberOrder = itemsPerPage * (currentPage - 1) + index + 1;
           return {
             no: numberOrder,
-            href: `/groups/group-detail/${item.id}`,
+            href: `/admin/groups/group-detail/${item.id}`,
             name: item.name,
             groupCategory: groupCategoryName(item.groupCategory),
             status: status.label,
