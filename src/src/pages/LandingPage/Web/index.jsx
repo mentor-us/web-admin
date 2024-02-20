@@ -121,7 +121,7 @@ function WebLandingPage() {
   return (
     <FullPageLayout>
       <MDBox width="100%" height="100vh" mx="auto">
-        <Header isMobile={false} />
+        <Header />
         <Home />
         {info.map((item) => (
           <Instruction

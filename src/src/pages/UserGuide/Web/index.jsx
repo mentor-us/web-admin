@@ -1,23 +1,26 @@
-import React from "react";
-
 import img1 from "assets/images/1.png";
 import img2 from "assets/images/2.png";
-import img3 from "assets/images/3.png";
 import img4 from "assets/images/4.png";
 import img5 from "assets/images/5.png";
 import img6 from "assets/images/6.png";
 import img7 from "assets/images/7.png";
 import img8 from "assets/images/8.png";
 import img9 from "assets/images/9.png";
+import EditAccount from "assets/images/EditAccount.png";
+import exportAccount from "assets/images/exportAccount.png";
+import exportGroupActivities from "assets/images/exportGroupActivities.png";
 import flow from "assets/images/flow.png";
+import groupSearch from "assets/images/groupSearch.png";
+import grouptypeSearch from "assets/images/grouptypeSearch.png";
+import ImportAccount from "assets/images/ImportAccount.png";
+import managerAccountOption from "assets/images/managerAccountOption.png";
+import managerGroup from "assets/images/managerGroup.png";
+import managerMemberGroup from "assets/images/managerMemberGroup.png";
+import optionGroupType from "assets/images/optionGroupType.png";
 
 import FullPageLayout from "layouts/FullPageLayout";
+import Instruction from "pages/LandingPage/components/Instruction";
 import MDBox from "components/MDComponents/MDBox";
-
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import Home from "../components/Home";
-import Instruction from "../components/Instruction";
 
 const info = [
   {
@@ -40,22 +43,42 @@ const info = [
     image: img2
   },
   {
+    title: "Tìm Kiếm Nhóm",
+    description:
+      "Ta có thể tìm kiếm nhóm bằng tên nhóm, loại nhóm, email thành viên, trang thái, thời gian bắt đầu và thời gian kết thúc.",
+    subDescription: ``,
+    isReverse: false,
+    imgWidth: false,
+    image: groupSearch
+  },
+  {
     title: "Quá trình tạo nhóm trong hệ thống",
     description:
       "Sau khi quản trị viên tạo một hoặc nhiều nhóm, hệ thống sẽ tự động gửi email mời tham gia đến các tài khoản đã được thêm vào (các tài khoản trong phần Email Mentor/Mentee), nhằm mời họ tham gia vào các nhóm đã được tạo. Sau khi đăng nhập vào ứng dụng MentorUS, những tài khoản này sẽ thấy các nhóm hiển thị trong mục Home.",
     subDescription: `Khi tạo nhóm mới, quản trị viên bắt buộc phải chọn một loại nhóm đang có trạng thái "Hoạt động" trong hệ thống. Nếu không có loại nhóm mong muốn, quản trị viên có thể tạo một loại nhóm mới và tiếp tục quá trình tạo nhóm.`,
-    isReverse: false,
+    isReverse: true,
     imgWidth: false,
     image: flow
   },
   {
     title: "Màn hình Chi tiết nhóm",
     description:
-      "Hiển thị thông tin chính của nhóm cùng danh sách Mentor, Mentee. Ngoài ra, có thể thực hiện xuất excel danh sách, thêm mới/xóa mentor, mentee hoặc chuyển mentor thành mentee và ngược lại.",
-    subDescription: "",
+      "Hiển thị thông tin chính của nhóm cùng danh sách Mentor, Mentee. Ngoài ra, có thể thực hiện xuất excel danh sách, thêm mới/xóa mentor.",
+    subDescription:
+      "Nhấn vào nút có biểu tượng cây bút để sửa thông tin một nhóm. Để khoá một nhóm, bạn phải truy cập vào trang chi tiết của nhóm. Các nhóm bị khoá thì sẽ bị chặn không truy cập được. Nhấn vào nút có biểu tượng ổ khoá màu vàng. Để xoá một nhóm nhấn nút có biểu tượng thùng rác màu đỏ.",
+    isReverse: false,
+    imgWidth: false,
+    image: managerGroup
+  },
+  {
+    title: "Quản lý thành viên nhóm",
+    description:
+      "Đầu tiên là nhấn vào dấu ba chấm dọc trên dòng thành viên bạn muốn đổi vai trò. Sau đó sẽ có nút “Chuyển thành Mentee” xuất hiện. Nếu vai trò đang là Mentor thì sẽ được sang Mentee. Để đổi sang Mentor thì làm tương tụ.",
+    subDescription:
+      "Để xoá thành viên ra khỏi nhóm, cần phải nhấn vào dấu ba chấm dọc tại dòng thành viên bạn muốn xoá. Sau đó nhấn nút “Xoá” màu đỏ. Xem hình bên dưới.",
     isReverse: true,
     imgWidth: false,
-    image: img3
+    image: managerMemberGroup
   },
   {
     title: "Màn hình Quản lý loại nhóm",
@@ -66,6 +89,23 @@ const info = [
     isReverse: false,
     imgWidth: false,
     image: img4
+  },
+  {
+    title: "Tìm kiếm loại nhóm",
+    description: "Có thể tìm kiếm loại nhóm bằng tên và trạng thái loại nhóm đó.",
+    subDescription: "",
+    isReverse: true,
+    imgWidth: false,
+    image: grouptypeSearch
+  },
+  {
+    title: "Chỉnh sửa và xoá loại nhóm",
+    description: "Nhấn nút 3 chấm ở cuối dòng để chọn Sửa hoặc Xóa.",
+    subDescription:
+      "Có thể đổi tên loại nhóm, mô tả, hình ảnh đại diện và quyền ứng dụng. Trước khi xoá sẽ có hai lựa chọn. Xoá hết tất cả các nhóm thuộc loại nhóm đó và xoá luôn loại nhóm. Chỉ xoá loại nhóm và chuyển các nhóm thuộc loại đó qua một loại nhóm khác.",
+    isReverse: false,
+    imgWidth: false,
+    image: optionGroupType
   },
   {
     title: "Màn hình Quản lý tài khoản",
@@ -85,6 +125,42 @@ const info = [
     isReverse: false,
     imgWidth: false,
     image: img6
+  },
+  {
+    title: "Nhập danh sách tài khoản",
+    description:
+      "Chọn nút “Import” ở trên màn hình. Một cửa sổ hiện ra, tại đây, có thể tải file excel mẫu để có thể nhập vào một danh sách tài khoản để nhập vào hệ thống. Sau khi nhập xong, kéo thả file vào ô và nhấn “Xác nhận” để nhập danh sách tài khoản mới.",
+    subDescription: "",
+    isReverse: true,
+    imgWidth: false,
+    image: ImportAccount
+  },
+  {
+    title: "Xuất danh sách tài khoản",
+    description:
+      "Để xuất tài khoản ra tập tin Excel, ta chọn nút “Xuất excel”. Cấu trúc tập tin Excel khi xuất ra sẽ có định dạng như trong hình",
+    subDescription: "",
+    isReverse: false,
+    imgWidth: false,
+    image: exportAccount
+  },
+  {
+    title: "Sửa thông tin một tài khoản",
+    description:
+      "Bấm vào tên email của người dùng sẽ đi đến trang chi tiết, ở trang chi tiết chọn vào biểu tượng bút chì màu xanh sẽ mở ra cửa sổ nhỏ cho phép chỉnh sửa thông tin của tài khoản.",
+    subDescription: "",
+    isReverse: true,
+    imgWidth: false,
+    image: EditAccount
+  },
+  {
+    title: "Xóa và khóa tài khoản",
+    description:
+      "Các tài khoản bị khóa sẽ không đăng nhập vào được ứng dụng của hệ thống. Có nhiều các để khóa tài khoản. Khóa trực tiếp ở màn hình danh sách tài khoản. Các tài khoản bị xóa sẽ không khôi phục lại được và được đánh dấu là đã xóa.",
+    subDescription: "",
+    isReverse: false,
+    imgWidth: false,
+    image: managerAccountOption
   },
   {
     title: "Màn hình Hoạt động",
@@ -114,15 +190,37 @@ const info = [
     isReverse: true,
     imgWidth: false,
     image: img9
+  },
+  {
+    title: "Xuất các hoạt động về nhóm",
+    description: "Xuất báo cáo sẽ xuất tập tin PDF về nhóm.",
+    subDescription:
+      "Xuất chi tiết sẽ xuất tập tin Excel về toàn bộ thông tin kèm tin nhắn hoặc lịch hẹn hoặc công việc trong nhóm đó.",
+    isReverse: false,
+    imgWidth: false,
+    image: exportGroupActivities
   }
 ];
 
-function WebLandingPage() {
+function WebAdminGuildline() {
   return (
     <FullPageLayout>
       <MDBox width="100%" height="100vh" mx="auto">
-        <Header isMobile={false} />
-        <Home />
+        <section
+          style={{
+            padding: "20px 0",
+            width: "100%",
+            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "white"
+          }}
+        >
+          <div className="instruction__text animate__animated animate__fadeInDown animate__slow animate__delay-2s">
+            <h2>Hướng dẫn sử dụng trang web MentorUS Admin</h2>
+          </div>
+        </section>
         {info.map((item) => (
           <Instruction
             title={item.title}
@@ -133,10 +231,24 @@ function WebLandingPage() {
             key={item.title}
           />
         ))}
-        <Footer />
+        <section
+          style={{
+            padding: "20px 0",
+            width: "100%",
+            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "white"
+          }}
+        >
+          <div className="instruction__text animate__animated animate__fadeInDown animate__slow animate__delay-2s">
+            <h2>Hết</h2>
+          </div>
+        </section>
       </MDBox>
     </FullPageLayout>
   );
 }
 
-export default WebLandingPage;
+export default WebAdminGuildline;

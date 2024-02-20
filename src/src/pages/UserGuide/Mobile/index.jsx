@@ -16,9 +16,6 @@ import img17 from "assets/images/app-18.png";
 import FullPageLayout from "layouts/FullPageLayout";
 import MDBox from "components/MDComponents/MDBox";
 
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import Home from "../components/Home";
 import Instruction from "../components/Instruction";
 
 const info = [
@@ -171,8 +168,21 @@ function MobileUserGuide() {
   return (
     <FullPageLayout>
       <MDBox width="100%" height="100vh" mx="auto">
-        <Header isMobile />
-        <Home isMobile />
+        <section
+          style={{
+            padding: "20px 0",
+            width: "100%",
+            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "white"
+          }}
+        >
+          <div className="instruction__text animate__animated animate__fadeInDown animate__slow animate__delay-2s">
+            <h2>Hướng dẫn sử dụng trang ứng dụng MentorUS Mobile</h2>
+          </div>
+        </section>
         {info.map((item) => (
           <Instruction
             title={item.title}
@@ -185,7 +195,21 @@ function MobileUserGuide() {
             key={item.title}
           />
         ))}
-        <Footer />
+        <section
+          style={{
+            padding: "20px 0",
+            width: "100%",
+            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "white"
+          }}
+        >
+          <div className="instruction__text animate__animated animate__fadeInDown animate__slow animate__delay-2s">
+            <h2>Hết</h2>
+          </div>
+        </section>
       </MDBox>
     </FullPageLayout>
   );

@@ -4,7 +4,7 @@ import { Icon, IconButton } from "@mui/material";
 import "../../styles.css";
 
 // eslint-disable-next-line react/prop-types
-function Header({ isMobile }) {
+function Header() {
   const handleClick = () => {
     // const menu = document.querySelector("#menu-icon");
     const navbar = document.querySelector(".navbar");
@@ -29,11 +29,6 @@ function Header({ isMobile }) {
         <li>
           <a href="#home">Trang chủ</a>
         </li>
-        {isMobile && (
-          <li>
-            <a href="#register">Điền form</a>
-          </li>
-        )}
         <li>
           <a href="#instruction">Hướng dẫn</a>
         </li>
