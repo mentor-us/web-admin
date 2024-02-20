@@ -10,12 +10,14 @@ import DeepLink from "pages/DeepLink";
 import GroupCategory from "pages/GroupCategoryManagement";
 import GroupDetail from "pages/GroupDetail";
 import GroupManagement from "pages/GroupManagement";
+import GuideLine from "pages/GuideLine";
 import MobileLandingPage from "pages/LandingPage/Mobile";
 import WebLandingPage from "pages/LandingPage/Web";
 import PageNotFound from "pages/NotFound";
 import SignIn from "pages/SignIn";
 import Statistic from "pages/Statistic";
 import StatisticDetail from "pages/StatisticDetail";
+import MobileUserGuide from "pages/UserGuide/Mobile";
 
 const pagesMap = {
   groups: "Quản lý nhóm",
@@ -86,6 +88,16 @@ export const publicRoutes = [
     key: "mobile-landing-page",
     path: "/",
     element: <MobileLandingPage />
+  },
+  {
+    key: "user-guide",
+    path: "/user-guide",
+    element: <GuideLine />
+  },
+  {
+    key: "user-guide-mobile",
+    path: "/user-guide-mobile",
+    element: <MobileUserGuide />
   },
   {
     key: "home",
@@ -270,6 +282,14 @@ const routes = [
     route: "/about/mobile", // invitation, meeting, task
     slideNavShow: false,
     component: <MobileLandingPage />
+  },
+  {
+    type: "collapse",
+    name: "App user guide",
+    key: "user-guide-mobile",
+    route: "/user-guide-mobile", // invitation, meeting, task
+    slideNavShow: false,
+    component: <MobileUserGuide />
   }
 ];
 

@@ -52,3 +52,4 @@ logs/
 # Mongo data folder
 */mongo-data/current_data_*.tar
 */mongo-data/backup.tar
+src/.env
