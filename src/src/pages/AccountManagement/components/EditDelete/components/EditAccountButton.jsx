@@ -181,7 +181,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
   };
 
   const handlePersonalEmailChange = (e) => {
-    setPersonalEmail(e.target.value);
+    setPersonalEmail(e.target.value?.trim());
   };
 
   const handlePhoneChange = (e) => {
@@ -275,6 +275,10 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
                   value={personalEmail || ""}
                   onChange={handlePersonalEmailChange}
                   inputProps={{ maxLength: 100 }}
+                  error={personalEmail && !isEmailValid(personalEmail)}
+                  helperText={
+                    personalEmail && !isEmailValid(personalEmail) ? "Email không hợp lệ" : ""
+                  }
                 />
               </MDBox>
               <MDBox className="relationship__searchBox-item" mb={2}>
