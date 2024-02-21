@@ -87,8 +87,8 @@ function MobileLandingPage() {
   return (
     <FullPageLayout>
       <MDBox width="100%" height="100vh" mx="auto">
-        <Header isMobile />
-        <Home isMobile />
+        <Header />
+        <Home />
         {info.map((item) => (
           <Instruction
             title={item.title}

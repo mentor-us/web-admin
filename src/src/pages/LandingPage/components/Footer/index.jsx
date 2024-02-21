@@ -45,14 +45,17 @@ function Footer() {
           <h4>Liên hệ:</h4>
           <p>Mọi thắc mắc vui lòng liên hệ qua:</p>
           <div className="landing_footer__contact">
-            <div className="landing_footer__contact-text">
-              <Icon fontSize="medium" className="landing_footer__contact-text-icon">
-                email
-              </Icon>
-              <a className="landing_footer-text" href={`mailto:${SUPPORT_EMAIL}`}>
-                {SUPPORT_EMAIL}
-              </a>
-            </div>
+            {SUPPORT_EMAIL && (
+              <div className="landing_footer__contact-text">
+                <Icon fontSize="medium" className="landing_footer__contact-text-icon">
+                  email
+                </Icon>
+                <a className="landing_footer-text" href={`mailto:${SUPPORT_EMAIL}`}>
+                  {SUPPORT_EMAIL}
+                </a>
+              </div>
+            )}
+
             <div className="landing_footer__contact-text">
               <Icon fontSize="medium" className="landing_footer__contact-text-icon">
                 facebook
@@ -83,6 +86,30 @@ function Footer() {
                 rel="noreferrer"
               >
                 Nhóm Zalo Hỗ trợ
+              </a>
+            </div>
+          </div>
+
+          <h4 style={{ marginTop: "10px" }}>Tài liệu hướng dẫn:</h4>
+          <div className="landing_footer__contact">
+            <div className="landing_footer__contact-text">
+              <a
+                className="landing_footer-text"
+                target="_blank"
+                href="/user-guide-web-admin"
+                rel="noreferrer"
+              >
+                Dành cho web admin
+              </a>
+            </div>
+            <div className="landing_footer__contact-text">
+              <a
+                className="landing_footer-text"
+                target="_blank"
+                href="/user-guide-mobile"
+                rel="noreferrer"
+              >
+                Dành cho mobile app
               </a>
             </div>
           </div>

@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 export default function useBreadcrumbs() {
   const location = useLocation();
   return useMemo(() => {
-    const paths = location.pathname.split("/").slice(1);
+    const paths = location.pathname.split("/").slice(2);
     // Remove the last element if it contains "*-detail" (e.g. "group-detail")
     if (paths.length > 1 && paths.some((path) => path.includes("detail"))) {
       paths.pop();
