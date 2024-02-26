@@ -1,7 +1,7 @@
-import React from "react";
-import { GitHub } from "@mui/icons-material";
 import { Icon } from "@mui/material";
 
+import { SUPPORT_EMAIL } from "config";
+import ZaloIcon from "assets/images/icons8-zalo.svg";
 import logo from "assets/images/logo.png";
 
 import "../../styles.css";
@@ -24,6 +24,15 @@ function Footer() {
           </ul>
           <p style={{ marginTop: "10px" }}>Nhóm sinh viên thực hiện:</p>
           <ul className="landing_footer__info-text">
+            <li>Trần Hồng Quân - 20127067</li>
+            <li>Nguyễn Tấn Hiếu - 20127159</li>
+            <li>Võ Thanh Sương - 20127312</li>
+            <li>Nguyễn Văn Hậu - 20127493</li>
+            <li>Võ Minh Thông - 20127638</li>
+            <li>Dương Quang Vinh - 20127665</li>
+          </ul>
+          <p style={{ marginTop: "10px" }}>Nhóm 5D1N:</p>
+          <ul className="landing_footer__info-text">
             <li>Đoàn Thu Ngân - 19120302</li>
             <li>Lê Văn Định - 19120477</li>
             <li>Thới Hải Đức - 19120483</li>
@@ -36,21 +45,72 @@ function Footer() {
           <h4>Liên hệ:</h4>
           <p>Mọi thắc mắc vui lòng liên hệ qua:</p>
           <div className="landing_footer__contact">
-            <div className="landing_footer__contact-text">
-              <Icon fontSize="medium" className="landing_footer__contact-text-icon">
-                alternate_email
-              </Icon>
-              <p className="landing_footer-text">mentorus.hcmus@gmail.com</p>
-            </div>
+            {SUPPORT_EMAIL && (
+              <div className="landing_footer__contact-text">
+                <Icon fontSize="medium" className="landing_footer__contact-text-icon">
+                  email
+                </Icon>
+                <a className="landing_footer-text" href={`mailto:${SUPPORT_EMAIL}`}>
+                  {SUPPORT_EMAIL}
+                </a>
+              </div>
+            )}
+
             <div className="landing_footer__contact-text">
               <Icon fontSize="medium" className="landing_footer__contact-text-icon">
                 facebook
               </Icon>
-              <p className="landing_footer-text">https://www.facebook.com/toladui</p>
+              <a
+                className="landing_footer-text"
+                target="_blank"
+                href="https://www.facebook.com/hieucckha"
+                rel="noreferrer"
+              >
+                https://www.facebook.com/hieucckha
+              </a>
             </div>
             <div className="landing_footer__contact-text">
-              <GitHub fontSize="medium" className="landing_footer__contact-text-icon" />
-              <p className="landing_footer-text">https://github.com/iamduy17</p>
+              <img
+                style={{
+                  width: "24px"
+                }}
+                className="landing_footer__contact-text-icon"
+                src={ZaloIcon}
+                alt="Zalo Icon"
+              />
+
+              <a
+                className="landing_footer-text"
+                target="_blank"
+                href="https://zalo.me/g/jljwwq240"
+                rel="noreferrer"
+              >
+                Nhóm Zalo Hỗ trợ
+              </a>
+            </div>
+          </div>
+
+          <h4 style={{ marginTop: "10px" }}>Tài liệu hướng dẫn:</h4>
+          <div className="landing_footer__contact">
+            <div className="landing_footer__contact-text">
+              <a
+                className="landing_footer-text"
+                target="_blank"
+                href="/user-guide-web-admin"
+                rel="noreferrer"
+              >
+                Dành cho web admin
+              </a>
+            </div>
+            <div className="landing_footer__contact-text">
+              <a
+                className="landing_footer-text"
+                target="_blank"
+                href="/user-guide-mobile"
+                rel="noreferrer"
+              >
+                Dành cho mobile app
+              </a>
             </div>
           </div>
         </div>

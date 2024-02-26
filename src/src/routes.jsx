@@ -16,6 +16,8 @@ import PageNotFound from "pages/NotFound";
 import SignIn from "pages/SignIn";
 import Statistic from "pages/Statistic";
 import StatisticDetail from "pages/StatisticDetail";
+import MobileUserGuide from "pages/UserGuide/Mobile";
+import WebAdminGuideline from "pages/UserGuide/Web";
 
 const pagesMap = {
   groups: "Quản lý nhóm",
@@ -36,62 +38,77 @@ export const privateRoutes = [
     key: "groups",
     name: translateToVNmeseByKey("groups"),
     icon: <Icon fontSize="small">groups</Icon>,
-    path: "/groups",
+    path: "/admin/groups",
     element: <GroupManagement />
   },
   {
     key: "group-category",
     name: translateToVNmeseByKey("group-category"),
     icon: <Icon fontSize="small">category</Icon>,
-    path: "/group-category",
+    path: "/admin/group-category",
     element: <GroupCategory />
   },
   {
     key: "group-detail",
     name: translateToVNmeseByKey("group-detail"),
     icon: null,
-    path: "/groups/group-detail/:id",
+    path: "/admin/groups/group-detail/:id",
     element: <GroupDetail />
   },
   {
     key: "account-management",
     name: translateToVNmeseByKey("account-management"),
     icon: <Icon fontSize="small">account_circle</Icon>,
-    path: "/account-management",
+    path: "/admin/account-management",
     element: <AccountManagement />
   },
   {
     key: "account-detail",
     name: translateToVNmeseByKey("account-detail"),
-    path: "/account-management/account-detail/:id",
+    path: "/admin/account-management/account-detail/:id",
     element: <AccountDetail />
   },
   {
     key: "statistic",
     name: translateToVNmeseByKey("statistic"),
     icon: <Icon fontSize="small">query_stats</Icon>,
-    path: "/statistic",
+    path: "/admin/statistic",
     element: <Statistic />
   },
   {
     key: "statistic-detail",
     name: translateToVNmeseByKey("statistic-detail"),
-    path: "/statistic/statistic-detail/:id",
+    path: "/admin/statistic/statistic-detail/:id",
     element: <StatisticDetail />
   }
 ];
 
 export const publicRoutes = [
   {
-    key: "home",
+    key: "mobile-landing-page",
     path: "/",
-    element: <Navigate to="/groups" replace />
+    element: <MobileLandingPage />
+  },
+  {
+    key: "user-guide",
+    path: "/user-guide-web-admin",
+    element: <WebAdminGuideline />
+  },
+  {
+    key: "user-guide-mobile",
+    path: "/user-guide-mobile",
+    element: <MobileUserGuide />
+  },
+  {
+    key: "home",
+    path: "/admin",
+    element: <Navigate to="/admin/groups" replace />
   },
   {
     name: "Sign In",
     key: "sign-in",
     icon: <Icon fontSize="small">login</Icon>,
-    path: "/sign-in",
+    path: "/admin/sign-in",
     element: <SignIn />
   },
   {
@@ -109,13 +126,13 @@ export const publicRoutes = [
   {
     name: "Web landing page",
     key: "web-landing-page",
-    path: "/web-landing-page",
+    path: "/about/web",
     element: <WebLandingPage />
   },
   {
     name: "App landing page",
     key: "mobile-landing-page",
-    path: "/mobile-landing-page",
+    path: "/about/mobile",
     element: <MobileLandingPage />
   },
   {
@@ -132,7 +149,7 @@ const routes = [
     name: "Sign In",
     key: "sign-in",
     icon: <Icon fontSize="small">login</Icon>,
-    route: "/sign-in",
+    route: "/admin/sign-in",
     slideNavShow: false,
     component: <SignIn />
   },
@@ -150,7 +167,7 @@ const routes = [
     name: translateToVNmeseByKey("groups"),
     key: "groups",
     icon: <Icon fontSize="small">groups</Icon>,
-    route: "/groups",
+    route: "/admin/groups",
     slideNavShow: true,
     component: (
       <ProtectedAuth>
@@ -163,7 +180,7 @@ const routes = [
     name: translateToVNmeseByKey("group-category"),
     key: "group-category",
     icon: <Icon fontSize="small">category</Icon>,
-    route: "/group-category",
+    route: "/admin/group-category",
     slideNavShow: true,
     component: (
       <ProtectedAuth>
@@ -176,7 +193,7 @@ const routes = [
     name: translateToVNmeseByKey("group-detail"),
     key: "group-detail",
     icon: null,
-    route: "/groups/group-detail/:id",
+    route: "/admin/groups/group-detail/:id",
     slideNavShow: false,
     component: (
       <ProtectedAuth>
@@ -189,7 +206,7 @@ const routes = [
     name: translateToVNmeseByKey("account-management"),
     key: "account-management",
     icon: <Icon fontSize="small">account_circle</Icon>,
-    route: "/account-management",
+    route: "/admin/account-management",
     slideNavShow: true,
     component: (
       <ProtectedAuth>
@@ -201,7 +218,7 @@ const routes = [
     type: "collapse",
     name: translateToVNmeseByKey("account-detail"),
     key: "account-detail",
-    route: "/account-management/account-detail/:id",
+    route: "/admin/account-management/account-detail/:id",
     slideNavShow: false,
     component: (
       <ProtectedAuth>
@@ -214,7 +231,7 @@ const routes = [
     name: translateToVNmeseByKey("statistic"),
     key: "statistic",
     icon: <Icon fontSize="small">query_stats</Icon>,
-    route: "/statistic",
+    route: "/admin/statistic",
     slideNavShow: true,
     component: (
       <ProtectedAuth>
@@ -226,7 +243,7 @@ const routes = [
     type: "collapse",
     name: translateToVNmeseByKey("statistic-detail"),
     key: "statistic-detail",
-    route: "/statistic/statistic-detail/:id",
+    route: "/admin/statistic/statistic-detail/:id",
     slideNavShow: false,
     component: (
       <ProtectedAuth>
@@ -254,7 +271,7 @@ const routes = [
     type: "collapse",
     name: "Web landing page",
     key: "web-landing-page",
-    route: "/web-landing-page", // invitation, meeting, task
+    route: "/about/web", // invitation, meeting, task
     slideNavShow: false,
     component: <WebLandingPage />
   },
@@ -262,9 +279,17 @@ const routes = [
     type: "collapse",
     name: "App landing page",
     key: "mobile-landing-page",
-    route: "/mobile-landing-page", // invitation, meeting, task
+    route: "/about/mobile", // invitation, meeting, task
     slideNavShow: false,
     component: <MobileLandingPage />
+  },
+  {
+    type: "collapse",
+    name: "App user guide",
+    key: "user-guide-mobile",
+    route: "/user-guide-mobile", // invitation, meeting, task
+    slideNavShow: false,
+    component: <MobileUserGuide />
   }
 ];
 

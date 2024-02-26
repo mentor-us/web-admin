@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Autocomplete, Card, Grid, TextField } from "@mui/material";
+import { Card, Grid, TextField } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -15,7 +15,6 @@ import {
 import { getByMonth } from "features/statistic/slice";
 
 import dayjs, { Dayjs } from "dayjs";
-// import pdf from "assets/images/pdf.png";
 import { numberWithCommas } from "utils";
 
 import ReportsBarChart from "components/Charts/BarCharts/ReportsBarChart";
@@ -23,8 +22,6 @@ import ReportsLineChart from "components/Charts/LineCharts/ReportsLineChart";
 import BasicDatePicker from "components/DatePicker";
 // import JsPDF from "jspdf";
 import MDBox from "components/MDComponents/MDBox";
-import MDInput from "components/MDComponents/MDInput";
-// import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 
 import InfoNumberCard from "../InfoNumberCard";
@@ -275,6 +272,10 @@ function StatisticNumberAndChart() {
                           label="Năm"
                           value={year}
                           onChange={(value) => {
+                            if (!value?.isValid() || Number.isNaN(value?.$y) || value?.$y < 2023) {
+                              return;
+                            }
+
                             handleChangeYearStatistic(value);
                           }}
                           minDate={new Date().setFullYear(2023)}

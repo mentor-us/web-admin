@@ -2,9 +2,6 @@
 import { Card, Icon, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
 import PropTypes from "prop-types";
 
 import MDBox from "components/MDComponents/MDBox";
@@ -17,7 +14,7 @@ import EditConfiguratorButton from "./EditConfiguratorButton";
 import "./styles.css";
 
 function Configurator({ open, onClose }) {
-  const { maxLearningYear, emailDomainsValid, status } = useConfiguration();
+  const { maxLearningYear, status } = useConfiguration();
 
   const renderBody = () => {
     if (status === "loading") {
@@ -32,7 +29,7 @@ function Configurator({ open, onClose }) {
       return (
         <MDBox className="configuration__container">
           <MDBox sx={{ mb: 2, width: "100%", gap: 2 }} display="flex" flexDirection="column">
-            <Card sx={{ p: 2, background: "#DFF6FF" }}>
+            {/* <Card sx={{ p: 2, background: "#DFF6FF" }}>
               <MDBox
                 display="flex"
                 flexDirection="row"
@@ -59,7 +56,7 @@ function Configurator({ open, onClose }) {
                   ))}
                 </List>
               )}
-            </Card>
+            </Card> */}
 
             <Card sx={{ p: 2, background: "#DFF6FF" }}>
               <MDBox

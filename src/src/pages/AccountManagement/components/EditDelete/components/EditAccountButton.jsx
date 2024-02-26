@@ -133,6 +133,18 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
     return false;
   };
 
+  const isValidData = () => {
+    const isValidBirthDate = birthDate && birthDate.toString() !== "Invalid Date";
+
+    const isValidName = name && name.length > 0;
+
+    const isValidEmail = personalEmail === "" || isEmailValid(personalEmail);
+
+    const isValidPhoneNumber = phone === "" || phone.length === 10;
+
+    return isValidBirthDate && isValidName && isValidEmail && isValidPhoneNumber;
+  };
+
   const EditAccount = async (req) => {
     setLoading(dispatchContext, true);
 
@@ -169,13 +181,14 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
   };
 
   const handlePersonalEmailChange = (e) => {
-    setPersonalEmail(e.target.value);
+    setPersonalEmail(e.target.value?.trim());
   };
 
   const handlePhoneChange = (e) => {
     const { value } = e.target;
-    if (value.length <= 10) {
-      setPhone(value);
+    const newValue = value.replace(/[^a-zA-Z0-9]/g, "");
+    if (newValue?.length <= 10) {
+      setPhone(newValue);
     }
   };
 
@@ -263,6 +276,10 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
                   value={personalEmail || ""}
                   onChange={handlePersonalEmailChange}
                   inputProps={{ maxLength: 100 }}
+                  error={personalEmail && !isEmailValid(personalEmail)}
+                  helperText={
+                    personalEmail && !isEmailValid(personalEmail) ? "Email không hợp lệ" : ""
+                  }
                 />
               </MDBox>
               <MDBox className="relationship__searchBox-item" mb={2}>
@@ -282,6 +299,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
                   value={phone || ""}
                   onChange={handlePhoneChange}
                   inputProps={{ maxLength: 10 }}
+                  pattern="[0-9]{10}"
                 />
               </MDBox>
 
@@ -400,7 +418,13 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
               )}
             </MDBox>
             <MDBox display="flex" flexDirection="row" justifyContent="center" mt={4}>
-              <MDButton onClick={handleSubmit} variant="contained" color="info" sx={{ mx: 1 }}>
+              <MDButton
+                onClick={handleSubmit}
+                variant="contained"
+                color="info"
+                sx={{ mx: 1 }}
+                disabled={!isValidData()}
+              >
                 <Icon sx={{ fontWeight: "bold" }}>check</Icon>
                 <MDTypography variant="body2" fontWeight="regular" color="white" sx={{ pl: 0.5 }}>
                   Xác nhận

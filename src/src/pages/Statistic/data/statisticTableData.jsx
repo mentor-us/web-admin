@@ -110,7 +110,7 @@ export default function statisticTableData(data, currentPage, itemsPerPage, colu
           const numberOrder = itemsPerPage * (currentPage - 1) + index + 1;
           return {
             no: numberOrder,
-            href: `/statistic/statistic-detail/${item.id}`,
+            href: `/admin/statistic/statistic-detail/${item.id}`,
             name: item.name,
             category: item.category,
             status: status.label,

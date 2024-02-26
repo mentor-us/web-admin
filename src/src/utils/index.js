@@ -8,8 +8,16 @@ export const isEmptyObject = (objectIns) => {
 };
 
 export const isEmailValid = (email) => {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
+  // const re = /^[^\s@]+@[^\s@]+\.[^a-zA-z@]+$/;
+  // Ref: https://www.baeldung.com/java-email-validation-regex
+  const emailRegex = /^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$/gm;
+  const testAllNumberRegex = /^[\d@.]+$/gm;
+
+  if (testAllNumberRegex.test(email)) {
+    return false;
+  }
+
+  return emailRegex.test(email);
 };
 
 export const getGroupStatusList = (removedStatus = "") => {

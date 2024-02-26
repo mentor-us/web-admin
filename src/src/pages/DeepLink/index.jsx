@@ -12,9 +12,10 @@ import MDTypography from "../../components/MDComponents/MDTypography";
 
 function DeepLink() {
   const path = window.location.href;
+
   const handleOpen = () => {
     const intentLink = path.replace("https", "intent");
-    const url = `${intentLink}#Intent;scheme=https;end`;
+    const url = `${intentLink}#Intent;scheme=https;package=com.mentorus;end`;
     document.location.replace(url);
   };
 

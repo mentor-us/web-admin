@@ -11,14 +11,14 @@ function Auth() {
   const tokenValue = new URLSearchParams(search).get("token");
   if (tokenValue) {
     localStorage.setItem("access_token", tokenValue);
-    return <Navigate to="/groups" replace />;
+    return <Navigate to="/admin/groups" replace />;
   }
 
   // If error occur on server, show error alert and redirect to sign in page
   const errorCodeValue = new URLSearchParams(search).get("error");
   const serverError = new ServerError(errorCodeValue);
   ErrorAlert(serverError.message);
-  return <Navigate to="/sign-in" replace />;
+  return <Navigate to="/admin/sign-in" replace />;
 }
 
 export default Auth;
