@@ -9,8 +9,15 @@ export const isEmptyObject = (objectIns) => {
 
 export const isEmailValid = (email) => {
   // const re = /^[^\s@]+@[^\s@]+\.[^a-zA-z@]+$/;
-  const re1 = /^(?!\d+@)\w+([-+.']\w+)*@(?!\d+\.)\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-  return re1.test(email);
+  // Ref: https://www.baeldung.com/java-email-validation-regex
+  const emailRegex = /^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$/gm;
+  const testAllNumberRegex = /^[\d@.]+$/gm;
+
+  if (testAllNumberRegex.test(email)) {
+    return false;
+  }
+
+  return emailRegex.test(email);
 };
 
 export const getGroupStatusList = (removedStatus = "") => {
