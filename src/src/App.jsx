@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, NavLink, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import {
   allCategoriesSelector,
   getCategoryPermissionsSelector
@@ -12,6 +12,8 @@ import { privateRoutes, publicRoutes } from "routes";
 import { isAuthenticated } from "utils";
 
 import ProtectedAuth from "pages/Auth/ProtectedAuth";
+import HomeLayout from "pages/WebUser/Home";
+import GroupRoutes from "pages/WebUser/Route/GroupRoutes";
 
 import "./index.css";
 
@@ -82,6 +84,10 @@ function App() {
       {/* {getRoutes(routes)} */}
       <Route path="/" element={<Navigate to="/admin/groups" replace />} />
       <Route path="*" element={<Navigate to="/not-found" replace />} />
+      <Route path="/web" element={<HomeLayout />}>
+        <Route index element={<div>Welcome To MentorUs Web</div>} />
+        <Route path="group/:groupId/*" element={<GroupRoutes />} />
+      </Route>
     </Routes>
   );
 }
