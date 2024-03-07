@@ -6,88 +6,88 @@ import MDAvatar from "components/MDComponents/MDAvatar";
 
 const groupExample = [
   {
-    id: "string",
+    id: "1",
     name: "Mentee",
     imageUrl: "https://www.womeninhvacr.org/wahelper/GetImage?id=415873"
   },
   {
-    id: "string",
+    id: "2",
     name: "Mentor",
     imageUrl: "https://kle.edu.vn/wp-content/uploads/2022/07/1-8.jpg"
   },
   {
-    id: "string",
+    id: "2",
     name: "Mobile",
     imageUrl: "https://cdn-icons-png.flaticon.com/512/0/191.png"
   },
   {
-    id: "string",
+    id: "3",
     name: "Mentee",
     imageUrl: "https://www.womeninhvacr.org/wahelper/GetImage?id=415873"
   },
   {
-    id: "string",
+    id: "4",
     name: "Mentor",
     imageUrl: "https://kle.edu.vn/wp-content/uploads/2022/07/1-8.jpg"
   },
   {
-    id: "string",
+    id: "5",
     name: "Mobile",
     imageUrl: "https://cdn-icons-png.flaticon.com/512/0/191.png"
   },
   {
-    id: "string",
+    id: "6",
     name: "Mentee",
     imageUrl: "https://www.womeninhvacr.org/wahelper/GetImage?id=415873"
   },
   {
-    id: "string",
+    id: "7",
     name: "Mentor",
     imageUrl: "https://kle.edu.vn/wp-content/uploads/2022/07/1-8.jpg"
   },
   {
-    id: "string",
+    id: "8",
     name: "Mobile",
     imageUrl: "https://cdn-icons-png.flaticon.com/512/0/191.png"
   },
   {
-    id: "string",
+    id: "9",
     name: "Mentee",
     imageUrl: "https://www.womeninhvacr.org/wahelper/GetImage?id=415873"
   },
   {
-    id: "string",
+    id: "10",
     name: "Mentor",
     imageUrl: "https://kle.edu.vn/wp-content/uploads/2022/07/1-8.jpg"
   },
   {
-    id: "string",
+    id: "11",
     name: "Mobile",
     imageUrl: "https://cdn-icons-png.flaticon.com/512/0/191.png"
   },
   {
-    id: "string",
+    id: "12",
     name: "Mentee",
     imageUrl: "https://www.womeninhvacr.org/wahelper/GetImage?id=415873"
   },
   {
-    id: "string",
+    id: "13",
     name: "Mentor",
     imageUrl: "https://kle.edu.vn/wp-content/uploads/2022/07/1-8.jpg"
   },
   {
-    id: "string",
+    id: "14",
     name: "Mobile",
     imageUrl: "https://cdn-icons-png.flaticon.com/512/0/191.png"
   }
 ];
 export default function ListGroup() {
   return (
-    <div className="scroll-auto">
+    <div className="scroll-auto max-w-16">
       {groupExample.map((group) => {
         return (
-          <div className="group_thumball flex justify-center items-center h-16 text-white hover:bg-sky-700">
-            <NavLink to="group/1">
+          <div className="group_thumball flex justify-center items-center max-w-16 h-16 text-white hover:bg-sky-700">
+            <NavLink to={`group/${group.id}`}>
               <Tooltip title={group.name}>
                 <Button>
                   <MDAvatar
@@ -95,7 +95,7 @@ export default function ListGroup() {
                     alt="detail-image"
                     shadow="xl"
                     size="sm"
-                    className="hover:rounded-lg"
+                    className="hover:rounded"
                     sx={{
                       alignSelf: "center",
                       background: "lightgray",

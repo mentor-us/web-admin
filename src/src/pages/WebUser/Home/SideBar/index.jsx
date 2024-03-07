@@ -12,7 +12,7 @@ import ListGroup from "../ListGroup";
 export default function SideBar() {
   return (
     <div className="flex flex-col justify-between h-full" style={{ backgroundColor: "#0091FF" }}>
-      <div className="h-20 flex flex-col pt-2 hover:bg-sky-700">
+      <div className="h-20 flex flex-col hover:bg-sky-700">
         <Tooltip title="thong89x">
           <Button>
             <MDAvatar
@@ -32,7 +32,7 @@ export default function SideBar() {
         </Tooltip>
       </div>
       <hr />
-      <div className="grow">
+      <div className="grow overflow-y-scroll overflow-x-hidden">
         <ListGroup />
       </div>
       <div className="">

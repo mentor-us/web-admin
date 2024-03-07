@@ -10,7 +10,7 @@ export default function HomeLayout() {
       <div className="web_layout_setting_col max-w-16">
         <SideBar />
       </div>
-      <div className="grow overscroll-auto">
+      <div className="grow ">
         <Outlet />
       </div>
     </div>
