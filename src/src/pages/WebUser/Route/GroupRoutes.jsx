@@ -7,7 +7,7 @@ export default function GroupRoutes() {
   return (
     <Routes>
       <Route element={<GroupLayout />}>
-        <Route index element={<div>Chose Some channel</div>} />
+        <Route index element={<div className="bg-slate-200 h-full ">Chose Some channel</div>} />
         <Route path="channel/:channelId" element={<div>Message</div>} />
       </Route>
     </Routes>

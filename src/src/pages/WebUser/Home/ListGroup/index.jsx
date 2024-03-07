@@ -86,10 +86,11 @@ export default function ListGroup() {
     <div className="scroll-auto max-w-16">
       {groupExample.map((group) => {
         return (
-          <div className="group_thumball flex justify-center items-center max-w-16 h-16 text-white hover:bg-sky-700">
+          <div className="group_thumball flex justify-center items-center max-w-16 h-16 text-white hover:bg-sky-600">
             <NavLink to={`group/${group.id}`}>
               <Tooltip title={group.name}>
                 <Button>
+                  {/* <Avatar className="hover:rounded" alt="Remy Sharp" src={group.imageUrl} /> */}
                   <MDAvatar
                     src={group.imageUrl}
                     alt="detail-image"
@@ -98,7 +99,7 @@ export default function ListGroup() {
                     className="hover:rounded"
                     sx={{
                       alignSelf: "center",
-                      background: "lightgray",
+                      background: "#abcdff;",
                       mx: 0
                     }}
                   />
