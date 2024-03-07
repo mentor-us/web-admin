@@ -31,7 +31,7 @@ export default function SideBar() {
           </Button>
         </Tooltip>
       </div>
-
+      <hr />
       <div className="grow">
         <ListGroup />
       </div>

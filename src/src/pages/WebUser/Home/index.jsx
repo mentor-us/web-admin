@@ -6,11 +6,11 @@ import "./index.css";
 
 export default function HomeLayout() {
   return (
-    <div className="web_layout min-h-full flex flex-row h-svh">
+    <div className="web_layout min-h-full flex flex-row h-svh max-h-svh">
       <div className="web_layout_setting_col max-w-16">
         <SideBar />
       </div>
-      <div className="grow">
+      <div className="grow overscroll-auto">
         <Outlet />
       </div>
     </div>
