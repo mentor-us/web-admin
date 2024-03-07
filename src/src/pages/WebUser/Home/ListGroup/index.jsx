@@ -26,7 +26,7 @@ export default function ListGroup() {
     <div>
       {groupExample.map((group) => {
         return (
-          <div className="flex justify-center items-center h-16 text-white hover:bg-sky-700">
+          <div className="group_thumball flex justify-center items-center h-16 text-white hover:bg-sky-700">
             <NavLink to="group/1">
               <Tooltip title={group.name}>
                 <Button>
@@ -35,6 +35,7 @@ export default function ListGroup() {
                     alt="detail-image"
                     shadow="xl"
                     size="sm"
+                    className="hover:rounded-lg"
                     sx={{
                       alignSelf: "center",
                       background: "lightgray",

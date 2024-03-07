@@ -24,7 +24,8 @@ export default function SideBar() {
                 alignSelf: "center",
                 background: "white",
                 mx: 0,
-                border: "1px solid white"
+                border: "1px solid white",
+                "border-radius": "5px"
               }}
             />
           </Button>
