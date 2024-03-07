@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -37,14 +38,17 @@ export default function SideBar() {
       </div>
       <div className="">
         <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600">
-          {/* <SettingsIcon /> */}
-          <IconButton color="white" aria-label="Setting">
-            {false ? (
-              <CalendarMonthIcon fontSize="medium" />
-            ) : (
-              <CalendarMonthOutlinedIcon fontSize="medium" />
+          <NavLink className="w-full h-full flex justify-center items-center " to="calendar">
+            {({ isActive }) => (
+              <IconButton color="white" aria-label="Setting">
+                {isActive ? (
+                  <CalendarMonthIcon fontSize="medium" />
+                ) : (
+                  <CalendarMonthOutlinedIcon fontSize="medium" />
+                )}
+              </IconButton>
             )}
-          </IconButton>
+          </NavLink>
         </div>
         <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600">
           {/* <SettingsIcon /> */}

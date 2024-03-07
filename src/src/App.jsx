@@ -88,6 +88,7 @@ function App() {
       <Route path="/web" element={<HomeLayout />}>
         <Route index element={<WelcomePage />} />
         <Route path="group/:groupId/*" element={<GroupRoutes />} />
+        <Route path="calendar" element={<div>Calendar</div>} />
       </Route>
     </Routes>
   );
