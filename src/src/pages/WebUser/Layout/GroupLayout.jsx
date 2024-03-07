@@ -6,7 +6,7 @@ import GroupHeader from "../Group/GroupHeader";
 export default function GroupLayout() {
   return (
     <div className="flex flex-row h-full">
-      <div className="flex flex-col w-80 h-full bg-slate-50">
+      <div className="flex flex-col w-80 h-full bg-slate-100">
         <div className="h-16 bg-white">
           <GroupHeader />
         </div>

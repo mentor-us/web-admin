@@ -13,7 +13,7 @@ export default function SideBar() {
   return (
     <div className="flex flex-col justify-between h-full" style={{ backgroundColor: "#0091FF" }}>
       <div className="h-20 flex flex-col hover:bg-sky-600">
-        <Tooltip title="thong89x">
+        <Tooltip title="thong89x" placement="right">
           <Button>
             <MDAvatar
               src="https://sm.ign.com/t/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.300.jpg"

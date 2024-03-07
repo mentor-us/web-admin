@@ -12,11 +12,6 @@ const groupExample = [
   },
   {
     id: "2",
-    name: "Mentor",
-    imageUrl: "https://kle.edu.vn/wp-content/uploads/2022/07/1-8.jpg"
-  },
-  {
-    id: "2",
     name: "Mobile",
     imageUrl: "https://cdn-icons-png.flaticon.com/512/0/191.png"
   },
@@ -86,9 +81,12 @@ export default function ListGroup() {
     <div className="scroll-auto max-w-16">
       {groupExample.map((group) => {
         return (
-          <div className="group_thumball flex justify-center items-center max-w-16 h-16 text-white hover:bg-sky-600">
+          <div
+            key={group.id}
+            className="group_thumball flex justify-center items-center max-w-16 h-16 text-white hover:bg-sky-600"
+          >
             <NavLink to={`group/${group.id}`}>
-              <Tooltip title={group.name}>
+              <Tooltip title={group.name} placement="right">
                 <Button>
                   {/* <Avatar className="hover:rounded" alt="Remy Sharp" src={group.imageUrl} /> */}
                   <MDAvatar
