@@ -13,6 +13,7 @@ import { isAuthenticated } from "utils";
 
 import ProtectedAuth from "pages/Auth/ProtectedAuth";
 import HomeLayout from "pages/WebUser/Home";
+import WelcomePage from "pages/WebUser/Home/WelcomePage";
 import GroupRoutes from "pages/WebUser/Route/GroupRoutes";
 
 import "./index.css";
@@ -85,7 +86,7 @@ function App() {
       <Route path="/" element={<Navigate to="/admin/groups" replace />} />
       <Route path="*" element={<Navigate to="/not-found" replace />} />
       <Route path="/web" element={<HomeLayout />}>
-        <Route index element={<div>Welcome To MentorUs Web</div>} />
+        <Route index element={<WelcomePage />} />
         <Route path="group/:groupId/*" element={<GroupRoutes />} />
       </Route>
     </Routes>
