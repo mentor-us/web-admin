@@ -1,16 +1,16 @@
 import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
+import SideBar from "./SideBar";
 import "./index.css";
 
 export default function HomeLayout() {
   return (
-    <div className="web_layout">
-      <div className="web_layout_setting_col">
-        Avatar
-        <NavLink to="group/1">Mentee</NavLink>
+    <div className="web_layout min-h-full flex flex-row h-svh">
+      <div className="web_layout_setting_col max-w-16">
+        <SideBar />
       </div>
-      <div className="">
+      <div className="grow">
         <Outlet />
       </div>
     </div>
