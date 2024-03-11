@@ -33,7 +33,7 @@ export default function SideBar() {
         </Tooltip>
       </div>
       {/* <hr /> */}
-      <div className="grow overflow-y-scroll overflow-x-hidden">
+      <div className="grow overflow-y-scroll no-scrollbar">
         <ListGroup />
       </div>
       <div className="">
