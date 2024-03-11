@@ -93,12 +93,13 @@ export default function ListGroup() {
                     src={group.imageUrl}
                     alt="detail-image"
                     shadow="xl"
-                    size="sm"
-                    className="hover:rounded"
+                    size="md"
+                    className="hover:rounded rounded"
                     sx={{
                       alignSelf: "center",
                       background: "#abcdff;",
-                      mx: 0
+                      mx: 0,
+                      borderRadius: "15px"
                     }}
                   />
                 </Button>

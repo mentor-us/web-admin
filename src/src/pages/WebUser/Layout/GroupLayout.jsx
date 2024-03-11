@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 
 import GroupHeader from "../Group/GroupHeader";
 
 export default function GroupLayout() {
+  const [showLayout, setShowLayout] = useState(true);
+  const toggleGroupDetail = () => {
+    setShowLayout((pre) => !pre);
+  };
   return (
     <div className="flex flex-row h-full">
       <div className="flex flex-col w-80 h-full bg-slate-100">
@@ -17,8 +21,9 @@ export default function GroupLayout() {
         </div>
       </div>
       <div className="grow h-full ">
-        <Outlet />
+        <Outlet context={[showLayout, toggleGroupDetail]} />
       </div>
+      {showLayout && <div className="w-80 h-full bg-slate-100">Layout</div>}
     </div>
   );
 }
