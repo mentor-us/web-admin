@@ -22,6 +22,7 @@ import Zoom from "@mui/material/Zoom";
 import PropTypes from "prop-types";
 
 import { GroupIcon, Hashtag, LockIcon, ParagraphIcon, UserNameIcon } from "assets/svgs";
+import colors from "assets/theme/base/colors";
 
 import { useGetWorkSpace } from "hooks/groups/queries";
 import { USER_ROLE } from "utils/constants";
@@ -50,7 +51,20 @@ function ChannelIcon({ channel }) {
 ChannelIcon.propTypes = {
   channel: PropTypes.object.isRequired
 };
-
+const styleActiveChannel = (selected) => {
+  return {
+    "&.Mui-selected": {
+      backgroundColor: selected ? colors.gradients.light.main : "inherit" // Using theme color here
+    },
+    "&:hover": {
+      backgroundColor: `${colors.gradients.light.main} !important` // Using theme color here
+    },
+    "&:focus": {
+      backgroundColor: `${colors.gradients.light.main} !important`, // Using theme color here
+      outline: "none" // Remove default focus outline if desired
+    }
+  };
+};
 function ChannelItem({ channel, role, selectedChannelId, onChannelSelected }) {
   const navigate = useNavigate();
   if (!channel) {
@@ -59,7 +73,7 @@ function ChannelItem({ channel, role, selectedChannelId, onChannelSelected }) {
 
   return (
     <ListItemButton
-      sx={{ pl: 4 }}
+      sx={{ ...styleActiveChannel(selectedChannelId === channel?.id), pl: 4 }}
       onClick={() => {
         navigate(`channel/${channel?.id}`);
         onChannelSelected(channel?.id);
@@ -115,7 +129,6 @@ export default function GroupLayout() {
   if (isLoading) {
     return null;
   }
-
   return (
     <div className="flex flex-row h-full">
       <div className="flex flex-col w-80 h-full bg-white border-r-[2px]">
@@ -135,6 +148,7 @@ export default function GroupLayout() {
                 handleListItemClick(workspace?.defaultChannelId);
               }}
               selected={selectedChannelId === workspace?.defaultChannelId}
+              sx={styleActiveChannel(selectedChannelId === workspace?.defaultChannelId)}
             >
               <ListItemIcon>
                 <GroupIcon width={22} height={22} />
@@ -159,7 +173,10 @@ export default function GroupLayout() {
                 backgroundColor: "#ccc"
               }}
             />
-            <ListItemButton onClick={toggleChannelList}>
+            <ListItemButton
+              sx={styleActiveChannel(selectedChannelId === workspace?.defaultChannelId)}
+              onClick={toggleChannelList}
+            >
               <ListItemIcon>
                 <ParagraphIcon width={22} height={22} />
               </ListItemIcon>
@@ -201,7 +218,10 @@ export default function GroupLayout() {
                 backgroundColor: "#ccc"
               }}
             />
-            <ListItemButton onClick={toggleShowPersonalChannel}>
+            <ListItemButton
+              sx={styleActiveChannel(selectedChannelId === workspace?.defaultChannelId)}
+              onClick={toggleShowPersonalChannel}
+            >
               <ListItemIcon>
                 <UserNameIcon width={22} height={22} />
               </ListItemIcon>
