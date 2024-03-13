@@ -1,10 +1,11 @@
-import * as React from "react";
 import { Dropdown } from "@mui/base/Dropdown";
 import { Menu } from "@mui/base/Menu";
 import { MenuButton as BaseMenuButton } from "@mui/base/MenuButton";
 import { MenuItem as BaseMenuItem, menuItemClasses } from "@mui/base/MenuItem";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { Tooltip } from "@mui/material";
 import { styled } from "@mui/system";
+import PropTypes from "prop-types";
 
 const blue = {
   50: "#F0F7FF",
@@ -108,7 +109,8 @@ const MenuItem = styled(BaseMenuItem)(
 //   }
 //   `
 // );
-export default function GroupHeader() {
+
+function GroupHeader({ groupName }) {
   const createHandleMenuClick = (menuItem) => {
     return () => {
       console.log(`Clicked on ${menuItem}`);
@@ -116,11 +118,14 @@ export default function GroupHeader() {
   };
 
   return (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     <Dropdown>
-      <BaseMenuButton className="h-full w-full border-white">
-        <div className="text-xl">
-          My Group <KeyboardArrowDownIcon fontSize="medium" />
-        </div>
+      <BaseMenuButton className="h-full w-full border-white flex justify-center items-center space-x-4 p-4">
+        <Tooltip title={groupName}>
+          <div className="text-base font-bold line-clamp-2">{groupName}</div>
+        </Tooltip>
+
+        <KeyboardArrowDownIcon fontSize="small" />
       </BaseMenuButton>
       <Menu slots={{ listbox: Listbox }}>
         <MenuItem onClick={createHandleMenuClick("Profile")}>
@@ -136,3 +141,13 @@ export default function GroupHeader() {
     </Dropdown>
   );
 }
+
+GroupHeader.defaultProps = {
+  groupName: ""
+};
+
+GroupHeader.propTypes = {
+  groupName: PropTypes.string
+};
+
+export default GroupHeader;

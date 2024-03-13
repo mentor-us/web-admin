@@ -7,17 +7,20 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { Button, IconButton, Tooltip } from "@mui/material";
 
 import MDAvatar from "components/MDComponents/MDAvatar";
+import useMyInfo from "hooks/useMyInfo";
 
 import ListGroup from "../ListGroup";
 
 export default function SideBar() {
+  const myInfo = useMyInfo();
+
   return (
     <div className="flex flex-col justify-between h-full" style={{ backgroundColor: "#0091FF" }}>
       <div className="h-20 flex flex-col hover:bg-sky-600">
-        <Tooltip title="thong89x" placement="right">
+        <Tooltip title={myInfo.name} placement="right">
           <Button>
             <MDAvatar
-              src="https://sm.ign.com/t/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.300.jpg"
+              src={myInfo.imageUrl}
               alt="detail-image"
               shadow="md"
               size="md"

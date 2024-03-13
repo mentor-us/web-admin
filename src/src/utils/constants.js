@@ -84,3 +84,8 @@ export const groupCategoryStatusList = [
   { label: "Hoạt động", textValue: "ACTIVE", value: 1, color: "green" },
   { label: "Đã xóa", textValue: "DELETED", value: 2, color: "red" }
 ];
+
+export const USER_ROLE = {
+  MENTOR: "MENTOR",
+  MENTEE: "MENTEE"
+};

@@ -1,8 +1,14 @@
-import React from "react";
+/* eslint-disable no-unused-vars */
+import { useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { NavLink } from "react-router-dom";
 import { Button, Tooltip } from "@mui/material";
 
-import MDAvatar from "components/MDComponents/MDAvatar";
+import FileApi from "api/FileApi";
+
+import { useGetAllHomeGroupInfinity } from "hooks/groups/queries";
+
+import AsyncMDAvatar from "../../components/AsyncMDAvatar";
 
 const groupExample = [
   {
@@ -76,38 +82,61 @@ const groupExample = [
     imageUrl: "https://cdn-icons-png.flaticon.com/512/0/191.png"
   }
 ];
+
 export default function ListGroup() {
+  const {
+    data: paginationList,
+    hasNextPage,
+    fetchNextPage,
+    isSuccess,
+    isLoading
+  } = useGetAllHomeGroupInfinity();
+  const [selectedGroupId, setSelectedGroupId] = useState("");
+
+  const handleListItemClick = (groupId) => {
+    setSelectedGroupId(groupId);
+  };
+
+  if (isLoading) {
+    return null;
+  }
+
   return (
-    <div className="scroll-auto max-w-16">
-      {groupExample.map((group) => {
-        return (
-          <div
-            key={group.id}
-            className="group_thumball flex justify-center items-center max-w-16 h-16 text-white hover:bg-sky-600"
-          >
-            <NavLink to={`group/${group.id}`}>
-              <Tooltip title={group.name} placement="right">
-                <Button>
-                  {/* <Avatar className="hover:rounded" alt="Remy Sharp" src={group.imageUrl} /> */}
-                  <MDAvatar
-                    src={group.imageUrl}
-                    alt="detail-image"
-                    shadow="xl"
-                    size="md"
-                    className="hover:rounded rounded"
-                    sx={{
-                      alignSelf: "center",
-                      background: "#abcdff;",
-                      mx: 0,
-                      borderRadius: "15px"
-                    }}
-                  />
-                </Button>
-              </Tooltip>
-            </NavLink>
-          </div>
-        );
-      })}
+    <div id="scrollableDiv" className="scroll-auto max-w-16 h-full">
+      {isSuccess &&
+        paginationList.pages.map((group) => {
+          console.log(selectedGroupId === group.id);
+          return (
+            <div
+              key={group.id}
+              className="group_thumball flex justify-center items-center max-w-16 h-16 text-white hover:bg-sky-600"
+            >
+              <NavLink
+                to={`group/${group.id}`}
+                onClick={() => {
+                  handleListItemClick(group.id);
+                }}
+              >
+                <Tooltip title={group.name} placement="right">
+                  <Button>
+                    <AsyncMDAvatar
+                      src={group.imageUrl}
+                      alt="detail-image"
+                      shadow="xl"
+                      size="md"
+                      className={`hover:rounded ${selectedGroupId === group.id ? "rounded" : ""}`}
+                      sx={{
+                        alignSelf: "center",
+                        background: "#abcdff;",
+                        mx: 0
+                      }}
+                    />
+                  </Button>
+                </Tooltip>
+              </NavLink>
+            </div>
+          );
+        })}
     </div>
   );
 }

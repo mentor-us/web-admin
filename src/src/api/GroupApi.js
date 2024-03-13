@@ -103,6 +103,18 @@ const GroupApi = {
     return AxiosClient.get(`api/groups/export/search?${makeRequestSearch(req)}`, {
       responseType: "blob"
     });
+  },
+
+  // User API
+  async getGroupsInHomePage(type, page = 0, pageSize = 25) {
+    const URL = `/api/groups/own?page=${page}&pageSize=${pageSize}&type=${type}`;
+    const response = await AxiosClient.get(URL);
+    return response.data.groups;
+  },
+  async getWorkspace(groupId) {
+    const URL = `/api/groups/${groupId}/workspace`;
+    const data = await AxiosClient.get(URL);
+    return data;
   }
 };
 
