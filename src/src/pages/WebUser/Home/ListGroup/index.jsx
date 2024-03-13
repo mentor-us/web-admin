@@ -116,6 +116,7 @@ export default function ListGroup() {
                 onClick={() => {
                   handleListItemClick(group.id);
                 }}
+                className={({ isActive }) => (isActive ? "bg-sky-600" : "")}
               >
                 <Tooltip title={group.name} placement="right">
                   <Button>
