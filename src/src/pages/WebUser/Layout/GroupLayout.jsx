@@ -174,7 +174,12 @@ export default function GroupLayout() {
               }}
             />
             <ListItemButton
-              sx={styleActiveChannel(selectedChannelId === workspace?.defaultChannelId)}
+              selected={
+                selectedChannelId && workspace && selectedChannelId !== workspace?.defaultChannelId
+              }
+              sx={styleActiveChannel(
+                selectedChannelId && workspace && selectedChannelId !== workspace?.defaultChannelId
+              )}
               onClick={toggleChannelList}
             >
               <ListItemIcon>
@@ -199,15 +204,18 @@ export default function GroupLayout() {
             <Collapse in={showChannelList} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 {workspace?.channels.map((channel) => {
-                  return (
-                    <ChannelItem
-                      key={channel.id}
-                      channel={channel}
-                      selectedChannelId={selectedChannelId}
-                      onChannelSelected={handleListItemClick}
-                      role={workspace?.role || "MENTEE"}
-                    />
-                  );
+                  if (channel && channel.id !== workspace?.defaultChannelId) {
+                    return (
+                      <ChannelItem
+                        key={channel.id}
+                        channel={channel}
+                        selectedChannelId={selectedChannelId}
+                        onChannelSelected={handleListItemClick}
+                        role={workspace?.role || "MENTEE"}
+                      />
+                    );
+                  }
+                  return null;
                 })}
               </List>
             </Collapse>
@@ -219,7 +227,7 @@ export default function GroupLayout() {
               }}
             />
             <ListItemButton
-              sx={styleActiveChannel(selectedChannelId === workspace?.defaultChannelId)}
+              // sx={styleActiveChannel(selectedChannelId === workspace?.defaultChannelId)}
               onClick={toggleShowPersonalChannel}
             >
               <ListItemIcon>
