@@ -28,6 +28,8 @@ import { useGetWorkSpace } from "hooks/groups/queries";
 import { USER_ROLE } from "utils/constants";
 
 import GroupHeader from "../Group/GroupHeader";
+import GroupInfo from "../Group/GroupInfo";
+// import MessageContainer from "../Group/MessageContainer";
 
 function ChannelIcon({ channel }) {
   if (channel.type === "PUBLIC") {
@@ -130,7 +132,7 @@ export default function GroupLayout() {
     return null;
   }
   return (
-    <div className="flex flex-row h-full">
+    <div className="flex flex-row h-full justify-between">
       <div className="flex flex-col w-80 h-full bg-white border-r-[2px]">
         <div className="h-16 bg-white ">
           {isSuccess && <GroupHeader groupName={workspace?.name} />}
@@ -254,6 +256,7 @@ export default function GroupLayout() {
           </List>
         </div>
       </div>
+      <GroupInfo />
     </div>
   );
 }
