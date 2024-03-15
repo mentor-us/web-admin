@@ -3,7 +3,7 @@ import { Menu } from "@mui/base/Menu";
 import { MenuButton as BaseMenuButton } from "@mui/base/MenuButton";
 import { MenuItem as BaseMenuItem, menuItemClasses } from "@mui/base/MenuItem";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Tooltip } from "@mui/material";
+import { Skeleton, Tooltip } from "@mui/material";
 import { styled } from "@mui/system";
 import PropTypes from "prop-types";
 
@@ -110,7 +110,7 @@ const MenuItem = styled(BaseMenuItem)(
 //   `
 // );
 
-function GroupHeader({ groupName }) {
+function GroupHeader({ groupName, isLoading }) {
   const createHandleMenuClick = (menuItem) => {
     return () => {
       console.log(`Clicked on ${menuItem}`);
@@ -121,11 +121,17 @@ function GroupHeader({ groupName }) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
     <Dropdown>
       <BaseMenuButton className="h-full w-full border-white flex justify-center items-center space-x-4 p-4">
-        <Tooltip title={groupName}>
-          <div className="text-base font-bold line-clamp-2">{groupName}</div>
-        </Tooltip>
+        {isLoading ? (
+          <Skeleton variant="text" sx={{ fontSize: "2rem", width: "100%" }} />
+        ) : (
+          <>
+            <Tooltip title={groupName}>
+              <div className="text-base font-bold line-clamp-2">{groupName}</div>
+            </Tooltip>
 
-        <KeyboardArrowDownIcon fontSize="small" />
+            <KeyboardArrowDownIcon fontSize="small" />
+          </>
+        )}
       </BaseMenuButton>
       <Menu slots={{ listbox: Listbox }}>
         <MenuItem onClick={createHandleMenuClick("Profile")}>
@@ -143,11 +149,13 @@ function GroupHeader({ groupName }) {
 }
 
 GroupHeader.defaultProps = {
-  groupName: ""
+  groupName: "",
+  isLoading: false
 };
 
 GroupHeader.propTypes = {
-  groupName: PropTypes.string
+  groupName: PropTypes.string,
+  isLoading: PropTypes.bool
 };
 
 export default GroupHeader;

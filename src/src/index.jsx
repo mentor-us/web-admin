@@ -1,8 +1,7 @@
 import ReactDOM from "react-dom/client";
 import { Provider as ReduxStoreProvider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { CssBaseline } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { MentorUSAppProvider } from "context/index";
 import store from "features/store";
 

@@ -9,6 +9,7 @@ import {
   getCategoryPermissionsSelector
 } from "features/groupsCategory/selector";
 import { getAllCategory, getPermissions } from "features/groupsCategory/slice";
+import { ConfirmProvider } from "material-ui-confirm";
 
 import { privateRoutes, publicRoutes } from "routes";
 import { isAuthenticated } from "utils";
@@ -84,19 +85,21 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Routes>
-        {publicRoutesRender(publicRoutes)}
-        {privateRoutesRender(privateRoutes)}
-        {/* {getRoutes(routes)} */}
-        <Route path="/" element={<Navigate to="/admin/groups" replace />} />
-        <Route path="*" element={<Navigate to="/not-found" replace />} />
-        <Route path="/web" element={<HomeLayout />}>
-          <Route index element={<WelcomePage />} />
-          <Route path="group/:groupId/*" element={<GroupRoutes />} />
-          <Route path="calendar" element={<div>Calendar</div>} />
-        </Route>
-      </Routes>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ConfirmProvider>
+        <Routes>
+          {publicRoutesRender(publicRoutes)}
+          {privateRoutesRender(privateRoutes)}
+          {/* {getRoutes(routes)} */}
+          <Route path="/" element={<Navigate to="/admin/groups" replace />} />
+          <Route path="*" element={<Navigate to="/not-found" replace />} />
+          <Route path="/web" element={<HomeLayout />}>
+            <Route index element={<WelcomePage />} />
+            <Route path="group/:groupId/*" element={<GroupRoutes />} />
+            <Route path="calendar" element={<div>Calendar</div>} />
+          </Route>
+        </Routes>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </ConfirmProvider>
     </QueryClientProvider>
   );
 }
