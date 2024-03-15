@@ -12,7 +12,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 
-import { CalendarIcon, GroupIcon, Hashtag, MediaIcon } from "assets/svgs";
+import { CalendarIcon, GroupIcon, MediaIcon, TaskListIcon, VotingQuestionIcon } from "assets/svgs";
 
 import MDAvatar from "components/MDComponents/MDAvatar";
 // Define the group information
@@ -49,12 +49,22 @@ function ChannelItem({ type }) {
           </ListItemButton>
           <ListItemButton>
             <ListItemIcon>
-              <Hashtag width={20} height={20} />
+              <VotingQuestionIcon width={20} height={20} />
             </ListItemIcon>
             <ListItemText
               disableTypography
               className="text-base line-clamp-1"
               primary="Bình chọn"
+            />
+          </ListItemButton>
+          <ListItemButton>
+            <ListItemIcon>
+              <TaskListIcon width={20} height={20} />
+            </ListItemIcon>
+            <ListItemText
+              disableTypography
+              className="text-base line-clamp-1"
+              primary="Danh sách công việc"
             />
           </ListItemButton>
         </>
@@ -72,7 +82,7 @@ function ChannelItem({ type }) {
             <ListItemIcon>
               <MediaIcon width={20} height={20} />
             </ListItemIcon>
-            <ListItemText disableTypography className="text-base line-clamp-1" primary="Hình ảnh" />
+            <ListItemText disableTypography className="text-base line-clamp-1" primary="Tập tin" />
           </ListItemButton>
         </>
       );
@@ -83,9 +93,18 @@ function ChannelItem({ type }) {
 
 export default function GroupInfo() {
   const [ShowGroupMember, setShowGroupMember] = useState(true);
-  const toggleChannelList = () => {
+  const [ShowGroupUtility, setShowGroupUtility] = useState(true);
+  const [ShowGroupMedia, setShowGroupMedia] = useState(true);
+  const toggleMemberList = () => {
     setShowGroupMember((pre) => !pre);
   };
+  const toggleChannelUtility = () => {
+    setShowGroupUtility((pre) => !pre);
+  };
+  const toggleChannelMedia = () => {
+    setShowGroupMedia((pre) => !pre);
+  };
+
   return (
     <div className="flex flex-col w-80 h-full bg-white border-r-[2px]">
       <div className="w-full font-bold text-base border-white flex justify-center items-center space-x-4 p-4">
@@ -137,7 +156,7 @@ export default function GroupInfo() {
             backgroundColor: "#ccc"
           }}
         />
-        <ListItemButton onClick={toggleChannelList}>
+        <ListItemButton onClick={toggleMemberList}>
           <ListItemText
             disableTypography
             className="text-base font-bold"
@@ -159,13 +178,13 @@ export default function GroupInfo() {
             backgroundColor: "#ccc"
           }}
         />
-        <ListItemButton onClick={toggleChannelList}>
-          <ListItemText disableTypography className="text-base font-bold" primary="Bảng tin" />
+        <ListItemButton onClick={toggleChannelUtility}>
+          <ListItemText disableTypography className="text-base font-bold" primary="Bảng tin nhóm" />
 
-          {ShowGroupMember ? <ExpandLess /> : <ExpandMore />}
+          {ShowGroupUtility ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
 
-        <Collapse in={ShowGroupMember} timeout="auto" unmountOnExit>
+        <Collapse in={ShowGroupUtility} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ChannelItem type="utility" />
           </List>
@@ -177,17 +196,17 @@ export default function GroupInfo() {
             backgroundColor: "#ccc"
           }}
         />
-        <ListItemButton onClick={toggleChannelList}>
+        <ListItemButton onClick={toggleChannelMedia}>
           <ListItemText
             disableTypography
             className="text-base font-bold"
             primary="Bộ sưu tập, tập tin đã gửi"
           />
 
-          {ShowGroupMember ? <ExpandLess /> : <ExpandMore />}
+          {ShowGroupMedia ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
 
-        <Collapse in={ShowGroupMember} timeout="auto" unmountOnExit>
+        <Collapse in={ShowGroupMedia} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ChannelItem type="media" />
           </List>
