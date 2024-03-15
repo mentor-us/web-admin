@@ -32,3 +32,10 @@ export const useGetWorkSpace = (groupId, select) =>
     select,
     enabled: !!groupId
   });
+
+export const useGetGroupDetail = (groupId) =>
+  useQuery({
+    queryKey: ["groupDetail", groupId],
+    queryFn: () => GroupsServices.getGroupDetail(groupId),
+    enabled: !!groupId
+  });
