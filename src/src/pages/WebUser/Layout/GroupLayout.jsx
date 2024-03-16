@@ -29,7 +29,9 @@ import { useGetWorkSpace } from "hooks/groups/queries";
 import { USER_ROLE } from "utils/constants";
 
 import GroupHeader from "../Group/GroupHeader";
+import GroupInfo from "../Group/GroupInfo";
 
+// import MessageContainer from "../Group/MessageContainer";
 import ChannelItem, { styleActiveChannel } from "./components/ChannelItem";
 import ChannelSkeleton from "./components/ChannelSkeleton";
 import CreateNewChannelDialog from "./components/CreateNewChannelDialog";
@@ -271,7 +273,12 @@ export default function GroupLayout() {
         <div className="grow h-full">
           <Outlet context={[showLayout, toggleGroupDetail]} />
         </div>
-        {showLayout && <div className="w-80 h-full bg-slate-100">Layout</div>}
+        {showLayout && (
+          <div className="w-80 h-full bg-slate-100">
+            {" "}
+            <GroupInfo />
+          </div>
+        )}
       </div>
       <CreateNewChannelDialog open={openCreateChannelDialog} handleClose={handleClose} />
     </>
