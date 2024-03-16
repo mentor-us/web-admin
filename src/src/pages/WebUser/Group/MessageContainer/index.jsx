@@ -6,6 +6,7 @@ import { Avatar, IconButton } from "@mui/material";
 import ListGroup from "pages/WebUser/Home/ListGroup";
 
 export default function MessageContainer() {
+  console.log("REDDADSA");
   const [showLayout, toggleGroupDetail] = useOutletContext();
   useEffect(() => {
     toggleGroupDetail();

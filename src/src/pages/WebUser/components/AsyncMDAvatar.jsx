@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { forwardRef, useEffect, useState } from "react";
+import { Skeleton } from "@mui/material";
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
@@ -10,17 +11,24 @@ import MDAvatarRoot from "components/MDComponents/MDAvatar/MDAvatarRoot";
 
 const AsyncMDAvatar = forwardRef(({ bgColor, size, shadow, src, ...rest }, ref) => {
   const [imageBase64, setImageBase64] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadImage = async () => {
-      const base64Str = await FileApi.getFileWithKey(src);
-      setImageBase64(base64Str);
+      try {
+        const base64Str = await FileApi.getFileWithKey(src);
+        setImageBase64(base64Str);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     loadImage();
   }, []);
 
-  return (
+  return isLoading ? (
+    <Skeleton variant="circular" width={48} height={48} />
+  ) : (
     <MDAvatarRoot ref={ref} src={imageBase64} ownerState={{ shadow, bgColor, size }} {...rest} />
   );
 });

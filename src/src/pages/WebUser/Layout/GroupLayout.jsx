@@ -35,6 +35,11 @@ import ChannelSkeleton from "./components/ChannelSkeleton";
 import CreateNewChannelDialog from "./components/CreateNewChannelDialog";
 
 export default function GroupLayout() {
+  const [showLayout, setShowLayout] = useState(true);
+  const toggleGroupDetail = () => {
+    setShowLayout((pre) => !pre);
+  };
+
   const navigate = useNavigate();
   const { groupId } = useParams();
   const { data: workspace, isLoading, isSuccess } = useGetWorkSpace(groupId);
@@ -263,6 +268,10 @@ export default function GroupLayout() {
             </List>
           </div>
         </div>
+        <div className="grow h-full">
+          <Outlet context={[showLayout, toggleGroupDetail]} />
+        </div>
+        {showLayout && <div className="w-80 h-full bg-slate-100">Layout</div>}
       </div>
       <CreateNewChannelDialog open={openCreateChannelDialog} handleClose={handleClose} />
     </>
