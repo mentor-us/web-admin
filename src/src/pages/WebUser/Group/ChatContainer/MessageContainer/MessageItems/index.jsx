@@ -19,7 +19,7 @@ function MessageItems({ message, isOwner }) {
       case MESSAGE_TYPE.VOTE:
         return <VoteItem message />;
       case MESSAGE_TYPE.FILE:
-        return <FileItem />;
+        return <FileItem message={message} isOwner={isOwner} />;
       default:
         return null;
     }

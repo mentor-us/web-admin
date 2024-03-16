@@ -2,6 +2,7 @@
 import { groupStatusList } from "./constants";
 
 export * from "./auth";
+export * from "./dateHelper";
 
 export const isEmptyObject = (objectIns) => {
   return objectIns && Object.keys(objectIns).length === 0 && objectIns.constructor === Object;

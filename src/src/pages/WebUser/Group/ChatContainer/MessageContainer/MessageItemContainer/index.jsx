@@ -2,6 +2,8 @@
 import { ListItem, ListItemAvatar, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
+import { getTime } from "utils";
+
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
 
 const styles = {
@@ -49,13 +51,20 @@ function MessageItemContainer({ children, message, isOwner }) {
           />
         </ListItemAvatar>
       )}
-      <div className="w-full h-full" style={containerStyle}>
+      <div className="w-full h-full space-y-1" style={containerStyle}>
         <Typography className="!text-xs font-bold text-[#299C49]">
           {message?.sender?.name}
         </Typography>
         {children}
+        <Typography
+          className="!text-sm"
+          style={{
+            color: "#888"
+          }}
+        >
+          {getTime(message?.createdDate)}
+        </Typography>
       </div>
-      {/* <div></div> */}
     </ListItem>
   );
 }
