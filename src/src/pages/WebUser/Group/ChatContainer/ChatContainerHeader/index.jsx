@@ -7,7 +7,12 @@ import PropTypes from "prop-types";
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
 import { useGetWorkSpace } from "hooks/groups/queries";
 
-function ChatContainerHeader({ isOpenChannelInfo, toggleOpenChannelInfo, channelName }) {
+function ChatContainerHeader({
+  isOpenChannelInfo,
+  toggleOpenChannelInfo,
+  channelName,
+  isLoadingGroupDetail
+}) {
   const { groupId } = useParams();
   const { data: workspace, isLoading } = useGetWorkSpace(groupId);
 
@@ -19,7 +24,7 @@ function ChatContainerHeader({ isOpenChannelInfo, toggleOpenChannelInfo, channel
         ) : (
           <AsyncMDAvatar alt="Remy Sharp" src={workspace?.imageUrl} />
         )}
-        <Typography className="line-clamp-1">{channelName}</Typography>
+        {!isLoadingGroupDetail && <Typography className="line-clamp-1">{channelName}</Typography>}
       </div>
       <div className="flex justify-center items-center text-white">
         <IconButton
@@ -38,13 +43,15 @@ function ChatContainerHeader({ isOpenChannelInfo, toggleOpenChannelInfo, channel
 ChatContainerHeader.propTypes = {
   channelName: PropTypes.string,
   isOpenChannelInfo: PropTypes.bool,
-  toggleOpenChannelInfo: PropTypes.func
+  toggleOpenChannelInfo: PropTypes.func,
+  isLoadingGroupDetail: PropTypes.bool
 };
 
 ChatContainerHeader.defaultProps = {
   channelName: "",
   isOpenChannelInfo: false,
-  toggleOpenChannelInfo: null
+  toggleOpenChannelInfo: null,
+  isLoadingGroupDetail: false
 };
 
 export default ChatContainerHeader;

@@ -5,29 +5,35 @@ import ViewSidebarOutlinedIcon from "@mui/icons-material/ViewSidebarOutlined";
 import { Avatar, IconButton } from "@mui/material";
 
 import ListGroup from "pages/WebUser/Home/ListGroup";
+import { useGetGroupDetail } from "hooks/groups/queries";
 
 import ChatContainerHeader from "./ChatContainerHeader";
+import MessageContainer from "./MessageContainer";
+import TextEditor from "./TextEditor";
 import "./style.css";
 
 function ChatContainer() {
-    const { channelId} = useParams();
+  const { channelId } = useParams();
   const [showLayout, toggleGroupDetail] = useOutletContext();
 
-  const {data: channelInfo} = use
+  const { data: groupDetail, isLoading } = useGetGroupDetail(
+    channelId === "null" ? null : channelId
+  );
 
   return (
     <div className="bg-slate-200 h-full w-full flex flex-col justify-between">
-      <ChatContainerHeader
-        isOpenChannelInfo={showLayout}
-        toggleOpenChannelInfo={toggleGroupDetail}
-        channelName={}
-      />
-
-      <div className="grow overflow-y-scroll overflow-x-hidden message-container">
-        <ListGroup />
-        <ListGroup />
+      <div className="">
+        <ChatContainerHeader
+          isOpenChannelInfo={showLayout}
+          toggleOpenChannelInfo={toggleGroupDetail}
+          channelName={groupDetail?.name}
+          isLoadingGroupDetail={isLoading}
+        />
       </div>
-      <div className="">TextEditor</div>
+      <div className="grow overflow-y-scroll overflow-x-hidden message-container">
+        <MessageContainer />
+      </div>
+      <TextEditor className="" />
     </div>
   );
 }

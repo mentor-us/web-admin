@@ -27,9 +27,15 @@ const AsyncMDAvatar = forwardRef(({ bgColor, size, shadow, src, ...rest }, ref) 
   }, []);
 
   return isLoading ? (
-    <Skeleton variant="circular" width={48} height={48} />
+    <Skeleton variant="circular" sx={rest.sx} />
   ) : (
-    <MDAvatarRoot ref={ref} src={imageBase64} ownerState={{ shadow, bgColor, size }} {...rest} />
+    <MDAvatarRoot
+      onLoad={() => URL.revokeObjectURL(imageBase64)}
+      ref={ref}
+      src={imageBase64}
+      ownerState={{ shadow, bgColor, size }}
+      {...rest}
+    />
   );
 });
 

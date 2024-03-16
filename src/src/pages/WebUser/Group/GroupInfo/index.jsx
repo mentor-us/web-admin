@@ -23,18 +23,19 @@ import {
   VotingQuestionIcon
 } from "assets/svgs";
 
-import MDAvatar from "components/MDComponents/MDAvatar";
+import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
 import { useGetGroupDetail } from "hooks/groups/queries";
 // Define the group information
 
 // eslint-disable-next-line react/prop-types, no-shadow
-function ChannelItem({ type, permission }) {
+function GroupInfoItem({ type, permission }) {
   // eslint-disable-next-line react/prop-types
 
-  if (permission === undefined) {
+  if (!permission) {
     // eslint-disable-next-line no-param-reassign
     permission = [];
   }
+
   switch (type) {
     case "member":
       return (
@@ -113,7 +114,8 @@ function ChannelItem({ type, permission }) {
       return null;
   }
 }
-ChannelItem.propTypes = {
+
+GroupInfoItem.propTypes = {
   type: PropTypes.oneOf(["member", "utility", "media"]).isRequired,
   permission: PropTypes.arrayOf(PropTypes.string).isRequired
 };
@@ -133,16 +135,25 @@ export default function GroupInfo() {
   };
 
   // const navigate = useNavigate();
-  const { groupId, channelId } = useParams();
-  const { data: detail, isLoading, isSuccess } = useGetGroupDetail(channelId || groupId);
+  const { channelId } = useParams();
+  const {
+    data: groupDetail,
+    isLoading,
+    isSuccess
+  } = useGetGroupDetail(channelId === "null" ? null : channelId);
+
   useEffect(() => {
     if (isLoading) {
       return;
     }
-    console.log(detail);
-  }, [detail, isLoading]);
+    console.log(groupDetail);
+  }, [groupDetail, isLoading]);
 
   if (isLoading) {
+    return null;
+  }
+
+  if (!channelId) {
     return null;
   }
 
@@ -155,8 +166,8 @@ export default function GroupInfo() {
       <div className="overflow-auto">
         <div className="header-info p-3">
           <div className="header-info ava flex justify-center items-center space-x-4 p-4 ">
-            <MDAvatar
-              src={detail.data.imageUrl}
+            <AsyncMDAvatar
+              src={groupDetail?.imageUrl}
               alt="detail-image"
               shadow="md"
               size="md"
@@ -170,14 +181,14 @@ export default function GroupInfo() {
             />
           </div>
           <div className="header-info name w-full font-bold text-base border-white flex justify-center items-center p-1">
-            {isSuccess && detail.data.name}
+            {isSuccess && groupDetail?.name}
             <IconButton size="small">
               <EditOutlinedIcon fontSize="inherit" />
             </IconButton>
           </div>
           <div className="header-info flex justify-center gap-8 text-xs items-center tools ">
             <div>
-              {isSuccess && detail.data?.permissions.includes("GROUP_SETTINGS") && (
+              {isSuccess && groupDetail?.permissions.includes("GROUP_SETTINGS") && (
                 <div className="tool-item bg-gray-100 hover:bg-slate-300 rounded-full">
                   <IconButton size="small" color="black">
                     <SettingsOutlinedIcon />
@@ -203,7 +214,7 @@ export default function GroupInfo() {
           <ListItemText
             disableTypography
             className="text-base font-bold"
-            primary={`Thành viên nhóm (${isSuccess && detail.data.totalMember})`}
+            primary={`Thành viên nhóm (${isSuccess && groupDetail?.totalMember})`}
           />
 
           {ShowGroupMember ? <ExpandLess /> : <ExpandMore />}
@@ -211,7 +222,7 @@ export default function GroupInfo() {
 
         <Collapse in={ShowGroupMember} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ChannelItem type="member" />
+            <GroupInfoItem type="member" />
           </List>
         </Collapse>
         <Divider
@@ -233,7 +244,7 @@ export default function GroupInfo() {
 
         <Collapse in={ShowGroupMedia} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ChannelItem type="media" />
+            <GroupInfoItem type="media" />
           </List>
         </Collapse>
         <ListItemButton onClick={toggleChannelUtility}>
@@ -244,7 +255,7 @@ export default function GroupInfo() {
 
         <Collapse in={ShowGroupUtility} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ChannelItem type="utility" permission={isSuccess && detail.data.permissions} />
+            <GroupInfoItem type="utility" permission={isSuccess && groupDetail?.permissions} />
           </List>
         </Collapse>
         <Divider

@@ -3,15 +3,16 @@ import { API_URL } from "config";
 const getBase64Image = async (res) => {
   const blob = await res.blob();
 
-  const reader = new FileReader();
+  // const reader = new FileReader();
 
-  await new Promise((resolve, reject) => {
-    reader.onload = resolve;
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
+  // await new Promise((resolve, reject) => {
+  //   reader.onload = resolve;
+  //   reader.onerror = reject;
+  //   reader.readAsDataURL(blob);
+  // });
 
-  return reader.result;
+  // return reader.result;
+  return URL.createObjectURL(blob);
 };
 
 const FileApi = {

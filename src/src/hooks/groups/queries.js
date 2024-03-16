@@ -3,9 +3,9 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 import GroupsServices from "service/groupsServices";
 
-import { GetAllHomeGroupInfinityKey, GetWorkspaceQueryKey } from "./keys";
+import { GetAllHomeGroupInfinityKey, GetGroupDetailKey, GetWorkspaceQueryKey } from "./keys";
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 25;
 
 export const useGetAllHomeGroupInfinity = () =>
   useInfiniteQuery({
@@ -35,7 +35,7 @@ export const useGetWorkSpace = (groupId, select) =>
 
 export const useGetGroupDetail = (groupId) =>
   useQuery({
-    queryKey: ["groupDetail", groupId],
+    queryKey: GetGroupDetailKey(groupId),
     queryFn: () => GroupsServices.getGroupDetail(groupId),
     enabled: !!groupId
   });

@@ -43,12 +43,12 @@ export default function GroupLayout() {
   };
 
   const navigate = useNavigate();
-  const { groupId } = useParams();
+  const { groupId, channelId } = useParams();
   const { data: workspace, isLoading, isSuccess } = useGetWorkSpace(groupId);
   const [selectedChannelId, setSelectedChannelId] = React.useState("");
 
-  const handleListItemClick = (channelId) => {
-    setSelectedChannelId(channelId);
+  const handleListItemClick = (id) => {
+    setSelectedChannelId(id);
   };
 
   const [showChannelList, setShowChannelList] = useState(true);
@@ -273,9 +273,8 @@ export default function GroupLayout() {
         <div className="grow h-full">
           <Outlet context={[showLayout, toggleGroupDetail]} />
         </div>
-        {showLayout && (
+        {channelId && showLayout && (
           <div className="w-80 h-full bg-slate-100">
-            {" "}
             <GroupInfo />
           </div>
         )}
