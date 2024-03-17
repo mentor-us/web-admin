@@ -36,7 +36,7 @@ function MessageContainer(props) {
           inverse
           loader={<h4>Loading...</h4>}
           scrollableTarget="scrollableDiv"
-          className="h-full pt-4"
+          className="w-full h-full pt-4"
         >
           {isSuccess &&
             messagesList.pages.map((message) => (

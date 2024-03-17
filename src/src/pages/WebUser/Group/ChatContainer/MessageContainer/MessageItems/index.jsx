@@ -26,14 +26,7 @@ function MessageItems({ message, isOwner }) {
   }
 
   return (
-    <div
-      style={{
-        maxWidth: "70%",
-        width: "70%",
-        marginBottom: 5
-      }}
-      className="flex space-x-2 mx-2 justify-start items-start"
-    >
+    <div className="flex space-x-2 justify-start items-start px-2 pb-2 max-w-[70%]">
       <Content />
     </div>
   );

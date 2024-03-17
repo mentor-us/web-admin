@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/forbid-prop-types */
 import { useState } from "react";
-import { Box, CircularProgress, IconButton, Paper, Typography } from "@mui/material";
+import { Box, CircularProgress, IconButton, Paper, Tooltip, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { useSnackbar } from "notistack";
@@ -108,7 +108,11 @@ function File({ file, isDownloadable }) {
         </Box>
 
         <Box flex={1}>
-          <Typography className="!text-base">{file?.filename}</Typography>
+          <Tooltip title={file?.filename}>
+            <Typography className="!text-base line-clamp-2 cursor-default">
+              {file?.filename}
+            </Typography>
+          </Tooltip>
           <Typography className="!text-xs text-gray-500">{formatFileSize(file?.size)}</Typography>
         </Box>
         {isDownloadable && (

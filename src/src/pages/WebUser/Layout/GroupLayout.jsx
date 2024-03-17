@@ -270,7 +270,7 @@ export default function GroupLayout() {
             </List>
           </div>
         </div>
-        <div className="grow h-full">
+        <div className="h-full flex-1">
           <Outlet context={[showLayout, toggleGroupDetail]} />
         </div>
         {channelId && showLayout && (

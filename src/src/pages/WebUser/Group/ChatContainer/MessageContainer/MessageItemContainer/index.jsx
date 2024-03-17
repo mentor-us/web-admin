@@ -49,7 +49,7 @@ function MessageItemContainer({ children, message, isOwner }) {
           />
         </ListItemAvatar>
       )}
-      <div className="w-full h-full space-y-1" style={containerStyle}>
+      <div className="h-full space-y-1" style={containerStyle}>
         <Typography className="!text-xs font-bold text-[#299C49]">
           {message?.sender?.name}
         </Typography>
