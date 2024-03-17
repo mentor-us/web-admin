@@ -11,6 +11,7 @@ import {
 import { getAllCategory, getPermissions } from "features/groupsCategory/slice";
 import { ConfirmProvider } from "material-ui-confirm";
 
+import { SnackbarProvider } from "notistack";
 import { privateRoutes, publicRoutes } from "routes";
 import { isAuthenticated } from "utils";
 
@@ -86,19 +87,31 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ConfirmProvider>
-        <Routes>
-          {publicRoutesRender(publicRoutes)}
-          {privateRoutesRender(privateRoutes)}
-          {/* {getRoutes(routes)} */}
-          <Route path="/" element={<Navigate to="/admin/groups" replace />} />
-          <Route path="*" element={<Navigate to="/not-found" replace />} />
-          <Route path="/web" element={<HomeLayout />}>
-            <Route index element={<WelcomePage />} />
-            <Route path="group/:groupId/*" element={<GroupRoutes />} />
-            <Route path="calendar" element={<div>Calendar</div>} />
-          </Route>
-        </Routes>
-        <ReactQueryDevtools initialIsOpen={false} />
+        <SnackbarProvider
+          maxSnack={3}
+          autoHideDuration={2000}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          iconVariant={{
+            success: "✅ ",
+            error: "✖️ ",
+            warning: "⚠️ ",
+            info: "ℹ️ "
+          }}
+        >
+          <Routes>
+            {publicRoutesRender(publicRoutes)}
+            {privateRoutesRender(privateRoutes)}
+            {/* {getRoutes(routes)} */}
+            <Route path="/" element={<Navigate to="/admin/groups" replace />} />
+            <Route path="*" element={<Navigate to="/not-found" replace />} />
+            <Route path="/web" element={<HomeLayout />}>
+              <Route index element={<WelcomePage />} />
+              <Route path="group/:groupId/*" element={<GroupRoutes />} />
+              <Route path="calendar" element={<div>Calendar</div>} />
+            </Route>
+          </Routes>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </SnackbarProvider>
       </ConfirmProvider>
     </QueryClientProvider>
   );

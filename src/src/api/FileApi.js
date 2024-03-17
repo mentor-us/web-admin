@@ -1,28 +1,27 @@
 import { API_URL } from "config";
 
 const getBase64Image = async (res) => {
-  const blob = await res.blob();
+  try {
+    const blob = await res.blob();
 
-  // const reader = new FileReader();
-
-  // await new Promise((resolve, reject) => {
-  //   reader.onload = resolve;
-  //   reader.onerror = reject;
-  //   reader.readAsDataURL(blob);
-  // });
-
-  // return reader.result;
-  return URL.createObjectURL(blob);
+    return URL.createObjectURL(blob);
+  } catch (e) {
+    return null;
+  }
 };
 
 const FileApi = {
   getFileWithKey(key) {
+    return FileApi.fetchFileWithKey(key).then(getBase64Image);
+  },
+
+  fetchFileWithKey(key) {
     if (!key) {
-      return "";
+      return Promise.resolve("");
     }
 
     if (key.startsWith("https")) {
-      return fetch(key).then(getBase64Image);
+      return fetch(key);
     }
 
     const searchParams = new URLSearchParams();
@@ -31,7 +30,7 @@ const FileApi = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`
       }
-    }).then(getBase64Image);
+    });
   }
 };
 

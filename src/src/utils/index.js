@@ -8,6 +8,31 @@ export const isEmptyObject = (objectIns) => {
   return objectIns && Object.keys(objectIns).length === 0 && objectIns.constructor === Object;
 };
 
+export const getFileExtention = (filename) => {
+  const splitedFileName = filename.toLowerCase().split(".");
+
+  // To get the file extension
+  return splitedFileName[splitedFileName.length - 1];
+};
+
+export const formatFileSize = (size) => {
+  let result;
+  switch (true) {
+    case size < 1000:
+      result = `${size} B`;
+      break;
+    case size >= 1000 && size < 1000000:
+      result = `${(size / 1000).toFixed(2)} KB`;
+      break;
+    case size >= 1000000:
+      result = `${(size / 1000000).toFixed(2)} MB`;
+      break;
+    default:
+      result = "N/A";
+  }
+  return result;
+};
+
 export const isEmailValid = (email) => {
   // const re = /^[^\s@]+@[^\s@]+\.[^a-zA-z@]+$/;
   // Ref: https://www.baeldung.com/java-email-validation-regex

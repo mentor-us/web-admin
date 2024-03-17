@@ -34,8 +34,6 @@ function MessageItemContainer({ children, message, isOwner }) {
         ...styles.otherContainer
       };
 
-  console.log(containerStyle);
-
   return (
     <ListItem>
       {!isOwner && (

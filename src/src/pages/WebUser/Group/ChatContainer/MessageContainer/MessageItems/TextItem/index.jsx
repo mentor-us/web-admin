@@ -14,6 +14,13 @@ function TextItem({ message, isOwner }) {
         primary={
           <div
             className="text-sm text-nowrap"
+            style={{
+              display: "block",
+              overflow: "hidden",
+              whiteSpace: "initial",
+              textOverflow: "ellipsis",
+              wordBreak: "break-word"
+            }}
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(message.content) }}
           />
         }

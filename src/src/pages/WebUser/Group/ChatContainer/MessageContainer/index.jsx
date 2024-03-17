@@ -40,7 +40,11 @@ function MessageContainer(props) {
         >
           {isSuccess &&
             messagesList.pages.map((message) => (
-              <MessageItems message={message} isOwner={myInfo?.id === message?.sender?.id} />
+              <MessageItems
+                key={message?.id}
+                message={message}
+                isOwner={myInfo?.id === message?.sender?.id}
+              />
             ))}
         </InfiniteScroll>
       )}
