@@ -12,14 +12,15 @@ const styles = {
     borderRadius: "0.4rem",
     padding: "0.4rem 0.4rem",
     borderWidth: 0.5,
-    color: "#333",
-    borderColor: "#2F88FF"
+    color: "#333"
   },
   ownerContainer: {
-    borderRadius: "0.4rem 0 0.4rem 0.4rem"
+    borderRadius: "0.4rem 0 0.4rem 0.4rem",
+    borderColor: "#2F88FF"
   },
   otherContainer: {
-    borderRadius: "0 0.4rem 0.4rem 0.4rem"
+    borderRadius: "0 0.4rem 0.4rem 0.4rem",
+    borderColor: "#ccc"
   }
 };
 

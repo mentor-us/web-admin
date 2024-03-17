@@ -15,7 +15,7 @@ function MessageItems({ message, isOwner }) {
       case MESSAGE_TYPE.TEXT:
         return <TextItem message={message} isOwner={isOwner} />;
       case MESSAGE_TYPE.IMAGE:
-        return <ImageItem message />;
+        return <ImageItem message={message} isOwner={isOwner} />;
       case MESSAGE_TYPE.VOTE:
         return <VoteItem message />;
       case MESSAGE_TYPE.FILE:
