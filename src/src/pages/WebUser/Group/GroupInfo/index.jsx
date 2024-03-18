@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+// eslint-disable-next-line no-unused-vars
+import { useNavigate, useParams } from "react-router";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
@@ -10,115 +11,14 @@ import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import PropTypes from "prop-types";
-
-import {
-  CalendarIcon,
-  FaqIcon,
-  GroupIcon,
-  MediaIcon,
-  TaskListIcon,
-  VotingQuestionIcon
-} from "assets/svgs";
 
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
+import GroupInfoItem from "pages/WebUser/Group/GroupInfo/GroupFunction";
 import { useGetGroupDetail } from "hooks/groups/queries";
 // Define the group information
 
 // eslint-disable-next-line react/prop-types, no-shadow
-function GroupInfoItem({ type, permission }) {
-  // eslint-disable-next-line react/prop-types
-
-  if (!permission) {
-    // eslint-disable-next-line no-param-reassign
-    permission = [];
-  }
-
-  switch (type) {
-    case "member":
-      return (
-        <ListItemButton>
-          <ListItemIcon>
-            <GroupIcon width={20} height={20} />
-          </ListItemIcon>
-          <ListItemText
-            disableTypography
-            className="text-base line-clamp-1"
-            primary="Xem thành viên"
-          />
-        </ListItemButton>
-      );
-    case "utility":
-      return (
-        <>
-          <ListItemButton>
-            <ListItemIcon>
-              <CalendarIcon width={20} height={20} />
-            </ListItemIcon>
-            <ListItemText disableTypography className="text-base line-clamp-1" primary="Lịch hẹn" />
-          </ListItemButton>
-          {permission.includes("BOARD_MANAGEMENT") && (
-            <ListItemButton>
-              <ListItemIcon>
-                <VotingQuestionIcon width={20} height={20} />
-              </ListItemIcon>
-              <ListItemText
-                disableTypography
-                className="text-base line-clamp-1"
-                primary="Bình chọn"
-              />
-            </ListItemButton>
-          )}
-          {permission.includes("TASK_MANAGEMENT") && (
-            <ListItemButton>
-              <ListItemIcon>
-                <TaskListIcon width={20} height={20} />
-              </ListItemIcon>
-              <ListItemText
-                disableTypography
-                className="text-base line-clamp-1"
-                primary="Danh sách công việc"
-              />
-            </ListItemButton>
-          )}
-          {permission.includes("FAQ_MANAGEMENT") && (
-            <ListItemButton>
-              <ListItemIcon>
-                <FaqIcon width={20} height={20} />
-              </ListItemIcon>
-              <ListItemText disableTypography className="text-base line-clamp-1" primary="FAQs" />
-            </ListItemButton>
-          )}
-        </>
-      );
-    case "media":
-      return (
-        <>
-          <ListItemButton>
-            <ListItemIcon>
-              <MediaIcon width={20} height={20} />
-            </ListItemIcon>
-            <ListItemText disableTypography className="text-base line-clamp-1" primary="Hình ảnh" />
-          </ListItemButton>
-          <ListItemButton>
-            <ListItemIcon>
-              <MediaIcon width={20} height={20} />
-            </ListItemIcon>
-            <ListItemText disableTypography className="text-base line-clamp-1" primary="Tập tin" />
-          </ListItemButton>
-        </>
-      );
-    default:
-      return null;
-  }
-}
-
-GroupInfoItem.propTypes = {
-  type: PropTypes.oneOf(["member", "utility", "media"]).isRequired,
-  permission: PropTypes.arrayOf(PropTypes.string).isRequired
-};
 
 export default function GroupInfo() {
   const [ShowGroupMember, setShowGroupMember] = useState(true);
