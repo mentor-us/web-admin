@@ -19,7 +19,7 @@ export default function GroupMedia() {
   const { data: channelMedia, isLoading, isSuccess } = useGetGroupMedia(channelId);
   const [ImageItem, setImageItem] = useState([]); // State for image items
   const [FileItem, setFileItem] = useState([]); // State for file items
-  const [imagesToRender, setImagesToRender] = useState(10); // Number of images to render at a time
+  const [imagesToRender, setImagesToRender] = useState(20); // Number of images to render at a time
   const containerRef = useRef(null); // Reference to the container div
 
   useEffect(() => {
@@ -103,7 +103,7 @@ export default function GroupMedia() {
           {value === 0 && ImageItem.length > 0 && (
             <ImageList cols={3}>
               {ImageItem.map((item) => (
-                <ImageListItem key={item.id}>
+                <ImageListItem key={item.imageUrl}>
                   <img src={item.base64Str} alt="hình ảnh" loading="lazy" />
                 </ImageListItem>
               ))}
