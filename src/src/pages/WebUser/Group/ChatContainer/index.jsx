@@ -30,9 +30,7 @@ function ChatContainer() {
           isLoadingGroupDetail={isLoading}
         />
       </div>
-      <div className="grow overflow-y-scroll overflow-x-hidden message-container">
-        <MessageContainer />
-      </div>
+      <MessageContainer channelId={channelId} />
       <TextEditor className="" />
     </div>
   );
