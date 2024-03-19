@@ -23,6 +23,7 @@ import WelcomePage from "pages/WebUser/Home/WelcomePage";
 import GroupRoutes from "pages/WebUser/Route/GroupRoutes";
 
 import "./index.css";
+import "./App.css";
 
 const publicRoutesRender = (publicRoutesList) =>
   publicRoutesList.map((route) => {
