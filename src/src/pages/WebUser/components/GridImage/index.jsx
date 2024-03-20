@@ -1,10 +1,12 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from "react";
-import { Box, CircularProgress, Grid, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, Skeleton, Typography } from "@mui/material";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import PropTypes from "prop-types";
 
+import { NotiFailed } from "assets/svgs";
+import colors from "assets/theme/base/colors";
 import FileApi from "api/FileApi";
 
 import "photoswipe/style.css";
@@ -12,7 +14,18 @@ import styles from "./styles.css";
 
 const countFrom = 5;
 
-function GridImage({ images, galleryID }) {
+function ImageSkeleton() {
+  return (
+    <Skeleton
+      sx={{ marginRight: "0.1rem", marginBottom: "0.1rem", flex: 1, cursor: "progress" }}
+      animation="wave"
+      variant="rectangular"
+      height="12rem"
+    />
+  );
+}
+
+function GridImage({ images, galleryID, uploadFailed }) {
   const [imageUrlList, setImageUrlList] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const lightBoxRef = useRef(null);
@@ -184,16 +197,20 @@ function GridImage({ images, galleryID }) {
       images.length > countFrom && countFrom === 1 ? renderCountOverlay(true) : renderOverlay();
     return (
       <Grid container className="container">
-        <Grid
-          item
-          xs={12}
-          md={12}
-          className="border height-one background"
-          style={{ backgroundImage: `url(${imageUrlList[0]})` }}
-          onClick={() => onOpenImagePreview(0)}
-        >
-          {overlay}
-        </Grid>
+        {images[0].isUploading ? (
+          <ImageSkeleton />
+        ) : (
+          <Grid
+            item
+            xs={12}
+            md={12}
+            className="border height-one background"
+            style={{ backgroundImage: `url(${imageUrlList[0]})` }}
+            onClick={() => onOpenImagePreview(0)}
+          >
+            {overlay}
+          </Grid>
+        )}
       </Grid>
     );
   };
@@ -209,30 +226,38 @@ function GridImage({ images, galleryID }) {
 
     return (
       <Grid container className="container">
-        <Grid
-          item
-          xs={6}
-          md={6}
-          className="border height-two background"
-          style={{
-            backgroundImage: `url(${conditionalRender ? imageUrlList[1] : imageUrlList[0]})`
-          }}
-          onClick={() => onOpenImagePreview(conditionalRender ? 1 : 0)}
-        >
-          {renderOverlay()}
-        </Grid>
-        <Grid
-          item
-          xs={6}
-          md={6}
-          className="border height-two background"
-          style={{
-            backgroundImage: `url(${conditionalRender ? imageUrlList[2] : imageUrlList[1]})`
-          }}
-          onClick={() => onOpenImagePreview(conditionalRender ? 2 : 1)}
-        >
-          {overlay}
-        </Grid>
+        {images[conditionalRender ? 1 : 0].isUploading ? (
+          <ImageSkeleton />
+        ) : (
+          <Grid
+            item
+            xs={6}
+            md={6}
+            className="border height-two background"
+            style={{
+              backgroundImage: `url(${conditionalRender ? imageUrlList[1] : imageUrlList[0]})`
+            }}
+            onClick={() => onOpenImagePreview(conditionalRender ? 1 : 0)}
+          >
+            {renderOverlay()}
+          </Grid>
+        )}
+        {images[conditionalRender ? 2 : 1].isUploading ? (
+          <ImageSkeleton />
+        ) : (
+          <Grid
+            item
+            xs={6}
+            md={6}
+            className="border height-two background"
+            style={{
+              backgroundImage: `url(${conditionalRender ? imageUrlList[2] : imageUrlList[1]})`
+            }}
+            onClick={() => onOpenImagePreview(conditionalRender ? 2 : 1)}
+          >
+            {overlay}
+          </Grid>
+        )}
       </Grid>
     );
   };
@@ -248,42 +273,54 @@ function GridImage({ images, galleryID }) {
 
     return (
       <Grid container className="container">
-        <Grid
-          item
-          xs={6}
-          md={4}
-          className="border height-three background"
-          style={{
-            backgroundImage: `url(${conditionalRender ? imageUrlList[1] : imageUrlList[2]})`
-          }}
-          onClick={() => onOpenImagePreview(conditionalRender ? 1 : 2)}
-        >
-          {renderOverlay(conditionalRender ? 1 : 2)}
-        </Grid>
-        <Grid
-          item
-          xs={6}
-          md={4}
-          className="border height-three background"
-          style={{
-            backgroundImage: `url(${conditionalRender ? imageUrlList[2] : imageUrlList[3]})`
-          }}
-          onClick={() => onOpenImagePreview(conditionalRender ? 2 : 3)}
-        >
-          {renderOverlay(conditionalRender ? 2 : 3)}
-        </Grid>
-        <Grid
-          item
-          xs={6}
-          md={4}
-          className="border height-three background"
-          style={{
-            backgroundImage: `url(${conditionalRender ? imageUrlList[3] : imageUrlList[4]})`
-          }}
-          onClick={() => onOpenImagePreview(conditionalRender ? 3 : 4)}
-        >
-          {overlay}
-        </Grid>
+        {images[conditionalRender ? 1 : 2].isUploading ? (
+          <ImageSkeleton />
+        ) : (
+          <Grid
+            item
+            xs={6}
+            md={4}
+            className="border height-three background"
+            style={{
+              backgroundImage: `url(${conditionalRender ? imageUrlList[1] : imageUrlList[2]})`
+            }}
+            onClick={() => onOpenImagePreview(conditionalRender ? 1 : 2)}
+          >
+            {renderOverlay(conditionalRender ? 1 : 2)}
+          </Grid>
+        )}
+        {images[conditionalRender ? 2 : 3].isUploading ? (
+          <ImageSkeleton />
+        ) : (
+          <Grid
+            item
+            xs={6}
+            md={4}
+            className="border height-three background"
+            style={{
+              backgroundImage: `url(${conditionalRender ? imageUrlList[2] : imageUrlList[3]})`
+            }}
+            onClick={() => onOpenImagePreview(conditionalRender ? 2 : 3)}
+          >
+            {renderOverlay(conditionalRender ? 2 : 3)}
+          </Grid>
+        )}
+        {images[conditionalRender ? 3 : 4].isUploading ? (
+          <ImageSkeleton />
+        ) : (
+          <Grid
+            item
+            xs={6}
+            md={4}
+            className="border height-three background"
+            style={{
+              backgroundImage: `url(${conditionalRender ? imageUrlList[3] : imageUrlList[4]})`
+            }}
+            onClick={() => onOpenImagePreview(conditionalRender ? 3 : 4)}
+          >
+            {overlay}
+          </Grid>
+        )}
       </Grid>
     );
   };
@@ -291,11 +328,40 @@ function GridImage({ images, galleryID }) {
   return (
     <div className="grid-container w-[20rem]" id={galleryID}>
       {isLoaded && (
-        <>
+        <Box position="relative">
           {[1, 3, 4].includes(imagesToShow.length) && renderOne()}
           {imagesToShow.length >= 2 && imagesToShow.length !== 4 && renderTwo()}
           {imagesToShow.length >= 4 && renderThree()}
-        </>
+          {uploadFailed && (
+            <Box
+              style={{
+                alignItems: "center",
+                backgroundColor: "#000a",
+                bottom: 0,
+                justifyContent: "center",
+                left: 0,
+                position: "absolute",
+                right: 0,
+                top: 0,
+                zIndex: 0,
+                borderRadius: 8
+              }}
+            >
+              <Box
+                height="100%"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                flexDirection="column"
+              >
+                <NotiFailed />
+                <Typography style={{ color: colors.white.main, fontWeight: "bold" }}>
+                  Gửi ảnh thất bại
+                </Typography>
+              </Box>
+            </Box>
+          )}
+        </Box>
       )}
 
       {!isLoaded && (
@@ -309,7 +375,12 @@ function GridImage({ images, galleryID }) {
 
 GridImage.propTypes = {
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
-  galleryID: PropTypes.string.isRequired
+  galleryID: PropTypes.string.isRequired,
+  uploadFailed: PropTypes.bool
+};
+
+GridImage.defaultProps = {
+  uploadFailed: false
 };
 
 export default GridImage;

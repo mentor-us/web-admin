@@ -8,7 +8,11 @@ import MessageItemContainer from "../../MessageItemContainer";
 function ImageItem({ message, isOwner }) {
   return (
     <MessageItemContainer isOwner={isOwner} message={message}>
-      <GridImage images={message?.images} galleryID={`images-${message?.id}`} />
+      <GridImage
+        images={message?.images}
+        uploadFailed={message?.uploadFailed ?? false}
+        galleryID={`images-${message?.id}`}
+      />
     </MessageItemContainer>
   );
 }

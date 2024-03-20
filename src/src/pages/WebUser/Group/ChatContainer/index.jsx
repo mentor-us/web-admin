@@ -31,7 +31,7 @@ function ChatContainer() {
         />
       </div>
       <MessageContainer channelId={channelId} />
-      <TextEditor className="" />
+      <TextEditor className="" channelId={channelId} />
     </div>
   );
 }

@@ -3,17 +3,20 @@ import React from "react";
 import { Box } from "@mui/material";
 import PropTypes from "prop-types";
 
-function TextEditor(props) {
+import EditorToolbar from "./EditorToolbar";
+import RichTextField from "./RichTextField";
+
+function TextEditor({ channelId }) {
   return (
     <Box className="bg-white">
-      <Box className="h-[47px]" display="flex" alignItems="center">
-        Toolbar
-      </Box>
-      <Box className="h-[58px]">Chat</Box>
+      <EditorToolbar channelId={channelId} />
+      <RichTextField />
     </Box>
   );
 }
 
-TextEditor.propTypes = {};
+TextEditor.propTypes = {
+  channelId: PropTypes.string.isRequired
+};
 
 export default TextEditor;

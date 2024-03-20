@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/forbid-prop-types */
+import { Box } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { MESSAGE_TYPE } from "utils/constants";
@@ -26,9 +28,9 @@ function MessageItems({ message, isOwner }) {
   }
 
   return (
-    <div className="flex space-x-2 justify-start items-start px-2 pb-2 max-w-[70%]">
+    <Box>
       <Content />
-    </div>
+    </Box>
   );
 }
 

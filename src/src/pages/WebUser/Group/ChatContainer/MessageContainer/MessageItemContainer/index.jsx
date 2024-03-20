@@ -1,5 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
-import { ListItem, ListItemAvatar, Typography } from "@mui/material";
+import { Box, ListItem, ListItemAvatar, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { getTime } from "utils";
@@ -36,35 +36,43 @@ function MessageItemContainer({ children, message, isOwner }) {
       };
 
   return (
-    <ListItem>
-      {!isOwner && (
-        <ListItemAvatar sx={{ alignSelf: "start", marginRight: "0.5rem", minWidth: 0 }}>
-          <AsyncMDAvatar
-            sx={{
-              width: "32px",
-              height: "32px",
-              marginRight: 0,
-              padding: 0
+    <Box
+      className={`flex space-x-2 items-start px-2 pb-2 ${
+        isOwner ? " justify-end" : "justify-start"
+      }`}
+    >
+      <ListItem className={`max-w-[70%] ${isOwner ? "!justify-end" : ""}`}>
+        {!isOwner && (
+          <ListItemAvatar sx={{ alignSelf: "start", marginRight: "0.5rem", minWidth: 0 }}>
+            <AsyncMDAvatar
+              sx={{
+                width: "32px",
+                height: "32px",
+                marginRight: 0,
+                padding: 0
+              }}
+              src={message?.sender?.imageUrl}
+            />
+          </ListItemAvatar>
+        )}
+        <div className="h-full space-y-1" style={containerStyle}>
+          {!isOwner && (
+            <Typography className="!text-xs font-bold text-[#299C49]">
+              {message?.sender?.name}
+            </Typography>
+          )}
+          {children}
+          <Typography
+            className="!text-sm"
+            style={{
+              color: "#888"
             }}
-            src={message?.sender?.imageUrl}
-          />
-        </ListItemAvatar>
-      )}
-      <div className="h-full space-y-1" style={containerStyle}>
-        <Typography className="!text-xs font-bold text-[#299C49]">
-          {message?.sender?.name}
-        </Typography>
-        {children}
-        <Typography
-          className="!text-sm"
-          style={{
-            color: "#888"
-          }}
-        >
-          {getTime(message?.createdDate)}
-        </Typography>
-      </div>
-    </ListItem>
+          >
+            {getTime(message?.createdDate)}
+          </Typography>
+        </div>
+      </ListItem>
+    </Box>
   );
 }
 
