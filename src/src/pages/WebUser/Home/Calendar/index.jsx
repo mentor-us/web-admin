@@ -13,23 +13,40 @@ import {
   WorkWeek
 } from "@syncfusion/ej2-react-schedule";
 
-import { CALENDAR_ID, SECRECT_API_KEY_CALENDAR } from "config";
-// import EventApi from "api/EventApi";
+import { API_URL, CALENDAR_ID, SECRECT_API_KEY_CALENDAR } from "config";
 
+import { useGetAllEvents } from "hooks/events/queries";
+// import EventApi from "api/EventApi";
+// const URL_FETCH_EVENT = `${API_URL}/api/events/own`;
+const URL_SYNC = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${SECRECT_API_KEY_CALENDAR}`;
+// const URL_EXAMPLE_DATA = `https://js.syncfusion.com/demos/ejserveices/api/Schedule/LoadData`;
 export default function Calendar() {
+  const { data: events, isLoading, isSuccess } = useGetAllEvents();
+  if (isLoading) {
+    return <div className="">isLoading</div>;
+  }
   //   const data = EventApi.getSchedulesData();
-  //   console.log(data);
+  console.log(events);
+  console.log(API_URL);
+  console.log(URL_SYNC);
   const remoteData = new DataManager({
-    url: `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${SECRECT_API_KEY_CALENDAR}`,
+    // data: events,
+    url: URL_SYNC,
     adaptor: new WebApiAdaptor(),
     crossDomain: true
   });
   function onDataBinding(e) {
-    const items = e.result;
+    console.log("onDataBinding");
+    console.log(e);
+    const data = e.result;
+    const { items } = data;
+
     const schedulerData = [];
     if (items.length > 0) {
       // eslint-disable-next-line no-restricted-syntax
       for (const event of items) {
+        // console.log(event);
+
         const isAllDay = !event.start.dateTime;
         let start = event.start.dateTime;
         let end = event.end.dateTime;
@@ -48,32 +65,34 @@ export default function Calendar() {
     }
     e.result = schedulerData;
   }
-  return (
-    <div className="flex flex-row">
-      <div className="w-80">Mini calendar</div>
-      <div className="">
-        <ScheduleComponent
-          width="70%"
-          height="650px"
-          eventSettings={{ dataSource: remoteData }}
-          // eslint-disable-next-line react/jsx-no-bind
-          dataBinding={onDataBinding}
-          currentView="Month"
-        >
-          <Inject
-            services={[
-              Day,
-              Week,
-              WorkWeek,
-              Month,
-              Agenda,
-              MonthAgenda,
-              TimelineViews,
-              TimelineMonth
-            ]}
-          />
-        </ScheduleComponent>
+  if (isSuccess)
+    return (
+      <div className="flex flex-row">
+        <div className="w-80">Mini calendar</div>
+        <div className="grow h-full">
+          <ScheduleComponent
+            className="ml-5"
+            width="100%"
+            height="650px"
+            eventSettings={{ dataSource: remoteData }}
+            // eslint-disable-next-line react/jsx-no-bind
+            dataBinding={onDataBinding}
+            currentView="Month"
+          >
+            <Inject
+              services={[
+                Day,
+                Week,
+                WorkWeek,
+                Month,
+                Agenda,
+                MonthAgenda,
+                TimelineViews,
+                TimelineMonth
+              ]}
+            />
+          </ScheduleComponent>
+        </div>
       </div>
-    </div>
-  );
+    );
 }
