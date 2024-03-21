@@ -37,9 +37,7 @@ function MessageItemContainer({ children, message, isOwner }) {
 
   return (
     <Box
-      className={`flex space-x-2 items-start px-2 pb-2 ${
-        isOwner ? " justify-end" : "justify-start"
-      }`}
+      className={`flex space-x-2 items-start px-2 ${isOwner ? " justify-end" : "justify-start"}`}
     >
       <ListItem className={`max-w-[70%] ${isOwner ? "!justify-end" : ""}`}>
         {!isOwner && (

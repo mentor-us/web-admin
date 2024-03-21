@@ -1,0 +1,7 @@
+.wrap-block {
+  display: block;
+  overflow: hidden;
+  white-space: initial;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+}

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 // eslint-disable-next-line no-unused-vars
 import { useNavigate, useParams } from "react-router";
@@ -7,7 +8,7 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import { IconButton } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
@@ -85,23 +86,30 @@ export default function GroupInfo() {
 
   return (
     <div className="flex flex-col w-80 h-full bg-white border-r-[2px]">
-      <div className="h-16 bg-white">
-        <div className="w-full font-bold text-base border-white flex justify-center items-center space-x-4 p-4 border-l-2">
+      <Box className="min-h-16 h-16 p-4 bg-white">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          position="relative"
+          className="w-full font-bold text-base"
+        >
           {showTypeScreen !== "" ? (
-            <span className="hover:bg-slate-300 rounded-full">
-              <IconButton
-                size="small"
-                onClick={() => {
-                  selectedType("");
-                }}
-              >
-                <ArrowBackIcon fontSize="inherit" />
-              </IconButton>
-            </span>
+            <IconButton
+              className="!absolute !left-0 hover:!bg-slate-300 rounded-full"
+              size="small"
+              onClick={() => {
+                selectedType("");
+              }}
+            >
+              <ArrowBackIcon fontSize="inherit" />
+            </IconButton>
           ) : null}
-          <span>{headerInfo}</span>
-        </div>
-      </div>
+          <Tooltip title={headerInfo}>
+            <span className="line-clamp-1 max-w-[74%]">{headerInfo}</span>
+          </Tooltip>
+        </Box>
+      </Box>
       <hr />
       {showTypeScreen === "" ? (
         <div className="overflow-auto">

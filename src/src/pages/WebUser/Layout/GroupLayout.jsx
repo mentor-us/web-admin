@@ -90,8 +90,8 @@ export default function GroupLayout() {
 
   return (
     <>
-      <div className="flex flex-row h-full">
-        <div className="flex flex-col w-80 h-full bg-white border-r-[2px]">
+      <div className="flex w-full h-full">
+        <div className="flex flex-col min-w-80 w-80 h-full bg-white border-r-[2px]">
           <div className="h-16 bg-white ">
             {isSuccess && <GroupHeader groupName={workspace?.name} isLoading={isLoading} />}
           </div>
@@ -270,11 +270,11 @@ export default function GroupLayout() {
             </List>
           </div>
         </div>
-        <div className="h-full flex-1">
+        <div className="h-full w-full">
           <Outlet context={[showLayout, toggleGroupDetail]} />
         </div>
         {channelId && showLayout && (
-          <div className="w-80 h-full bg-slate-100">
+          <div className="min-w-78 w-78 h-full bg-slate-100 border-l-2">
             <GroupInfo />
           </div>
         )}

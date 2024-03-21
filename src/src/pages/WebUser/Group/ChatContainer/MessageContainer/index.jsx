@@ -41,7 +41,7 @@ function MessageContainer({ channelId }) {
       }}
     >
       <InfiniteScroll
-        className="pt-4"
+        className="pt-4 gap-y-4"
         scrollableTarget="scrollableDiv"
         dataLength={
           !isSuccess

@@ -19,11 +19,11 @@ function MessageItems({ message, isOwner }) {
       case MESSAGE_TYPE.IMAGE:
         return <ImageItem message={message} isOwner={isOwner} />;
       case MESSAGE_TYPE.VOTE:
-        return <VoteItem message />;
+        return <VoteItem message={message} />;
       case MESSAGE_TYPE.FILE:
         return <FileItem message={message} isOwner={isOwner} />;
       default:
-        return null;
+        return <TextItem message={message} isOwner={isOwner} />;
     }
   }
 

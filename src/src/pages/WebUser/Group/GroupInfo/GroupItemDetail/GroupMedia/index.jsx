@@ -1,17 +1,29 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import {
   BottomNavigation,
   BottomNavigationAction,
+  Box,
   CircularProgress,
   Divider,
   ImageList,
-  ImageListItem
+  ImageListItem,
+  styled,
+  Tab,
+  Tabs
 } from "@mui/material";
 
 import FileApi from "api/FileApi";
 
 import { useGetGroupMedia } from "hooks/channels/queries";
+
+const AntTabs = styled(Tabs)({
+  borderBottom: "1px solid #e8e8e8",
+  "& .MuiTabs-indicator": {
+    backgroundColor: "#1890ff"
+  }
+});
 
 export default function GroupMedia() {
   const { channelId } = useParams();
@@ -58,35 +70,62 @@ export default function GroupMedia() {
     }
   };
 
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`
+    };
+  }
+
   return (
-    <div className="overflow-auto" onScroll={handleScroll} ref={containerRef}>
+    <Box className="overflow-y-scroll no-scrollbar" onScroll={handleScroll} ref={containerRef}>
       <BottomNavigation
         showLabels
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue);
         }}
-        className="bg-white font-bold text-base"
-        sx={{
-          "& .Mui-selected": {
-            color: "#0190fe"
-          },
-          "& .MuiBottomNavigationAction-root": {
-            color: "#A5A5A5"
-          },
-          height: "40px"
-        }}
+        className="bg-white font-bold text-base border-b-2 mb-1 !h-[2rem]"
+        // sx={{
+        //   "&.Mui-selected": {
+        //     color: "#0190fe"
+        //   },
+        //   "&.MuiBottomNavigationAction-root": {
+        //     color: "#A5A5A5"
+        //   },
+        //   height: "40px"
+        // }}
       >
-        <BottomNavigationAction label="Hình ảnh" />
-        <BottomNavigationAction label="Tập tin" />
+        <BottomNavigationAction
+          className="!p-0 !m-0"
+          showLabel
+          // sx={{
+          //   "&:hover": {
+          //     backgroundColor: `#0190fe !important` // Using theme color here
+          //   },
+          //   "&:focus": {
+          //     backgroundColor: `#0190fe !important`, // Using theme color here
+          //     outline: "none" // Remove default focus outline if desired
+          //   }
+          // }}
+          label="Hình ảnh"
+        />
+
+        <BottomNavigationAction
+          className="!p-0 !m-0"
+          showLabel
+          // sx={{
+          //   "&:hover": {
+          //     backgroundColor: `#0190fe !important` // Using theme color here
+          //   },
+          //   "&:focus": {
+          //     backgroundColor: `#0190fe !important`, // Using theme color here
+          //     outline: "none" // Remove default focus outline if desired
+          //   }
+          // }}
+          label="Tập tin"
+        />
       </BottomNavigation>
-      <Divider
-        sx={{
-          margin: 1,
-          padding: 0,
-          backgroundColor: "#A5A5A5"
-        }}
-      />
       {isLoading ? ( // Display spinner when loading
         <div
           style={{
@@ -120,6 +159,6 @@ export default function GroupMedia() {
           {value === 1 && FileItem.length === 0 && <div>Chưa có file</div>}
         </>
       )}
-    </div>
+    </Box>
   );
 }

@@ -2,6 +2,7 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable global-require */
 import AnimationPerson from "./animation-person.png";
+import ColumnChartImage from "./column_chart_img.png";
 import docx from "./docx.png";
 import excel from "./excel.png";
 import pdf from "./pdf_1.png";
@@ -15,5 +16,6 @@ export const images = {
   png,
   excel,
   ppt,
-  pdf
+  pdf,
+  ColumnChartImage
 };

@@ -25,6 +25,8 @@
     "dompurify": "^3.0.9",
     "dotenv": "^16.3.1",
     "env-cmd": "^10.1.0",
+    "jodit": "^4.0.18",
+    "jodit-react": "^4.0.15",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "material-ui-confirm": "^3.0.11",
