@@ -15,6 +15,7 @@ export const useGetAllEvents = () =>
           return {
             ...event,
             start: new Date(event.timeStart)
+            // backgroundColor: "rgb(125 211 252)"
           };
         });
         return events;
