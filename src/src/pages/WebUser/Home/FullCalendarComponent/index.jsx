@@ -1,9 +1,11 @@
+/* eslint-disable react/button-has-type */
 // import { useEffect, useRef, useState } from "react";
 import { useRef } from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionGridPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import TodayIcon from "@mui/icons-material/Today";
 
 import { useGetAllEvents } from "hooks/events/queries";
 import { formatDate } from "utils/dateHelper";
@@ -13,6 +15,8 @@ import "./index.css";
 // eslint-disable-next-line import/prefer-default-export
 export function FullCalendarComponent() {
   const { data: events, isLoading, isSuccess } = useGetAllEvents();
+  // const [openModalDetail, setOpenModalDetail] = useState(false);
+  // const propsModal = useRef(null);
   const mainCalendarRef = useRef(null);
   if (isLoading) {
     return <div className="">isLoading</div>;
@@ -32,7 +36,10 @@ export function FullCalendarComponent() {
   return (
     <div className="flex h-full w-full">
       <div className="w-80 flex flex-col sub-calendar">
-        <div className="">Select kind event1</div>
+        <div className="">
+          Select kind event1
+          <TodayIcon />
+        </div>
         <div className="grow p-2">
           <FullCalendar
             height="350px"
@@ -43,8 +50,12 @@ export function FullCalendarComponent() {
             headerToolbar={{
               start: "prev",
               center: "title",
-              end: "next"
+              end: "today,next"
             }}
+            // buttonIcons={{
+            //   // prev: "chevron-right"
+            //   // next: "chevron-left"
+            // }}
             weekends
             // eventContent
           />
@@ -57,12 +68,14 @@ export function FullCalendarComponent() {
           plugins={[dayGridPlugin, timeGridPlugin, interactionGridPlugin]}
           initialView="dayGridMonth"
           headerToolbar={{
-            start: "dayGridMonth,timeGridWeek,timeGridDay",
+            start: "",
             center: "title",
-            end: "today"
+            end: "dayGridMonth,timeGridWeek,timeGridDay"
           }}
+          // bootstrapFontAwesome={{
+          //   dayGridMonth: "fa-times"
+          // }}
           dateClick={(date) => {
-            // setCurrentDay(new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000));
             console.log("dateClick");
             console.log(date);
           }}
