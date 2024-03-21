@@ -1,5 +1,7 @@
 import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionGridPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
+import timeGridPlugin from "@fullcalendar/timegrid";
 
 import { useGetAllEvents } from "hooks/events/queries";
 import { formatDate } from "utils/dateHelper";
@@ -17,11 +19,33 @@ export function FullCalendarComponent() {
   }
   return (
     <div className="flex h-full w-full">
-      <div className="grow">
+      <div className="w-80 flex flex-col sub-calendar">
+        <div className="">Select kind event</div>
+        <div className="grow p-2">
+          <FullCalendar
+            height="300px"
+            aspectRatio={1.7}
+            plugins={[dayGridPlugin]}
+            initialView="dayGridMonth"
+            headerToolbar={{
+              start: "prev",
+              center: "title",
+              end: "next"
+            }}
+            weekends
+          />
+        </div>
+      </div>
+      <div className="grow p-5">
         <FullCalendar
           height="100%"
-          plugins={[dayGridPlugin]}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionGridPlugin]}
           initialView="dayGridMonth"
+          headerToolbar={{
+            start: "dayGridMonth,timeGridWeek,timeGridDay",
+            center: "title",
+            end: "today prev,next"
+          }}
           weekends
           events={[...events]}
           // eslint-disable-next-line no-use-before-define

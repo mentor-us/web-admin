@@ -1,6 +1,5 @@
 .fc td{
-    width: 150px;
-    max-width: 150px;
+  
 }
 .block {
     display: block;
@@ -23,4 +22,11 @@
 }
 .fc-col-header{
     background-color: rgb(125 211 252);
+}
+.sub-calendar .fc-header-toolbar{
+    font-size: small;
+    margin-bottom: 0;
+}
+.sub-calendar .calendar tr{
+    /* height: fit-content; */
 }
