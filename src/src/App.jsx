@@ -17,10 +17,14 @@ import { isAuthenticated } from "utils";
 
 import ProtectedAuth from "pages/Auth/ProtectedAuth";
 import HomeLayout from "pages/WebUser/Home";
+import Calendar from "pages/WebUser/Home/Calendar";
+import { FullCalendarComponent } from "pages/WebUser/Home/FullCalendarComponent";
+import UpcomingEvent from "pages/WebUser/Home/UpcomingEvent";
 import WelcomePage from "pages/WebUser/Home/WelcomePage";
 import GroupRoutes from "pages/WebUser/Route/GroupRoutes";
 
 import "./index.css";
+import "./App.css";
 
 const publicRoutesRender = (publicRoutesList) =>
   publicRoutesList.map((route) => {
@@ -107,7 +111,9 @@ function App() {
             <Route path="/web" element={<HomeLayout />}>
               <Route index element={<WelcomePage />} />
               <Route path="group/:groupId/*" element={<GroupRoutes />} />
-              <Route path="calendar" element={<div>Calendar</div>} />
+              {/* <Route path="calendar" element={<Calendar />} /> */}
+              <Route path="calendar" element={<FullCalendarComponent />} />
+              <Route path="upcoming-event" element={<UpcomingEvent />} />
             </Route>
           </Routes>
           <ReactQueryDevtools initialIsOpen={false} />

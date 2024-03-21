@@ -2,6 +2,8 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import EventIcon from "@mui/icons-material/Event";
+import EventOutlinedIcon from "@mui/icons-material/EventOutlined";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { Button, IconButton, Tooltip } from "@mui/material";
@@ -40,6 +42,19 @@ export default function SideBar() {
         <ListGroup />
       </div>
       <div className="">
+        <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600">
+          <NavLink className="w-full h-full flex justify-center items-center " to="upcoming-event">
+            {({ isActive }) => (
+              <IconButton color="white" aria-label="Setting">
+                {isActive ? (
+                  <EventIcon fontSize="medium" />
+                ) : (
+                  <EventOutlinedIcon fontSize="medium" />
+                )}
+              </IconButton>
+            )}
+          </NavLink>
+        </div>
         <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600">
           <NavLink className="w-full h-full flex justify-center items-center " to="calendar">
             {({ isActive }) => (

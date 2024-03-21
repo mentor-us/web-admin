@@ -1,0 +1,55 @@
+/* all calendar */
+.fc td{
+  
+}
+.block {
+    display: block;
+    overflow: hidden;
+    white-space: initial;
+    text-overflow: ellipsis;
+    word-wrap: break-word
+}
+.fc-event{
+    cursor: pointer;
+    padding: 0.25rem;
+    padding-left: 0.5rem;
+    overflow: hidden;
+    white-space: initial;
+    text-overflow: ellipsis;
+    word-wrap: break-word
+    /* flex-direction: column; */
+    /* padding: 1rem; */
+}
+
+.fc-event .fc-event-main{
+    cursor: pointer;
+    /* flex-direction: column; */
+}
+.fc-event:hover{
+    /* background-color: lightblue; */
+}
+.fc-daygrid-day-top{
+    flex-direction: row !important;
+    /* padding-left: 1rem; */
+}
+.fc-col-header{
+    background-color: rgb(125 211 252);
+}
+/* main-calendar */
+.main-calendar .fc-header-toolbar{
+    font-size: medium;
+    margin-bottom: 0 !important;
+}
+
+
+/* sub-calendar */
+.sub-calendar .fc-header-toolbar{
+    font-size: small;
+    margin-bottom: 0 !important;
+}
+.sub-calendar .fc-daygrid-day-events{
+    display: none;
+}
+.sub-calendar .fc-day{
+    cursor: pointer;
+}
