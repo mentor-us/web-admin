@@ -70,3 +70,4 @@ export const getTime = (dateStr) => {
 
   return `${hh}:${mm} ${getMomentTime(dateStr)}`;
 };
+export { formatDate };

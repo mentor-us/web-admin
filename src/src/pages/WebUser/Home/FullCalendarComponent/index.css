@@ -1,0 +1,26 @@
+.fc td{
+    width: 150px;
+    max-width: 150px;
+}
+.block {
+    display: block;
+    overflow: hidden;
+    white-space: initial;
+    text-overflow: ellipsis;
+    word-wrap: break-word
+}
+.fc-event{
+    cursor: pointer;
+    flex-direction: column;
+    /* padding: 1rem; */
+}
+.fc-event:hover{
+    background-color: transparent;
+}
+.fc-daygrid-day-top{
+    flex-direction: row !important;
+    padding-left: 1rem;
+}
+.fc-col-header{
+    background-color: rgb(125 211 252);
+}

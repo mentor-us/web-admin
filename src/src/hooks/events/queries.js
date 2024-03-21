@@ -7,6 +7,19 @@ import EventService from "service/EventService";
 export const useGetAllEvents = () =>
   useQuery({
     queryKey: ["events"],
-    queryFn: () => EventService.getAllEvent(),
+    queryFn: async () => {
+      const res = await EventService.getAllEvent();
+      if (res.data && res.data.length > 0) {
+        let events = res.data;
+        events = events.map((event) => {
+          return {
+            ...event,
+            start: new Date(event.timeStart)
+          };
+        });
+        return events;
+      }
+      return [];
+    },
     enabled: true
   });
