@@ -14,7 +14,8 @@ export const useGetAllEvents = () =>
         events = events.map((event) => {
           return {
             ...event,
-            start: new Date(event.timeStart)
+            start: new Date(event.deadline ?? event.timeStart),
+            timeStart: event.deadline ?? event.timeStart
             // backgroundColor: "rgb(125 211 252)"
           };
         });

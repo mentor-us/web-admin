@@ -30,6 +30,7 @@ export function FullCalendarComponent() {
   };
   const handleClickEvent = (event) => {
     // showModal
+    console.log("handleClickEvent");
     console.log(event.event);
     console.log(event.event.id);
   };
@@ -72,9 +73,12 @@ export function FullCalendarComponent() {
             center: "title",
             end: "dayGridMonth,timeGridWeek,timeGridDay"
           }}
-          // bootstrapFontAwesome={{
-          //   dayGridMonth: "fa-times"
-          // }}
+          slotLabelFormat={{
+            hour: "2-digit",
+            minute: "2-digit",
+            omitZeroMinute: false,
+            hour12: false // Set to false for 24-hour format
+          }}
           dateClick={(date) => {
             console.log("dateClick");
             console.log(date);
