@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 
+import GroupMedia from "./GroupMedia";
 import GroupMember from "./GroupMember";
 
 function GroupItemDetail({ type }) {
@@ -13,7 +14,7 @@ function GroupItemDetail({ type }) {
     return <div>Công việc</div>;
   }
   if (type === "IMAGE" || type === "FILE") {
-    return <div>Bộ sưu tập</div>;
+    return <GroupMedia />;
   }
   if (type === "FAQ") {
     return <div>FAQ</div>;
