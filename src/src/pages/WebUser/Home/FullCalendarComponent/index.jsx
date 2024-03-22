@@ -10,6 +10,7 @@ import TodayIcon from "@mui/icons-material/Today";
 import { useGetAllEvents } from "hooks/events/queries";
 import { formatDate } from "utils/dateHelper";
 
+import viLocale from "./vi";
 import "./index.css";
 
 // eslint-disable-next-line import/prefer-default-export
@@ -44,6 +45,8 @@ export function FullCalendarComponent() {
         <div className="grow p-2">
           <FullCalendar
             height="350px"
+            locale={viLocale}
+            dayHeaderFormat={{ weekday: "narrow" }}
             plugins={[dayGridPlugin, interactionGridPlugin]}
             initialView="dayGridMonth"
             events={[]}
@@ -51,7 +54,7 @@ export function FullCalendarComponent() {
             headerToolbar={{
               start: "prev",
               center: "title",
-              end: "today,next"
+              end: "next"
             }}
             // buttonIcons={{
             //   // prev: "chevron-right"
@@ -68,6 +71,8 @@ export function FullCalendarComponent() {
           height="100%"
           plugins={[dayGridPlugin, timeGridPlugin, interactionGridPlugin]}
           initialView="dayGridMonth"
+          dayHeaderFormat={{ weekday: "long" }}
+          locale={viLocale}
           headerToolbar={{
             start: "",
             center: "title",

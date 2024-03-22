@@ -1,6 +1,6 @@
 /* all calendar */
-.fc td{
-  
+.fc-highlight{
+    background-color: #2f88ff83 !important;
 }
 .block {
     display: block;
@@ -20,13 +20,20 @@
     /* flex-direction: column; */
     /* padding: 1rem; */
 }
-
+.fc-day { 
+    border-radius: 5px;
+}
+.fc-daygrid-day{
+    cursor: pointer;
+}
+.fc-daygrid-day:hover{
+    background-color: #2f88ff83 !important;
+}
 .fc-event .fc-event-main{
     cursor: pointer;
-    /* flex-direction: column; */
 }
 .fc-event:hover{
-    /* background-color: lightblue; */
+    
 }
 .fc-daygrid-day-top{
     flex-direction: row !important;
@@ -35,6 +42,12 @@
 .fc-col-header{
     background-color: rgb(125 211 252);
 }
+.fc-timegrid-axis-cushion{
+    /* font-size:medium; */
+}
+.fc-next-button{
+}
+
 /* main-calendar */
 .main-calendar .fc-header-toolbar{
     font-size: medium;
@@ -49,7 +62,4 @@
 }
 .sub-calendar .fc-daygrid-day-events{
     display: none;
-}
-.sub-calendar .fc-day{
-    cursor: pointer;
 }
