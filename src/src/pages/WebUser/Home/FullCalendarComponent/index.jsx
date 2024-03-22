@@ -36,7 +36,7 @@ export function FullCalendarComponent() {
     console.log(event.event.id);
   };
   return (
-    <div className="flex h-full w-full">
+    <div className="flex h-full w-full calendar-page">
       <div className="w-80 flex flex-col sub-calendar">
         <div className="">
           Select kind event1

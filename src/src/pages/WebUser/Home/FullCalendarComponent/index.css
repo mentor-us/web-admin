@@ -33,19 +33,22 @@
     cursor: pointer;
 }
 .fc-event:hover{
-    
+    background-color: #2f88ff83 !important;
 }
 .fc-daygrid-day-top{
     flex-direction: row !important;
     /* padding-left: 1rem; */
 }
 .fc-col-header{
-    background-color: rgb(125 211 252);
+    background-color: rgb(92, 198, 247);
 }
 .fc-timegrid-axis-cushion{
     /* font-size:medium; */
 }
 .fc-next-button{
+}
+.calendar-page{
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 /* main-calendar */
