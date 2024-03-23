@@ -8,8 +8,10 @@ import { MESSAGE_TYPE } from "utils/constants";
 
 import FileItem from "./FileItem";
 import ImageItem from "./ImageItem";
+import MeetingItem from "./MeetingItem";
 import TextItem from "./TextItem";
 import VoteItem from "./VoteItem";
+import "./styles.css";
 
 function MessageItems({ message, isOwner }) {
   function Content() {
@@ -22,6 +24,8 @@ function MessageItems({ message, isOwner }) {
         return <VoteItem message={message} />;
       case MESSAGE_TYPE.FILE:
         return <FileItem message={message} isOwner={isOwner} />;
+      case MESSAGE_TYPE.MEETING:
+        return <MeetingItem meeting={message?.meeting} />;
       default:
         return <TextItem message={message} isOwner={isOwner} />;
     }

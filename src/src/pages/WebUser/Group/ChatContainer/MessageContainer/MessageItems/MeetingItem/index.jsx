@@ -1,0 +1,46 @@
+/* eslint-disable no-unused-vars */
+import { Box, Button, Typography } from "@mui/material";
+import PropTypes from "prop-types";
+
+import { ClockIcon } from "assets/svgs";
+
+import MeetingService from "service/meetingService";
+
+function MeetingItem({ meeting }) {
+  const showMeeting = MeetingService.fulfillMeetingTime(meeting);
+
+  return (
+    <Box className="meeting-message-container ">
+      <Box className="bg-white rounded-lg w-[70%] p-4">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+          gap={1}
+        >
+          <Box display="flex" justifyContent="center" alignItems="center" gap={1}>
+            <ClockIcon width={22} height={22} />
+            <Typography className="text-[#F05B51] !font-bold !text-base"> Lịch hẹn</Typography>
+          </Box>
+          <Typography className="!font-bold !text-xl !text-[#333] line-clamp-2">
+            {showMeeting.title}
+          </Typography>
+          <Typography className="!text-lg !text-[#888] line-clamp-2">
+            Lúc {showMeeting.time.from}, ngày {showMeeting.time.date}
+          </Typography>
+          <Button className="!text-sm !bg-[#ebebeb] !rounded-full !text-[#333] !font-medium">
+            Mở lịch
+          </Button>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+MeetingItem.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  meeting: PropTypes.object.isRequired
+};
+
+export default MeetingItem;

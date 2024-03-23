@@ -1,0 +1,38 @@
+.meeting-message-container,
+.vote-message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vote-message-item {
+  position: relative;
+  width: 100% !important;
+  display: flex;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background-color: #ebebeb !important;
+  margin-bottom: 5px !important;
+  padding: 10px !important;
+  border-radius: 8px !important;
+}
+
+.vote-message-item .vote-percent-line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #c2e5f5;
+  border-radius: 8px;
+}
+
+.vote-message-item .vote-option-text {
+  color: #000;
+}
+
+.vote-message-item .vote-option-number {
+  color: #299c49;
+  font-weight: 600;
+}

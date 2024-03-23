@@ -1,15 +1,12 @@
 /* eslint-disable no-unused-vars */
-import React, { useMemo } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { useMemo } from "react";
+import { Box, Button, Tooltip, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { images } from "assets/images";
 import { LockRedIcon } from "assets/svgs";
 
-const VOTE_STATUS = {
-  OPEN: "OPEN",
-  CLOSED: "CLOSED"
-};
+import { VOTE_STATUS } from "utils/constants";
 
 function VoteItem({ message }) {
   const { vote } = message;
@@ -23,17 +20,26 @@ function VoteItem({ message }) {
       vote?.choices.map((item) => {
         let votePercent = "0%";
         if (voterNumber) {
-          votePercent = `${((item.voters.length / voterNumber) * 107).toFixed(2)}%`;
+          votePercent = `${((item.voters.length / voterNumber) * 100).toFixed(2)}%`;
         }
 
         return (
-          <Box key={item.id}>
-            <Box />
-            <Box>
-              <Typography>{item.name}</Typography>
+          <Box className="vote-message-item" key={item.id}>
+            <Box
+              className="vote-percent-line !z-10"
+              sx={{
+                width: votePercent
+              }}
+            />
+            <Box className="vote-option-text line-clamp-2 !z-20">
+              <Tooltip title={item.name}>
+                <Typography className="!text-base ">{item.name}</Typography>
+              </Tooltip>
             </Box>
-            <Box>
-              <Typography>{item.voters.length}</Typography>
+            <Box className="!z-20">
+              <Typography className="vote-option-number line-clamp-1 !text-base">
+                {item.voters.length}
+              </Typography>
             </Box>
           </Box>
         );
@@ -42,51 +48,67 @@ function VoteItem({ message }) {
   );
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center">
-      <Box className="bg-white rounded-md w-[70%] p-4">
+    <Box className="vote-message-container">
+      <Box className="bg-white rounded-lg w-[70%] p-4 ">
         <Box display="flex" alignItems="center" justifyContent="flex-start">
           <img
             src={images.ColumnChartImage}
             alt="Chart icon"
             style={{ width: 30, height: 30, marginRight: 12 }}
           />
-          <Typography className="font-bold color-[#333] text-base line-clamp-3">
+          <Typography className="!font-bold !text-[#333] !text-base !line-clamp-3">
             {vote?.question}
           </Typography>
         </Box>
 
         {vote?.status === VOTE_STATUS.CLOSED && (
-          <Box>
+          <Box marginTop={1} display="flex" alignItems="center" justifyContent="flex-start" gap={1}>
             <LockRedIcon width={15} height={15} />
-            <Typography>Bình chọn đã kết thúc!</Typography>
+            <Typography className="!text-base">Bình chọn đã kết thúc!</Typography>
           </Box>
         )}
 
         <Box
+          className="my-2"
           sx={{
             height: "2px",
             backgroundColor: "#ccc",
-            elevation: 1,
-            marginVertical: 5
+            elevation: 1
           }}
         />
 
         {voterNumber === 0 ? (
-          <Typography>Chưa có người tham gia bình chọn!</Typography>
+          <Typography className="!text-[#006EDC] !text-base !mb-2">
+            Chưa có người tham gia bình chọn!
+          </Typography>
         ) : (
-          <Typography>{voterNumber} người đã bình chọn.</Typography>
+          <Typography className="!text-[#006EDC] !text-base !mb-2">
+            {voterNumber} người đã bình chọn.
+          </Typography>
         )}
 
-        <Box>{renderVoteItems}</Box>
-        {vote?.status === VOTE_STATUS.OPEN ? (
-          <Button>
-            <Typography>BÌNH CHỌN</Typography>
-          </Button>
-        ) : (
-          <Button>
-            <Typography>XEM BÌNH CHỌN</Typography>
-          </Button>
-        )}
+        <Box className="mb-2 space-y-2">{renderVoteItems}</Box>
+
+        <Button
+          className="w-full !mt-4 focus:!text-[#fff]"
+          sx={{
+            backgroundColor: "#006EDC",
+            borderRadius: 20,
+            textAlign: "center",
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#006EDC",
+              color: "#fff",
+              opacity: 0.8
+            }
+          }}
+        >
+          {vote?.status === VOTE_STATUS.OPEN ? (
+            <Typography className="!text-base">BÌNH CHỌN</Typography>
+          ) : (
+            <Typography className="!text-base">XEM BÌNH CHỌN</Typography>
+          )}
+        </Button>
       </Box>
     </Box>
   );

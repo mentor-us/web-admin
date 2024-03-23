@@ -70,4 +70,16 @@ export const getTime = (dateStr) => {
 
   return `${hh}:${mm} ${getMomentTime(dateStr)}`;
 };
+
+export const getTimeMeeting = (start, end) => {
+  const time = {
+    from: formatDate(start, "time"),
+    to: formatDate(end, "time"),
+    date: formatDate(start, "date"),
+    display: `${formatDate(start, "time")} - ${getTime(end)}`
+  };
+
+  return time;
+};
+
 export { formatDate };
