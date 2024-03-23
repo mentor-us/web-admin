@@ -1,17 +1,13 @@
 /* eslint-disable no-shadow */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-unused-vars */
+import toast from "react-hot-toast";
 import { CircularProgress, IconButton } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useFilePicker } from "use-file-picker";
-import {
-  FileAmountLimitValidator,
-  FileSizeValidator,
-  FileTypeValidator
-} from "use-file-picker/validators";
+import { FileAmountLimitValidator, FileSizeValidator } from "use-file-picker/validators";
 
-import { useSnackbar } from "notistack";
 import { v4 as uuidv4 } from "uuid";
 import { MediaIcon } from "assets/svgs";
 import MessageApi from "api/MessageApi";
@@ -42,9 +38,6 @@ const MAX_FILE_IMAGE_SIZE = 5; // 5MB
 function ImageIconButton({ channelId }) {
   const queryClient = useQueryClient();
   const myInfo = useMyInfo();
-  const { enqueueSnackbar } = useSnackbar();
-
-  const updateQueryData = (message) => {};
 
   const { openFilePicker, loading } = useFilePicker({
     accept: "image/*",
@@ -59,17 +52,11 @@ function ImageIconButton({ channelId }) {
       if (errors.length === 1) {
         const { reason } = errors[0];
         if (reason === "FILE_TYPE_NOT_ACCEPTED") {
-          enqueueSnackbar("Định dạng file không được hỗ trợ", {
-            variant: "error"
-          });
+          toast.error("Định dạng file không được hỗ trợ");
         } else if (reason === "MAX_AMOUNT_OF_FILES_EXCEEDED") {
-          enqueueSnackbar(`Chỉ được gửi tối đa ${NO_LIMIT_IMAGES} ảnh`, {
-            variant: "error"
-          });
+          toast.error(`Chỉ được gửi tối đa ${NO_LIMIT_IMAGES} ảnh`);
         } else if (reason === "FILE_SIZE_TOO_LARGE") {
-          enqueueSnackbar(`Vượt quá ${MAX_FILE_IMAGE_SIZE}MB`, {
-            variant: "error"
-          });
+          toast.error(`Vượt quá ${MAX_FILE_IMAGE_SIZE}MB`);
         }
       }
     },

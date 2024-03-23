@@ -31,7 +31,7 @@ function MessageContainer({ channelId }) {
 
   return (
     <div
-      className="overflow-x-hidden message-container"
+      className="overflow-x-hidden message-container "
       id="scrollableDiv"
       style={{
         height: "calc(100% - 10px)",
@@ -41,7 +41,7 @@ function MessageContainer({ channelId }) {
       }}
     >
       <InfiniteScroll
-        className="pt-4 gap-y-4"
+        className="pb-4 gap-y-4"
         scrollableTarget="scrollableDiv"
         dataLength={
           !isSuccess

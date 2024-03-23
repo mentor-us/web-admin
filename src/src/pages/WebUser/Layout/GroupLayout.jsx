@@ -168,7 +168,7 @@ export default function GroupLayout() {
                 <List component="div" disablePadding>
                   {isLoading && (
                     <>
-                      {[1, 2, 3].map((val, index) => {
+                      {[1, 2, 3].map((val) => {
                         return (
                           <ListItemButton key={val} disableTouchRipple>
                             <ListItemIcon />
@@ -279,7 +279,9 @@ export default function GroupLayout() {
           </div>
         )}
       </div>
-      <CreateNewChannelDialog open={openCreateChannelDialog} handleClose={handleClose} />
+      {openCreateChannelDialog && (
+        <CreateNewChannelDialog open={openCreateChannelDialog} handleClose={handleClose} />
+      )}
     </>
   );
 }

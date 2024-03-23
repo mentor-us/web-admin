@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/forbid-prop-types */
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import toast from "react-hot-toast";
 import { Box, CircularProgress, IconButton, Paper, Tooltip, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
-import { useSnackbar } from "notistack";
 import { formatFileSize, getFileExtention } from "utils";
 import { images } from "assets/images";
 import { AttachmentIcon, DownloadIcon } from "assets/svgs";
@@ -70,12 +70,9 @@ FileIcon.propTypes = {
 };
 
 function File({ file, isDownloadable }) {
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const onDownloadFileClick = async () => {
-    setIsDownloading(true);
-
+  const downloadFile = async () => {
     try {
       const response = await FileApi.fetchFileWithKey(file?.url);
 
@@ -88,16 +85,38 @@ function File({ file, isDownloadable }) {
       link.click();
       document.body.removeChild(link);
 
-      enqueueSnackbar("Tải file thành công", {
-        variant: "success"
-      });
-    } catch (e) {
-      enqueueSnackbar("Lỗi xảy ra trong quá trình tải file!. Vui lòng thử lại sau.", {
-        variant: "error"
-      });
-    } finally {
-      setIsDownloading(false);
+      return Promise.resolve();
+    } catch (error) {
+      return Promise.reject(error);
     }
+  };
+
+  const SuccessDownloadFileToast = useCallback(() => {
+    setIsDownloading(false);
+    return <b>Tải file thành công</b>;
+  }, []);
+
+  const ErrorDownloadFileToast = useCallback(() => {
+    setIsDownloading(false);
+    return <b>Lỗi xảy ra trong quá trình tải file!. Vui lòng thử lại sau.</b>;
+  }, []);
+
+  const onDownloadFileClick = async () => {
+    setIsDownloading(true);
+
+    toast.promise(
+      downloadFile(),
+      {
+        loading: "Đang tải...",
+        success: SuccessDownloadFileToast,
+        error: ErrorDownloadFileToast
+      },
+      {
+        style: {
+          minWidth: "250px"
+        }
+      }
+    );
   };
 
   return (

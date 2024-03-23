@@ -1,12 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { forwardRef, useEffect, useState } from "react";
-import { Skeleton } from "@mui/material";
+import { Avatar, Skeleton } from "@mui/material";
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
 import FileApi from "api/FileApi";
 
-// Custom styles for MDAvatar
 import MDAvatarRoot from "components/MDComponents/MDAvatar/MDAvatarRoot";
 
 const AsyncMDAvatar = forwardRef(({ bgColor, size, shadow, src, ...rest }, ref) => {

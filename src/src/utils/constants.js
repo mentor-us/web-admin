@@ -95,7 +95,8 @@ export const MESSAGE_TYPE = {
   FILE: "FILE",
   IMAGE: "IMAGE",
   VOTE: "VOTE",
-  MEETING: "MEETING"
+  MEETING: "MEETING",
+  TASK: "TASK"
 };
 
 export const CHANNEL_PERMISSION = {
@@ -107,7 +108,50 @@ export const CHANNEL_PERMISSION = {
   GROUP_SETTINGS: "GROUP_SETTINGS"
 };
 
+export const CHANNEL_TYPE = {
+  PUBLIC: "PUBLIC",
+  PRIVATE: "PRIVATE"
+};
+
 export const VOTE_STATUS = {
   OPEN: "OPEN",
   CLOSED: "CLOSED"
+};
+
+export const TaskStatusObject = {
+  TO_DO: {
+    key: "TO_DO",
+    displayName: "Mới",
+    color: "#333",
+    backgroundColor: "#ebebeb",
+    icon: "progress-close"
+  },
+  IN_PROGRESS: {
+    key: "IN_PROGRESS",
+    displayName: "Đang thực hiện",
+    color: "#2A7BDE",
+    backgroundColor: "#2A7BDE",
+    icon: "progress-upload"
+  },
+  DONE: {
+    key: "DONE",
+    displayName: "Hoàn thành",
+    color: "#4EA05B",
+    backgroundColor: "#4EA05B",
+    icon: "progress-check"
+  },
+  OVERDUE: {
+    key: "OVERDUE",
+    displayName: "Đã trễ hạn",
+    color: "#C01C28",
+    backgroundColor: "#C01C28",
+    icon: "progress-alert"
+  },
+  NULL: {
+    key: "NULL",
+    displayName: "",
+    color: "transparent",
+    backgroundColor: "transparent",
+    icon: ""
+  }
 };

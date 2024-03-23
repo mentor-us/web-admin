@@ -7,7 +7,7 @@ import { ClockIcon } from "assets/svgs";
 import MeetingService from "service/meetingService";
 
 function MeetingItem({ meeting }) {
-  const showMeeting = MeetingService.fulfillMeetingTime(meeting);
+  const meetingData = MeetingService.fulfillMeetingTime(meeting);
 
   return (
     <Box className="meeting-message-container ">
@@ -21,13 +21,13 @@ function MeetingItem({ meeting }) {
         >
           <Box display="flex" justifyContent="center" alignItems="center" gap={1}>
             <ClockIcon width={22} height={22} />
-            <Typography className="text-[#F05B51] !font-bold !text-base"> Lịch hẹn</Typography>
+            <Typography className="text-[#F05B51] !font-bold !text-base">Lịch hẹn</Typography>
           </Box>
           <Typography className="!font-bold !text-xl !text-[#333] line-clamp-2">
-            {showMeeting.title}
+            {meetingData.title}
           </Typography>
           <Typography className="!text-lg !text-[#888] line-clamp-2">
-            Lúc {showMeeting.time.from}, ngày {showMeeting.time.date}
+            Lúc {meetingData.time.from}, ngày {meetingData.time.date}
           </Typography>
           <Button className="!text-sm !bg-[#ebebeb] !rounded-full !text-[#333] !font-medium">
             Mở lịch

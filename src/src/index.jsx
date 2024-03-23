@@ -1,4 +1,5 @@
 import ReactDOM from "react-dom/client";
+import { Toaster } from "react-hot-toast";
 import { Provider as ReduxStoreProvider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -24,6 +25,7 @@ root.render(
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <App />
+          <Toaster position="top-center" />
         </ThemeProvider>
       </ReduxStoreProvider>
     </MentorUSAppProvider>

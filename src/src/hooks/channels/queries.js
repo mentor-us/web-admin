@@ -1,17 +1,25 @@
-/* eslint-disable no-unused-vars */
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import channelService from "service/channelService";
+import groupsServices from "service/groupsServices";
 
-import { GetChannelMediaKey, GetChannelMembersKey } from "./keys";
+import { GetChannelMediaKey, GetChannelMembersKey, GetGroupsMembersKey } from "./keys";
 
-// eslint-disable-next-line import/prefer-default-export
-export const useGetGroupMembers = (groupId) =>
+export const useGetGroupMembers = (groupId, select) =>
   useQuery({
-    queryKey: GetChannelMembersKey(groupId),
-    queryFn: () => channelService.getChannelMembers(groupId),
-    enabled: !!groupId
+    queryKey: GetGroupsMembersKey(groupId),
+    queryFn: () => groupsServices.getGroupMembers(groupId),
+    enabled: !!groupId,
+    select
   });
+
+export const useGetChannelMembers = (channelId) =>
+  useQuery({
+    queryKey: GetChannelMembersKey(channelId),
+    queryFn: () => channelService.getChannelMembers(channelId),
+    enabled: !!channelId
+  });
+
 export const useGetGroupMedia = (groupId) =>
   useQuery({
     queryKey: GetChannelMediaKey(groupId),

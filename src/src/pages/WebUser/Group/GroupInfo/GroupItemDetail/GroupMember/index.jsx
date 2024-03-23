@@ -6,12 +6,12 @@ import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui
 import { GroupIcon } from "assets/svgs";
 
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
-import { useGetGroupMembers } from "hooks/channels/queries";
+import { useGetChannelMembers } from "hooks/channels/queries";
 
 export default function GroupMember() {
   const { channelId } = useParams();
-  const { data: channelMember, isLoading, isSuccess } = useGetGroupMembers(channelId);
-  console.log("ttt", channelMember);
+  const { data: channelMember, isLoading, isSuccess } = useGetChannelMembers(channelId);
+
   return (
     <div className="overflow-auto">
       <ListItemButton>

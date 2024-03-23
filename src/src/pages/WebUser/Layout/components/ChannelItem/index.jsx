@@ -1,7 +1,8 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/forbid-prop-types */
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import {
@@ -14,11 +15,16 @@ import {
   Typography,
   Zoom
 } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import { useConfirm } from "material-ui-confirm";
 import PropTypes from "prop-types";
 
+import { makeTxtElipsis } from "utils";
 import colors from "assets/theme/base/colors";
 
+import { useDeleteChannelMutation } from "hooks/channels/mutation";
+import { GetWorkspaceQueryKey } from "hooks/groups/keys";
+import { useGetWorkSpace } from "hooks/groups/queries";
 import { USER_ROLE } from "utils/constants";
 
 import ChannelIcon from "../ChannelIcon";
@@ -39,12 +45,19 @@ export const styleActiveChannel = (selected) => {
 };
 
 function ChannelItem({ channel, role, selectedChannelId, onChannelSelected, disableContextMenu }) {
+  const { groupId } = useParams();
   const confirm = useConfirm();
   const navigate = useNavigate();
-
+  const { data: defaultChannelId } = useGetWorkSpace(groupId, (detail) => detail.defaultChannelId);
+  const { mutateAsync: deleteChannelMutateAsync } = useDeleteChannelMutation();
+  const queryClient = useQueryClient();
   const [contextMenu, setContextMenu] = useState(null);
 
   const handleContextMenu = (event) => {
+    if (role !== USER_ROLE.MENTOR) {
+      return;
+    }
+
     event.preventDefault();
     setContextMenu(
       contextMenu === null
@@ -68,12 +81,7 @@ function ChannelItem({ channel, role, selectedChannelId, onChannelSelected, disa
   const onDeleteChannelClick = (id) => {
     confirm({
       title: "Xác nhận xóa kênh",
-      description: (
-        <>
-          <Typography>{`Thực hiện xóa kênh ${channel.name}.`}</Typography>
-          <Typography color={colors.error.focus}>Không thể hoàn tác sau khi xác nhận.</Typography>
-        </>
-      ),
+      description: <span className="text-base">Bạn có chắc chăn muốn xóa kênh này không?</span>,
       confirmationText: "Xóa",
       cancellationText: "Hủy",
       buttonOrder: ["confirm", "cancel"],
@@ -99,11 +107,29 @@ function ChannelItem({ channel, role, selectedChannelId, onChannelSelected, disa
           color: colors.light.main
         }
       }
-    })
-      .then(() => {
-        // Delete channel api call
-      })
-      .catch(() => console.log("Deletion cancelled."));
+    }).then(() => {
+      toast.promise(deleteChannelMutateAsync(id), {
+        loading: "Đang xoá kênh...",
+        success: () => {
+          navigate(`channel/${defaultChannelId}`);
+          queryClient.invalidateQueries({
+            queryKey: GetWorkspaceQueryKey(groupId)
+          });
+          return (
+            <span className="text-base">
+              Xoá kênh <b>{makeTxtElipsis(channel.name)}</b> thành công
+            </span>
+          );
+        },
+        error: () => {
+          return (
+            <span className="text-base">
+              Xoá kênh <b>{makeTxtElipsis(channel.name)}</b> thất bại
+            </span>
+          );
+        }
+      });
+    });
   };
 
   if (!channel) {
@@ -115,11 +141,11 @@ function ChannelItem({ channel, role, selectedChannelId, onChannelSelected, disa
       <Tooltip title={channel.name} arrow placement="right" TransitionComponent={Zoom}>
         <ListItemButton
           sx={{ ...styleActiveChannel(selectedChannelId === channel?.id), pl: 4 }}
-          onClick={(e) => {
+          onClick={() => {
             navigate(`channel/${channel?.id}`);
             onChannelSelected(channel?.id);
           }}
-          onContextMenu={disableContextMenu ? null : role === USER_ROLE.MENTOR && handleContextMenu}
+          onContextMenu={disableContextMenu ? null : handleContextMenu}
           selected={selectedChannelId === channel?.id}
         >
           <ListItemIcon>
@@ -161,7 +187,6 @@ function ChannelItem({ channel, role, selectedChannelId, onChannelSelected, disa
             </Typography>
           </MenuItem>
           <MenuItem
-            disabled
             onClick={() => {
               onDeleteChannelClick(channel?.id);
               handleClose();
