@@ -96,6 +96,8 @@ import ReplyIcon from "./_raw/reply-icon.svg?react";
 import Search from "./_raw/search.svg?react";
 import SearchBlackIcon from "./_raw/search-black.svg?react";
 import SearchIcon from "./_raw/search-icon.svg?react";
+import SendIconUnfocusSvg from "./_raw/send-icon.svg?react";
+import SendIconFocusSvg from "./_raw/sendable-icon.svg?react";
 import SideNavigationIcon from "./_raw/side-navigation-icon-1.svg?react";
 import SortIcon from "./_raw/sort-icon.svg?react";
 import StudentReadingIcon from "./_raw/student-reading-icon.svg?react";
@@ -195,6 +197,8 @@ export {
   ReplyIcon,
   SearchBlackIcon,
   SearchIcon,
+  SendIconFocusSvg,
+  SendIconUnfocusSvg,
   SideNavigationIcon,
   SortIcon,
   StudentReadingIcon,

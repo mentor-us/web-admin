@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -19,18 +19,18 @@ import PropTypes from "prop-types";
 import { makeTxtElipsis } from "utils";
 
 import { useCreateChannelMutation } from "hooks/channels/mutation";
-import { useGetGroupMembers } from "hooks/channels/queries";
+import { useGetAllChannelsByGroupId, useGetGroupMembers } from "hooks/channels/queries";
 import { GetWorkspaceQueryKey } from "hooks/groups/keys";
-import { useGetWorkSpace } from "hooks/groups/queries";
 import useMyInfo from "hooks/useMyInfo";
 import { CHANNEL_TYPE } from "utils/constants";
 
 function CreateNewChannelDialog({ open, handleClose }) {
   const myInfo = useMyInfo();
   const { groupId } = useParams();
-  const { data: channelNameList } = useGetWorkSpace(groupId, (data) =>
-    data.channels.map((channel) => channel.name)
+  const { data: channelNameList } = useGetAllChannelsByGroupId(groupId, (data) =>
+    data.map((channel) => channel.name)
   );
+
   const { data: memberList, isLoading: isLoadingMembers } = useGetGroupMembers(groupId, (data) => {
     const mergeList = [];
     if (data && data?.mentors) {
@@ -42,6 +42,11 @@ function CreateNewChannelDialog({ open, handleClose }) {
 
     return mergeList;
   });
+  const optionMemberList = useMemo(
+    () => (memberList ? memberList.filter((member) => member.id !== myInfo.id) : []),
+    [memberList]
+  );
+
   const queryClient = useQueryClient();
   const {
     control,
@@ -60,8 +65,8 @@ function CreateNewChannelDialog({ open, handleClose }) {
   const { mutateAsync: submitChannelAsync, isPending } = useCreateChannelMutation();
 
   useEffect(() => {
-    setValue("userIds", memberList);
-  }, [memberList]);
+    setValue("userIds", optionMemberList);
+  }, [optionMemberList]);
 
   const prepareData = (data) => {
     const newData = { ...data };
@@ -180,7 +185,7 @@ function CreateNewChannelDialog({ open, handleClose }) {
             }
           }}
           onChange={([, data]) => data}
-          defaultValue={memberList ?? []}
+          defaultValue={optionMemberList ?? []}
           render={({ field: { onChange, ...props } }) => {
             return (
               <Autocomplete
@@ -190,7 +195,7 @@ function CreateNewChannelDialog({ open, handleClose }) {
                 multiple
                 width={350}
                 filterSelectedOptions
-                options={memberList ?? []}
+                options={optionMemberList ?? []}
                 noOptionsText="Không có thành viên nào"
                 groupBy={(option) => option.category}
                 getOptionLabel={(option) => option.name ?? ""}

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useMemo } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
@@ -12,6 +12,17 @@ import { TaskStatusObject } from "utils/constants";
 function TaskItem({ task }) {
   const myInfo = useMyInfo();
   const taskData = TaskService.fullfillTaskStatus(task, myInfo.id);
+
+  const ownStatus = useMemo(() => {
+    if (!taskData.assignees) {
+      return "NULL";
+    }
+    const assignee = taskData.assignees.find((item) => item.id === myInfo.id);
+    if (!assignee) {
+      return "NULL";
+    }
+    return assignee.status;
+  }, [taskData]);
 
   return (
     <Box className="meeting-message-container ">
@@ -33,9 +44,11 @@ function TaskItem({ task }) {
           <Typography className="!text-lg !text-[#888] line-clamp-2">
             Tới hạn {taskData.deadlineTimeModel.time}, ngày {taskData.deadlineTimeModel.date}
           </Typography>
-          <Button className="!text-sm !bg-[#ebebeb] !rounded-full !text-[#333] !font-medium">
-            {TaskStatusObject[taskData.status].displayName}
-          </Button>
+          {ownStatus && ownStatus !== "NULL" && (
+            <Button className="!text-sm !bg-[#ebebeb] !rounded-full !text-[#333] !font-medium">
+              {TaskStatusObject[taskData.status].displayName}
+            </Button>
+          )}
         </Box>
       </Box>
     </Box>

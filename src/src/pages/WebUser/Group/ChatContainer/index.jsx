@@ -21,7 +21,7 @@ function ChatContainer() {
   );
 
   return (
-    <div className="bg-slate-200 h-full w-full flex flex-col justify-between">
+    <div className="bg-slate-200 h-full flex flex-col justify-between">
       <div className="">
         <ChatContainerHeader
           isOpenChannelInfo={showLayout}

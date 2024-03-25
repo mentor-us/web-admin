@@ -13,9 +13,9 @@ export default defineConfig({
   build: {
     outDir: "build"
   },
-  optimizeDeps: {
-    include: ["@emotion/react", "@emotion/styled"]
-  },
+  // optimizeDeps: {
+  //   include: ["@emotion/react", "@emotion/styled"]
+  // },
   plugins: [
     svgr(),
     react(),
