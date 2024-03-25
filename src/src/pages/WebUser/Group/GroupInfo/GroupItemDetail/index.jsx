@@ -4,6 +4,7 @@ import { GROUP_FUNCTION } from "utils/constants";
 
 import GroupMedia from "./GroupMedia";
 import GroupMember from "./GroupMember";
+import GroupVoting from "./GroupVoting";
 
 function GroupItemDetail({ type }) {
   if (type === GROUP_FUNCTION.MEMBER) {
@@ -22,7 +23,7 @@ function GroupItemDetail({ type }) {
     return <div>FAQ</div>;
   }
   if (type === GROUP_FUNCTION.VOTING) {
-    return <div>Bình chọn</div>;
+    return <GroupVoting />;
   }
   return <div>{type}</div>;
 }

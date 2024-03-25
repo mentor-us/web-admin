@@ -14,14 +14,6 @@ export default function GroupMember() {
 
   return (
     <div className="overflow-auto">
-      <ListItemButton>
-        <ListItemText
-          disableTypography
-          className="text-base font-bold"
-          primary="Danh sách thành viên"
-        />
-      </ListItemButton>
-
       <Collapse in timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {channelMember?.map((member) => (
