@@ -155,3 +155,14 @@ export const TaskStatusObject = {
     icon: ""
   }
 };
+export const GROUP_FUNCTION = {
+  MEMBER: "MEMBER",
+  UTILITY: "UTILITY",
+  MEDIA: "MEDIA",
+  FAQ: "FAQ",
+  MEETING: "MEETING",
+  TASK: "TASK",
+  VOTING: "VOTING",
+  IMAGE: "IMAGE",
+  FILE: "FILE"
+};

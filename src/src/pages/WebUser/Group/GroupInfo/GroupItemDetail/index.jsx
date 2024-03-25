@@ -1,26 +1,28 @@
 import PropTypes from "prop-types";
 
+import { GROUP_FUNCTION } from "utils/constants";
+
 import GroupMedia from "./GroupMedia";
 import GroupMember from "./GroupMember";
 
 function GroupItemDetail({ type }) {
-  if (type === "MEMBER") {
+  if (type === GROUP_FUNCTION.MEMBER) {
     return <GroupMember />;
   }
-  if (type === "MEETING") {
+  if (type === GROUP_FUNCTION.MEETING) {
     return <div>Lịch hẹn</div>;
   }
-  if (type === "TASK") {
+  if (type === GROUP_FUNCTION.TASK) {
     return <div>Công việc</div>;
   }
-  if (type === "IMAGE" || type === "FILE") {
-    return <GroupMedia />;
+  if (type === GROUP_FUNCTION.IMAGE || type === GROUP_FUNCTION.FILE) {
+    return <GroupMedia type={type} />;
   }
-  if (type === "FAQ") {
+  if (type === GROUP_FUNCTION.FAQ) {
     return <div>FAQ</div>;
   }
-  if (type === "IMAGE" || type === "FILE") {
-    return <div>Media</div>;
+  if (type === GROUP_FUNCTION.VOTING) {
+    return <div>Bình chọn</div>;
   }
   return <div>{type}</div>;
 }

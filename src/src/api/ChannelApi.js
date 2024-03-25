@@ -11,13 +11,13 @@ const ChannelApi = {
     const data = await AxiosClient.get(URL);
     return data;
   },
-  async getChannelMember(memberId) {
-    const URL = `/api/channels/${memberId}/members`;
+  async getChannelMember(channelId) {
+    const URL = `/api/channels/${channelId}/members`;
     const data = await AxiosClient.get(URL);
     return data;
   },
-  async getChannelMedia(memberId) {
-    const URL = `/api/groups/${memberId}/media`;
+  async getChannelMedia(channelId) {
+    const URL = `/api/groups/${channelId}/media`;
     const data = await AxiosClient.get(URL);
     return data?.data;
   },

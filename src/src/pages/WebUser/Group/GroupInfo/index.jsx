@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 // eslint-disable-next-line no-unused-vars
 import { useNavigate, useParams } from "react-router";
+import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import ExpandLess from "@mui/icons-material/ExpandLess";
@@ -19,23 +20,24 @@ import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
 import GroupInfoItem from "pages/WebUser/Group/GroupInfo/GroupFunction";
 import GroupItemDetail from "pages/WebUser/Group/GroupInfo/GroupItemDetail";
 import { useGetGroupDetail } from "hooks/groups/queries";
+import { CHANNEL_PERMISSION, GROUP_FUNCTION } from "utils/constants";
 // Define the group information
 
 // eslint-disable-next-line react/prop-types, no-shadow
 function renderHeaderInfor(type) {
-  if (type === "MEMBER") {
+  if (type === GROUP_FUNCTION.MEMBER) {
     return "Thành viên nhóm";
   }
-  if (type === "MEETING") {
+  if (type === GROUP_FUNCTION.MEETING) {
     return "Lịch hẹn";
   }
-  if (type === "TASK") {
+  if (type === GROUP_FUNCTION.TASK) {
     return "Công việc";
   }
-  if (type === "IMAGE" || type === "FILE") {
+  if (type === GROUP_FUNCTION.IMAGE || type === GROUP_FUNCTION.FILE) {
     return "Bộ sưu tập";
   }
-  if (type === "FAQ") {
+  if (type === GROUP_FUNCTION.FAQ) {
     return "FAQ";
   }
 
@@ -108,6 +110,19 @@ export default function GroupInfo() {
           <Tooltip title={headerInfo}>
             <span className="line-clamp-1 max-w-[74%]">{headerInfo}</span>
           </Tooltip>
+          {showTypeScreen !== "" &&
+          showTypeScreen !== GROUP_FUNCTION.MEMBER &&
+          showTypeScreen !== GROUP_FUNCTION.IMAGE ? (
+            <IconButton
+              className="!absolute !right-0 hover:!bg-slate-300 rounded-full"
+              size="small"
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+            >
+              <AddIcon />
+            </IconButton>
+          ) : null}
         </Box>
       </Box>
       <hr />

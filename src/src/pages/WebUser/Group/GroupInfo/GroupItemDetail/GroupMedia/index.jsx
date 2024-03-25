@@ -13,9 +13,11 @@ import {
   Tab,
   Tabs
 } from "@mui/material";
+import PropTypes from "prop-types";
 
 import FileApi from "api/FileApi";
 
+import File from "pages/WebUser/components/File";
 import { useGetGroupMedia } from "hooks/channels/queries";
 
 const AntTabs = styled(Tabs)({
@@ -25,11 +27,12 @@ const AntTabs = styled(Tabs)({
   }
 });
 
-export default function GroupMedia() {
+export default function GroupMedia({ type }) {
   const { channelId } = useParams();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(type);
   const { data: channelMedia, isLoading, isSuccess } = useGetGroupMedia(channelId);
   const [ImageItem, setImageItem] = useState([]); // State for image items
+  const [loading, setLoading] = useState(false);
   const [FileItem, setFileItem] = useState([]); // State for file items
   const [imagesToRender, setImagesToRender] = useState(20); // Number of images to render at a time
   const containerRef = useRef(null); // Reference to the container div
@@ -37,6 +40,7 @@ export default function GroupMedia() {
   useEffect(() => {
     if (isSuccess) {
       const fetchMediaData = async () => {
+        setLoading(true);
         const imageItems = await Promise.all(
           channelMedia
             ?.filter((item) => item.type === "IMAGE")
@@ -53,9 +57,10 @@ export default function GroupMedia() {
         );
 
         setImageItem(imageItems.filter(Boolean));
-
+        setLoading(false);
         const fileItems = channelMedia?.filter((item) => item.type === "FILE") || [];
         setFileItem(fileItems);
+        console.log("fileItems", fileItems);
       };
 
       fetchMediaData();
@@ -86,47 +91,12 @@ export default function GroupMedia() {
           setValue(newValue);
         }}
         className="bg-white font-bold text-base border-b-2 mb-1 !h-[2rem]"
-        // sx={{
-        //   "&.Mui-selected": {
-        //     color: "#0190fe"
-        //   },
-        //   "&.MuiBottomNavigationAction-root": {
-        //     color: "#A5A5A5"
-        //   },
-        //   height: "40px"
-        // }}
       >
-        <BottomNavigationAction
-          className="!p-0 !m-0"
-          showLabel
-          // sx={{
-          //   "&:hover": {
-          //     backgroundColor: `#0190fe !important` // Using theme color here
-          //   },
-          //   "&:focus": {
-          //     backgroundColor: `#0190fe !important`, // Using theme color here
-          //     outline: "none" // Remove default focus outline if desired
-          //   }
-          // }}
-          label="Hình ảnh"
-        />
+        <BottomNavigationAction value="IMAGE" className="!p-0 !m-0" showLabel label="Hình ảnh" />
 
-        <BottomNavigationAction
-          className="!p-0 !m-0"
-          showLabel
-          // sx={{
-          //   "&:hover": {
-          //     backgroundColor: `#0190fe !important` // Using theme color here
-          //   },
-          //   "&:focus": {
-          //     backgroundColor: `#0190fe !important`, // Using theme color here
-          //     outline: "none" // Remove default focus outline if desired
-          //   }
-          // }}
-          label="Tập tin"
-        />
+        <BottomNavigationAction value="FILE" className="!p-0 !m-0" showLabel label="Tập tin" />
       </BottomNavigation>
-      {isLoading ? ( // Display spinner when loading
+      {loading ? ( // Display spinner when loading
         <div
           style={{
             display: "flex",
@@ -139,7 +109,7 @@ export default function GroupMedia() {
         </div>
       ) : (
         <>
-          {value === 0 && ImageItem.length > 0 && (
+          {value === "IMAGE" && ImageItem.length > 0 && (
             <ImageList cols={3}>
               {ImageItem.map((item) => (
                 <ImageListItem key={item.imageUrl}>
@@ -148,17 +118,27 @@ export default function GroupMedia() {
               ))}
             </ImageList>
           )}
-          {value === 1 && FileItem.length > 0 && (
+          {value === "FILE" && FileItem.length > 0 && (
             <div>
               {FileItem.map((item) => (
-                <div key={item.title}>{item.title}</div>
+                <Box
+                  sx={{
+                    padding: "2px"
+                  }}
+                >
+                  <File file={item.file} isDownloadable />
+                </Box>
               ))}
             </div>
           )}
-          {value === 0 && ImageItem.length === 0 && <div>Chưa có hình ảnh</div>}
-          {value === 1 && FileItem.length === 0 && <div>Chưa có file</div>}
+          {value === "IMAGE" && ImageItem.length === 0 && <div>Chưa có hình ảnh</div>}
+          {value === "FILE" && FileItem.length === 0 && <div>Chưa có file</div>}
         </>
       )}
     </Box>
   );
 }
+GroupMedia.propTypes = {
+  // eslint-disable-next-line react/require-default-props
+  type: PropTypes.string
+};
