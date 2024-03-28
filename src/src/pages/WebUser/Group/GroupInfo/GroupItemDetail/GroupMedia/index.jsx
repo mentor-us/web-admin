@@ -27,6 +27,7 @@ const AntTabs = styled(Tabs)({
   }
 });
 
+const sizeRender = 10;
 export default function GroupMedia({ type }) {
   const { channelId } = useParams();
   const [value, setValue] = useState(type);
@@ -34,17 +35,17 @@ export default function GroupMedia({ type }) {
   const [ImageItem, setImageItem] = useState([]); // State for image items
   const [loading, setLoading] = useState(false);
   const [FileItem, setFileItem] = useState([]); // State for file items
-  const [imagesToRender, setImagesToRender] = useState(20); // Number of images to render at a time
+  const [imagesToRender, setImagesToRender] = useState(sizeRender); // Number of images to render at a time
   const containerRef = useRef(null); // Reference to the container div
 
   useEffect(() => {
     if (isSuccess) {
       const fetchMediaData = async () => {
         setLoading(true);
+
         const imageItems = await Promise.all(
           channelMedia
             ?.filter((item) => item.type === "IMAGE")
-            .slice(0, imagesToRender) // Select only the first 'imagesToRender' images
             .map(async (item) => {
               try {
                 const base64Str = await FileApi.getFileWithKey(item.imageUrl);
@@ -56,11 +57,10 @@ export default function GroupMedia({ type }) {
             })
         );
 
-        setImageItem(imageItems.filter(Boolean));
+        setImageItem((prevImageItems) => [...prevImageItems, ...imageItems.filter(Boolean)]);
         setLoading(false);
         const fileItems = channelMedia?.filter((item) => item.type === "FILE") || [];
         setFileItem(fileItems);
-        console.log("fileItems", fileItems);
       };
 
       fetchMediaData();
@@ -68,12 +68,6 @@ export default function GroupMedia({ type }) {
   }, [channelMedia, isSuccess, imagesToRender]);
 
   // Function to handle scrolling
-  const handleScroll = () => {
-    const container = containerRef.current;
-    if (container && container.scrollTop + container.clientHeight >= container.scrollHeight) {
-      setImagesToRender(imagesToRender + 20); // Load more images when scrolled to bottom
-    }
-  };
 
   function a11yProps(index) {
     return {
@@ -83,7 +77,7 @@ export default function GroupMedia({ type }) {
   }
 
   return (
-    <Box className="overflow-y-scroll no-scrollbar" onScroll={handleScroll} ref={containerRef}>
+    <Box className="overflow-y-scroll no-scrollbar">
       <BottomNavigation
         showLabels
         value={value}
@@ -131,8 +125,12 @@ export default function GroupMedia({ type }) {
               ))}
             </div>
           )}
-          {value === "IMAGE" && ImageItem.length === 0 && <div>Chưa có hình ảnh</div>}
-          {value === "FILE" && FileItem.length === 0 && <div>Chưa có file</div>}
+          {value === "IMAGE" && ImageItem.length === 0 && (
+            <div className="flex justify-center items-center">Chưa có hình ảnh</div>
+          )}
+          {value === "FILE" && FileItem.length === 0 && (
+            <div className="flex justify-center items-center">Chưa có file</div>
+          )}
         </>
       )}
     </Box>

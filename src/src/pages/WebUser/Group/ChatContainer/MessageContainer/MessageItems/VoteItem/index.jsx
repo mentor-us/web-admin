@@ -9,7 +9,11 @@ import { LockRedIcon } from "assets/svgs";
 import { VOTE_STATUS } from "utils/constants";
 
 function VoteItem({ message }) {
-  const { vote } = message;
+  let { vote } = message; // Define vote variable outside the if-else block
+
+  if (vote === undefined) {
+    vote = message;
+  }
 
   const voterNumber = vote?.choices
     .flatMap((choice) => choice.voters)
