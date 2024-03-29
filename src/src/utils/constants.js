@@ -85,6 +85,35 @@ export const groupCategoryStatusList = [
   { label: "Đã xóa", textValue: "DELETED", value: 2, color: "red" }
 ];
 
+export const getRouteUrl = (...paths) => {
+  return paths.join("");
+};
+
+export const ROUTE_URL = {
+  SIGN_IN: "/sign-in",
+
+  // Admin
+  ADMIN_ROOT: "/admin",
+
+  // Group management
+  GROUP_ROOT: "/admin/groups",
+
+  // Group category management
+  GROUP_CATEGORY: "/admin/group-category",
+
+  // Account management
+  ACCOUNT_ROOT: "/admin/account-management",
+
+  // Statistic
+  STATISTIC_ROOT: "/admin/statistic"
+};
+
+export const INIT_TOTAL_REACTION = {
+  data: [],
+  ownerReacted: [],
+  total: 0
+};
+
 export const USER_ROLE = {
   MENTOR: "MENTOR",
   MENTEE: "MENTEE"
@@ -117,6 +146,34 @@ export const VOTE_STATUS = {
   OPEN: "OPEN",
   CLOSED: "CLOSED"
 };
+
+export const UPLOAD_STATUS = {
+  SUCCESS: "Success",
+  FAIL: "Fail",
+  UPLOADING: "Uploading"
+};
+
+export const SUPPORTED_FILE_UPLOAD = [".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf"];
+
+export const MAX_FILE_IMAGE_SIZE = 5; // 5MB
+
+export const SUPPORTED_IMAGE_EXT = [
+  ".jpg",
+  ".jpeg",
+  ".jpe",
+  ".jif",
+  ".jfif",
+  ".jfi",
+  ".png",
+  ".gif",
+  ".webp",
+  ".tiff",
+  ".tif",
+  ".heif",
+  ".heic"
+];
+
+export const LIMIT_IMAGES = 5; // Max 5 image can send
 
 export const TaskStatusObject = {
   TO_DO: {

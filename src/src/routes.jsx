@@ -18,6 +18,7 @@ import Statistic from "pages/Statistic";
 import StatisticDetail from "pages/StatisticDetail";
 import MobileUserGuide from "pages/UserGuide/Mobile";
 import WebAdminGuideline from "pages/UserGuide/Web";
+import { ROUTE_URL } from "utils/constants";
 
 const pagesMap = {
   groups: "Quản lý nhóm",
@@ -108,7 +109,7 @@ export const publicRoutes = [
     name: "Sign In",
     key: "sign-in",
     icon: <Icon fontSize="small">login</Icon>,
-    path: "/admin/sign-in",
+    path: ROUTE_URL.SIGN_IN,
     element: <SignIn />
   },
   {
