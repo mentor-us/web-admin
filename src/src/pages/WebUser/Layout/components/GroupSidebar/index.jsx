@@ -32,6 +32,7 @@ import ChannelSkeleton from "../ChannelSkeleton";
 import CreateNewChannelDialog from "../CreateNewChannelDialog";
 
 function GroupSidebar({ workspace, isLoading }) {
+  const { channelId } = useParams();
   const navigate = useNavigate();
 
   const isHasChannels = workspace?.channels?.length !== 1;
@@ -72,8 +73,12 @@ function GroupSidebar({ workspace, isLoading }) {
   }, [isHasChannels, isHasPersonalChannels]);
 
   useEffect(() => {
-    setSelectedChannelId(workspace?.defaultChannelId);
-  }, [workspace]);
+    if (channelId) {
+      setSelectedChannelId(channelId);
+    } else {
+      setSelectedChannelId(workspace?.defaultChannelId);
+    }
+  }, [workspace, channelId]);
 
   return (
     <>

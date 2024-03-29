@@ -53,7 +53,7 @@ const MATCHERS = [
 function RichTextField() {
   const { channelId } = useParams();
   const myInfo = useMyInfo();
-  const { addNewestMessage } = useMessageQueryState(channelId);
+  const { addNewestMessage, updateChannelState } = useMessageQueryState(channelId);
 
   const initialConfig = {
     namespace: "MyEditor",
@@ -80,6 +80,7 @@ function RichTextField() {
     // Send message
     SocketService.sendMessage(message);
     addNewestMessage(message);
+    updateChannelState();
 
     // Clear the editor
     editorRef?.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);

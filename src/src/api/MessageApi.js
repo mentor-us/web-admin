@@ -14,6 +14,25 @@ const MessageApi = {
     }
   },
 
+  sendFileMessage: ({ messageId, groupId, senderId, file }) => {
+    const URL = `api/messages/file`;
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    formData.append("id", messageId);
+    formData.append("groupId", groupId);
+    formData.append("senderId", senderId);
+
+    return AxiosClient.post(URL, formData, {
+      timeout: 20000,
+      headers: {
+        accept: "application/json",
+        "content-type": "multipart/form-data"
+      }
+    });
+  },
+
   sendImagesMessage: async ({ messageId, groupId, senderId, images }) => {
     const POST_IMAGES_URL = `${MESSAGE_API_URL}/images`;
 

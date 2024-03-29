@@ -5,6 +5,7 @@ import { Box, CircularProgress, Grid, Skeleton, Typography } from "@mui/material
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import PropTypes from "prop-types";
 
+import { getImageUrlWithKey } from "utils";
 import { NotiFailed } from "assets/svgs";
 import colors from "assets/theme/base/colors";
 import FileApi from "api/FileApi";
@@ -27,7 +28,7 @@ function ImageSkeleton() {
 
 function GridImage({ images, galleryID, uploadFailed }) {
   const [imageUrlList, setImageUrlList] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   const lightBoxRef = useRef(null);
 
   const imagesToShow = [...images];
@@ -123,30 +124,11 @@ function GridImage({ images, galleryID, uploadFailed }) {
     registerUI(lightbox);
     lightbox.init();
 
-    const loadAllImage = async () => {
-      const imageObjectUrl = await Promise.allSettled(
-        images.map(async (image, index) => {
-          return FileApi.getFileWithKey(image?.url);
-        })
-      ).then((results) => {
-        return results.map((result) => {
-          if (result.status === "fulfilled") {
-            return result.value;
-          }
-          return null;
-        });
-      });
-
-      setImageUrlList(imageObjectUrl);
-      setIsLoaded(true);
-    };
-
-    loadAllImage();
+    setImageUrlList(images.map((image) => getImageUrlWithKey(image?.url)));
 
     return () => {
       lightbox.destroy();
       lightbox = null;
-      imageUrlList.forEach((url) => URL.revokeObjectURL(url));
     };
   }, []);
 

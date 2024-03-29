@@ -1,8 +1,24 @@
 /* eslint-disable no-unused-vars */
+import { API_URL } from "config";
+
 import { groupStatusList } from "./constants";
 
 export * from "./auth";
 export * from "./dateHelper";
+
+export function getImageUrlWithKey(key) {
+  if (!key) {
+    return "";
+  }
+
+  if (key.startsWith("https") || key.startsWith("data:image/")) {
+    return key;
+  }
+
+  const searchParams = new URLSearchParams();
+  searchParams.append("key", key);
+  return `${API_URL}api/files?${searchParams.toString()}`;
+}
 
 export function stringToColor(string) {
   let hash = 0;
@@ -35,6 +51,9 @@ export const isEmptyObject = (objectIns) => {
 };
 
 export const getFileExtention = (filename) => {
+  if (!filename) {
+    return "";
+  }
   const splitedFileName = filename.toLowerCase().split(".");
 
   // To get the file extension
