@@ -2,13 +2,23 @@
 /* eslint-disable react/forbid-prop-types */
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
-import { Box, CircularProgress, IconButton, Paper, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  Paper,
+  Skeleton,
+  Tooltip,
+  Typography
+} from "@mui/material";
 import PropTypes from "prop-types";
 
 import { formatFileSize, getFileExtention } from "utils";
 import { images } from "assets/images";
 import { AttachmentIcon, DownloadIcon } from "assets/svgs";
 import FileApi from "api/FileApi";
+
+import { UPLOAD_STATUS } from "utils/constants";
 
 const styles = {
   container: {
@@ -118,6 +128,18 @@ function File({ file, isDownloadable }) {
       }
     );
   };
+
+  if (file && file.uploadStatus === UPLOAD_STATUS.UPLOADING) {
+    return (
+      <Skeleton
+        sx={{ flex: 1, cursor: "progress" }}
+        animation="wave"
+        variant="rectangular"
+        height="4rem"
+        width="20rem"
+      />
+    );
+  }
 
   return (
     <Paper sx={styles.container}>

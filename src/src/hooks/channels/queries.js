@@ -1,9 +1,14 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
+import { useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import channelService from "service/channelService";
 import groupsServices from "service/groupsServices";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
+import useChatStore from "hooks/client/useChatStore";
+import { GetWorkspaceQueryKey } from "hooks/groups/keys";
+import { UPLOAD_STATUS } from "utils/constants";
 
 import {
   GetAllChannelsKey,
@@ -47,7 +52,98 @@ export const useMessageQueryState = (channelId) => {
     throw new Error("Required `channelId`!");
   }
 
+  const chatStore = useChatStore();
   const queryClient = useQueryClient();
+  const { groupId } = useParams();
+
+  if (!groupId) {
+    throw new Error("Required `groupId`!");
+  }
+
+  const manualAddNewMessage = (message) => {
+    queryClient.setQueryData(GetAllChatMessageInfinityKey(channelId), (data) => {
+      const { pages } = data;
+      const [firstPage, ...restPages] = pages;
+
+      return {
+        ...data,
+        pages: [[message, ...firstPage], ...restPages]
+      };
+    });
+  };
+
+  const updateNewFileMessageStatus = (message, newUrl) => {
+    queryClient.setQueryData(GetAllChatMessageInfinityKey(channelId), (data) => {
+      const pages = [...data.pages];
+
+      const [firstPage, ...restPages] = pages;
+
+      return {
+        ...data,
+        pages: [
+          [
+            ...firstPage.map((item) => {
+              if (item.id === message.id) {
+                return {
+                  ...item,
+                  file: {
+                    ...item.file,
+                    url: newUrl,
+                    uploadStatus: newUrl ? UPLOAD_STATUS.SUCCESS : UPLOAD_STATUS.FAIL
+                  }
+                };
+              }
+
+              return item;
+            })
+          ],
+          ...restPages
+        ]
+      };
+    });
+  };
+
+  const updateNewImageMessageStatus = (message, uploaded) => {
+    queryClient.setQueryData(GetAllChatMessageInfinityKey(channelId), (data) => {
+      const pages = [...data.pages];
+
+      if (pages && pages.length >= 1) {
+        // eslint-disable-next-line no-param-reassign
+        pages[0] = [
+          ...pages[0].map((item) => {
+            if (item.id === message.id) {
+              return {
+                ...item,
+                uploadFailed: !uploaded,
+                images: item.images?.map((img) => ({
+                  ...img,
+                  isUploading: false
+                }))
+              };
+            }
+
+            return item;
+          })
+        ];
+      }
+
+      return {
+        pages,
+        pageParams: data.pageParams
+      };
+    });
+  };
+
+  const updateChannelState = () => {
+    chatStore.addUnseenMessageChannelId(channelId);
+    queryClient.invalidateQueries({
+      queryKey: GetWorkspaceQueryKey(groupId)
+    });
+  };
+
+  const seenChannelState = () => {
+    chatStore.removeUnseenMessageChannelId(channelId);
+  };
 
   const addNewestMessage = (message) => {
     queryClient.setQueryData(GetAllChatMessageInfinityKey(channelId), (data) => {
@@ -68,6 +164,11 @@ export const useMessageQueryState = (channelId) => {
   };
 
   return {
-    addNewestMessage
+    manualAddNewMessage,
+    updateNewImageMessageStatus,
+    updateNewFileMessageStatus,
+    addNewestMessage,
+    updateChannelState,
+    seenChannelState
   };
 };

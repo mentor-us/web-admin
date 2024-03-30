@@ -23,6 +23,7 @@ import { makeTxtElipsis } from "utils";
 import colors from "assets/theme/base/colors";
 
 import { useDeleteChannelMutation } from "hooks/channels/mutation";
+import useChatStore from "hooks/client/useChatStore";
 import { GetWorkspaceQueryKey } from "hooks/groups/keys";
 import { useGetWorkSpace } from "hooks/groups/queries";
 import { USER_ROLE } from "utils/constants";
@@ -52,6 +53,10 @@ function ChannelItem({ channel, role, selectedChannelId, onChannelSelected, disa
   const { mutateAsync: deleteChannelMutateAsync } = useDeleteChannelMutation();
   const queryClient = useQueryClient();
   const [contextMenu, setContextMenu] = useState(null);
+  const { unseenChannelIds, removeUnseenMessageChannelId } = useChatStore((state) => ({
+    unseenChannelIds: state.unseenMessageChannelId,
+    removeUnseenMessageChannelId: state.removeUnseenMessageChannelId
+  }));
 
   const handleContextMenu = (event) => {
     if (role !== USER_ROLE.MENTOR) {
@@ -142,6 +147,9 @@ function ChannelItem({ channel, role, selectedChannelId, onChannelSelected, disa
         <ListItemButton
           sx={{ ...styleActiveChannel(selectedChannelId === channel?.id), pl: 4 }}
           onClick={() => {
+            if (unseenChannelIds.has(channel.id)) {
+              removeUnseenMessageChannelId(channel?.id);
+            }
             navigate(`channel/${channel?.id}`);
             onChannelSelected(channel?.id);
           }}
@@ -153,7 +161,9 @@ function ChannelItem({ channel, role, selectedChannelId, onChannelSelected, disa
           </ListItemIcon>
           <ListItemText
             disableTypography
-            className="text-base line-clamp-1"
+            className={`text-base line-clamp-1 ${
+              unseenChannelIds.has(channel.id) ? "!font-bold" : ""
+            }`}
             primary={channel.name}
           />
         </ListItemButton>
