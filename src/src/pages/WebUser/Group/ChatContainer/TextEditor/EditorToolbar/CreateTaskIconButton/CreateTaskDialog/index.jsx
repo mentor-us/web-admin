@@ -26,11 +26,10 @@ import dayjs from "dayjs";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
-import { useCreateMeetingMutation } from "hooks/chats/mutation";
+import { useCreateTaskMutation } from "hooks/chats/mutation";
 import useMyInfo from "hooks/useMyInfo";
-import { MEETING_REPEATED_TYPE } from "utils/constants";
 
-function BookMeetingDialog({ open, handleClose }) {
+function CreateTaskDialog({ open, handleClose }) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
@@ -39,7 +38,7 @@ function BookMeetingDialog({ open, handleClose }) {
   );
   const queryClient = useQueryClient();
 
-  const today = dayjs().add(1, "h").minute(0);
+  const today = dayjs().add(1, "h");
 
   const {
     control,
@@ -51,14 +50,12 @@ function BookMeetingDialog({ open, handleClose }) {
     defaultValues: {
       title: "",
       description: "",
-      place: "",
       attendees: [],
-      timeStart: today,
-      timeEnd: today.add(45, "m"),
+      deadline: today,
       date: today
     }
   });
-  const { mutateAsync: createMeetingMutationAsync, isPending } = useCreateMeetingMutation();
+  const { mutateAsync: createTaskMutationAsync, isPending } = useCreateTaskMutation();
 
   useEffect(() => {
     setValue("attendees", channelMembers ?? []);
@@ -70,12 +67,10 @@ function BookMeetingDialog({ open, handleClose }) {
     return {
       title: data.title,
       description: data.description,
-      attendees: data.attendees.map((attendee) => attendee.id),
+      userIds: data.attendees.map((attendee) => attendee.id),
       organizerId: myInfo.id,
-      repeated: MEETING_REPEATED_TYPE.EVERY_DAY,
       groupId: channelId,
-      timeEnd: data.timeEnd.date(date.date()).month(date.month()).year(date.year()).toJSON(),
-      timeStart: data.timeStart.date(date.date()).month(date.month()).year(date.year()).toJSON()
+      deadline: data.deadline.date(date.date()).month(date.month()).year(date.year()).toJSON()
     };
   };
 
@@ -87,7 +82,7 @@ function BookMeetingDialog({ open, handleClose }) {
   const onSubmit = (data) => {
     toast.promise(
       new Promise((resolve, reject) => {
-        createMeetingMutationAsync(prepareData(data))
+        createTaskMutationAsync(prepareData(data))
           .then(() => {
             queryClient.invalidateQueries({
               queryKey: GetAllChatMessageInfinityKey(channelId)
@@ -97,9 +92,9 @@ function BookMeetingDialog({ open, handleClose }) {
           .catch(reject);
       }),
       {
-        loading: "Đang tạo lịch hẹn",
-        success: "Tạo lịch hẹn thành công",
-        error: "Tạo lịch hẹn thất bại"
+        loading: "Đang tạo công việc...",
+        success: "Tạo công việc thành công",
+        error: "Tạo công việc thất bại"
       }
     );
 
@@ -125,7 +120,7 @@ function BookMeetingDialog({ open, handleClose }) {
           handleSubmit(onSubmit)();
         }}
       >
-        <DialogTitle alignSelf="center">Lịch hẹn mới</DialogTitle>
+        <DialogTitle alignSelf="center">Công việc mới</DialogTitle>
         <DialogContent className="!py-4">
           <Controller
             getGroupDetailColumnHeadersMentorSelector
@@ -151,14 +146,17 @@ function BookMeetingDialog({ open, handleClose }) {
             control={control}
             rules={{ required: false }}
             render={({ field }) => {
-              return <TextField className="!mb-6" label="Mô tả" fullWidth {...field} />;
+              return (
+                // eslint-disable-next-line react/no-unstable-nested-components
+                <TextField className="!mb-6" label="Mô tả" fullWidth {...field} />
+              );
             }}
           />
 
-          <Grid container spacing={0} justifyContent="space-between">
-            <Grid item xs>
+          <Grid container spacing={2}>
+            <Grid item sx>
               <Controller
-                name="timeStart"
+                name="deadline"
                 control={control}
                 rules={{ required: false }}
                 render={({ field: { onChange, ...rest } }) => {
@@ -166,37 +164,8 @@ function BookMeetingDialog({ open, handleClose }) {
                     <MobileTimePicker
                       className="!mb-6"
                       fullWidth
-                      label="Từ *"
-                      disablePast
-                      error={!!errors?.timeStart}
-                      helperText={errors?.timeStart?.message}
-                      onChange={(newValue) => onChange(newValue)}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Từ *"
-                          error={!!errors?.userIds}
-                          helperText={errors?.userIds?.message}
-                        />
-                      )}
-                      {...rest}
-                    />
-                  );
-                }}
-              />
-            </Grid>
-            <Grid item xs>
-              <Controller
-                name="timeEnd"
-                control={control}
-                rules={{ required: false }}
-                render={({ field: { onChange, ...rest } }) => {
-                  return (
-                    <MobileTimePicker
-                      className="!mb-6"
-                      fullWidth
-                      label="Đến *"
-                      minTime={today.add(1, "m")}
+                      label="Tới hạn lúc *"
+                      minTime={dayjs().add(30, "m")}
                       disablePast
                       error={!!errors?.timeEnd}
                       helperText={errors?.timeEnd?.message}
@@ -204,7 +173,7 @@ function BookMeetingDialog({ open, handleClose }) {
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          label="Đến *"
+                          label="Tới hạn *"
                           error={!!errors?.userIds}
                           helperText={errors?.userIds?.message}
                         />
@@ -215,7 +184,7 @@ function BookMeetingDialog({ open, handleClose }) {
                 }}
               />
             </Grid>
-            <Grid item xs>
+            <Grid item sx>
               <Controller
                 name="date"
                 control={control}
@@ -253,33 +222,17 @@ function BookMeetingDialog({ open, handleClose }) {
           </Grid>
 
           <Controller
-            getGroupDetailColumnHeadersMentorSelector
-            name="place"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                className="!mb-6"
-                label="Địa điểm"
-                fullWidth
-                error={!!errors?.place}
-                helperText={errors?.place?.message}
-                {...field}
-              />
-            )}
-          />
-
-          <Controller
             name="attendees"
             control={control}
             rules={{
-              required: "Vui lòng chọn người tham gia lịch hẹn"
+              required: "Vui lòng chọn người sẽ thực hiện công việc"
             }}
             onChange={([, data]) => data}
             render={({ field: { onChange, ...props } }) => {
               return (
                 <Autocomplete
                   className="!mt-2"
-                  label="Người tham dự *"
+                  label="Giao công việc *"
                   loading={isLoadingMembers}
                   limitTags={3}
                   multiple
@@ -300,7 +253,7 @@ function BookMeetingDialog({ open, handleClose }) {
                   }}
                   renderInput={(params) => (
                     <TextField
-                      label="Người tham dự *"
+                      label="Giao công việc *"
                       error={!!errors?.attendees}
                       helperText={errors?.attendees?.message}
                       InputProps={{
@@ -331,16 +284,16 @@ function BookMeetingDialog({ open, handleClose }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={onCancel}>Hủy</Button>
-          <Button type="submit">Tạo lịch hẹn</Button>
+          <Button type="submit">Tạo công việc</Button>
         </DialogActions>
       </Dialog>
     </LocalizationProvider>
   );
 }
 
-BookMeetingDialog.propTypes = {
+CreateTaskDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired
 };
 
-export default BookMeetingDialog;
+export default CreateTaskDialog;
