@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "@emotion/cache": "^11.10.5",
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@fullcalendar/core": "^6.1.11",
     "@fullcalendar/daygrid": "^6.1.11",
     "@fullcalendar/interaction": "^6.1.11",
@@ -13,8 +13,8 @@
     "@fullcalendar/timegrid": "^6.1.11",
     "@lexical/react": "^0.14.2",
     "@mui/icons-material": "^5.11.0",
-    "@mui/material": "^5.11.1",
-    "@mui/x-date-pickers": "^5.0.13",
+    "@mui/material": "^5.15.14",
+    "@mui/x-date-pickers": "7.1.0",
     "@reduxjs/toolkit": "^1.9.3",
     "@syncfusion/ej2-react-schedule": "^25.1.35",
     "@tanstack/react-query": "^5.27.5",
@@ -54,6 +54,10 @@
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5",
     "zustand": "^4.5.2"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
   },
   "scripts": {
     "start": "vite",

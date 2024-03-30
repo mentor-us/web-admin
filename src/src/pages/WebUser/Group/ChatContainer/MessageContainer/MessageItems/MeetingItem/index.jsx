@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Tooltip, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { ClockIcon } from "assets/svgs";
@@ -23,9 +23,11 @@ function MeetingItem({ meeting }) {
             <ClockIcon width={22} height={22} />
             <Typography className="text-[#F05B51] !font-bold !text-base">Lịch hẹn</Typography>
           </Box>
-          <Typography className="!font-bold !text-xl !text-[#333] line-clamp-2">
-            {meetingData.title}
-          </Typography>
+          <Tooltip title={meetingData.title}>
+            <Typography className="!font-bold !text-xl !text-[#333] line-clamp-2">
+              {meetingData.title}
+            </Typography>
+          </Tooltip>
           <Typography className="!text-lg !text-[#888] line-clamp-2">
             Lúc {meetingData.time.from}, ngày {meetingData.time.date}
           </Typography>

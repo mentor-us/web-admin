@@ -33,11 +33,12 @@ export const useGetAllChannelsByGroupId = (groupId, select) =>
     select
   });
 
-export const useGetChannelMembers = (channelId) =>
+export const useGetChannelMembers = (channelId, select) =>
   useQuery({
     queryKey: GetChannelMembersKey(channelId),
     queryFn: () => channelService.getChannelMembers(channelId),
-    enabled: !!channelId
+    enabled: !!channelId,
+    select
   });
 
 export const useGetGroupMedia = (groupId) =>

@@ -28,6 +28,18 @@ export default function ListGroup() {
     return null;
   }
 
+  const groupName = (group) => {
+    const groupNameSplit = group?.name
+      .trim()
+      .split(" ")
+      .filter((txt) => txt);
+    if (groupNameSplit.length >= 2) {
+      return `${groupNameSplit[0][0]}${groupNameSplit[1][0]}`;
+    }
+
+    return groupNameSplit[0][0];
+  };
+
   return (
     <div id="scrollableDiv" className="scroll-auto max-w-16 h-full">
       {isSuccess &&
@@ -72,8 +84,7 @@ export default function ListGroup() {
                           mx: 0
                         }}
                       >
-                        {group.name.split(" ")[0][0]}
-                        {group.name.split(" ")[1][0]}
+                        {groupName(group)}
                       </Avatar>
                     )}
                   </Button>

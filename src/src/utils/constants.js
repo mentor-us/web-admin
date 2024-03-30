@@ -108,6 +108,14 @@ export const ROUTE_URL = {
   STATISTIC_ROOT: "/admin/statistic"
 };
 
+export const MEETING_REPEATED_TYPE = {
+  NONE: "NONE",
+  EVERY_DAY: "EVERY_DAY",
+  ONCE_A_WEEK: "ONCE_A_WEEK",
+  ONCE_TWO_WEEKS: "ONCE_TWO_WEEKS",
+  ONCE_A_MONTH: "ONCE_A_MONTH"
+};
+
 export const INIT_TOTAL_REACTION = {
   data: [],
   ownerReacted: [],
