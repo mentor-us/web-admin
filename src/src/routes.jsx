@@ -13,6 +13,7 @@ import GroupManagement from "pages/GroupManagement";
 import MobileLandingPage from "pages/LandingPage/Mobile";
 import WebLandingPage from "pages/LandingPage/Web";
 import PageNotFound from "pages/NotFound";
+import Privacy from "pages/Privacy";
 import SignIn from "pages/SignIn";
 import Statistic from "pages/Statistic";
 import StatisticDetail from "pages/StatisticDetail";
@@ -85,6 +86,11 @@ export const privateRoutes = [
 ];
 
 export const publicRoutes = [
+  {
+    key: "privacy-page",
+    path: "/privacy",
+    element: <Privacy />
+  },
   {
     key: "mobile-landing-page",
     path: "/",
