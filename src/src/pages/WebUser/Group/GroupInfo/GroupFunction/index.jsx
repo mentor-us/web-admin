@@ -53,7 +53,11 @@ function GroupFunction({ type, permission, selectedType }) {
             <ListItemText disableTypography className="text-base line-clamp-1" primary="Lịch hẹn" />
           </ListItemButton>
           {permission.includes(CHANNEL_PERMISSION.BOARD_MANAGEMENT) && (
-            <ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                selectedType(GROUP_FUNCTION.VOTING);
+              }}
+            >
               <ListItemIcon>
                 <ChartIcon width={20} height={20} />
               </ListItemIcon>

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
 import {
   BottomNavigation,
@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 
+import { getImageUrlWithKey } from "utils";
 import FileApi from "api/FileApi";
 
 import File from "pages/WebUser/components/File";
@@ -34,38 +35,22 @@ export default function GroupMedia({ type }) {
   const { data: channelMedia, isLoading, isSuccess } = useGetGroupMedia(channelId);
   const [ImageItem, setImageItem] = useState([]); // State for image items
   const [loading, setLoading] = useState(false);
-  const [FileItem, setFileItem] = useState([]); // State for file items
-  const [imagesToRender, setImagesToRender] = useState(sizeRender); // Number of images to render at a time
   const containerRef = useRef(null); // Reference to the container div
 
-  useEffect(() => {
-    if (isSuccess) {
-      const fetchMediaData = async () => {
-        setLoading(true);
+  const images = useMemo(() => {
+    return (
+      channelMedia
+        ?.filter((item) => item.type === "IMAGE")
+        ?.map((item) => {
+          return { ...item, url: getImageUrlWithKey(item.imageUrl) };
+        })
+        ?.filter(Boolean) || []
+    );
+  }, [channelMedia]);
 
-        const imageItems = await Promise.all(
-          channelMedia
-            ?.filter((item) => item.type === "IMAGE")
-            .map(async (item) => {
-              try {
-                const base64Str = await FileApi.getFileWithKey(item.imageUrl);
-                return { ...item, base64Str };
-              } catch (error) {
-                console.error("Error fetching image:", error);
-                return null;
-              }
-            })
-        );
-
-        setImageItem((prevImageItems) => [...prevImageItems, ...imageItems.filter(Boolean)]);
-        setLoading(false);
-        const fileItems = channelMedia?.filter((item) => item.type === "FILE") || [];
-        setFileItem(fileItems);
-      };
-
-      fetchMediaData();
-    }
-  }, [channelMedia, isSuccess, imagesToRender]);
+  const files = useMemo(() => {
+    return channelMedia?.filter((item) => item.type === "FILE") || [];
+  }, [channelMedia]);
 
   // Function to handle scrolling
 
@@ -103,18 +88,19 @@ export default function GroupMedia({ type }) {
         </div>
       ) : (
         <>
-          {value === "IMAGE" && ImageItem.length > 0 && (
+          {value === "IMAGE" && images.length > 0 && (
             <ImageList cols={3}>
-              {ImageItem.map((item) => (
-                <ImageListItem key={item.imageUrl}>
-                  <img src={item.base64Str} alt="hình ảnh" loading="lazy" />
+              {images.map((item, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <ImageListItem key={`${item.imageUrl}-${index}`}>
+                  <img src={item.url} alt="hình ảnh" loading="lazy" />
                 </ImageListItem>
               ))}
             </ImageList>
           )}
-          {value === "FILE" && FileItem.length > 0 && (
+          {value === "FILE" && files.length > 0 && (
             <div>
-              {FileItem.map((item) => (
+              {files.map((item) => (
                 <Box
                   sx={{
                     padding: "2px"
@@ -125,10 +111,10 @@ export default function GroupMedia({ type }) {
               ))}
             </div>
           )}
-          {value === "IMAGE" && ImageItem.length === 0 && (
+          {value === "IMAGE" && images.length === 0 && (
             <div className="flex justify-center items-center">Chưa có hình ảnh</div>
           )}
-          {value === "FILE" && FileItem.length === 0 && (
+          {value === "FILE" && files.length === 0 && (
             <div className="flex justify-center items-center">Chưa có file</div>
           )}
         </>

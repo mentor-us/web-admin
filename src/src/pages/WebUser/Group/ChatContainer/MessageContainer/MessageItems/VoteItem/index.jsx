@@ -8,7 +8,7 @@ import { LockRedIcon } from "assets/svgs";
 
 import { VOTE_STATUS } from "utils/constants";
 
-function VoteItem({ message }) {
+function VoteItem({ message, containerClassName }) {
   let { vote } = message; // Define vote variable outside the if-else block
 
   if (vote === undefined) {
@@ -53,7 +53,11 @@ function VoteItem({ message }) {
 
   return (
     <Box className="vote-message-container">
-      <Box className="bg-white rounded-lg w-[70%] p-4 ">
+      <Box
+        className={
+          containerClassName !== "" ? containerClassName : "bg-white rounded-lg w-[70%] p-4"
+        }
+      >
         <Box display="flex" alignItems="center" justifyContent="flex-start">
           <img
             src={images.ColumnChartImage}
@@ -120,7 +124,12 @@ function VoteItem({ message }) {
 
 VoteItem.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  message: PropTypes.object.isRequired
+  message: PropTypes.object.isRequired,
+  containerClassName: PropTypes.string
+};
+
+VoteItem.defaultProps = {
+  containerClassName: ""
 };
 
 export default VoteItem;

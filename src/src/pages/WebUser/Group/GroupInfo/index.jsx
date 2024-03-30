@@ -37,6 +37,9 @@ function renderHeaderInfor(type) {
   if (type === GROUP_FUNCTION.IMAGE || type === GROUP_FUNCTION.FILE) {
     return "Bộ sưu tập";
   }
+  if (type === GROUP_FUNCTION.VOTING) {
+    return "Bình chọn";
+  }
   if (type === GROUP_FUNCTION.FAQ) {
     return "FAQ";
   }

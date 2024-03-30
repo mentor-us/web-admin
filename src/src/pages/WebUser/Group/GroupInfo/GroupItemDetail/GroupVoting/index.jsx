@@ -11,7 +11,12 @@ export default function GroupVoting() {
   return (
     <div className="overflow-auto">
       {votes?.map((vote) => (
-        <VoteItem className="border-inherit" message={vote} key={vote.id} />
+        <VoteItem
+          className="border-inherit"
+          containerClassName="bg-white rounded-lg w-full p-2 border-2 border-gray-200 m-2"
+          message={vote}
+          key={vote.id}
+        />
       ))}
     </div>
   );
