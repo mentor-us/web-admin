@@ -34,7 +34,7 @@ function CreateTaskDialog({ open, handleClose }) {
   const { channelId } = useParams();
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
     channelId,
-    (members) => members?.filter((member) => member.id !== myInfo.id) ?? []
+    (members) => members ?? []
   );
   const queryClient = useQueryClient();
 
