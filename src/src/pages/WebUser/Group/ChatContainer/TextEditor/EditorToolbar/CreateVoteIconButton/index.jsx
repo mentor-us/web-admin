@@ -1,14 +1,21 @@
-/* eslint-disable no-unused-vars */
+import { useState } from "react";
 import { IconButton } from "@mui/material";
-import PropTypes from "prop-types";
 
 import { ChartSquareIcon } from "assets/svgs";
 
-function CreateVoteIconButton(props) {
+import CreateVoteDialog from "./CreateVoteDialog";
+
+function CreateVoteIconButton() {
+  const [openDialog, setOpenDialog] = useState(false);
   return (
-    <IconButton>
-      <ChartSquareIcon width={30} height={30} />
-    </IconButton>
+    <>
+      <IconButton onClick={() => setOpenDialog(true)}>
+        <ChartSquareIcon width={30} height={30} />
+      </IconButton>
+      {openDialog && (
+        <CreateVoteDialog open={openDialog} handleClose={() => setOpenDialog(false)} />
+      )}
+    </>
   );
 }
 

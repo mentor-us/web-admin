@@ -224,6 +224,7 @@ function BookMeetingDialog({ open, handleClose }) {
                   return (
                     <DatePicker
                       className="!mb-6"
+                      format="DD/MM/YYYY"
                       fullWidth
                       label="Ngày *"
                       slotProps={{
