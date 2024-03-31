@@ -1,4 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
+import { Avatar } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { Hashtag, LockIcon } from "assets/svgs";
@@ -12,14 +13,7 @@ function ChannelIcon({ channel }) {
     return <LockIcon width={18} height={18} />;
   }
 
-  // return (
-  //   <image
-  //     style={styles.avatar}
-  //     source={
-  //       channel.imageUrl ? { uri: channel.imageUrl } : DefaultUserAvatar
-  //     }
-  //   />
-  // );
+  return <Avatar src={channel?.imageUrl} className="!w-6 !h-6" />;
 }
 
 ChannelIcon.propTypes = {

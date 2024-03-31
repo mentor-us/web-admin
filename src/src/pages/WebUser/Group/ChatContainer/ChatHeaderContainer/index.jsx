@@ -4,8 +4,10 @@ import ViewSidebarOutlinedIcon from "@mui/icons-material/ViewSidebarOutlined";
 import { Avatar, IconButton, Skeleton, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
+import { getImageUrlWithKey } from "utils";
+
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
-import { useGetWorkSpace } from "hooks/groups/queries";
+import { useGetGroupDetail, useGetWorkSpace } from "hooks/groups/queries";
 
 function ChatContainerHeader({
   isOpenChannelInfo,
@@ -13,8 +15,9 @@ function ChatContainerHeader({
   channelName,
   isLoadingGroupDetail
 }) {
-  const { groupId } = useParams();
+  const { groupId, channelId } = useParams();
   const { data: workspace, isLoading } = useGetWorkSpace(groupId);
+  const { data: channelImage } = useGetGroupDetail(channelId, (detail) => detail?.imageUrl ?? "");
 
   return (
     <div className="flex flex-row justify-between items-center bg-white sticky px-4 h-16">
@@ -22,7 +25,11 @@ function ChatContainerHeader({
         {isLoading ? (
           <Skeleton variant="circular" width={48} height={48} />
         ) : (
-          <AsyncMDAvatar alt="Remy Sharp" src={workspace?.imageUrl} />
+          <Avatar
+            alt="chat-avatar"
+            className="!w-10 !h-10"
+            src={getImageUrlWithKey(channelImage || workspace?.imageUrl)}
+          />
         )}
         {!isLoadingGroupDetail && <Typography className="line-clamp-1">{channelName}</Typography>}
       </div>

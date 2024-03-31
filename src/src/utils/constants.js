@@ -147,7 +147,8 @@ export const CHANNEL_PERMISSION = {
 
 export const CHANNEL_TYPE = {
   PUBLIC: "PUBLIC",
-  PRIVATE: "PRIVATE"
+  PRIVATE: "PRIVATE",
+  PRIVATE_MESSAGE: "PRIVATE_MESSAGE"
 };
 
 export const VOTE_STATUS = {
