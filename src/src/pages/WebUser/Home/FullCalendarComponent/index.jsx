@@ -1,12 +1,13 @@
 /* eslint-disable react/button-has-type */
 // import { useEffect, useRef, useState } from "react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionGridPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import TodayIcon from "@mui/icons-material/Today";
 
+import CreateTaskDialog from "pages/WebUser/Group/ChatContainer/TextEditor/EditorToolbar/CreateTaskIconButton/CreateTaskDialog";
 import { useGetAllEvents } from "hooks/events/queries";
 import { formatDate } from "utils/dateHelper";
 
@@ -16,6 +17,9 @@ import "./index.css";
 // eslint-disable-next-line import/prefer-default-export
 export function FullCalendarComponent() {
   const { data: events, isLoading, isSuccess } = useGetAllEvents();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [msgDialog, setMsgDialog] = useState(null);
+
   // const [openModalDetail, setOpenModalDetail] = useState(false);
   // const propsModal = useRef(null);
   const mainCalendarRef = useRef(null);
@@ -34,6 +38,13 @@ export function FullCalendarComponent() {
     console.log("handleClickEvent");
     console.log(event.event);
     console.log(event.event.id);
+    console.log(event.event.extendedProps.type);
+    // eslint-disable-next-line eqeqeq
+    if (event?.event?.extendedProps?.type == "TASK") {
+      setOpenDialog(true);
+      const msg = events.find((e) => e.id === event.event.id);
+      setMsgDialog(msg);
+    }
   };
   return (
     <div className="flex h-full w-full calendar-page">
@@ -96,6 +107,13 @@ export function FullCalendarComponent() {
           eventContent={renderEventContent}
         />
       </div>
+      {openDialog && (
+        <CreateTaskDialog
+          open={openDialog}
+          handleClose={() => setOpenDialog(false)}
+          msg={msgDialog}
+        />
+      )}
     </div>
   );
 }

@@ -100,7 +100,7 @@ function App() {
             <Route path="group/:groupId/*" element={<GroupRoutes />} />
             {/* <Route path="calendar" element={<Calendar />} /> */}
             <Route path="calendar" element={<FullCalendarComponent />} />
-            <Route path="upcoming-event" element={<UpcomingEvent />} />
+            {/* <Route path="upcoming-event" element={<UpcomingEvent />} /> */}
           </Route>
         </Routes>
         <ReactQueryDevtools initialIsOpen={false} />

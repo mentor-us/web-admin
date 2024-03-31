@@ -26,16 +26,19 @@ import dayjs from "dayjs";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
-import { useCreateTaskMutation } from "hooks/chats/mutation";
+import { useCreateTaskMutation, useUpdateTaskMutation } from "hooks/chats/mutation";
 import useMyInfo from "hooks/useMyInfo";
 
-function CreateTaskDialog({ open, handleClose }) {
+function CreateTaskDialog({ open, handleClose, msg = {} }) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
     channelId,
     (members) => members ?? []
   );
+  console.log(msg);
+  const titleDialog = msg ? "Chi tiết công việc" : "Công việc mới";
+  const titlebtnDialog = msg ? "Cập nhật" : "Tạo công việc";
   const queryClient = useQueryClient();
 
   const today = dayjs().add(1, "h");
@@ -48,14 +51,16 @@ function CreateTaskDialog({ open, handleClose }) {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      title: "",
-      description: "",
-      attendees: [],
-      deadline: today,
-      date: today
+      title: msg.title || "",
+      description: msg.description || "",
+      attendees: msg.attendees || [],
+      deadline: dayjs(msg.deadline) || today,
+      date: dayjs(msg.deadline) || today
     }
   });
-  const { mutateAsync: createTaskMutationAsync, isPending } = useCreateTaskMutation();
+  const { mutateAsync: createTaskMutationAsync, isPending } = !msg
+    ? useCreateTaskMutation()
+    : useUpdateTaskMutation();
 
   useEffect(() => {
     setValue("attendees", channelMembers ?? []);
@@ -100,7 +105,16 @@ function CreateTaskDialog({ open, handleClose }) {
 
     onCancel();
   };
-
+  // useEffect(() => {
+  //   if (open) {
+  //     reset({
+  //       title: msg.title || "",
+  //       description: msg.description || "",
+  //       // attendees: msg.attendees || [],
+  //       deadline: new Date(msg.deadline) || today
+  //     });
+  //   }
+  // }, [reset]);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Dialog
@@ -120,7 +134,7 @@ function CreateTaskDialog({ open, handleClose }) {
           handleSubmit(onSubmit)();
         }}
       >
-        <DialogTitle alignSelf="center">Công việc mới</DialogTitle>
+        <DialogTitle alignSelf="center">{titleDialog}</DialogTitle>
         <DialogContent className="!py-4">
           <Controller
             getGroupDetailColumnHeadersMentorSelector
@@ -280,7 +294,7 @@ function CreateTaskDialog({ open, handleClose }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={onCancel}>Hủy</Button>
-          <Button type="submit">Tạo công việc</Button>
+          <Button type="submit">{titlebtnDialog}</Button>
         </DialogActions>
       </Dialog>
     </LocalizationProvider>
@@ -289,7 +303,9 @@ function CreateTaskDialog({ open, handleClose }) {
 
 CreateTaskDialog.propTypes = {
   open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  msg: PropTypes.object.isRequired
 };
 
 export default CreateTaskDialog;
