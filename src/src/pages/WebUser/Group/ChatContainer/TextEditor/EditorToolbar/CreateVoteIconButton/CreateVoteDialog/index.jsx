@@ -185,7 +185,18 @@ function CreateVoteDialog({ open, handleClose }) {
             <Controller
               name="timeEnd"
               control={control}
-              rules={{ required: false }}
+              rules={{
+                required: false,
+                validate: {
+                  gtnow: (v) => {
+                    if (!v || dayjs().isBefore(v)) {
+                      return true;
+                    }
+
+                    return "Thời hạn phải luôn lớn hơn thời điểm hiện tại";
+                  }
+                }
+              }}
               render={({ field: { onChange, ...rest } }) => {
                 return (
                   <DateTimePicker
@@ -198,7 +209,12 @@ function CreateVoteDialog({ open, handleClose }) {
                           minWidth: 0
                         }
                       },
-                      textField: { placeholder: "Không có thời hạn" }
+                      textField: {
+                        placeholder: "Không có thời hạn",
+                        fullWidth: false,
+                        error: !!errors?.timeEnd,
+                        helperText: errors?.timeEnd?.message
+                      }
                     }}
                     localeText={{
                       clearButtonLabel: "Không có thời hạn",
@@ -208,19 +224,8 @@ function CreateVoteDialog({ open, handleClose }) {
                     minTime={dayjs()}
                     disablePast
                     onChange={(newValue) => onChange(newValue)}
-                    renderInput={({ inputProps, ...restParams }) => {
-                      return (
-                        <TextField
-                          {...restParams}
-                          inputProps={{
-                            ...inputProps,
-                            placeholder: "Không có thời hạn"
-                          }}
-                          fullWidth
-                          error={!!errors?.timeEnd}
-                          helperText={errors?.timeEnd?.message}
-                        />
-                      );
+                    renderInput={(field) => {
+                      return <TextField {...field} />;
                     }}
                     {...rest}
                   />
