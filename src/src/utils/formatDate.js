@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { parse } from "tinyduration";
 
 const convertMinuteToYearMonthDay = (minutes) => {
@@ -76,7 +77,7 @@ const getAnotherDateFromToday = (currentDate = new Date(), value = -4, type = "y
     default:
       break;
   }
-  return date;
+  return dayjs(date);
 };
 
 export { formatDate, formatDateExcel, formatDateFromDuration, getAnotherDateFromToday };

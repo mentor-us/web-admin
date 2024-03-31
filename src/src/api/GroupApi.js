@@ -120,6 +120,10 @@ const GroupApi = {
     const URL = `/api/groups/${groupId}/detail`;
     const res = await AxiosClient.get(URL);
     return res?.data;
+  },
+  async getGroupMembers(groupId) {
+    const res = await AxiosClient.get(`/api/groups/${groupId}/members`);
+    return res?.data;
   }
 };
 

@@ -2,6 +2,11 @@ import { API_URL } from "config";
 
 const getBase64Image = async (res) => {
   try {
+    // Check if image base64 string
+    if ((typeof res === "string" || res instanceof String) && res.startsWith("data:image/")) {
+      return res;
+    }
+
     const blob = await res.blob();
 
     return URL.createObjectURL(blob);
@@ -20,6 +25,12 @@ const FileApi = {
       return Promise.resolve("");
     }
 
+    // Check if image base64 string
+    if (key.startsWith("data:image/")) {
+      return Promise.resolve(key);
+    }
+
+    // Check if simple https call
     if (key.startsWith("https")) {
       return fetch(key);
     }

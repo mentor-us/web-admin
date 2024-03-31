@@ -1,11 +1,122 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import { useMemo } from "react";
+import { Box, Button, Tooltip, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
-function VoteItem(props) {
-  return <div>VoteItem</div>;
+import { images } from "assets/images";
+import { LockRedIcon } from "assets/svgs";
+
+import { VOTE_STATUS } from "utils/constants";
+
+function VoteItem({ message }) {
+  const { vote } = message;
+
+  const voterNumber = vote?.choices
+    .flatMap((choice) => choice.voters)
+    .filter((value, index, array) => array.indexOf(value) === index).length;
+
+  const renderVoteItems = useMemo(
+    () =>
+      vote?.choices.map((item) => {
+        let votePercent = "0%";
+        if (voterNumber) {
+          votePercent = `${((item.voters.length / voterNumber) * 100).toFixed(2)}%`;
+        }
+
+        return (
+          <Box className="vote-message-item" key={item.id}>
+            <Box
+              className="vote-percent-line !z-10"
+              sx={{
+                width: votePercent
+              }}
+            />
+            <Box className="vote-option-text line-clamp-2 !z-20">
+              <Tooltip title={item.name}>
+                <Typography className="!text-base ">{item.name}</Typography>
+              </Tooltip>
+            </Box>
+            <Box className="!z-20">
+              <Typography className="vote-option-number line-clamp-1 !text-base">
+                {item.voters.length}
+              </Typography>
+            </Box>
+          </Box>
+        );
+      }),
+    [vote?.choices, voterNumber]
+  );
+
+  return (
+    <Box className="vote-message-container">
+      <Box className="bg-white rounded-lg w-[70%] p-4 ">
+        <Box display="flex" alignItems="center" justifyContent="flex-start">
+          <img
+            src={images.ColumnChartImage}
+            alt="Chart icon"
+            style={{ width: 30, height: 30, marginRight: 12 }}
+          />
+          <Typography className="!font-bold !text-[#333] !text-base !line-clamp-3">
+            {vote?.question}
+          </Typography>
+        </Box>
+
+        {vote?.status === VOTE_STATUS.CLOSED && (
+          <Box marginTop={1} display="flex" alignItems="center" justifyContent="flex-start" gap={1}>
+            <LockRedIcon width={15} height={15} />
+            <Typography className="!text-base">Bình chọn đã kết thúc!</Typography>
+          </Box>
+        )}
+
+        <Box
+          className="my-2"
+          sx={{
+            height: "2px",
+            backgroundColor: "#ccc",
+            elevation: 1
+          }}
+        />
+
+        {voterNumber === 0 ? (
+          <Typography className="!text-[#006EDC] !text-base !mb-2">
+            Chưa có người tham gia bình chọn!
+          </Typography>
+        ) : (
+          <Typography className="!text-[#006EDC] !text-base !mb-2">
+            {voterNumber} người đã bình chọn.
+          </Typography>
+        )}
+
+        <Box className="mb-2 space-y-2">{renderVoteItems}</Box>
+
+        <Button
+          className="w-full !mt-4 focus:!text-[#fff]"
+          sx={{
+            backgroundColor: "#006EDC",
+            borderRadius: 20,
+            textAlign: "center",
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#006EDC",
+              color: "#fff",
+              opacity: 0.8
+            }
+          }}
+        >
+          {vote?.status === VOTE_STATUS.OPEN ? (
+            <Typography className="!text-base">BÌNH CHỌN</Typography>
+          ) : (
+            <Typography className="!text-base">XEM BÌNH CHỌN</Typography>
+          )}
+        </Button>
+      </Box>
+    </Box>
+  );
 }
 
-VoteItem.propTypes = {};
+VoteItem.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  message: PropTypes.object.isRequired
+};
 
 export default VoteItem;

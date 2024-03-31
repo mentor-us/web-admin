@@ -85,6 +85,43 @@ export const groupCategoryStatusList = [
   { label: "Đã xóa", textValue: "DELETED", value: 2, color: "red" }
 ];
 
+export const getRouteUrl = (...paths) => {
+  return paths.join("");
+};
+
+export const ROUTE_URL = {
+  SIGN_IN: "/sign-in",
+
+  // Admin
+  ADMIN_ROOT: "/admin",
+
+  // Group management
+  GROUP_ROOT: "/admin/groups",
+
+  // Group category management
+  GROUP_CATEGORY: "/admin/group-category",
+
+  // Account management
+  ACCOUNT_ROOT: "/admin/account-management",
+
+  // Statistic
+  STATISTIC_ROOT: "/admin/statistic"
+};
+
+export const MEETING_REPEATED_TYPE = {
+  NONE: "NONE",
+  EVERY_DAY: "EVERY_DAY",
+  ONCE_A_WEEK: "ONCE_A_WEEK",
+  ONCE_TWO_WEEKS: "ONCE_TWO_WEEKS",
+  ONCE_A_MONTH: "ONCE_A_MONTH"
+};
+
+export const INIT_TOTAL_REACTION = {
+  data: [],
+  ownerReacted: [],
+  total: 0
+};
+
 export const USER_ROLE = {
   MENTOR: "MENTOR",
   MENTEE: "MENTEE"
@@ -94,5 +131,93 @@ export const MESSAGE_TYPE = {
   TEXT: "TEXT",
   FILE: "FILE",
   IMAGE: "IMAGE",
-  VOTE: "VOTE"
+  VOTE: "VOTE",
+  MEETING: "MEETING",
+  TASK: "TASK"
+};
+
+export const CHANNEL_PERMISSION = {
+  SEND_FILES: "SEND_FILES",
+  TASK_MANAGEMENT: "TASK_MANAGEMENT",
+  MEETING_MANAGEMENT: "MEETING_MANAGEMENT",
+  BOARD_MANAGEMENT: "BOARD_MANAGEMENT",
+  FAQ_MANAGEMENT: "FAQ_MANAGEMENT",
+  GROUP_SETTINGS: "GROUP_SETTINGS"
+};
+
+export const CHANNEL_TYPE = {
+  PUBLIC: "PUBLIC",
+  PRIVATE: "PRIVATE",
+  PRIVATE_MESSAGE: "PRIVATE_MESSAGE"
+};
+
+export const VOTE_STATUS = {
+  OPEN: "OPEN",
+  CLOSED: "CLOSED"
+};
+
+export const UPLOAD_STATUS = {
+  SUCCESS: "Success",
+  FAIL: "Fail",
+  UPLOADING: "Uploading"
+};
+
+export const SUPPORTED_FILE_UPLOAD = [".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf"];
+
+export const MAX_FILE_IMAGE_SIZE = 5; // 5MB
+
+export const SUPPORTED_IMAGE_EXT = [
+  ".jpg",
+  ".jpeg",
+  ".jpe",
+  ".jif",
+  ".jfif",
+  ".jfi",
+  ".png",
+  ".gif",
+  ".webp",
+  ".tiff",
+  ".tif",
+  ".heif",
+  ".heic"
+];
+
+export const LIMIT_IMAGES = 5; // Max 5 image can send
+
+export const TaskStatusObject = {
+  TO_DO: {
+    key: "TO_DO",
+    displayName: "Mới",
+    color: "#333",
+    backgroundColor: "#ebebeb",
+    icon: "progress-close"
+  },
+  IN_PROGRESS: {
+    key: "IN_PROGRESS",
+    displayName: "Đang thực hiện",
+    color: "#2A7BDE",
+    backgroundColor: "#2A7BDE",
+    icon: "progress-upload"
+  },
+  DONE: {
+    key: "DONE",
+    displayName: "Hoàn thành",
+    color: "#4EA05B",
+    backgroundColor: "#4EA05B",
+    icon: "progress-check"
+  },
+  OVERDUE: {
+    key: "OVERDUE",
+    displayName: "Đã trễ hạn",
+    color: "#C01C28",
+    backgroundColor: "#C01C28",
+    icon: "progress-alert"
+  },
+  NULL: {
+    key: "NULL",
+    displayName: "",
+    color: "transparent",
+    backgroundColor: "transparent",
+    icon: ""
+  }
 };

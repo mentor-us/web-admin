@@ -25,7 +25,7 @@ import MDTypography from "components/MDComponents/MDTypography";
 import TooltipCustom from "components/Tooltip";
 import useBreadcrumbs from "hooks/useBreadcrumbs";
 import useMyInfo from "hooks/useMyInfo";
-import { roleAccountList } from "utils/constants";
+import { roleAccountList, ROUTE_URL } from "utils/constants";
 
 import { navbar, navbarContainer, navbarIconButton, navbarRow } from "./styles";
 
@@ -93,7 +93,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
     // } else {
     //   navigate("/sign-in", { replace: true });
     // }
-    navigate("/admin/sign-in", { replace: true });
+    navigate(ROUTE_URL.SIGN_IN, { replace: true });
   };
 
   const menuBox = () => {

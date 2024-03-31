@@ -184,6 +184,7 @@ const getGroupsInHomePage = async (type = "", page = 0, pageSize = 25) => {
 
 const getWorkspace = (groupId) => GroupApi.getWorkspace(groupId);
 const getGroupDetail = (groupId) => GroupApi.getGroupDetail(groupId);
+const getGroupMembers = (groupId) => GroupApi.getGroupMembers(groupId);
 
 const groupsServices = {
   getAllGroups,
@@ -207,6 +208,7 @@ const groupsServices = {
   // User Services
   getGroupsInHomePage,
   getWorkspace,
-  getGroupDetail
+  getGroupDetail,
+  getGroupMembers
 };
 export default ErrorWrapper(groupsServices);

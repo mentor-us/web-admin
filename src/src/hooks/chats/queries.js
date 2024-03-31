@@ -13,15 +13,8 @@ export const useGetMessagesInfinity = (userId, channelId) =>
     queryFn: ({ pageParam }) => {
       return MessageService.getMessages(userId, channelId, pageParam, PAGE_SIZE);
     },
-
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPage) => {
-      return lastPage.length === PAGE_SIZE ? allPage[0].length / PAGE_SIZE : undefined;
-    },
-    select(data) {
-      return {
-        pages: data.pages.flatMap((x) => x),
-        pageParams: [...data.pageParams]
-      };
+      return lastPage.length === PAGE_SIZE ? allPage.length : undefined;
     }
   });

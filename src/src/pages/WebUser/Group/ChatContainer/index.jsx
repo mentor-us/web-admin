@@ -7,7 +7,7 @@ import { Avatar, IconButton } from "@mui/material";
 import ListGroup from "pages/WebUser/Home/ListGroup";
 import { useGetGroupDetail } from "hooks/groups/queries";
 
-import ChatContainerHeader from "./ChatContainerHeader";
+import ChatContainerHeader from "./ChatHeaderContainer";
 import MessageContainer from "./MessageContainer";
 import TextEditor from "./TextEditor";
 import "./style.css";
@@ -21,7 +21,7 @@ function ChatContainer() {
   );
 
   return (
-    <div className="bg-slate-200 h-full w-full flex flex-col justify-between">
+    <div className="bg-slate-200 h-full flex flex-col justify-between">
       <div className="">
         <ChatContainerHeader
           isOpenChannelInfo={showLayout}
@@ -30,10 +30,8 @@ function ChatContainer() {
           isLoadingGroupDetail={isLoading}
         />
       </div>
-      <div className="grow overflow-y-scroll overflow-x-hidden message-container">
-        <MessageContainer />
-      </div>
-      <TextEditor className="" />
+      <MessageContainer channelId={channelId} />
+      <TextEditor className="" channelId={channelId} />
     </div>
   );
 }

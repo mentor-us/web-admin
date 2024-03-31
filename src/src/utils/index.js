@@ -1,14 +1,59 @@
 /* eslint-disable no-unused-vars */
+import { API_URL } from "config";
+
 import { groupStatusList } from "./constants";
 
 export * from "./auth";
 export * from "./dateHelper";
+
+export function getImageUrlWithKey(key) {
+  if (!key) {
+    return "";
+  }
+
+  if (key.startsWith("https") || key.startsWith("data:image/")) {
+    return key;
+  }
+
+  const searchParams = new URLSearchParams();
+  searchParams.append("key", key);
+  return `${API_URL}api/files?${searchParams.toString()}`;
+}
+
+export function stringToColor(string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = "#";
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+  return color;
+}
+
+export function makeTxtElipsis(str) {
+  if (str.length > 35) {
+    return `${str.substr(0, 20)}...${str.substr(str.length - 10, str.length)}`;
+  }
+  return str;
+}
 
 export const isEmptyObject = (objectIns) => {
   return objectIns && Object.keys(objectIns).length === 0 && objectIns.constructor === Object;
 };
 
 export const getFileExtention = (filename) => {
+  if (!filename) {
+    return "";
+  }
   const splitedFileName = filename.toLowerCase().split(".");
 
   // To get the file extension
