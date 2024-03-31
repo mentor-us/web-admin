@@ -17,6 +17,7 @@ import Privacy from "pages/Privacy";
 import SignIn from "pages/SignIn";
 import Statistic from "pages/Statistic";
 import StatisticDetail from "pages/StatisticDetail";
+import TermOfService from "pages/TermOfService";
 import MobileUserGuide from "pages/UserGuide/Mobile";
 import WebAdminGuideline from "pages/UserGuide/Web";
 import { ROUTE_URL } from "utils/constants";
@@ -90,6 +91,11 @@ export const publicRoutes = [
     key: "privacy-page",
     path: "/privacy",
     element: <Privacy />
+  },
+  {
+    key: "privacy-page",
+    path: "/term-of-service",
+    element: <TermOfService />
   },
   {
     key: "mobile-landing-page",
