@@ -24,7 +24,7 @@ function VoteItem({ message }) {
         }
 
         return (
-          <Box className="vote-message-item" key={item.id}>
+          <Box className="vote-message-item h-8" key={item.id}>
             <Box
               className="vote-percent-line !z-10"
               sx={{
@@ -33,11 +33,11 @@ function VoteItem({ message }) {
             />
             <Box className="vote-option-text line-clamp-2 !z-20">
               <Tooltip title={item.name}>
-                <Typography className="!text-base ">{item.name}</Typography>
+                <Typography className="!text-sm">{item.name}</Typography>
               </Tooltip>
             </Box>
             <Box className="!z-20">
-              <Typography className="vote-option-number line-clamp-1 !text-base">
+              <Typography className="vote-option-number line-clamp-1 !text-sm">
                 {item.voters.length}
               </Typography>
             </Box>
@@ -78,11 +78,11 @@ function VoteItem({ message }) {
         />
 
         {voterNumber === 0 ? (
-          <Typography className="!text-[#006EDC] !text-base !mb-2">
+          <Typography className="!text-[#006EDC] !text-sm !mb-2">
             Chưa có người tham gia bình chọn!
           </Typography>
         ) : (
-          <Typography className="!text-[#006EDC] !text-base !mb-2">
+          <Typography className="!text-[#006EDC] !text-sm !mb-2">
             {voterNumber} người đã bình chọn.
           </Typography>
         )}
@@ -90,10 +90,10 @@ function VoteItem({ message }) {
         <Box className="mb-2 space-y-2">{renderVoteItems}</Box>
 
         <Button
-          className="w-full !mt-4 focus:!text-[#fff]"
+          size="small"
+          className="w-full !mt-2 focus:!text-[#fff]"
           sx={{
             backgroundColor: "#006EDC",
-            borderRadius: 20,
             textAlign: "center",
             color: "#fff",
             "&:hover": {
@@ -104,9 +104,9 @@ function VoteItem({ message }) {
           }}
         >
           {vote?.status === VOTE_STATUS.OPEN ? (
-            <Typography className="!text-base">BÌNH CHỌN</Typography>
+            <Typography className="!text-sm">BÌNH CHỌN</Typography>
           ) : (
-            <Typography className="!text-base">XEM BÌNH CHỌN</Typography>
+            <Typography className="!text-sm">XEM BÌNH CHỌN</Typography>
           )}
         </Button>
       </Box>

@@ -31,7 +31,7 @@ function MeetingItem({ meeting }) {
           <Typography className="!text-lg !text-[#888] line-clamp-2">
             Lúc {meetingData.time.from}, ngày {meetingData.time.date}
           </Typography>
-          <Button className="!text-sm !bg-[#ebebeb] !rounded-full !text-[#333] !font-medium">
+          <Button size="small" className=" !bg-[#ebebeb] !rounded-full !text-[#333] !font-medium">
             Mở lịch
           </Button>
         </Box>

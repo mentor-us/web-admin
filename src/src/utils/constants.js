@@ -1,5 +1,6 @@
 import { API_URL } from "config";
 import coaching from "assets/images/coaching.png";
+import EMOJI_IMAGES from "assets/images/emojis";
 import group from "assets/images/group.png";
 import jpeg from "assets/images/jpeg.png";
 import jpg from "assets/images/jpg.png";
@@ -220,4 +221,14 @@ export const TaskStatusObject = {
     backgroundColor: "transparent",
     icon: ""
   }
+};
+
+export const EMOJI_ICONS = {
+  LIKE_INACTIVE: EMOJI_IMAGES.LikeEmojiInactive,
+  LIKE: EMOJI_IMAGES.LikeEmoji,
+  LOVE_EYE: EMOJI_IMAGES.LoveEyeEmoji,
+  SMILE: EMOJI_IMAGES.SmileEmoji,
+  CRY_FACE: EMOJI_IMAGES.CryFaceEmoji,
+  CURIOUS: EMOJI_IMAGES.CuriousEmoji,
+  ANGRY_FACE: EMOJI_IMAGES.AngryFaceEmoji
 };

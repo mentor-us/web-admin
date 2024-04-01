@@ -57,6 +57,19 @@ const MessageApi = {
     }
 
     return true;
+  },
+
+  addReaction: (messageId, senderId, emojiId) => {
+    const URL = `api/messages/react`;
+    return AxiosClient.post(URL, {
+      messageId,
+      senderId,
+      emojiId
+    });
+  },
+  removeReaction: (messageId, senderId) => {
+    const URL = `api/messages/react?messageId=${messageId}&senderId=${senderId}`;
+    return AxiosClient.delete(URL);
   }
 };
 
