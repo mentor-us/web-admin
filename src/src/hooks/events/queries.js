@@ -11,8 +11,6 @@ export const useGetAllEvents = () =>
       const res = await EventService.getAllEvent();
       if (res.data && res.data.length > 0) {
         let events = res.data;
-        console.log("events");
-        console.log(events);
         events = events.map((event) => {
           return {
             ...event,

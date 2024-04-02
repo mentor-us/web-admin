@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -15,6 +15,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Skeleton,
   TextField
 } from "@mui/material";
 import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
@@ -23,22 +24,33 @@ import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 import dayjs from "dayjs";
+import TaskApi from "api/TaskApi";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
 import { useCreateTaskMutation, useUpdateTaskMutation } from "hooks/chats/mutation";
+import { useGetDetailTasks } from "hooks/chats/queries";
 import useMyInfo from "hooks/useMyInfo";
 
-function CreateTaskDialog({ open, handleClose, msg = {} }) {
+function CreateTaskDialog({ open, handleClose, taskId = null }) {
   const myInfo = useMyInfo();
+  const {
+    data: taskDetail,
+    isLoading: isLoadingTaskDetail,
+    isSuccess: isSuccessTaskDetail
+  } = useGetDetailTasks(taskId);
+  if (taskId && isLoadingTaskDetail) {
+    return <Skeleton />;
+  }
+
   const { channelId } = useParams();
+  const [channelIdState, setChannelIdState] = useState(channelId);
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
-    channelId,
+    channelIdState || "",
     (members) => members ?? []
   );
-  console.log(msg);
-  const titleDialog = msg ? "Chi tiết công việc" : "Công việc mới";
-  const titlebtnDialog = msg ? "Cập nhật" : "Tạo công việc";
+  const titleDialog = taskId ? "Chi tiết công việc" : "Công việc mới";
+  const titlebtnDialog = taskId ? "Cập nhật" : "Tạo công việc";
   const queryClient = useQueryClient();
 
   const today = dayjs().add(1, "h");
@@ -51,18 +63,19 @@ function CreateTaskDialog({ open, handleClose, msg = {} }) {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      title: msg.title || "",
-      description: msg.description || "",
-      attendees: msg.attendees || [],
-      deadline: dayjs(msg.deadline) || today,
-      date: dayjs(msg.deadline) || today
+      title: "",
+      description: "",
+      attendees: [],
+      deadline: today,
+      date: today
     }
   });
-  const { mutateAsync: createTaskMutationAsync, isPending } = !msg
+  const { mutateAsync: createTaskMutationAsync, isPending } = !taskId
     ? useCreateTaskMutation()
     : useUpdateTaskMutation();
-
   useEffect(() => {
+    console.log("channelMembers");
+    console.log(channelMembers);
     setValue("attendees", channelMembers ?? []);
   }, [channelMembers]);
 
@@ -105,16 +118,42 @@ function CreateTaskDialog({ open, handleClose, msg = {} }) {
 
     onCancel();
   };
-  // useEffect(() => {
-  //   if (open) {
-  //     reset({
-  //       title: msg.title || "",
-  //       description: msg.description || "",
-  //       // attendees: msg.attendees || [],
-  //       deadline: new Date(msg.deadline) || today
-  //     });
-  //   }
-  // }, [reset]);
+  useEffect(() => {
+    if (open) {
+      // eslint-disable-next-line no-shadow
+      const getTaskAssignee = async (taskDetail) => {
+        const res = await TaskApi.getTaskAssignees(taskDetail.id);
+        // if (res.data) {
+        setValue("attendees", res.data || []);
+        // }
+      };
+      if (isSuccessTaskDetail && taskDetail) {
+        console.log("taskDetail");
+        console.log(taskDetail);
+        if (taskDetail) {
+          const { channelId: ChannelIdInTask } = taskDetail;
+          setChannelIdState(ChannelIdInTask);
+          // Now you have the channelId from taskDetail
+        }
+        reset({
+          title: taskDetail.title || "",
+          description: taskDetail.description || "",
+          deadline: dayjs(taskDetail.deadline) || today,
+          date: dayjs(taskDetail.deadline) || today,
+          attendees: channelMembers || []
+        });
+        // setValue("attendees", [
+        //   {
+        //     id: "650fa97f0ee45f4e461b6bd0",
+        //     imageUrl:
+        //       "https://lh3.googleusercontent.com/a/ACg8ocLc8pAbl-MFsj5x56rb0dxVS3jpp1GhMQ4mkVjqAS7Qsf4=s96-c",
+        //     name: "Võ Thanh Sương"
+        //   }
+        // ]);
+        getTaskAssignee(taskDetail);
+      }
+    }
+  }, [isSuccessTaskDetail]);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Dialog
@@ -305,7 +344,7 @@ CreateTaskDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  msg: PropTypes.object.isRequired
+  taskId: PropTypes.string.isRequired
 };
 
 export default CreateTaskDialog;

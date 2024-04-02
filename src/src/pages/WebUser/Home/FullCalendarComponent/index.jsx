@@ -18,7 +18,7 @@ import "./index.css";
 export function FullCalendarComponent() {
   const { data: events, isLoading, isSuccess } = useGetAllEvents();
   const [openDialog, setOpenDialog] = useState(false);
-  const [msgDialog, setMsgDialog] = useState(null);
+  const [msgIdDialog, setMsgIdDialog] = useState(null);
 
   // const [openModalDetail, setOpenModalDetail] = useState(false);
   // const propsModal = useRef(null);
@@ -35,15 +35,10 @@ export function FullCalendarComponent() {
   };
   const handleClickEvent = (event) => {
     // showModal
-    console.log("handleClickEvent");
-    console.log(event.event);
-    console.log(event.event.id);
-    console.log(event.event.extendedProps.type);
     // eslint-disable-next-line eqeqeq
     if (event?.event?.extendedProps?.type == "TASK") {
       setOpenDialog(true);
-      const msg = events.find((e) => e.id === event.event.id);
-      setMsgDialog(msg);
+      setMsgIdDialog(event.event.id);
     }
   };
   return (
@@ -111,7 +106,7 @@ export function FullCalendarComponent() {
         <CreateTaskDialog
           open={openDialog}
           handleClose={() => setOpenDialog(false)}
-          msg={msgDialog}
+          taskId={msgIdDialog}
         />
       )}
     </div>
