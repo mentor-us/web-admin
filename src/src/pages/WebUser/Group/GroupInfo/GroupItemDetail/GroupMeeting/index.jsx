@@ -1,14 +1,21 @@
+import { useParams } from "react-router-dom";
+import { Box } from "@mui/material";
+
+import { useGetGroupMeetings } from "hooks/meeting/queries";
+
+import MeetingItem from "./MeetingItem";
+
 export default function GroupMeeting() {
+  const { channelId } = useParams();
+  // const channelId = "65d99d858c91143221a44b99";
+  const { data: meetings } = useGetGroupMeetings(channelId);
   return (
-    <div className="bg-white w-full max-w-screen-md shadow-md my-2 p-3 pt-10 relative border-2 border-gray-200">
-      <div className="bg-blue-500 absolute top-1 right-0 px-2 py-2 ">
-        <p className="text-white  text-xs text-center">23:43 - 12-34 hôm nay</p>
-      </div>
-      <div className="absolute top-1 left-0 px-2 py-2 border-l-4 border-blue-500 rounded-r-md ">
-        <p className="text-blue-500 text-sm font-bold">Lịch hẹn</p>
-      </div>
-      <p className="text-black text-xl">hau nguyen</p>
-      <p className="text-gray-500 text-sm">Người tổ chức: Hau nef</p>
-    </div>
+    <Box className="border">
+      {meetings && meetings.length > 0 ? (
+        meetings.map((meeting) => <MeetingItem key={meeting.id} meeting={meeting} />)
+      ) : (
+        <div className="flex justify-center items-center">Chưa có lịch hẹn</div>
+      )}
+    </Box>
   );
 }

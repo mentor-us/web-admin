@@ -13,6 +13,9 @@ const MeetingService = {
         name: "System"
       }
     };
+  },
+  getAllMeetingInGroup: (groupId) => {
+    return MeetingApi.getAllMeetingInGroup(groupId);
   }
 };
 
