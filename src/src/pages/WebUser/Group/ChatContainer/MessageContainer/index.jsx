@@ -6,9 +6,9 @@ import PropTypes from "prop-types";
 
 import BouncingDotsLoading from "pages/WebUser/components/BouncingDotsLoading";
 import SocketService from "service/socketService";
+import { useMessageQueryState } from "hooks/channels/queries";
 import { useGetMessagesInfinity } from "hooks/chats/queries";
 import useMyInfo from "hooks/useMyInfo";
-import { MESSAGE_TYPE } from "utils/constants";
 
 import MessageFooterItem from "./MessageFooterItem";
 import MessageItems from "./MessageItems";
@@ -21,6 +21,7 @@ function MessageContainer({ channelId }) {
     hasNextPage,
     fetchNextPage
   } = useGetMessagesInfinity(myInfo?.id, channelId);
+  const { manualAddNewMessage } = useMessageQueryState(channelId);
 
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
@@ -34,12 +35,7 @@ function MessageContainer({ channelId }) {
 
   useEffect(() => {
     const onReceiveMessage = (response) => {
-      // console.log("@DUKE: receive_message", response);
-      if (response.type === MESSAGE_TYPE.MEETING || response.type === MESSAGE_TYPE.TASK) {
-        // dispacher(EventActions.setLoading(true));
-      }
-      console.log(response);
-      // state.receiveMessage(response);
+      manualAddNewMessage(response);
     };
 
     // Join chat room

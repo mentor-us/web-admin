@@ -1,10 +1,12 @@
 /* eslint-disable react/forbid-prop-types */
-import { Box, ListItem, ListItemAvatar, Typography } from "@mui/material";
+import { Box, ListItem, ListItemAvatar, Stack, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { getTime } from "utils";
 
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
+import ReactedEmoji from "pages/WebUser/components/ReactedEmoji";
+import ReactionButton from "pages/WebUser/components/ReactionButton";
 
 const styles = {
   container: {
@@ -37,9 +39,11 @@ function MessageItemContainer({ children, message, isOwner }) {
 
   return (
     <Box
-      className={`flex space-x-2 items-start px-2 ${isOwner ? " justify-end" : "justify-start"}`}
+      className={`message-item-container flex space-x-2 items-start px-2 ${
+        isOwner ? " justify-end" : "justify-start other-message-container"
+      }`}
     >
-      <ListItem className={`max-w-[70%] ${isOwner ? "!justify-end" : ""}`}>
+      <ListItem className={`max-w-[70%]  ${isOwner ? "!justify-end" : ""}`}>
         {!isOwner && (
           <ListItemAvatar sx={{ alignSelf: "start", marginRight: "0.5rem", minWidth: 0 }}>
             <AsyncMDAvatar
@@ -53,7 +57,7 @@ function MessageItemContainer({ children, message, isOwner }) {
             />
           </ListItemAvatar>
         )}
-        <div className="h-full space-y-1" style={containerStyle}>
+        <div className="message-item-content h-full space-y-1" style={containerStyle}>
           {!isOwner && (
             <Typography className="!text-xs font-bold text-[#299C49]">
               {message?.sender?.name}
@@ -61,13 +65,22 @@ function MessageItemContainer({ children, message, isOwner }) {
           )}
           {children}
           <Typography
-            className="!text-sm"
+            className="!text-sm !mb-2"
             style={{
               color: "#888"
             }}
           >
             {getTime(message?.createdDate)}
           </Typography>
+          <Stack className="reaction-button-container" spacing={1} direction="row">
+            <ReactedEmoji className="reacted-emoji-container" reactions={message?.totalReaction} />
+            <ReactionButton
+              className={`reaction-icon-button ${
+                message?.totalReaction?.ownerReacted.length !== 0 ? "flex" : "flex"
+              }`}
+              message={message}
+            />
+          </Stack>
         </div>
       </ListItem>
     </Box>

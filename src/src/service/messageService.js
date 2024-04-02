@@ -40,8 +40,15 @@ const getMessages = async (userId, groupId, page = 0, size = 25) => {
   }
 };
 
+const addReaction = (messageId, senderId, emojiId) =>
+  MessageApi.addReaction(messageId, senderId, emojiId);
+
+const removeReaction = (messageId, senderId) => MessageApi.removeReaction(messageId, senderId);
+
 const messageService = {
-  getMessages
+  getMessages,
+  addReaction,
+  removeReaction
 };
 
 export default ErrorWrapper(messageService);

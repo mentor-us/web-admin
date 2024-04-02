@@ -1,5 +1,6 @@
 import { API_URL } from "config";
 import coaching from "assets/images/coaching.png";
+import EMOJI_IMAGES from "assets/images/emojis";
 import group from "assets/images/group.png";
 import jpeg from "assets/images/jpeg.png";
 import jpg from "assets/images/jpg.png";
@@ -108,6 +109,14 @@ export const ROUTE_URL = {
   STATISTIC_ROOT: "/admin/statistic"
 };
 
+export const MEETING_REPEATED_TYPE = {
+  NONE: "NONE",
+  EVERY_DAY: "EVERY_DAY",
+  ONCE_A_WEEK: "ONCE_A_WEEK",
+  ONCE_TWO_WEEKS: "ONCE_TWO_WEEKS",
+  ONCE_A_MONTH: "ONCE_A_MONTH"
+};
+
 export const INIT_TOTAL_REACTION = {
   data: [],
   ownerReacted: [],
@@ -139,7 +148,8 @@ export const CHANNEL_PERMISSION = {
 
 export const CHANNEL_TYPE = {
   PUBLIC: "PUBLIC",
-  PRIVATE: "PRIVATE"
+  PRIVATE: "PRIVATE",
+  PRIVATE_MESSAGE: "PRIVATE_MESSAGE"
 };
 
 export const VOTE_STATUS = {
@@ -211,6 +221,16 @@ export const TaskStatusObject = {
     backgroundColor: "transparent",
     icon: ""
   }
+};
+
+export const EMOJI_ICONS = {
+  LIKE_INACTIVE: EMOJI_IMAGES.LikeEmojiInactive,
+  LIKE: EMOJI_IMAGES.LikeEmoji,
+  LOVE_EYE: EMOJI_IMAGES.LoveEyeEmoji,
+  SMILE: EMOJI_IMAGES.SmileEmoji,
+  CRY_FACE: EMOJI_IMAGES.CryFaceEmoji,
+  CURIOUS: EMOJI_IMAGES.CuriousEmoji,
+  ANGRY_FACE: EMOJI_IMAGES.AngryFaceEmoji
 };
 export const GROUP_FUNCTION = {
   MEMBER: "MEMBER",

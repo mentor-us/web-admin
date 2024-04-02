@@ -1,6 +1,10 @@
 import { getTimeMeeting } from "utils";
+import MeetingApi from "api/MeetingApi";
 
 const MeetingService = {
+  createMeeting: (meeting) => {
+    return MeetingApi.createMeeting(meeting);
+  },
   fulfillMeetingTime: (meeting) => {
     return {
       ...meeting,

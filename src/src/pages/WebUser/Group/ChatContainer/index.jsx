@@ -7,7 +7,7 @@ import { Avatar, IconButton } from "@mui/material";
 import ListGroup from "pages/WebUser/Home/ListGroup";
 import { useGetGroupDetail } from "hooks/groups/queries";
 
-import ChatContainerHeader from "./ChatContainerHeader";
+import ChatContainerHeader from "./ChatHeaderContainer";
 import MessageContainer from "./MessageContainer";
 import TextEditor from "./TextEditor";
 import "./style.css";
