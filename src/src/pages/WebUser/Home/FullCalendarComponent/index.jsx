@@ -5,7 +5,6 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionGridPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import TodayIcon from "@mui/icons-material/Today";
 
 import CreateTaskDialog from "pages/WebUser/Group/ChatContainer/TextEditor/EditorToolbar/CreateTaskIconButton/CreateTaskDialog";
 import { useGetAllEvents } from "hooks/events/queries";
@@ -44,11 +43,7 @@ export function FullCalendarComponent() {
   return (
     <div className="flex h-full w-full calendar-page">
       <div className="w-80 flex flex-col sub-calendar">
-        <div className="">
-          Select kind event1
-          <TodayIcon />
-        </div>
-        <div className="grow p-2">
+        <div className="grow p-2 mt-5">
           <FullCalendar
             height="350px"
             locale={viLocale}
@@ -71,17 +66,17 @@ export function FullCalendarComponent() {
           />
         </div>
       </div>
-      <div className="grow p-5 main-calendar">
+      <div className="grow py-5 main-calendar">
         <FullCalendar
           ref={mainCalendarRef}
           height="100%"
           plugins={[dayGridPlugin, timeGridPlugin, interactionGridPlugin]}
           initialView="dayGridMonth"
-          dayHeaderFormat={{ weekday: "long" }}
+          dayHeaderFormat={{ weekday: "short" }}
           locale={viLocale}
           headerToolbar={{
-            start: "",
-            center: "title",
+            start: "title",
+            center: "",
             end: "dayGridMonth,timeGridWeek,timeGridDay"
           }}
           slotLabelFormat={{
