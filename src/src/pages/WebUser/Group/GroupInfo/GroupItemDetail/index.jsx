@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { GROUP_FUNCTION } from "utils/constants";
 
 import GroupMedia from "./GroupMedia";
+import GroupMeeting from "./GroupMeeting";
 import GroupMember from "./GroupMember";
 import GroupVoting from "./GroupVoting";
 
@@ -11,7 +12,7 @@ function GroupItemDetail({ type }) {
     return <GroupMember />;
   }
   if (type === GROUP_FUNCTION.MEETING) {
-    return <div>Lịch hẹn</div>;
+    return <GroupMeeting />;
   }
   if (type === GROUP_FUNCTION.TASK) {
     return <div>Công việc</div>;

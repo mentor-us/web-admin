@@ -74,13 +74,6 @@ export default function GroupInfo() {
     isSuccess
   } = useGetGroupDetail(channelId === "null" ? null : channelId);
 
-  useEffect(() => {
-    if (isLoading) {
-      return;
-    }
-    console.log(groupDetail);
-  }, [groupDetail, isLoading]);
-
   if (isLoading) {
     return null;
   }

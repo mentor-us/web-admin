@@ -1,3 +1,4 @@
+import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -9,7 +10,6 @@ import {
   FaqIcon,
   GalleryIcon,
   GroupIcon,
-  MediaIcon,
   TaskListIcon
 } from "assets/svgs";
 
@@ -120,7 +120,7 @@ function GroupFunction({ type, permission, selectedType }) {
             }}
           >
             <ListItemIcon>
-              <MediaIcon width={20} height={20} />
+              <FolderOutlinedIcon width={20} height={20} />
             </ListItemIcon>
             <ListItemText disableTypography className="text-base line-clamp-1" primary="Tập tin" />
           </ListItemButton>
