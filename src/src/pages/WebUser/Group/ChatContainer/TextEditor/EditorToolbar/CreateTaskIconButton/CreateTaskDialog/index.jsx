@@ -15,7 +15,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Skeleton,
+  // Skeleton,
   TextField
 } from "@mui/material";
 import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
@@ -34,23 +34,19 @@ import useMyInfo from "hooks/useMyInfo";
 
 function CreateTaskDialog({ open, handleClose, taskId = null }) {
   const myInfo = useMyInfo();
-  const {
-    data: taskDetail,
-    isLoading: isLoadingTaskDetail,
-    isSuccess: isSuccessTaskDetail
-  } = useGetDetailTasks(taskId);
-  if (taskId && isLoadingTaskDetail) {
-    return <Skeleton />;
-  }
-
   const { channelId } = useParams();
-  const [channelIdState, setChannelIdState] = useState(channelId);
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
-    channelIdState || "",
+    channelId || "",
     (members) => members ?? []
   );
-  const titleDialog = taskId ? "Chi tiết công việc" : "Công việc mới";
-  const titlebtnDialog = taskId ? "Cập nhật" : "Tạo công việc";
+  const { data: taskDetail } = useGetDetailTasks(taskId);
+  console.log(taskDetail);
+  // if (taskId && isLoadingTaskDetail) {
+  //   return <Skeleton />;
+  // }
+  const [titleDialog, setTitleDialog] = useState(taskId ? "Chi tiết công việc" : "Công việc mới");
+  const [isEditable, setIsEditable] = useState(!taskId);
+  const titlebtnDialog = isEditable ? "Lưu công việc" : "";
   const queryClient = useQueryClient();
 
   const today = dayjs().add(1, "h");
@@ -72,7 +68,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
   });
   const { mutateAsync: createTaskMutationAsync, isPending } = !taskId
     ? useCreateTaskMutation()
-    : useUpdateTaskMutation();
+    : useUpdateTaskMutation(taskId);
   useEffect(() => {
     console.log("channelMembers");
     console.log(channelMembers);
@@ -83,6 +79,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
     const { date } = data;
 
     return {
+      id: taskId ?? null,
       title: data.title,
       description: data.description,
       userIds: data.attendees.map((attendee) => attendee.id),
@@ -111,7 +108,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
       }),
       {
         loading: "Đang tạo công việc...",
-        success: "Tạo công việc thành công",
+        success: "Lưu công việc thành công",
         error: "Tạo công việc thất bại"
       }
     );
@@ -127,13 +124,13 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
         setValue("attendees", res.data || []);
         // }
       };
-      if (isSuccessTaskDetail && taskDetail) {
+      if (taskDetail) {
+        // taskData.role === "MENTOR" || taskData.assigner.id == currentUser.id
         console.log("taskDetail");
         console.log(taskDetail);
-        if (taskDetail) {
-          const { channelId: ChannelIdInTask } = taskDetail;
-          setChannelIdState(ChannelIdInTask);
-          // Now you have the channelId from taskDetail
+        if (taskDetail.role === "MENTOR" || taskDetail?.assigner?.id === myInfo.id) {
+          setTitleDialog("Cập nhật công việc");
+          setIsEditable(true);
         }
         reset({
           title: taskDetail.title || "",
@@ -153,7 +150,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
         getTaskAssignee(taskDetail);
       }
     }
-  }, [isSuccessTaskDetail]);
+  }, [taskDetail]);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Dialog
@@ -166,7 +163,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
           className: "!px-2"
         }}
         onSubmit={(event) => {
-          if (isPending) {
+          if (isPending || !isEditable) {
             return;
           }
           event.preventDefault();
@@ -179,6 +176,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
             getGroupDetailColumnHeadersMentorSelector
             name="title"
             control={control}
+            disabled={!isEditable}
             rules={{
               required: "Vui lòng nhập tiêu đề"
             }}
@@ -197,6 +195,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
           <Controller
             name="description"
             control={control}
+            disabled={!isEditable}
             rules={{ required: false }}
             render={({ field }) => {
               return (
@@ -211,6 +210,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
               <Controller
                 name="deadline"
                 control={control}
+                disabled={!isEditable}
                 rules={{ required: false }}
                 render={({ field: { onChange, ...rest } }) => {
                   return (
@@ -240,6 +240,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
             <Grid item sx>
               <Controller
                 name="date"
+                disabled={!isEditable}
                 control={control}
                 rules={{ required: false }}
                 render={({ field: { onChange, ...rest } }) => {
@@ -272,6 +273,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
 
           <Controller
             name="attendees"
+            disabled={!isEditable}
             control={control}
             rules={{
               required: "Vui lòng chọn người sẽ thực hiện công việc"
@@ -332,8 +334,8 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel}>Hủy</Button>
-          <Button type="submit">{titlebtnDialog}</Button>
+          <Button onClick={onCancel}>Đóng</Button>
+          {isEditable && <Button type="submit">{titlebtnDialog}</Button>}
         </DialogActions>
       </Dialog>
     </LocalizationProvider>
