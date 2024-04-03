@@ -73,10 +73,14 @@ function MessageItemContainer({ children, message, isOwner }) {
             {getTime(message?.createdDate)}
           </Typography>
           <Stack className="reaction-button-container" spacing={1} direction="row">
-            <ReactedEmoji className="reacted-emoji-container" reactions={message?.totalReaction} />
+            <ReactedEmoji
+              className="reacted-emoji-container"
+              reactions={message?.reactions}
+              totalReaction={message?.totalReaction}
+            />
             <ReactionButton
               className={`reaction-icon-button ${
-                message?.totalReaction?.ownerReacted.length !== 0 ? "flex" : "flex"
+                message?.totalReaction?.ownerReacted.length !== 0 ? "flex" : "hidden"
               }`}
               message={message}
             />

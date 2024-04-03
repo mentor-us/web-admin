@@ -2,7 +2,7 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-unused-vars */
 import toast from "react-hot-toast";
-import { CircularProgress, IconButton } from "@mui/material";
+import { CircularProgress, IconButton, Tooltip } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useFilePicker } from "use-file-picker";
@@ -88,9 +88,15 @@ function ImageIconButton({ channelId }) {
   });
 
   return (
-    <IconButton onClick={() => openFilePicker()}>
-      {loading ? <CircularProgress color="info" size={30} /> : <MediaIcon width={30} height={30} />}
-    </IconButton>
+    <Tooltip title="Gửi ảnh" placement="top">
+      <IconButton onClick={() => openFilePicker()}>
+        {loading ? (
+          <CircularProgress color="info" size={30} />
+        ) : (
+          <MediaIcon width={30} height={30} />
+        )}
+      </IconButton>
+    </Tooltip>
   );
 }
 
