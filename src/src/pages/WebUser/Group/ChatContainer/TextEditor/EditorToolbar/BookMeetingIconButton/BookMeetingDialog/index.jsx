@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -23,10 +23,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 import dayjs from "dayjs";
+import MeetingApi from "api/MeetingApi";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
-import { useCreateMeetingMutation } from "hooks/chats/mutation";
+import { useCreateMeetingMutation, useUpdateMeetingMutation } from "hooks/chats/mutation";
 import { useGetDetailMeeting } from "hooks/events/queries";
 import useMyInfo from "hooks/useMyInfo";
 import { MEETING_REPEATED_TYPE } from "utils/constants";
@@ -41,6 +42,11 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
   const queryClient = useQueryClient();
   const today = dayjs().add(1, "h").minute(0);
   const { data: meetingDetail } = useGetDetailMeeting(meetingId);
+  const [titleDialog, setTitleDialog] = useState(
+    meetingId ? "Chi tiết lịch hẹn " : "Lịch hẹn  mới"
+  );
+  const [isEditable, setIsEditable] = useState(!meetingId);
+  const titlebtnDialog = isEditable ? "Lưu lịch hẹn " : "";
 
   const {
     control,
@@ -59,7 +65,9 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
       date: today
     }
   });
-  const { mutateAsync: createMeetingMutationAsync, isPending } = useCreateMeetingMutation();
+  const { mutateAsync: createMeetingMutationAsync, isPending } = meetingId
+    ? useUpdateMeetingMutation()
+    : useCreateMeetingMutation();
 
   useEffect(() => {
     setValue("attendees", channelMembers ?? []);
@@ -69,11 +77,13 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
     const { date } = data;
 
     return {
+      id: meetingId ?? null,
       title: data.title,
       description: data.description,
       attendees: data.attendees.map((attendee) => attendee.id),
       organizerId: myInfo.id,
       repeated: MEETING_REPEATED_TYPE.EVERY_DAY,
+      place: data.place,
       groupId: channelId,
       timeEnd: data.timeEnd.date(date.date()).month(date.month()).year(date.year()).toJSON(),
       timeStart: data.timeStart.date(date.date()).month(date.month()).year(date.year()).toJSON()
@@ -109,26 +119,28 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
   useEffect(() => {
     if (open) {
       // eslint-disable-next-line no-shadow
-      // const getTaskAssignee = async (meetingDetail) => {
-      //   const res = await TaskApi.getTaskAssignees(meetingDetail.id);
-      //   // if (res.data) {
-      //   setValue("attendees", res.data || []);
-      //   // }
-      // };
+      const getMeetingAssignees = async (meetingDetail) => {
+        const res = await MeetingApi.getMeetingAssignees(meetingDetail.id);
+        // if (res.data) {
+        setValue("attendees", res.data || []);
+        // }
+      };
       if (meetingDetail) {
         // taskData.role === "MENTOR" || taskData.assigner.id == currentUser.id
         console.log("meetingDetail");
         console.log(meetingDetail);
-        // if (meetingDetail.role === "MENTOR" || meetingDetail?.assigner?.id === myInfo.id) {
-        //   setTitleDialog("Cập nhật công việc");
-        //   setIsEditable(true);
-        // }
+        if (meetingDetail.canEdit) {
+          setTitleDialog("Cập nhật lịch hẹn");
+          setIsEditable(true);
+        }
         reset({
           title: meetingDetail.title || "",
-          description: meetingDetail.description || ""
-          // deadline: dayjs(meetingDetail.deadline) || today,
-          // date: dayjs(meetingDetail.deadline) || today,
-          // attendees: channelMembers || []
+          description: meetingDetail.description || "",
+          place: meetingDetail.place || "",
+          timeStart: dayjs(meetingDetail.timeStart) || today,
+          timeEnd: dayjs(meetingDetail.timeEnd) || today,
+          date: dayjs(meetingDetail.date) || today,
+          attendees: meetingDetail.attendees || []
         });
         // setValue("attendees", [
         //   {
@@ -138,7 +150,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
         //     name: "Võ Thanh Sương"
         //   }
         // ]);
-        // getTaskAssignee(meetingDetail);
+        getMeetingAssignees(meetingDetail);
       }
     }
   }, [meetingDetail]);
@@ -161,11 +173,12 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
           handleSubmit(onSubmit)();
         }}
       >
-        <DialogTitle alignSelf="center">Lịch hẹn mới</DialogTitle>
+        <DialogTitle alignSelf="center">{titleDialog}</DialogTitle>
         <DialogContent className="!py-4">
           <Controller
             getGroupDetailColumnHeadersMentorSelector
             name="title"
+            disabled={!isEditable}
             control={control}
             rules={{
               required: "Vui lòng nhập tiêu đề"
@@ -184,6 +197,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
 
           <Controller
             name="description"
+            disabled={!isEditable}
             control={control}
             rules={{ required: false }}
             render={({ field }) => {
@@ -195,6 +209,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
             <Grid item xs>
               <Controller
                 name="timeStart"
+                disabled={!isEditable}
                 control={control}
                 rules={{ required: false }}
                 render={({ field: { onChange, ...rest } }) => {
@@ -224,6 +239,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
             <Grid item xs>
               <Controller
                 name="timeEnd"
+                disabled={!isEditable}
                 control={control}
                 rules={{ required: false }}
                 render={({ field: { onChange, ...rest } }) => {
@@ -254,6 +270,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
             <Grid item xs>
               <Controller
                 name="date"
+                disabled={!isEditable}
                 control={control}
                 rules={{ required: false }}
                 render={({ field: { onChange, ...rest } }) => {
@@ -292,6 +309,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
           <Controller
             getGroupDetailColumnHeadersMentorSelector
             name="place"
+            disabled={!isEditable}
             control={control}
             render={({ field }) => (
               <TextField
@@ -307,6 +325,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
 
           <Controller
             name="attendees"
+            disabled={!isEditable}
             control={control}
             rules={{
               required: "Vui lòng chọn người tham gia lịch hẹn"
@@ -368,7 +387,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={onCancel}>Hủy</Button>
-          <Button type="submit">Tạo lịch hẹn</Button>
+          {isEditable && <Button type="submit">{titlebtnDialog}</Button>}
         </DialogActions>
       </Dialog>
     </LocalizationProvider>

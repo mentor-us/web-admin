@@ -181,7 +181,7 @@
 }
 .sub-calendar .fc-day { 
     border-radius: 50%;
-    transition: all ease 0.2s;
+    transition: all ease 0.25s;
     background-color: transparent;
 }
 .sub-calendar .fc-daygrid-day-top{

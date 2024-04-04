@@ -11,7 +11,11 @@ export const useCreateMeetingMutation = () =>
     mutationKey: CreateMeetingMutationKey,
     mutationFn: (meeting) => MeetingService.createMeeting(meeting)
   });
-
+export const useUpdateMeetingMutation = () =>
+  useMutation({
+    mutationKey: CreateMeetingMutationKey,
+    mutationFn: (meeting) => MeetingService.updateMeeting(meeting)
+  });
 export const useCreateTaskMutation = () =>
   useMutation({
     mutationKey: CreateTaskMutationKey,
