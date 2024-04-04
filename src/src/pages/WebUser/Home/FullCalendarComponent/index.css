@@ -18,7 +18,7 @@
 }
 .fc-event{
     cursor: pointer;
-    padding: 0.25rem;
+    padding: 0.225rem;
     padding-left: 0.5rem;
     overflow: hidden;
     white-space: initial;
@@ -135,6 +135,8 @@
 .main-calendar .fc-daygrid-day { 
     background-color: whitesmoke;
     border-radius: 5px;
+    max-width: 210px !important;
+    max-height: 200px !important;
 }
 .main-calendar .fc-daygrid-day-number{
     /* padding: 0.2rem 0.45rem !important; */
@@ -188,6 +190,8 @@
     display: flex;
     justify-content: center;
     font-weight: bold;
+    font-size: large;
+
 }
 .sub-calendar .fc-daygrid-day-top:hover{
     color: white;

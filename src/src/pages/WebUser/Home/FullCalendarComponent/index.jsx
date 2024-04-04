@@ -66,7 +66,7 @@ export function FullCalendarComponent() {
           </div>
           <div className="calendar-wraper p-2 rounded-lg">
             <FullCalendar
-              height="330px"
+              height="320px"
               locale={viLocale}
               dayHeaderFormat={{ weekday: "narrow" }}
               plugins={[dayGridPlugin, interactionGridPlugin]}
