@@ -8,7 +8,7 @@ const MeetingApi = {
   getMeetingAssignees: (meetingId, params = {}) =>
     AxiosClient.get(`${MEETING_URL}/${meetingId}/attendees`, params),
   updateMeeting: (meeting) => AxiosClient.patch(`${MEETING_URL}/${meeting.id}`, meeting),
-  getAllMeetingInGroup: (groupId) => AxiosClient.get(`api/channels/${groupId}/meetings`)
+  getAllMeetingInChannel: (groupId) => AxiosClient.get(`api/channels/${groupId}/meetings`)
 };
 
 export default MeetingApi;

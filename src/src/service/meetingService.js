@@ -17,8 +17,8 @@ const MeetingService = {
       }
     };
   },
-  getAllMeetingInGroup: (groupId) => {
-    return MeetingApi.getAllMeetingInGroup(groupId);
+  getAllMeetingInChannel: (groupId) => {
+    return MeetingApi.getAllMeetingInChannel(groupId);
   }
 };
 

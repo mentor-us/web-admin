@@ -5,6 +5,7 @@ import { GROUP_FUNCTION } from "utils/constants";
 import GroupMedia from "./GroupMedia";
 import GroupMeeting from "./GroupMeeting";
 import GroupMember from "./GroupMember";
+import GroupTask from "./GroupTask";
 import GroupVoting from "./GroupVoting";
 
 function GroupItemDetail({ type }) {
@@ -15,7 +16,7 @@ function GroupItemDetail({ type }) {
     return <GroupMeeting />;
   }
   if (type === GROUP_FUNCTION.TASK) {
-    return <div>Công việc</div>;
+    return <GroupTask />;
   }
   if (type === GROUP_FUNCTION.IMAGE || type === GROUP_FUNCTION.FILE) {
     return <GroupMedia type={type} />;

@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
 import { Box } from "@mui/material";
 
-import { useGetGroupMeetings } from "hooks/meeting/queries";
+import { useGetChannelTasks } from "hooks/tasks/queries";
 
-import MeetingItem from "./MeetingItem";
+import TaskItem from "./TaskItem";
 
-export default function GroupMeeting() {
+export default function GroupTask() {
   const { channelId } = useParams();
   // const channelId = "65d99d858c91143221a44b99";
-  const { data: meetings } = useGetGroupMeetings(channelId);
+  const { data: meetings } = useGetChannelTasks(channelId);
   // add sord meeting by date
   if (meetings) {
     meetings.sort((a, b) => new Date(b.timeStart) - new Date(a.timeStart));
@@ -16,9 +16,9 @@ export default function GroupMeeting() {
   return (
     <Box className="border overflow-y-scroll">
       {meetings && meetings.length > 0 ? (
-        meetings.map((meeting) => <MeetingItem key={meeting.id} meeting={meeting} />)
+        meetings.map((meeting) => <TaskItem key={meeting.id} meeting={meeting} />)
       ) : (
-        <div className="flex justify-center items-center">Chưa có lịch hẹn</div>
+        <div className="flex justify-center items-center">Chưa có T</div>
       )}
     </Box>
   );

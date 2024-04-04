@@ -108,7 +108,8 @@ export default function GroupInfo() {
           </Tooltip>
           {showTypeScreen !== "" &&
           showTypeScreen !== GROUP_FUNCTION.MEMBER &&
-          showTypeScreen !== GROUP_FUNCTION.IMAGE ? (
+          showTypeScreen !== GROUP_FUNCTION.IMAGE &&
+          showTypeScreen !== GROUP_FUNCTION.FILE ? (
             <IconButton
               className="!absolute !right-0 hover:!bg-slate-300 rounded-full"
               size="small"

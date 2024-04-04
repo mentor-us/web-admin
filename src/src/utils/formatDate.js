@@ -129,5 +129,6 @@ export {
   formatDateExcel,
   formatDateFromDuration,
   getAnotherDateFromToday,
+  getTime,
   getTimeMeeting
 };

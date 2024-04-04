@@ -15,7 +15,8 @@ const TaskService = {
       },
       status: !ownAssignee ? "NULL" : ownAssignee.status
     };
-  }
+  },
+  getAllTaskInChannel: (channelId) => TaskApi.getAllTaskInChannel(channelId)
 };
 
 export default TaskService;
