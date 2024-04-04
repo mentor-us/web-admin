@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -15,6 +15,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  // Skeleton,
   TextField
 } from "@mui/material";
 import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
@@ -23,19 +24,29 @@ import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 import dayjs from "dayjs";
+import TaskApi from "api/TaskApi";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
-import { useCreateTaskMutation } from "hooks/chats/mutation";
+import { useCreateTaskMutation, useUpdateTaskMutation } from "hooks/chats/mutation";
+import { useGetDetailTasks } from "hooks/chats/queries";
 import useMyInfo from "hooks/useMyInfo";
 
-function CreateTaskDialog({ open, handleClose }) {
+function CreateTaskDialog({ open, handleClose, taskId = null }) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
-    channelId,
+    channelId || "",
     (members) => members ?? []
   );
+  const { data: taskDetail } = useGetDetailTasks(taskId);
+  console.log(taskDetail);
+  // if (taskId && isLoadingTaskDetail) {
+  //   return <Skeleton />;
+  // }
+  const [titleDialog, setTitleDialog] = useState(taskId ? "Chi tiết công việc" : "Công việc mới");
+  const [isEditable, setIsEditable] = useState(!taskId);
+  const titlebtnDialog = isEditable ? "Lưu công việc" : "";
   const queryClient = useQueryClient();
 
   const today = dayjs().add(1, "h");
@@ -55,9 +66,12 @@ function CreateTaskDialog({ open, handleClose }) {
       date: today
     }
   });
-  const { mutateAsync: createTaskMutationAsync, isPending } = useCreateTaskMutation();
-
+  const { mutateAsync: createTaskMutationAsync, isPending } = !taskId
+    ? useCreateTaskMutation()
+    : useUpdateTaskMutation(taskId);
   useEffect(() => {
+    console.log("channelMembers");
+    console.log(channelMembers);
     setValue("attendees", channelMembers ?? []);
   }, [channelMembers]);
 
@@ -65,6 +79,7 @@ function CreateTaskDialog({ open, handleClose }) {
     const { date } = data;
 
     return {
+      id: taskId ?? null,
       title: data.title,
       description: data.description,
       userIds: data.attendees.map((attendee) => attendee.id),
@@ -93,14 +108,49 @@ function CreateTaskDialog({ open, handleClose }) {
       }),
       {
         loading: "Đang tạo công việc...",
-        success: "Tạo công việc thành công",
+        success: "Lưu công việc thành công",
         error: "Tạo công việc thất bại"
       }
     );
 
     onCancel();
   };
-
+  useEffect(() => {
+    if (open) {
+      // eslint-disable-next-line no-shadow
+      const getTaskAssignee = async (taskDetail) => {
+        const res = await TaskApi.getTaskAssignees(taskDetail.id);
+        // if (res.data) {
+        setValue("attendees", res.data || []);
+        // }
+      };
+      if (taskDetail) {
+        // taskData.role === "MENTOR" || taskData.assigner.id == currentUser.id
+        console.log("taskDetail");
+        console.log(taskDetail);
+        if (taskDetail.role === "MENTOR" || taskDetail?.assigner?.id === myInfo.id) {
+          setTitleDialog("Cập nhật công việc");
+          setIsEditable(true);
+        }
+        reset({
+          title: taskDetail.title || "",
+          description: taskDetail.description || "",
+          deadline: dayjs(taskDetail.deadline) || today,
+          date: dayjs(taskDetail.deadline) || today,
+          attendees: channelMembers || []
+        });
+        // setValue("attendees", [
+        //   {
+        //     id: "650fa97f0ee45f4e461b6bd0",
+        //     imageUrl:
+        //       "https://lh3.googleusercontent.com/a/ACg8ocLc8pAbl-MFsj5x56rb0dxVS3jpp1GhMQ4mkVjqAS7Qsf4=s96-c",
+        //     name: "Võ Thanh Sương"
+        //   }
+        // ]);
+        getTaskAssignee(taskDetail);
+      }
+    }
+  }, [taskDetail]);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Dialog
@@ -113,19 +163,20 @@ function CreateTaskDialog({ open, handleClose }) {
           className: "!px-2"
         }}
         onSubmit={(event) => {
-          if (isPending) {
+          if (isPending || !isEditable) {
             return;
           }
           event.preventDefault();
           handleSubmit(onSubmit)();
         }}
       >
-        <DialogTitle alignSelf="center">Công việc mới</DialogTitle>
+        <DialogTitle alignSelf="center">{titleDialog}</DialogTitle>
         <DialogContent className="!py-4">
           <Controller
             getGroupDetailColumnHeadersMentorSelector
             name="title"
             control={control}
+            disabled={!isEditable}
             rules={{
               required: "Vui lòng nhập tiêu đề"
             }}
@@ -144,6 +195,7 @@ function CreateTaskDialog({ open, handleClose }) {
           <Controller
             name="description"
             control={control}
+            disabled={!isEditable}
             rules={{ required: false }}
             render={({ field }) => {
               return (
@@ -158,18 +210,8 @@ function CreateTaskDialog({ open, handleClose }) {
               <Controller
                 name="deadline"
                 control={control}
-                rules={{
-                  required: "Vui lòng nhập giờ tới hạn",
-                  validate: {
-                    gtnow: (v) => {
-                      if (!v || dayjs().isBefore(v)) {
-                        return true;
-                      }
-
-                      return "Thời hạn phải lớn hơn thời điểm hiện tại";
-                    }
-                  }
-                }}
+                disabled={!isEditable}
+                rules={{ required: false }}
                 render={({ field: { onChange, ...rest } }) => {
                   return (
                     <MobileTimePicker
@@ -196,6 +238,7 @@ function CreateTaskDialog({ open, handleClose }) {
             <Grid item sx>
               <Controller
                 name="date"
+                disabled={!isEditable}
                 control={control}
                 rules={{
                   required: "Vui lòng nhập ngày tới hạn",
@@ -244,6 +287,7 @@ function CreateTaskDialog({ open, handleClose }) {
 
           <Controller
             name="attendees"
+            disabled={!isEditable}
             control={control}
             rules={{
               required: "Vui lòng chọn người sẽ thực hiện công việc"
@@ -304,8 +348,8 @@ function CreateTaskDialog({ open, handleClose }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel}>Hủy</Button>
-          <Button type="submit">Tạo công việc</Button>
+          <Button onClick={onCancel}>Đóng</Button>
+          {isEditable && <Button type="submit">{titlebtnDialog}</Button>}
         </DialogActions>
       </Dialog>
     </LocalizationProvider>
@@ -314,7 +358,9 @@ function CreateTaskDialog({ open, handleClose }) {
 
 CreateTaskDialog.propTypes = {
   open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  taskId: PropTypes.string.isRequired
 };
 
 export default CreateTaskDialog;

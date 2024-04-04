@@ -1,9 +1,14 @@
 import AxiosClient from "./AxiosClient";
 
-const urlMeeting = "/api/meetings";
+const MEETING_URL = "/api/meetings";
 const MeetingApi = {
-  createMeeting: (meeting) => AxiosClient.post(urlMeeting, meeting),
-  getAllMeetingInGroup: (groupId) => AxiosClient.get(`${urlMeeting}?groupId=${groupId}`)
+  createMeeting: (meeting) => AxiosClient.post("/api/meetings", meeting),
+  getDetailMeeting: (meetingId, params = {}) =>
+    AxiosClient.get(`${MEETING_URL}/${meetingId}`, params),
+  getMeetingAssignees: (meetingId, params = {}) =>
+    AxiosClient.get(`${MEETING_URL}/${meetingId}/attendees`, params),
+  updateMeeting: (meeting) => AxiosClient.patch(`${MEETING_URL}/${meeting.id}`, meeting),
+  getAllMeetingInGroup: (groupId) => AxiosClient.get(`${MEETING_URL}?groupId=${groupId}`)
 };
 
 export default MeetingApi;
