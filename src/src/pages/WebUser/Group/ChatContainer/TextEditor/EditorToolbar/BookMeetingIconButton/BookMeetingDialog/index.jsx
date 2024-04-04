@@ -277,7 +277,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                       className="!mb-6"
                       fullWidth
                       label="Đến *"
-                      minTime={getValues("timeStart").add(1, "m")}
+                      minTime={getValues("timeStart")?.add(1, "m")}
                       disablePast
                       slotProps={{
                         textField: {

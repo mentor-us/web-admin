@@ -10,7 +10,7 @@ export default function GroupMeeting() {
   // const channelId = "65d99d858c91143221a44b99";
   const { data: meetings } = useGetGroupMeetings(channelId);
   return (
-    <Box className="border">
+    <Box className="border overflow-y-scroll">
       {meetings && meetings.length > 0 ? (
         meetings.map((meeting) => <MeetingItem key={meeting.id} meeting={meeting} />)
       ) : (
