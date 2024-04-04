@@ -27,10 +27,11 @@ import dayjs from "dayjs";
 import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
 import { useCreateMeetingMutation } from "hooks/chats/mutation";
+import { useGetDetailMeeting } from "hooks/events/queries";
 import useMyInfo from "hooks/useMyInfo";
 import { MEETING_REPEATED_TYPE } from "utils/constants";
 
-function BookMeetingDialog({ open, handleClose }) {
+function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
@@ -38,8 +39,8 @@ function BookMeetingDialog({ open, handleClose }) {
     (members) => members?.filter((member) => member.id !== myInfo.id) ?? []
   );
   const queryClient = useQueryClient();
-
   const today = dayjs().add(1, "h").minute(0);
+  const { data: meetingDetail } = useGetDetailMeeting(meetingId);
 
   const {
     control,
@@ -105,7 +106,42 @@ function BookMeetingDialog({ open, handleClose }) {
 
     onCancel();
   };
-
+  useEffect(() => {
+    if (open) {
+      // eslint-disable-next-line no-shadow
+      // const getTaskAssignee = async (meetingDetail) => {
+      //   const res = await TaskApi.getTaskAssignees(meetingDetail.id);
+      //   // if (res.data) {
+      //   setValue("attendees", res.data || []);
+      //   // }
+      // };
+      if (meetingDetail) {
+        // taskData.role === "MENTOR" || taskData.assigner.id == currentUser.id
+        console.log("meetingDetail");
+        console.log(meetingDetail);
+        // if (meetingDetail.role === "MENTOR" || meetingDetail?.assigner?.id === myInfo.id) {
+        //   setTitleDialog("Cập nhật công việc");
+        //   setIsEditable(true);
+        // }
+        reset({
+          title: meetingDetail.title || "",
+          description: meetingDetail.description || ""
+          // deadline: dayjs(meetingDetail.deadline) || today,
+          // date: dayjs(meetingDetail.deadline) || today,
+          // attendees: channelMembers || []
+        });
+        // setValue("attendees", [
+        //   {
+        //     id: "650fa97f0ee45f4e461b6bd0",
+        //     imageUrl:
+        //       "https://lh3.googleusercontent.com/a/ACg8ocLc8pAbl-MFsj5x56rb0dxVS3jpp1GhMQ4mkVjqAS7Qsf4=s96-c",
+        //     name: "Võ Thanh Sương"
+        //   }
+        // ]);
+        // getTaskAssignee(meetingDetail);
+      }
+    }
+  }, [meetingDetail]);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Dialog
@@ -341,7 +377,8 @@ function BookMeetingDialog({ open, handleClose }) {
 
 BookMeetingDialog.propTypes = {
   open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
+  meetingId: PropTypes.string.isRequired
 };
 
 export default BookMeetingDialog;

@@ -6,8 +6,10 @@ import interactionGridPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 
+import BookMeetingDialog from "pages/WebUser/Group/ChatContainer/TextEditor/EditorToolbar/BookMeetingIconButton/BookMeetingDialog";
 import CreateTaskDialog from "pages/WebUser/Group/ChatContainer/TextEditor/EditorToolbar/CreateTaskIconButton/CreateTaskDialog";
 import { useGetAllEvents } from "hooks/events/queries";
+import { MESSAGE_TYPE } from "utils/constants";
 import { formatDate } from "utils/dateHelper";
 
 import viLocale from "./vi";
@@ -17,6 +19,7 @@ import "./index.css";
 export function FullCalendarComponent() {
   const { data: events, isLoading, isSuccess } = useGetAllEvents();
   const [openDialog, setOpenDialog] = useState(false);
+  const [openDialogMeeting, setOpenDialogMeeting] = useState(false);
   const [msgIdDialog, setMsgIdDialog] = useState(null);
 
   // const [openModalDetail, setOpenModalDetail] = useState(false);
@@ -34,10 +37,24 @@ export function FullCalendarComponent() {
   };
   const handleClickEvent = (event) => {
     // showModal
+    console.log("handleClickEvent");
+    const element = document.querySelector(".fc-popover-close");
+    console.log(element);
+    if (element) {
+      element.click();
+    }
     // eslint-disable-next-line eqeqeq
-    if (event?.event?.extendedProps?.type == "TASK") {
-      setOpenDialog(true);
-      setMsgIdDialog(event.event.id);
+    switch (event?.event?.extendedProps?.type) {
+      case MESSAGE_TYPE.TASK:
+        setOpenDialog(true);
+        setMsgIdDialog(event.event.id);
+        break;
+      case MESSAGE_TYPE.MEETING:
+        setOpenDialogMeeting(true);
+        setMsgIdDialog(event.event.id);
+        break;
+      default:
+        break;
     }
   };
   return (
@@ -102,6 +119,13 @@ export function FullCalendarComponent() {
           open={openDialog}
           handleClose={() => setOpenDialog(false)}
           taskId={msgIdDialog}
+        />
+      )}
+      {openDialogMeeting && (
+        <BookMeetingDialog
+          open={openDialogMeeting}
+          handleClose={() => setOpenDialogMeeting(false)}
+          meetingId={msgIdDialog}
         />
       )}
     </div>

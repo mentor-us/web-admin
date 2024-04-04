@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
+import MeetingApi from "api/MeetingApi";
+
 import EventService from "service/EventService";
 
 // eslint-disable-next-line import/prefer-default-export
@@ -24,6 +26,16 @@ export const useGetAllEvents = () =>
         return events;
       }
       return [];
+    },
+    enabled: true
+  });
+export const useGetDetailMeeting = (meetingId, params = {}) =>
+  useQuery({
+    queryKey: ["tasks", meetingId],
+    queryFn: async () => {
+      if (!meetingId) return null;
+      const res = await MeetingApi.getDetailMeeting(meetingId, params);
+      return res.data;
     },
     enabled: true
   });
