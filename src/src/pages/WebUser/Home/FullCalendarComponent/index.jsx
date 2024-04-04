@@ -60,27 +60,36 @@ export function FullCalendarComponent() {
   return (
     <div className="flex h-full w-full calendar-page">
       <div className="w-80 flex flex-col sub-calendar">
-        <div className="grow p-2 mt-5">
-          <FullCalendar
-            height="350px"
-            locale={viLocale}
-            dayHeaderFormat={{ weekday: "narrow" }}
-            plugins={[dayGridPlugin, interactionGridPlugin]}
-            initialView="dayGridMonth"
-            events={[]}
-            dateClick={(date) => handleChoseDateMiniCalendar(date)}
-            headerToolbar={{
-              start: "prev",
-              center: "title",
-              end: "next"
-            }}
-            // buttonIcons={{
-            //   // prev: "chevron-right"
-            //   // next: "chevron-left"
-            // }}
-            weekends
-            // eventContent
-          />
+        <div className="grow p-2">
+          <div className="text-center text-3xl p-3">
+            <strong>Lịch vạn niên</strong>
+          </div>
+          <div className="calendar-wraper p-2 rounded-lg">
+            <FullCalendar
+              height="330px"
+              locale={viLocale}
+              dayHeaderFormat={{ weekday: "narrow" }}
+              plugins={[dayGridPlugin, interactionGridPlugin]}
+              initialView="dayGridMonth"
+              events={[]}
+              dateClick={(date) => handleChoseDateMiniCalendar(date)}
+              headerToolbar={{
+                start: "prev",
+                center: "title",
+                end: "next"
+              }}
+              weekends
+              customButtons={{
+                customNextButton: {
+                  text: "My Next", // You can use any text or HTML for your button
+                  click() {
+                    // Handle click event for your custom button
+                    alert("Custom next button clicked!");
+                  }
+                }
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className="grow py-5 main-calendar">

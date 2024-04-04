@@ -2,6 +2,7 @@
 /* all calendar */
 .fc-toolbar-title{
     text-transform: uppercase;
+    font-weight: bold;
     text-align: center;
 }
 .fc-highlight{
@@ -80,6 +81,43 @@
 .fc-col-header-cell{
     border: none !important;
 }
+/* Override FullCalendar's default button styles */
+.fc .fc-button-primary {
+    background-color: transparent !important; /* Set background to transparent */
+    border: 1px solid #3788d8 !important; /* Add border */
+    color: #3788d8 !important; /* Set text color */
+    transition: background-color 0.3s, color 0.3s !important; /* Add transition for hover effect */
+    outline: none !important; /* Remove default outline */
+   
+}
+
+/* Add hover effect for primary buttons */
+.fc .fc-button-primary:hover {
+    background-color: #3788d8 !important; /* Change background color on hover */
+    color: white !important; /* Change text color on hover */
+    border: 1px solid #3788d8 !important; /* Add border */
+}
+
+/* Add focus effect for primary buttons */
+.fc .fc-button-primary:focus {
+    background-color: #3788d8 !important; /* Change background color on focus */
+    color: white !important; /* Change text color on focus */
+    border: 1px solid #3788d8 !important; /* Add border */
+    box-shadow: #3788d8 !important;
+}
+
+/* Add active effect for primary buttons */
+.fc .fc-button-primary:active {
+    background-color: #3788d8 !important; /* Change background color on active */
+    color: white !important; /* Change text color on active */
+    border: 1px solid #3788d8 !important; /* Add border */
+    box-shadow: #3788d8 !important;
+}
+
+.fc .fc-button-primary:not(:disabled):active:focus{
+    box-shadow: #3788d8 !important;
+    --tw-shadow-color: #3b82f683 !important;
+}
 /* main-calendar */
 .main-calendar .fc-header-toolbar{
     font-size: medium;
@@ -93,9 +131,26 @@
     border-radius: 5px;
 }
 /* sub-calendar */
+.sub-calendar .fc {
+    background-color: transparent;
+}
+.sub-calendar .calendar-wraper{
+    background-color: white;
+    padding: auto;
+
+}
+.sub-calendar .fc-scrollgrid-liquid{
+    border: none !important;
+}
+.sub-calendar .fc-col-header-cell{
+    font-weight: lighter !important;
+}
+
 .sub-calendar .fc-header-toolbar{
     font-size: small;
     margin-bottom: 0 !important;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
 }
 .sub-calendar .fc-daygrid-day-events{
     display: none;
@@ -103,6 +158,7 @@
 .sub-calendar .fc-day { 
     border-radius: 50%;
     transition: all ease 0.2s;
+    background-color: transparent;
 }
 .sub-calendar .fc-daygrid-day-top{
     display: flex;
@@ -113,4 +169,17 @@
 }
 .sub-calendar .fc-theme-standard td, .fc-theme-standard th{
     border: none !important;
+}
+.sub-calendar .fc-col-header{
+    /* background-color: rgb(92, 198, 247); */
+    background-color: transparent;
+}
+
+.sub-calendar .fc-toolbar-title{
+    font-size: medium !important;
+}
+
+.sub-calendar .fc .fc-button{
+    padding: 0.3em 0.4em !important;
+    border-radius: 50% !important;
 }
