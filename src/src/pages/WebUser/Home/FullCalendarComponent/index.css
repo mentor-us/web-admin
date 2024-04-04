@@ -35,7 +35,7 @@
 }
 .fc-daygrid-day:hover{
     background-color: #2f88ff83 !important;
-    color: white;
+    /* color: white; */
 }
 .fc-event .fc-event-main{
     cursor: pointer;
@@ -123,13 +123,36 @@
     font-size: medium;
     margin-bottom: 0 !important;
 }
+.main-calendar .fc-col-header-cell{
+    background-color: white;
+    font-weight: bold !important;
+    color: gray;
+}
 .main-calendar .fc-col-header-cell .fc-scrollgrid-sync-inner{
     display: flex;
     justify-content: flex-end;
 }
-.main-calendar .fc-day { 
+.main-calendar .fc-daygrid-day { 
+    background-color: whitesmoke;
     border-radius: 5px;
 }
+.main-calendar .fc-daygrid-day-number{
+    /* padding: 0.2rem 0.45rem !important; */
+    text-align: center;
+    width: 40px !important;
+    height: 40px !important;
+    background-color: rgba(209, 213, 219, 0.45);
+    border-radius: 50%;
+    font-weight: bold;
+}
+.main-calendar .fc-daygrid-day-top{
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+.main-calendar thead{
+    border-bottom: 1px solid #ddd;
+}
+
 /* sub-calendar */
 .sub-calendar .fc {
     background-color: transparent;
@@ -143,7 +166,8 @@
     border: none !important;
 }
 .sub-calendar .fc-col-header-cell{
-    font-weight: lighter !important;
+    font-weight: bold !important;
+    color: gray;
 }
 
 .sub-calendar .fc-header-toolbar{
@@ -163,6 +187,7 @@
 .sub-calendar .fc-daygrid-day-top{
     display: flex;
     justify-content: center;
+    font-weight: bold;
 }
 .sub-calendar .fc-daygrid-day-top:hover{
     color: white;
@@ -176,10 +201,10 @@
 }
 
 .sub-calendar .fc-toolbar-title{
-    font-size: medium !important;
+    font-size: large !important;
 }
 
 .sub-calendar .fc .fc-button{
-    padding: 0.3em 0.4em !important;
+    padding: 0.35em 0.35em !important;
     border-radius: 50% !important;
 }

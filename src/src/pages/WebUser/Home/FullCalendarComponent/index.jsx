@@ -98,7 +98,7 @@ export function FullCalendarComponent() {
           height="100%"
           plugins={[dayGridPlugin, timeGridPlugin, interactionGridPlugin]}
           initialView="dayGridMonth"
-          dayHeaderFormat={{ weekday: "short" }}
+          dayHeaderFormat={{ weekday: "long" }}
           locale={viLocale}
           headerToolbar={{
             start: "title",
@@ -121,6 +121,24 @@ export function FullCalendarComponent() {
           events={[...events]}
           // eslint-disable-next-line no-use-before-define
           eventContent={renderEventContent}
+          eventDidMount={(info) => {
+            // Ensure the popover is displayed inside the viewport
+            info.el.addEventListener("mouseenter", () => {
+              const popoverEl = info.el.querySelector(".fc-popover");
+              if (popoverEl) {
+                const rect = popoverEl.getBoundingClientRect();
+                const bodyRect = document.body.getBoundingClientRect();
+                if (rect.right > bodyRect.right) {
+                  popoverEl.style.right = "0";
+                  popoverEl.style.left = "auto";
+                }
+                if (rect.bottom > bodyRect.bottom) {
+                  popoverEl.style.bottom = "0";
+                  popoverEl.style.top = "auto";
+                }
+              }
+            });
+          }}
         />
       </div>
       {openDialog && (
