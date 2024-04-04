@@ -33,8 +33,12 @@ export const SOCKET_EVENT = {
   SEND_MESSAGE: "send_message",
   RECEIVE_MESSAGE: "receive_message",
   UPDATE_MESSAGE: "update_message",
+
   RECEIVE_REACT_MESSAGE: "receive_react_message",
   REMOVE_REACT_MESSAGE: "receive_remove_react_message",
+
+  RECEIVE_PINNED_MESSAGE: "receive_pinned_message",
+  REMOVE_PINNED_MESSAGE: "receive_unpinned_message",
 
   RECEIVE_VOTING: "receive_voting"
 };

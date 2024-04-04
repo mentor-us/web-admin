@@ -45,6 +45,7 @@ function BookMeetingDialog({ open, handleClose }) {
     control,
     handleSubmit,
     reset,
+    getValues,
     setValue,
     formState: { errors }
   } = useForm({
@@ -155,71 +156,108 @@ function BookMeetingDialog({ open, handleClose }) {
             }}
           />
 
-          <Grid container spacing={0} justifyContent="space-between">
-            <Grid item xs>
+          <Grid container spacing={2} justifyContent="space-between">
+            <Grid item xs={4}>
               <Controller
                 name="timeStart"
                 control={control}
-                rules={{ required: false }}
+                rules={{
+                  required: "Vui lòng nhập giờ bắt đầu",
+                  validate: {
+                    gtnow: (v) => {
+                      if (!v || dayjs().isBefore(v)) {
+                        return true;
+                      }
+
+                      return "Thời điểm bắt đầu phải lớn hơn thời điểm hiện tại";
+                    }
+                  }
+                }}
                 render={({ field: { onChange, ...rest } }) => {
                   return (
                     <MobileTimePicker
                       className="!mb-6"
                       fullWidth
                       label="Từ *"
+                      minTime={dayjs()}
                       disablePast
-                      error={!!errors?.timeStart}
-                      helperText={errors?.timeStart?.message}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          error: !!errors?.timeStart,
+                          helperText: errors?.timeStart?.message
+                        }
+                      }}
                       onChange={(newValue) => onChange(newValue)}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Từ *"
-                          error={!!errors?.userIds}
-                          helperText={errors?.userIds?.message}
-                        />
-                      )}
+                      renderInput={(params) => <TextField {...params} label="Từ *" />}
                       {...rest}
                     />
                   );
                 }}
               />
             </Grid>
-            <Grid item xs>
+            <Grid item xs={4}>
               <Controller
                 name="timeEnd"
                 control={control}
-                rules={{ required: false }}
+                rules={{
+                  required: "Vui lòng nhập giờ kết thúc",
+                  validate: {
+                    gtnow: (v) => {
+                      if (!v || dayjs().isBefore(v)) {
+                        return true;
+                      }
+
+                      return "Thời điểm kết thúc phải luôn lớn hơn thời điểm hiện tại";
+                    },
+                    gtstart: (v) => {
+                      if (!v || getValues("timeStart").isBefore(v)) {
+                        return true;
+                      }
+
+                      return "Giờ kết thúc phải luôn lớn hơn giờ bắt đầu";
+                    }
+                  }
+                }}
                 render={({ field: { onChange, ...rest } }) => {
                   return (
                     <MobileTimePicker
                       className="!mb-6"
                       fullWidth
                       label="Đến *"
-                      minTime={today.add(1, "m")}
+                      minTime={getValues("timeStart").add(1, "m")}
                       disablePast
-                      error={!!errors?.timeEnd}
-                      helperText={errors?.timeEnd?.message}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          error: !!errors?.timeEnd,
+                          helperText: errors?.timeEnd?.message
+                        }
+                      }}
                       onChange={(newValue) => onChange(newValue)}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Đến *"
-                          error={!!errors?.userIds}
-                          helperText={errors?.userIds?.message}
-                        />
-                      )}
+                      renderInput={(params) => <TextField {...params} label="Đến *" />}
                       {...rest}
                     />
                   );
                 }}
               />
             </Grid>
-            <Grid item xs>
+            <Grid item xs={4}>
               <Controller
                 name="date"
                 control={control}
-                rules={{ required: false }}
+                rules={{
+                  required: "Vui lòng nhập ngày hẹn",
+                  validate: {
+                    gtnow: (v) => {
+                      if (!v || dayjs().isBefore(v)) {
+                        return true;
+                      }
+
+                      return "Ngày hẹn phải lớn hơn hoặc bằng ngày hiện tại";
+                    }
+                  }
+                }}
                 render={({ field: { onChange, ...rest } }) => {
                   return (
                     <DatePicker
@@ -230,21 +268,20 @@ function BookMeetingDialog({ open, handleClose }) {
                       slotProps={{
                         actionBar: {
                           actions: ["today"]
+                        },
+                        textField: {
+                          fullWidth: true,
+                          error: !!errors?.date,
+                          helperText: errors?.date?.message
                         }
                       }}
-                      minDate={today}
+                      localeText={{
+                        todayButtonLabel: "Hôm nay"
+                      }}
+                      minDate={dayjs()}
                       maxDate={dayjs().date(31).month(11)}
-                      error={!!errors?.date}
-                      helperText={errors?.date?.message}
                       onChange={(newValue) => onChange(newValue)}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Ngày *"
-                          error={!!errors?.userIds}
-                          helperText={errors?.userIds?.message}
-                        />
-                      )}
+                      renderInput={(params) => <TextField {...params} label="Ngày *" />}
                       {...rest}
                     />
                   );

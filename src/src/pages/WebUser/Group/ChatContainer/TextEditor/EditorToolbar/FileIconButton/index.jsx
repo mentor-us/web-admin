@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import toast from "react-hot-toast";
-import { CircularProgress, IconButton } from "@mui/material";
+import { CircularProgress, IconButton, Tooltip } from "@mui/material";
 import PropTypes from "prop-types";
 import { useFilePicker } from "use-file-picker";
 import {
@@ -102,13 +102,15 @@ function FileIconButton({ channelId }) {
   });
 
   return (
-    <IconButton onClick={openFilePicker}>
-      {loading ? (
-        <CircularProgress color="info" size={30} />
-      ) : (
-        <AttachmentIcon width={30} height={30} />
-      )}
-    </IconButton>
+    <Tooltip title="Gửi tập tin" placement="top">
+      <IconButton onClick={openFilePicker}>
+        {loading ? (
+          <CircularProgress color="info" size={30} />
+        ) : (
+          <AttachmentIcon width={30} height={30} />
+        )}
+      </IconButton>
+    </Tooltip>
   );
 }
 

@@ -158,26 +158,35 @@ function CreateTaskDialog({ open, handleClose }) {
               <Controller
                 name="deadline"
                 control={control}
-                rules={{ required: false }}
+                rules={{
+                  required: "Vui lòng nhập giờ tới hạn",
+                  validate: {
+                    gtnow: (v) => {
+                      if (!v || dayjs().isBefore(v)) {
+                        return true;
+                      }
+
+                      return "Thời hạn phải lớn hơn thời điểm hiện tại";
+                    }
+                  }
+                }}
                 render={({ field: { onChange, ...rest } }) => {
                   return (
                     <MobileTimePicker
                       className="!mb-6"
                       fullWidth
                       label="Tới hạn lúc *"
-                      minTime={dayjs().add(30, "m")}
+                      minTime={dayjs().add(1, "m")}
                       disablePast
-                      error={!!errors?.timeEnd}
-                      helperText={errors?.timeEnd?.message}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          error: !!errors?.deadline,
+                          helperText: errors?.deadline?.message
+                        }
+                      }}
                       onChange={(newValue) => onChange(newValue)}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Tới hạn *"
-                          error={!!errors?.userIds}
-                          helperText={errors?.userIds?.message}
-                        />
-                      )}
+                      renderInput={(params) => <TextField {...params} label="Tới hạn *" />}
                       {...rest}
                     />
                   );
@@ -188,7 +197,19 @@ function CreateTaskDialog({ open, handleClose }) {
               <Controller
                 name="date"
                 control={control}
-                rules={{ required: false }}
+                rules={{
+                  required: "Vui lòng nhập ngày tới hạn",
+
+                  validate: {
+                    gtnow: (v) => {
+                      if (!v || dayjs().isBefore(v)) {
+                        return true;
+                      }
+
+                      return "Ngày tới hạn phải lớn hơn hoặc bằng ngày hiện tại";
+                    }
+                  }
+                }}
                 render={({ field: { onChange, ...rest } }) => {
                   return (
                     <DatePicker
@@ -196,19 +217,23 @@ function CreateTaskDialog({ open, handleClose }) {
                       format="DD/MM/YYYY"
                       fullWidth
                       label="Ngày *"
+                      slotProps={{
+                        actionBar: {
+                          actions: ["today"]
+                        },
+                        textField: {
+                          fullWidth: true,
+                          error: !!errors?.date,
+                          helperText: errors?.date?.message
+                        }
+                      }}
+                      localeText={{
+                        todayButtonLabel: "Hôm nay"
+                      }}
                       minDate={today}
                       maxDate={dayjs().date(31).month(11)}
-                      error={!!errors?.date}
-                      helperText={errors?.date?.message}
                       onChange={(newValue) => onChange(newValue)}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Ngày *"
-                          error={!!errors?.userIds}
-                          helperText={errors?.userIds?.message}
-                        />
-                      )}
+                      renderInput={(params) => <TextField {...params} label="Ngày *" />}
                       {...rest}
                     />
                   );
