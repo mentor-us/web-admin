@@ -55,6 +55,9 @@
 .fc-timegrid-axis-cushion{
     /* font-size:medium; */
 }
+.fc-daygrid-event-harness-abs{
+    right: 0 !important;
+}
 .fc-daygrid-event-harness:has(.fc-daygrid-event){
     background-color: #3788d8;
     border-radius: 5px;

@@ -26,6 +26,7 @@
     "dompurify": "^3.0.9",
     "dotenv": "^16.3.1",
     "env-cmd": "^10.1.0",
+    "framer-motion": "^11.0.24",
     "jodit": "^4.0.18",
     "jodit-react": "^4.0.15",
     "jwt-decode": "^3.1.2",
