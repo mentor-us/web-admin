@@ -1,3 +1,4 @@
+import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -5,12 +6,14 @@ import PropTypes from "prop-types";
 
 import {
   CalendarIcon,
+  ChartIcon,
   FaqIcon,
+  GalleryIcon,
   GroupIcon,
-  MediaIcon,
-  TaskListIcon,
-  VotingQuestionIcon
+  TaskListIcon
 } from "assets/svgs";
+
+import { CHANNEL_PERMISSION, GROUP_FUNCTION } from "utils/constants";
 
 function GroupFunction({ type, permission, selectedType }) {
   if (!permission) {
@@ -21,7 +24,11 @@ function GroupFunction({ type, permission, selectedType }) {
   switch (type) {
     case "member":
       return (
-        <ListItemButton>
+        <ListItemButton
+          onClick={() => {
+            selectedType(GROUP_FUNCTION.MEMBER);
+          }}
+        >
           <ListItemIcon>
             <GroupIcon width={20} height={20} />
           </ListItemIcon>
@@ -29,45 +36,47 @@ function GroupFunction({ type, permission, selectedType }) {
             disableTypography
             className="text-base line-clamp-1"
             primary="Xem thành viên"
-            onClick={() => {
-              selectedType("MEMBER");
-            }}
           />
         </ListItemButton>
       );
     case "utility":
       return (
         <>
-          <ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              selectedType(GROUP_FUNCTION.MEETING);
+            }}
+          >
             <ListItemIcon>
               <CalendarIcon width={20} height={20} />
             </ListItemIcon>
-            <ListItemText
-              disableTypography
-              className="text-base line-clamp-1"
-              primary="Lịch hẹn"
-              onClick={() => {
-                selectedType("MEETING");
-              }}
-            />
+            <ListItemText disableTypography className="text-base line-clamp-1" primary="Lịch hẹn" />
           </ListItemButton>
-          {permission.includes("BOARD_MANAGEMENT") && (
-            <ListItemButton>
+          {permission.includes(CHANNEL_PERMISSION.BOARD_MANAGEMENT) && (
+            <ListItemButton
+              onClick={() => {
+                selectedType(GROUP_FUNCTION.VOTING);
+              }}
+            >
               <ListItemIcon>
-                <VotingQuestionIcon width={20} height={20} />
+                <ChartIcon width={20} height={20} />
               </ListItemIcon>
               <ListItemText
                 disableTypography
                 className="text-base line-clamp-1"
                 primary="Bình chọn"
                 onClick={() => {
-                  selectedType("VOTING");
+                  selectedType(GROUP_FUNCTION.VOTING);
                 }}
               />
             </ListItemButton>
           )}
-          {permission.includes("TASK_MANAGEMENT") && (
-            <ListItemButton>
+          {permission.includes(CHANNEL_PERMISSION.TASK_MANAGEMENT) && (
+            <ListItemButton
+              onClick={() => {
+                selectedType(GROUP_FUNCTION.TASK);
+              }}
+            >
               <ListItemIcon>
                 <TaskListIcon width={20} height={20} />
               </ListItemIcon>
@@ -75,25 +84,19 @@ function GroupFunction({ type, permission, selectedType }) {
                 disableTypography
                 className="text-base line-clamp-1"
                 primary="Danh sách công việc"
-                onClick={() => {
-                  selectedType("TASK");
-                }}
               />
             </ListItemButton>
           )}
-          {permission.includes("FAQ_MANAGEMENT") && (
-            <ListItemButton>
+          {permission.includes(CHANNEL_PERMISSION.FAQ_MANAGEMENT) && (
+            <ListItemButton
+              onClick={() => {
+                selectedType(GROUP_FUNCTION.FAQ);
+              }}
+            >
               <ListItemIcon>
                 <FaqIcon width={20} height={20} />
               </ListItemIcon>
-              <ListItemText
-                disableTypography
-                className="text-base line-clamp-1"
-                primary="FAQs"
-                onClick={() => {
-                  selectedType("FAQ");
-                }}
-              />
+              <ListItemText disableTypography className="text-base line-clamp-1" primary="FAQs" />
             </ListItemButton>
           )}
         </>
@@ -101,31 +104,25 @@ function GroupFunction({ type, permission, selectedType }) {
     case "media":
       return (
         <>
-          <ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              selectedType(GROUP_FUNCTION.IMAGE);
+            }}
+          >
             <ListItemIcon>
-              <MediaIcon width={20} height={20} />
+              <GalleryIcon width={20} height={20} />
             </ListItemIcon>
-            <ListItemText
-              disableTypography
-              className="text-base line-clamp-1"
-              primary="Hình ảnh"
-              onClick={() => {
-                selectedType("IMAGE");
-              }}
-            />
+            <ListItemText disableTypography className="text-base line-clamp-1" primary="Hình ảnh" />
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              selectedType(GROUP_FUNCTION.FILE);
+            }}
+          >
             <ListItemIcon>
-              <MediaIcon width={20} height={20} />
+              <FolderOutlinedIcon width={20} height={20} />
             </ListItemIcon>
-            <ListItemText
-              disableTypography
-              className="text-base line-clamp-1"
-              primary="Tập tin"
-              onClick={() => {
-                selectedType("FILE");
-              }}
-            />
+            <ListItemText disableTypography className="text-base line-clamp-1" primary="Tập tin" />
           </ListItemButton>
         </>
       );
@@ -135,7 +132,8 @@ function GroupFunction({ type, permission, selectedType }) {
 }
 GroupFunction.propTypes = {
   type: PropTypes.oneOf(["member", "utility", "media"]).isRequired,
-  permission: PropTypes.arrayOf(PropTypes.string).isRequired,
+  // eslint-disable-next-line react/require-default-props
+  permission: PropTypes.arrayOf(PropTypes.string),
   selectedType: PropTypes.func.isRequired
 };
 

@@ -12,7 +12,7 @@ import VoteDetailDialog from "pages/WebUser/components/VoteDetailDialog";
 import useMyInfo from "hooks/useMyInfo";
 import { VOTE_STATUS } from "utils/constants";
 
-function VoteItem({ message }) {
+function VoteItem({ message, containerClassName }) {
   const myInfo = useMyInfo();
   const [openVoteDetail, setOpenVoteDetail] = useState(false);
   const { vote } = message;
@@ -70,7 +70,11 @@ function VoteItem({ message }) {
         className="vote-message-container cursor-pointer"
         onClick={() => setOpenVoteDetail(true)}
       >
-        <Box className="bg-white rounded-lg w-[70%] p-4 ">
+        <Box
+          className={
+            containerClassName !== "" ? containerClassName : "bg-white rounded-lg w-[70%] p-4"
+          }
+        >
           <Box display="flex" alignItems="center" justifyContent="flex-start">
             <img
               src={images.ColumnChartImage}
@@ -151,7 +155,12 @@ function VoteItem({ message }) {
 
 VoteItem.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  message: PropTypes.object.isRequired
+  message: PropTypes.object.isRequired,
+  containerClassName: PropTypes.string
+};
+
+VoteItem.defaultProps = {
+  containerClassName: ""
 };
 
 export default VoteItem;

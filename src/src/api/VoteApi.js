@@ -10,7 +10,12 @@ const VoteApi = {
   updateVote: (voteId, payload) => AxiosClient.patch(`${VOTING_URL}/${voteId}`, payload),
   doVoting: (voteId, payload) => AxiosClient.post(`${VOTE_URL}/${voteId}/voting`, payload),
   close: (voteId) => AxiosClient.patch(`${VOTE_URL}/${voteId}/close`),
-  reopenVote: (voteId) => AxiosClient.patch(`${VOTE_URL}/${voteId}/reopen`)
+  reopenVote: (voteId) => AxiosClient.patch(`${VOTE_URL}/${voteId}/reopen`),
+  async getAllVotesByGroupId(channelId) {
+    const URL = `/api/channels/${channelId}/votes`;
+    const data = await AxiosClient.get(URL);
+    return data;
+  }
 };
 
 export default VoteApi;

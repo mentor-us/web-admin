@@ -5,6 +5,9 @@ const MeetingService = {
   createMeeting: (meeting) => {
     return MeetingApi.createMeeting(meeting);
   },
+  updateMeeting: (meeting) => {
+    return MeetingApi.updateMeeting(meeting);
+  },
   fulfillMeetingTime: (meeting) => {
     return {
       ...meeting,
@@ -13,6 +16,9 @@ const MeetingService = {
         name: "System"
       }
     };
+  },
+  getAllMeetingInChannel: (groupId) => {
+    return MeetingApi.getAllMeetingInChannel(groupId);
   }
 };
 

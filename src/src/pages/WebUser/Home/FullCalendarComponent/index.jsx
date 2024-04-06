@@ -1,20 +1,27 @@
 /* eslint-disable react/button-has-type */
 // import { useEffect, useRef, useState } from "react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionGridPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import TodayIcon from "@mui/icons-material/Today";
 
+import BookMeetingDialog from "pages/WebUser/Group/ChatContainer/TextEditor/EditorToolbar/BookMeetingIconButton/BookMeetingDialog";
+import CreateTaskDialog from "pages/WebUser/Group/ChatContainer/TextEditor/EditorToolbar/CreateTaskIconButton/CreateTaskDialog";
 import { useGetAllEvents } from "hooks/events/queries";
+import { MESSAGE_TYPE } from "utils/constants";
 import { formatDate } from "utils/dateHelper";
 
+import viLocale from "./vi";
 import "./index.css";
 
 // eslint-disable-next-line import/prefer-default-export
 export function FullCalendarComponent() {
   const { data: events, isLoading, isSuccess } = useGetAllEvents();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openDialogMeeting, setOpenDialogMeeting] = useState(false);
+  const [msgIdDialog, setMsgIdDialog] = useState(null);
+
   // const [openModalDetail, setOpenModalDetail] = useState(false);
   // const propsModal = useRef(null);
   const mainCalendarRef = useRef(null);
@@ -31,46 +38,71 @@ export function FullCalendarComponent() {
   const handleClickEvent = (event) => {
     // showModal
     console.log("handleClickEvent");
-    console.log(event.event);
-    console.log(event.event.id);
+    const element = document.querySelector(".fc-popover-close");
+    console.log(element);
+    if (element) {
+      element.click();
+    }
+    // eslint-disable-next-line eqeqeq
+    switch (event?.event?.extendedProps?.type) {
+      case MESSAGE_TYPE.TASK:
+        setOpenDialog(true);
+        setMsgIdDialog(event.event.id);
+        break;
+      case MESSAGE_TYPE.MEETING:
+        setOpenDialogMeeting(true);
+        setMsgIdDialog(event.event.id);
+        break;
+      default:
+        break;
+    }
   };
   return (
-    <div className="flex h-full w-full">
+    <div className="flex h-full w-full calendar-page">
       <div className="w-80 flex flex-col sub-calendar">
-        <div className="">
-          Select kind event1
-          <TodayIcon />
-        </div>
         <div className="grow p-2">
-          <FullCalendar
-            height="350px"
-            plugins={[dayGridPlugin, interactionGridPlugin]}
-            initialView="dayGridMonth"
-            events={[]}
-            dateClick={(date) => handleChoseDateMiniCalendar(date)}
-            headerToolbar={{
-              start: "prev",
-              center: "title",
-              end: "today,next"
-            }}
-            // buttonIcons={{
-            //   // prev: "chevron-right"
-            //   // next: "chevron-left"
-            // }}
-            weekends
-            // eventContent
-          />
+          <div className="text-center text-3xl p-3">
+            <strong>Lịch vạn niên</strong>
+          </div>
+          <div className="calendar-wraper p-2 rounded-lg">
+            <FullCalendar
+              height="320px"
+              locale={viLocale}
+              dayHeaderFormat={{ weekday: "narrow" }}
+              plugins={[dayGridPlugin, interactionGridPlugin]}
+              initialView="dayGridMonth"
+              events={[]}
+              dateClick={(date) => handleChoseDateMiniCalendar(date)}
+              headerToolbar={{
+                start: "prev",
+                center: "title",
+                end: "next"
+              }}
+              weekends
+              customButtons={{
+                customNextButton: {
+                  text: "My Next", // You can use any text or HTML for your button
+                  click() {
+                    // Handle click event for your custom button
+                    alert("Custom next button clicked!");
+                  }
+                }
+              }}
+            />
+          </div>
         </div>
       </div>
-      <div className="grow p-5 main-calendar">
+      <div className="grow py-5 main-calendar">
         <FullCalendar
           ref={mainCalendarRef}
           height="100%"
           plugins={[dayGridPlugin, timeGridPlugin, interactionGridPlugin]}
           initialView="dayGridMonth"
+          dayHeaderFormat={{ weekday: "long" }}
+          locale={viLocale}
           headerToolbar={{
-            start: "",
-            center: "title",
+            start: "title",
+            center: "",
             end: "dayGridMonth,timeGridWeek,timeGridDay"
           }}
           slotLabelFormat={{
@@ -89,8 +121,40 @@ export function FullCalendarComponent() {
           events={[...events]}
           // eslint-disable-next-line no-use-before-define
           eventContent={renderEventContent}
+          eventDidMount={(info) => {
+            // Ensure the popover is displayed inside the viewport
+            info.el.addEventListener("mouseenter", () => {
+              const popoverEl = info.el.querySelector(".fc-popover");
+              if (popoverEl) {
+                const rect = popoverEl.getBoundingClientRect();
+                const bodyRect = document.body.getBoundingClientRect();
+                if (rect.right > bodyRect.right) {
+                  popoverEl.style.right = "0";
+                  popoverEl.style.left = "auto";
+                }
+                if (rect.bottom > bodyRect.bottom) {
+                  popoverEl.style.bottom = "0";
+                  popoverEl.style.top = "auto";
+                }
+              }
+            });
+          }}
         />
       </div>
+      {openDialog && (
+        <CreateTaskDialog
+          open={openDialog}
+          handleClose={() => setOpenDialog(false)}
+          taskId={msgIdDialog}
+        />
+      )}
+      {openDialogMeeting && (
+        <BookMeetingDialog
+          open={openDialogMeeting}
+          handleClose={() => setOpenDialogMeeting(false)}
+          meetingId={msgIdDialog}
+        />
+      )}
     </div>
   );
 }

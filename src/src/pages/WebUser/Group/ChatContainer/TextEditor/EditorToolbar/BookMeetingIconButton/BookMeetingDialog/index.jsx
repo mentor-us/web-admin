@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -23,14 +23,16 @@ import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 import dayjs from "dayjs";
+import MeetingApi from "api/MeetingApi";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
-import { useCreateMeetingMutation } from "hooks/chats/mutation";
+import { useCreateMeetingMutation, useUpdateMeetingMutation } from "hooks/chats/mutation";
+import { useGetDetailMeeting } from "hooks/events/queries";
 import useMyInfo from "hooks/useMyInfo";
 import { MEETING_REPEATED_TYPE } from "utils/constants";
 
-function BookMeetingDialog({ open, handleClose }) {
+function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
@@ -38,8 +40,13 @@ function BookMeetingDialog({ open, handleClose }) {
     (members) => members?.filter((member) => member.id !== myInfo.id) ?? []
   );
   const queryClient = useQueryClient();
-
   const today = dayjs().add(1, "h").minute(0);
+  const { data: meetingDetail } = useGetDetailMeeting(meetingId);
+  const [titleDialog, setTitleDialog] = useState(
+    meetingId ? "Chi tiết lịch hẹn " : "Lịch hẹn  mới"
+  );
+  const [isEditable, setIsEditable] = useState(!meetingId);
+  const titlebtnDialog = isEditable ? "Lưu lịch hẹn " : "";
 
   const {
     control,
@@ -59,7 +66,9 @@ function BookMeetingDialog({ open, handleClose }) {
       date: today
     }
   });
-  const { mutateAsync: createMeetingMutationAsync, isPending } = useCreateMeetingMutation();
+  const { mutateAsync: createMeetingMutationAsync, isPending } = meetingId
+    ? useUpdateMeetingMutation()
+    : useCreateMeetingMutation();
 
   useEffect(() => {
     setValue("attendees", channelMembers ?? []);
@@ -69,11 +78,13 @@ function BookMeetingDialog({ open, handleClose }) {
     const { date } = data;
 
     return {
+      id: meetingId ?? null,
       title: data.title,
       description: data.description,
       attendees: data.attendees.map((attendee) => attendee.id),
       organizerId: myInfo.id,
       repeated: MEETING_REPEATED_TYPE.EVERY_DAY,
+      place: data.place,
       groupId: channelId,
       timeEnd: data.timeEnd.date(date.date()).month(date.month()).year(date.year()).toJSON(),
       timeStart: data.timeStart.date(date.date()).month(date.month()).year(date.year()).toJSON()
@@ -106,7 +117,44 @@ function BookMeetingDialog({ open, handleClose }) {
 
     onCancel();
   };
-
+  useEffect(() => {
+    if (open) {
+      // eslint-disable-next-line no-shadow
+      const getMeetingAssignees = async (meetingDetail) => {
+        const res = await MeetingApi.getMeetingAssignees(meetingDetail.id);
+        // if (res.data) {
+        setValue("attendees", res.data || []);
+        // }
+      };
+      if (meetingDetail) {
+        // taskData.role === "MENTOR" || taskData.assigner.id == currentUser.id
+        console.log("meetingDetail");
+        console.log(meetingDetail);
+        if (meetingDetail.canEdit) {
+          setTitleDialog("Cập nhật lịch hẹn");
+          setIsEditable(true);
+        }
+        reset({
+          title: meetingDetail.title || "",
+          description: meetingDetail.description || "",
+          place: meetingDetail.place || "",
+          timeStart: dayjs(meetingDetail.timeStart) || today,
+          timeEnd: dayjs(meetingDetail.timeEnd) || today,
+          date: dayjs(meetingDetail.date) || today,
+          attendees: meetingDetail.attendees || []
+        });
+        // setValue("attendees", [
+        //   {
+        //     id: "650fa97f0ee45f4e461b6bd0",
+        //     imageUrl:
+        //       "https://lh3.googleusercontent.com/a/ACg8ocLc8pAbl-MFsj5x56rb0dxVS3jpp1GhMQ4mkVjqAS7Qsf4=s96-c",
+        //     name: "Võ Thanh Sương"
+        //   }
+        // ]);
+        getMeetingAssignees(meetingDetail);
+      }
+    }
+  }, [meetingDetail]);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Dialog
@@ -126,11 +174,12 @@ function BookMeetingDialog({ open, handleClose }) {
           handleSubmit(onSubmit)();
         }}
       >
-        <DialogTitle alignSelf="center">Lịch hẹn mới</DialogTitle>
+        <DialogTitle alignSelf="center">{titleDialog}</DialogTitle>
         <DialogContent className="!py-4">
           <Controller
             getGroupDetailColumnHeadersMentorSelector
             name="title"
+            disabled={!isEditable}
             control={control}
             rules={{
               required: "Vui lòng nhập tiêu đề"
@@ -149,6 +198,7 @@ function BookMeetingDialog({ open, handleClose }) {
 
           <Controller
             name="description"
+            disabled={!isEditable}
             control={control}
             rules={{ required: false }}
             render={({ field }) => {
@@ -160,6 +210,7 @@ function BookMeetingDialog({ open, handleClose }) {
             <Grid item xs={4}>
               <Controller
                 name="timeStart"
+                disabled={!isEditable}
                 control={control}
                 rules={{
                   required: "Vui lòng nhập giờ bắt đầu",
@@ -199,6 +250,7 @@ function BookMeetingDialog({ open, handleClose }) {
             <Grid item xs={4}>
               <Controller
                 name="timeEnd"
+                disabled={!isEditable}
                 control={control}
                 rules={{
                   required: "Vui lòng nhập giờ kết thúc",
@@ -225,7 +277,7 @@ function BookMeetingDialog({ open, handleClose }) {
                       className="!mb-6"
                       fullWidth
                       label="Đến *"
-                      minTime={getValues("timeStart").add(1, "m")}
+                      minTime={getValues("timeStart")?.add(1, "m")}
                       disablePast
                       slotProps={{
                         textField: {
@@ -245,6 +297,7 @@ function BookMeetingDialog({ open, handleClose }) {
             <Grid item xs={4}>
               <Controller
                 name="date"
+                disabled={!isEditable}
                 control={control}
                 rules={{
                   required: "Vui lòng nhập ngày hẹn",
@@ -293,6 +346,7 @@ function BookMeetingDialog({ open, handleClose }) {
           <Controller
             getGroupDetailColumnHeadersMentorSelector
             name="place"
+            disabled={!isEditable}
             control={control}
             render={({ field }) => (
               <TextField
@@ -308,6 +362,7 @@ function BookMeetingDialog({ open, handleClose }) {
 
           <Controller
             name="attendees"
+            disabled={!isEditable}
             control={control}
             rules={{
               required: "Vui lòng chọn người tham gia lịch hẹn"
@@ -369,7 +424,7 @@ function BookMeetingDialog({ open, handleClose }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={onCancel}>Hủy</Button>
-          <Button type="submit">Tạo lịch hẹn</Button>
+          {isEditable && <Button type="submit">{titlebtnDialog}</Button>}
         </DialogActions>
       </Dialog>
     </LocalizationProvider>
@@ -378,7 +433,8 @@ function BookMeetingDialog({ open, handleClose }) {
 
 BookMeetingDialog.propTypes = {
   open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
+  meetingId: PropTypes.string.isRequired
 };
 
 export default BookMeetingDialog;
