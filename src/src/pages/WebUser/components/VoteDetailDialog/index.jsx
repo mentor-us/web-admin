@@ -1,6 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import { useEffect, useRef } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import {
@@ -29,8 +30,9 @@ import { CloseFillIcon, LockRedIcon, SortIcon } from "assets/svgs";
 
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
 import useMyInfo from "hooks/useMyInfo";
-import { useVotingMutation } from "hooks/vote/mutation";
-import { useGetVoteDetail } from "hooks/vote/queries";
+import { GetAllVotesInChannelKey, GetVoteDetailKey } from "hooks/votes/key";
+import { useVotingMutation } from "hooks/votes/mutation";
+import { useGetVoteDetail } from "hooks/votes/queries";
 import { VOTE_STATUS } from "utils/constants";
 
 import VoteDetailOption from "./VoteDetailOption";
@@ -55,8 +57,8 @@ function VoteDetailDialog({ open, handleClose, voteId }) {
     defaultValues: {
       voterId: myInfo.id,
       voteId,
-      voteTotal: vote?.voteTotal,
-      noOfVoters: vote?.noOfVoters,
+      voteTotal: vote?.voteTotal ?? 0,
+      noOfVoters: vote?.noOfVoters ?? 1,
       choices: vote?.choices ?? []
     }
   });
@@ -97,29 +99,10 @@ function VoteDetailDialog({ open, handleClose, voteId }) {
     }
   }, [vote]);
 
-  const handleSubmitVote = (data) => {
-    const requestData = {
-      voterId: data.voterId,
-      voteId: data.voteId,
-      choices: data.choices.map((choice) => {
-        return {
-          ...choice,
-          voters: choice.voters.flatMap((voter) => voter.id)
-        };
-      })
-    };
-    votingMutateAsync(requestData, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: GetAllChatMessageInfinityKey(channelId)
-        });
-      }
-    });
-  };
-
   const onCancel = () => {
     if (isDirty) {
       confirm({
+        title: "Xác nhận",
         content: "Bạn chưa lưu bình chọn của mình. Thoát bình chọn?",
         confirmationText: "Thoát",
         cancellationText: "Hủy"
@@ -133,6 +116,38 @@ function VoteDetailDialog({ open, handleClose, voteId }) {
     }
     reset();
     handleClose();
+  };
+
+  const handleSubmitVote = (data) => {
+    const requestData = {
+      voterId: data.voterId,
+      voteId: data.voteId,
+      choices: data.choices.map((choice) => {
+        return {
+          ...choice,
+          voters: choice.voters.flatMap((voter) => voter.id)
+        };
+      })
+    };
+    votingMutateAsync(requestData, {
+      onSuccess: async () => {
+        await queryClient.refetchQueries({
+          queryKey: GetVoteDetailKey(vote?.id)
+        });
+        await queryClient.invalidateQueries({
+          queryKey: GetAllChatMessageInfinityKey(channelId)
+        });
+        await queryClient.invalidateQueries({
+          queryKey: GetAllVotesInChannelKey(channelId)
+        });
+
+        reset();
+        handleClose();
+      },
+      onError: () => {
+        toast.error("Có lỗi xảy ra khi bình chọn.\nVui lòng thử lại sau!");
+      }
+    });
   };
 
   if (isLoading || isError) {

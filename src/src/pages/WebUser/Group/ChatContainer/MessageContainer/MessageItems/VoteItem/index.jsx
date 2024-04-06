@@ -15,14 +15,20 @@ import { VOTE_STATUS } from "utils/constants";
 function VoteItem({ message, containerClassName }) {
   const myInfo = useMyInfo();
   const [openVoteDetail, setOpenVoteDetail] = useState(false);
-  const { vote } = message;
+
+  let { vote } = message;
+  if (!vote) {
+    vote = message;
+  }
 
   const [noOfDiffVoters, voteTotal] = useMemo(() => {
-    const allVotersId = vote.choices
-      .flatMap((choice) => choice.voters)
-      .flatMap((voter) => voter.id);
+    const allVotersId = vote.choices.flatMap((choice) => choice.voters);
 
-    return [new Set(allVotersId).size, allVotersId.length];
+    if (allVotersId.every((item) => typeof item === "string" || item instanceof String)) {
+      return [new Set(allVotersId).size, allVotersId.length];
+    }
+
+    return [new Set(allVotersId.flatMap((voter) => voter.id)).size, allVotersId.length];
   }, [vote]);
 
   const renderVoteItems = useMemo(
@@ -51,7 +57,8 @@ function VoteItem({ message, containerClassName }) {
               </Tooltip>
             </Box>
             <Stack className="!z-20" direction="row" spacing={1}>
-              {item.voters.includes(myInfo.id) && (
+              {(item.voters.includes(myInfo.id) ||
+                item.voters.flatMap((voter) => voter.id).includes(myInfo.id)) && (
                 <CheckCircleIcon className="!z-20" color="info" />
               )}
               <Typography className="vote-option-number line-clamp-1 !text-sm">
@@ -146,7 +153,7 @@ function VoteItem({ message, containerClassName }) {
         <VoteDetailDialog
           open={openVoteDetail}
           handleClose={() => setOpenVoteDetail(false)}
-          voteId={message?.vote?.id}
+          voteId={vote?.id}
         />
       )}
     </>
