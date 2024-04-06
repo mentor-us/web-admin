@@ -82,4 +82,4 @@ export const getTimeMeeting = (start, end) => {
   return time;
 };
 
-export { formatDate };
+export { formatDate, getMomentTime };

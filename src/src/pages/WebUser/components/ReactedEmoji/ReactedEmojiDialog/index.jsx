@@ -40,7 +40,7 @@ function ReactedEmojiDialog({ open, handleClose, reactions }) {
         <List sx={{ width: "100%", bgcolor: "background.paper" }}>
           {reactions.map((react) => {
             return (
-              <ListItem className="!mb-2">
+              <ListItem key={react.imageUrl} className="!mb-2">
                 <ListItemAvatar>
                   <Avatar
                     className="!rounded-lg"
@@ -68,6 +68,7 @@ function ReactedEmojiDialog({ open, handleClose, reactions }) {
                             {react.data.map((emoji) => {
                               return (
                                 <Avatar
+                                  key={emoji.id}
                                   className="!border-none"
                                   src={EMOJI_ICONS[emoji.id]}
                                   sx={{ width: "24px", height: "24px" }}
