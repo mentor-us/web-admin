@@ -3,6 +3,7 @@ import axios from "axios";
 import { API_URL } from "config";
 
 import { ErrorAlertConfirm } from "components/SweetAlert";
+import { ROUTE_URL } from "utils/constants";
 
 const AxiosClient = axios.create({
   baseURL: API_URL,
@@ -42,7 +43,7 @@ AxiosClient.interceptors.response.use(
         (result) => {
           if (result.isConfirmed) {
             localStorage.removeItem("access_token");
-            window.location.assign("/admin/sign-in");
+            window.location.assign(ROUTE_URL.SIGN_IN);
           }
         }
       );

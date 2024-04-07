@@ -8,6 +8,7 @@ import bgImage from "assets/images/hcmus.jpg";
 import FullPageCenter from "layouts/components/FullPageCenter";
 import FullBgImageLayout from "layouts/FullBgImageLayout";
 import useMyInfo from "hooks/useMyInfo";
+import { ROUTE_URL } from "utils/constants";
 
 import ConfirmLogout from "./components/ConfirmLogout";
 import SignInCard from "./components/SignInCard";
@@ -20,7 +21,7 @@ function SignIn() {
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     dispatch(logout());
-    navigate("/admin/sign-in", { replace: true });
+    navigate(ROUTE_URL.SIGN_IN, { replace: true });
 
     // if (myInfo.provider === "google") {
     //   window.location.assign(

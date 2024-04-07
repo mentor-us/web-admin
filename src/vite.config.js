@@ -3,6 +3,7 @@ import jsconfigPaths from "vite-jsconfig-paths";
 import checker from "vite-plugin-checker";
 import envCompatible from "vite-plugin-env-compatible";
 import eslintPlugin from "vite-plugin-eslint";
+import svgr from "vite-plugin-svgr";
 
 import { defineConfig } from "vite";
 
@@ -12,7 +13,11 @@ export default defineConfig({
   build: {
     outDir: "build"
   },
+  // optimizeDeps: {
+  //   include: ["@emotion/react", "@emotion/styled"]
+  // },
   plugins: [
+    svgr(),
     react(),
     jsconfigPaths(),
     envCompatible(),

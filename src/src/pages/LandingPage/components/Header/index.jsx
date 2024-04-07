@@ -1,5 +1,6 @@
-import React from "react";
 import { Icon, IconButton } from "@mui/material";
+
+import { ROUTE_URL } from "utils/constants";
 
 import "../../styles.css";
 
@@ -34,6 +35,9 @@ function Header() {
         </li>
         <li>
           <a href="#footer">Thông tin</a>
+        </li>
+        <li>
+          <a href={ROUTE_URL.SIGN_IN}>Đăng nhập</a>
         </li>
       </ul>
     </header>

@@ -1,0 +1,123 @@
+.meeting-message-container,
+.vote-message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vote-message-item {
+  position: relative;
+  width: 100% !important;
+  display: flex;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background-color: #ebebeb !important;
+  margin-bottom: 5px !important;
+  padding: 10px !important;
+  border-radius: 8px !important;
+}
+
+.vote-message-item .vote-percent-line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #c2e5f5;
+  border-radius: 8px;
+}
+
+.vote-message-item .vote-option-text {
+  color: #000;
+}
+
+.vote-message-item .vote-option-number {
+  color: #299c49;
+  font-weight: 600;
+}
+
+.message-item-container:hover .reaction-icon-button {
+  display: flex;
+}
+
+.message-item-content {
+  position: relative;
+}
+
+.reaction-button-container {
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+  margin-right: 4px;
+}
+
+.reaction-icon-button {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  border-radius: 50%;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.reacted-emoji-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 2px 4px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+}
+
+.reaction-icon-button img {
+  background-size: 13px;
+  position: relative;
+  width: 14px;
+  height: 14px;
+  background-repeat: no-repeat;
+}
+
+.reaction-icon-button:hover .reaction-toolbar {
+  visibility: visible;
+  -webkit-transition: visibility 0.5s ease;
+  -moz-transition: visibility 0.5s ease;
+  transition: visibility 0.5s ease;
+}
+
+.other-message-container .reaction-toolbar {
+  transform: translateX(40%) translateY(-110%);
+}
+.reaction-toolbar {
+  cursor: default;
+  position: absolute;
+  top: 0;
+  right: 0;
+  visibility: hidden;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  transform: translateY(-110%);
+  -webkit-transition: visibility 0.5s ease;
+  -moz-transition: visibility 0.5s ease;
+  transition: visibility 0.5s ease;
+}
+
+.reaction-toolbar-emoji-list {
+  background-color: #fff;
+  border-radius: 24px;
+  padding: 6px 12px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+}
+
+.reaction-toolbar-emoji-list img:hover {
+  cursor: pointer;
+  scale: 1.2;
+}

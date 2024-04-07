@@ -13,11 +13,14 @@ import GroupManagement from "pages/GroupManagement";
 import MobileLandingPage from "pages/LandingPage/Mobile";
 import WebLandingPage from "pages/LandingPage/Web";
 import PageNotFound from "pages/NotFound";
+import Privacy from "pages/Privacy";
 import SignIn from "pages/SignIn";
 import Statistic from "pages/Statistic";
 import StatisticDetail from "pages/StatisticDetail";
+import TermOfService from "pages/TermOfService";
 import MobileUserGuide from "pages/UserGuide/Mobile";
 import WebAdminGuideline from "pages/UserGuide/Web";
+import { ROUTE_URL } from "utils/constants";
 
 const pagesMap = {
   groups: "Quản lý nhóm",
@@ -85,6 +88,16 @@ export const privateRoutes = [
 
 export const publicRoutes = [
   {
+    key: "privacy-page",
+    path: "/privacy",
+    element: <Privacy />
+  },
+  {
+    key: "privacy-page",
+    path: "/term-of-service",
+    element: <TermOfService />
+  },
+  {
     key: "mobile-landing-page",
     path: "/",
     element: <MobileLandingPage />
@@ -108,7 +121,7 @@ export const publicRoutes = [
     name: "Sign In",
     key: "sign-in",
     icon: <Icon fontSize="small">login</Icon>,
-    path: "/admin/sign-in",
+    path: ROUTE_URL.SIGN_IN,
     element: <SignIn />
   },
   {
