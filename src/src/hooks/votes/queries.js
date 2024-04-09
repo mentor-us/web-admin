@@ -1,15 +1,28 @@
-/* eslint-disable no-unused-vars */
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-import votesService from "service/votesService";
+import VoteService from "service/voteService";
+import useMyInfo from "hooks/useMyInfo";
 
-import { GetAllVotesInGroupKey } from "./keys";
+import { GetAllVotesInChannelKey, GetVoteDetailKey } from "./key";
 
-// eslint-disable-next-line import/prefer-default-export
-export const useGetGroupVotes = (groupId, select) =>
-  useQuery({
-    queryKey: GetAllVotesInGroupKey(groupId),
-    queryFn: () => votesService.getAllVotesByGroupId(groupId),
-    enabled: !!groupId,
+export const useGetVoteDetail = (voteId, select) => {
+  const myInfo = useMyInfo();
+
+  return useQuery({
+    queryKey: GetVoteDetailKey(voteId),
+    queryFn: () => VoteService.getVoteDetail(voteId, myInfo.id),
+    enabled: !!voteId && !!myInfo.id,
     select
   });
+};
+
+export const useGetChannelVotes = (channelId, select) => {
+  const myInfo = useMyInfo();
+
+  return useQuery({
+    queryKey: GetAllVotesInChannelKey(channelId),
+    queryFn: () => VoteService.getChannelVotes(channelId, myInfo.id),
+    enabled: !!channelId,
+    select
+  });
+};

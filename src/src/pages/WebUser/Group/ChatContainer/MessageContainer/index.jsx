@@ -44,17 +44,25 @@ function MessageContainer({ channelId }) {
       });
     };
 
+    const onVoting = () => {
+      queryClient.invalidateQueries({
+        queryKey: GetAllChatMessageInfinityKey(channelId)
+      });
+    };
+
     // Join chat room
     SocketService.joinChannel(channelId, myInfo.id);
 
     SocketService.registerHandler(SOCKET_EVENT.RECEIVE_MESSAGE, onReceiveMessage);
     SocketService.registerHandler(SOCKET_EVENT.RECEIVE_REACT_MESSAGE, onReceiveReaction);
     SocketService.registerHandler(SOCKET_EVENT.REMOVE_REACT_MESSAGE, onRemoveReaction);
+    SocketService.registerHandler(SOCKET_EVENT.RECEIVE_VOTING, onVoting);
 
     return () => {
       SocketService.unregisterHandler(SOCKET_EVENT.RECEIVE_MESSAGE, onReceiveMessage);
       SocketService.unregisterHandler(SOCKET_EVENT.RECEIVE_REACT_MESSAGE, onReceiveReaction);
       SocketService.unregisterHandler(SOCKET_EVENT.REMOVE_REACT_MESSAGE, onRemoveReaction);
+      SocketService.unregisterHandler(SOCKET_EVENT.RECEIVE_VOTING, onVoting);
 
       SocketService.leaveChannel(channelId, myInfo.id);
     };

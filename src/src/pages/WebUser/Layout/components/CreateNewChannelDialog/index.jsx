@@ -76,7 +76,9 @@ function CreateNewChannelDialog({ open, handleClose }) {
     newData.groupId = groupId;
     newData.creatorId = myInfo.id;
     newData.type =
-      newData.userIds.length === memberList.length ? CHANNEL_TYPE.PUBLIC : CHANNEL_TYPE.PRIVATE;
+      newData.userIds.length === optionMemberList.length
+        ? CHANNEL_TYPE.PUBLIC
+        : CHANNEL_TYPE.PRIVATE;
     return newData;
   };
 
