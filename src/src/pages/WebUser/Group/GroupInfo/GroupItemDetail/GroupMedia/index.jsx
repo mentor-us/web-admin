@@ -73,7 +73,7 @@ export default function GroupMedia({ type }) {
         onChange={(event, newValue) => {
           setValue(newValue);
         }}
-        className="bg-white font-bold text-base border-b-2 mb-1 !h-[2rem]"
+        sx={{ backgroundColor: "transparent", borderBottom: "1px solid #e0e0e0" }}
       >
         <CustomBottomNavigationAction
           value="IMAGE"
