@@ -6,7 +6,7 @@ import CreateTaskDialog from "pages/WebUser/Group/ChatContainer/TextEditor/Edito
 import TaskService from "service/taskService";
 import { TaskStatusObject } from "utils/constants";
 
-function TaskItem({ meeting: task }) {
+function TaskItem({ task }) {
   const formateTask = TaskService.formatTask(task);
   const [openDialogTask, setOpenDialogTask] = useState(false);
 
@@ -47,7 +47,7 @@ function TaskItem({ meeting: task }) {
 
 TaskItem.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  meeting: PropTypes.object.isRequired
+  task: PropTypes.object.isRequired
 };
 
 export default TaskItem;
