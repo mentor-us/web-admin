@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Box, Skeleton } from "@mui/material";
+import { Box, Skeleton, Stack } from "@mui/material";
 
 import { useGetChannelTasks } from "hooks/tasks/queries";
 
@@ -8,21 +8,26 @@ import TaskItem from "./TaskItem";
 export default function GroupTask() {
   const { channelId } = useParams();
   // const channelId = "65d99d858c91143221a44b99";
-  const { data: meetings, isLoading } = useGetChannelTasks(channelId);
-  console.log(meetings);
+  const { data: tasks, isLoading, isSuccess } = useGetChannelTasks(channelId);
   // add sord meeting by date
-  if (meetings) {
-    meetings.sort((a, b) => new Date(b.timeStart) - new Date(a.timeStart));
-  }
-  if (isLoading) {
-    return <Skeleton variant="rectangular" />;
+  if (tasks) {
+    tasks.sort((a, b) => new Date(b.timeStart) - new Date(a.timeStart));
   }
   return (
-    <Box className="border overflow-y-scroll">
-      {meetings && meetings.length > 0 ? (
-        meetings.map((meeting) => <TaskItem key={meeting.id} meeting={meeting} />)
+    <Box className="border overflow-y-scroll overflow-x-hidden">
+      {tasks && tasks.length > 0 ? (
+        tasks.map((meeting) => <TaskItem key={meeting.id} meeting={meeting} />)
       ) : (
-        <div className="flex justify-center items-center">Chưa có T</div>
+        <Box>
+          {isSuccess && <div className="flex justify-center items-center">Chưa có công việc</div>}
+        </Box>
+      )}
+      {isLoading && (
+        <Stack spacing={1}>
+          <Skeleton variant="rounded" height={90} />
+          <Skeleton variant="rounded" height={90} />
+          <Skeleton variant="rounded" height={90} />
+        </Stack>
       )}
     </Box>
   );

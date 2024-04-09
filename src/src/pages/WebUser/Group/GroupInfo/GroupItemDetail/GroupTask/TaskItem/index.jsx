@@ -11,12 +11,12 @@ function TaskItem({ meeting: task }) {
   const [openDialogTask, setOpenDialogTask] = useState(false);
 
   return (
-    <Box className="!px-2 hover:scale-100">
+    <Box className="!px-2 hover:scale-105">
       <Box
         onClick={() => {
           setOpenDialogTask(true);
         }}
-        className="w-full max-w-screen-md shadow-md my-1 gap-1  p-3 pt-10 relative hover:cursor-pointer"
+        className="w-95 max-w-screen-md shadow-md my-1 gap-1  p-3 pt-10 relative hover:cursor-pointer"
       >
         <Box className="bg-orange-500 absolute top-1 right-0 px-2 py-2 ">
           <p className="text-white  text-xs text-center">
