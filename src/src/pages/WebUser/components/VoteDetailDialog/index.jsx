@@ -223,6 +223,8 @@ function VoteDetailDialog({ open, handleClose, voteId }) {
                 {...{ control, index, field }}
                 voteTotal={getValues("voteTotal")}
                 onVoterChange={(voteTotal) => setValue("voteTotal", voteTotal)}
+                isMultipleChoice={vote?.isMultipleChoice}
+                setValue={setValue}
               />
             ))}
           </List>

@@ -17,7 +17,17 @@ import { getImageUrlWithKey } from "utils";
 
 import useMyInfo from "hooks/useMyInfo";
 
-function VoteDetailOption({ control, index, remove, errors, field, voteTotal, onVoterChange }) {
+function VoteDetailOption({
+  control,
+  index,
+  remove,
+  errors,
+  field,
+  voteTotal,
+  onVoterChange,
+  isMultipleChoice,
+  setValue
+}) {
   const myInfo = useMyInfo();
   const choices = useWatch({ name: "choices", control });
   const choiceName = useWatch({ name: `choices.${index}.name`, control });
@@ -54,6 +64,23 @@ function VoteDetailOption({ control, index, remove, errors, field, voteTotal, on
                     imageUrl: myInfo.imageUrl
                   });
                   onVoterChange(voteTotal + 1);
+
+                  if (!isMultipleChoice) {
+                    choices.forEach((choice, idx) => {
+                      if (index === idx) {
+                        return;
+                      }
+
+                      if (choice.voters.flatMap((voter) => voter.id).includes(myInfo.id)) {
+                        setValue(`choices.${idx}`, {
+                          ...choice,
+                          isChosen: false,
+                          voters: choice.voters.filter((voter) => voter.id !== myInfo.id)
+                        });
+                        onVoterChange(voteTotal);
+                      }
+                    });
+                  }
                 } else {
                   const myVoteIndex = voters.findIndex((voter) => voter.id === myInfo.id);
                   if (myVoteIndex !== -1) {
@@ -157,6 +184,10 @@ function VoteDetailOption({ control, index, remove, errors, field, voteTotal, on
   );
 }
 
+VoteDetailOption.defaultProps = {
+  isMultipleChoice: true
+};
+
 VoteDetailOption.propTypes = {
   control: PropTypes.instanceOf(Object).isRequired,
   index: PropTypes.number.isRequired,
@@ -164,7 +195,9 @@ VoteDetailOption.propTypes = {
   remove: PropTypes.func.isRequired,
   errors: PropTypes.instanceOf(Object).isRequired,
   voteTotal: PropTypes.number.isRequired,
-  onVoterChange: PropTypes.func.isRequired
+  onVoterChange: PropTypes.func.isRequired,
+  isMultipleChoice: PropTypes.bool,
+  setValue: PropTypes.func.isRequired
 };
 
 export default VoteDetailOption;
