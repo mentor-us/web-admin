@@ -10,7 +10,7 @@ import BookMeetingDialog from "pages/WebUser/Group/ChatContainer/TextEditor/Edit
 import CreateTaskDialog from "pages/WebUser/Group/ChatContainer/TextEditor/EditorToolbar/CreateTaskIconButton/CreateTaskDialog";
 // import { useGetAllEvents } from "hooks/events/queries";
 import { MESSAGE_TYPE } from "utils/constants";
-import { formatDate } from "utils/dateHelper";
+import { formatDate } from "utils/formatDate";
 
 import viLocale from "./vi";
 import "./notion.scss";
@@ -86,9 +86,50 @@ export function FullCalendarComponent() {
             />
           </div>
           <hr />
+          <div className="h-full overflow-x-auto p-2 text-xs flex flex-col">
+            <span className="text-blue-500 pb-1">
+              <strong className="font-bold uppercase">Hôm nay</strong> {formatDate(new Date())}
+            </span>
+            <div className="flex flex-row py-1 rounded bg-slate-300 cursor-pointer">
+              <div className="flex justify-start max-w-4 max-h-5">
+                <div className="list-item ml-7 mt-[-11px] mr-0  text-blue-600 text-3xl" />
+              </div>
+              <div className="flex flex-col">
+                <div className="font-[400]">8:30 - 9:00 AM</div>
+                <div className="font-bold">Hop nhom mentorUs</div>
+              </div>
+            </div>
+            <div className="flex flex-row py-1 rounded hover:bg-slate-300 cursor-pointer">
+              <div className="flex justify-start max-w-4 max-h-5">
+                <div className="list-item ml-7 mt-[-11px] mr-0  text-blue-600 text-3xl" />
+              </div>
+              <div className="flex flex-col">
+                <div className="font-[400]">8:30 - 9:00 AM</div>
+                <div className="font-bold">Hop nhom mentorUs</div>
+              </div>
+            </div>
+            <div className="flex flex-row py-1 rounded hover:bg-slate-300 cursor-pointer">
+              <div className="flex justify-start max-w-4 max-h-5">
+                <div className="list-item ml-7 mt-[-11px] mr-0  text-blue-600 text-3xl" />
+              </div>
+              <div className="flex flex-col">
+                <div className="font-[400]">8:30 - 9:00 AM</div>
+                <div className="font-bold">Hop nhom mentorUs</div>
+              </div>
+            </div>
+            <div className="flex flex-row py-1 rounded hover:bg-slate-300 cursor-pointer">
+              <div className="flex justify-start max-w-4 max-h-5">
+                <div className="list-item ml-7 mt-[-11px] mr-0  text-blue-600 text-3xl" />
+              </div>
+              <div className="flex flex-col">
+                <div className="font-[400]">8:30 - 9:00 AM</div>
+                <div className="font-bold">Hop nhom mentorUs</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="grow py-5 main-calendar bg-white">
+      <div className="grow main-calendar bg-white">
         <FullCalendar
           ref={mainCalendarRef}
           height="100%"
@@ -114,6 +155,10 @@ export function FullCalendarComponent() {
           eventClick={(event) => handleClickEvent(event)}
           dayMaxEvents={2}
           weekends
+          titleFormat={{
+            year: "numeric",
+            month: "2-digit"
+          }}
           events={[...events]}
           // eslint-disable-next-line no-use-before-define
           eventContent={renderEventContent}
