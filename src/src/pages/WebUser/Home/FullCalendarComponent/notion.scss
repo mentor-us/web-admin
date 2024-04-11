@@ -167,10 +167,11 @@
         // gap: 0.25rem;
     }
     .fc-more-popover{
+        --custom-left: calc(100vw - 194px);
         position: fixed;
         top: 0 !important;
         right: 0px !important;
-        left: 1652px !important;
+        left: var(--custom-left) !important;
         bottom: 0 !important;
         .fc-popover-header {
             padding: 0.5rem 0.25rem;
