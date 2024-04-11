@@ -13,6 +13,10 @@
     --fc-button-active-bg-color: #E5E5E5;
     --fc-button-active-border-color: transparent;
     // --fc-today-bg-color: #F04842;
+    --event-background-color: rgb(225, 249, 255);
+    --event-border-color: rgb(56 189 248);
+    --event-background-primary-color: rgb(50, 165, 228);
+    --event-foreground-color: white;
 }
   
 
@@ -78,7 +82,19 @@
 
 .main-calendar{
     font-size: var(--notion-smaller-font-size) !important;
-
+    .fc-scrollgrid-section-body{
+        tbody{
+            tr{
+                height: 140px !important;
+                max-height: 140px !important;
+                .fc-daygrid-day{
+                    height: 140px !important;
+                    max-height: 140px !important;
+                }
+            }
+            
+        }
+    }
     .fc-header-toolbar{
         height: 74px !important;
         display: flex;
@@ -130,6 +146,25 @@
     .fc-daygrid-day-number:hover{
         background-color: #E5E5E5;
     }
+    .fc-daygrid-event{
+        cursor: pointer;
+        margin-top: 3px !important;
+        border-left: 4px solid var(--event-border-color);
+        line-height: 1.25;
+        background-color: var(--event-background-color);
+        color: rgb(0, 121, 187);
+        padding-left: 5px;
+    }
+    .fc-daygrid-event:focus, .fc-daygrid-event:hover, .fc-daygrid-event:active, .fc-daygrid-event:active:focus{
+        background-color: var(--event-background-primary-color);
+        border-color: var(--event-background-primary-color);
+        color: white;
+        font-weight: bold;
+    }
+    .fc-daygrid-day-events{
+        // gap: 0.25rem;
+    }
+    
 }
 .fc-button-primary:focus, .fc-button-primary:active, .fc-button-primary:active:focus {
     box-shadow: none !important;

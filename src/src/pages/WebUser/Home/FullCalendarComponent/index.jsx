@@ -14,10 +14,52 @@ import { formatDate } from "utils/formatDate";
 
 import viLocale from "./vi";
 import "./notion.scss";
+
+const eventsExample = [
+  {
+    title: "Event 1",
+    start: "2024-04-11T10:00:00", // Start date and time of the
+    timeStart: "2024-04-11T10:00:00", // Start date and time of the
+    end: "2024-04-11T15:00:00" // End date and time of the event (optional)
+    // You can include additional event properties as needed
+    // For example: description, color, textColor, etc.
+  },
+  {
+    title: "Event 2",
+    start: new Date(), // Start date and time of the event
+    timeStart: new Date(), // End date and time of the event (optional)
+    end: "2024-04-11T23:00:00" // End date and time of the event (optional)
+    // You can include additional event properties as needed
+    // For example: description, color, textColor, etc.
+  },
+  {
+    title: "Event 3",
+    start: "2024-04-11T10:00:00", // Start date and time of the event
+    timeStart: "2024-04-11T10:00:00", // Start date and time of the event
+    end: "2024-04-11T15:00:00" // End date and time of the event (optional)
+    // You can include additional event properties as needed
+    // For example: description, color, textColor, etc.
+  },
+  {
+    title: "Event 4",
+    start: new Date(), // Start date and time of the event
+    timeStart: new Date(), // Start date and time of the event
+    end: "2024-04-11T23:00:00" // End date and time of the event (optional)
+    // You can include additional event properties as needed
+    // For example: description, color, textColor, etc.
+  },
+  {
+    title: "Event 5",
+    start: "2024-04-15T13:30:00",
+    timeStart: "2024-04-15T13:30:00",
+    end: "2024-04-15T16:00:00"
+  }
+  // Add more events as needed
+];
 // eslint-disable-next-line import/prefer-default-export
 export function FullCalendarComponent() {
   // const { data: events, isLoading, isSuccess } = useGetAllEvents();
-  const events = [];
+  const events = eventsExample;
   const isLoading = false;
   const isSuccess = true;
   const [openDialog, setOpenDialog] = useState(false);
@@ -129,7 +171,7 @@ export function FullCalendarComponent() {
           </div>
         </div>
       </div>
-      <div className="grow main-calendar bg-white">
+      <div className="main-calendar bg-white w-[1382px] border-r-2 border-gray-200">
         <FullCalendar
           ref={mainCalendarRef}
           height="100%"
@@ -202,11 +244,14 @@ export function FullCalendarComponent() {
 
 // a custom render function
 function renderEventContent(eventData) {
+  console.log(eventData.event);
   return (
     <>
       {/* // <div className="event-item flex flex-row justify-start text-left bg-sky-300 hover:bg-sky-400 w-full p-1 pl-2 rounded-lg"> */}
-      <b className="col-12">{formatDate(eventData.event.extendedProps.timeStart ?? "", "time")}:</b>
-      <span className="ml-1 truncate block">{eventData.event.title}</span>
+      <span className="col-12">
+        {formatDate(eventData.event.extendedProps.timeStart ?? "", "time")}:
+      </span>
+      <strong className="ml-1 truncate block">{eventData.event.title}</strong>
       {/* // </div> */}
     </>
   );
