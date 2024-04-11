@@ -8,16 +8,18 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 
 import BookMeetingDialog from "pages/WebUser/Group/ChatContainer/TextEditor/EditorToolbar/BookMeetingIconButton/BookMeetingDialog";
 import CreateTaskDialog from "pages/WebUser/Group/ChatContainer/TextEditor/EditorToolbar/CreateTaskIconButton/CreateTaskDialog";
-import { useGetAllEvents } from "hooks/events/queries";
+// import { useGetAllEvents } from "hooks/events/queries";
 import { MESSAGE_TYPE } from "utils/constants";
 import { formatDate } from "utils/dateHelper";
 
 import viLocale from "./vi";
-import "./index.css";
-
+import "./notion.scss";
 // eslint-disable-next-line import/prefer-default-export
 export function FullCalendarComponent() {
-  const { data: events, isLoading, isSuccess } = useGetAllEvents();
+  // const { data: events, isLoading, isSuccess } = useGetAllEvents();
+  const events = [];
+  const isLoading = false;
+  const isSuccess = true;
   const [openDialog, setOpenDialog] = useState(false);
   const [openDialogMeeting, setOpenDialogMeeting] = useState(false);
   const [msgIdDialog, setMsgIdDialog] = useState(null);
@@ -59,14 +61,12 @@ export function FullCalendarComponent() {
   };
   return (
     <div className="flex h-full w-full calendar-page">
-      <div className="w-80 flex flex-col sub-calendar">
-        <div className="grow p-2">
-          <div className="text-center text-3xl p-3">
-            <strong>Lịch vạn niên</strong>
-          </div>
+      <div className="w-52 flex flex-col sub-calendar bg-gray-100">
+        <div className="grow">
+          <div className="text-center h-11" />
           <div className="calendar-wraper p-2 rounded-lg">
             <FullCalendar
-              height="320px"
+              height="224px"
               locale={viLocale}
               dayHeaderFormat={{ weekday: "narrow" }}
               plugins={[dayGridPlugin, interactionGridPlugin]}
@@ -74,25 +74,21 @@ export function FullCalendarComponent() {
               events={[]}
               dateClick={(date) => handleChoseDateMiniCalendar(date)}
               headerToolbar={{
-                start: "prev",
-                center: "title",
-                end: "next"
+                start: "title",
+                center: "test",
+                end: "prev,next"
+              }}
+              titleFormat={{
+                year: "numeric",
+                month: "2-digit"
               }}
               weekends
-              customButtons={{
-                customNextButton: {
-                  text: "My Next", // You can use any text or HTML for your button
-                  click() {
-                    // Handle click event for your custom button
-                    alert("Custom next button clicked!");
-                  }
-                }
-              }}
             />
           </div>
+          <hr />
         </div>
       </div>
-      <div className="grow py-5 main-calendar">
+      <div className="grow py-5 main-calendar bg-white">
         <FullCalendar
           ref={mainCalendarRef}
           height="100%"
