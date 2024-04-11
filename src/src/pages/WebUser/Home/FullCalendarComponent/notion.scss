@@ -153,7 +153,9 @@
         line-height: 1.25;
         background-color: var(--event-background-color);
         color: rgb(0, 121, 187);
-        padding-left: 5px;
+        // padding-left: 5px;
+        padding: 5px;
+
     }
     .fc-daygrid-event:focus, .fc-daygrid-event:hover, .fc-daygrid-event:active, .fc-daygrid-event:active:focus{
         background-color: var(--event-background-primary-color);
@@ -164,7 +166,27 @@
     .fc-daygrid-day-events{
         // gap: 0.25rem;
     }
-    
+    .fc-more-popover{
+        position: fixed;
+        top: 0 !important;
+        right: 0px !important;
+        left: 1652px !important;
+        bottom: 0 !important;
+        .fc-popover-header {
+            padding: 0.5rem 0.25rem;
+            font-weight: bold;
+        }
+        .fc-popover-body {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0px !important;
+            padding: 5px !important;
+            .fc-daygrid-event{
+                padding: 5px;
+            }
+        }
+    }
 }
 .fc-button-primary:focus, .fc-button-primary:active, .fc-button-primary:active:focus {
     box-shadow: none !important;
