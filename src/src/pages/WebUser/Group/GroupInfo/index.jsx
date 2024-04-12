@@ -21,6 +21,10 @@ import GroupInfoItem from "pages/WebUser/Group/GroupInfo/GroupFunction";
 import GroupItemDetail from "pages/WebUser/Group/GroupInfo/GroupItemDetail";
 import { useGetGroupDetail } from "hooks/groups/queries";
 import { CHANNEL_PERMISSION, GROUP_FUNCTION } from "utils/constants";
+
+import BookMeetingDialog from "../ChatContainer/TextEditor/EditorToolbar/BookMeetingIconButton/BookMeetingDialog";
+import CreateTaskDialog from "../ChatContainer/TextEditor/EditorToolbar/CreateTaskIconButton/CreateTaskDialog";
+import CreateVoteDialog from "../ChatContainer/TextEditor/EditorToolbar/CreateVoteIconButton/CreateVoteDialog";
 // Define the group information
 
 // eslint-disable-next-line react/prop-types, no-shadow
@@ -60,11 +64,53 @@ export default function GroupInfo() {
     setShowGroupMedia((pre) => !pre);
   };
   const [showTypeScreen, setShowTypeScreen] = useState("");
+  const [showAddFunction, setShowAddFunction] = useState(false);
   // click to show member list
   const selectedType = (type) => {
     setShowTypeScreen(type);
   };
   const headerInfo = renderHeaderInfor(showTypeScreen);
+  // eslint-disable-next-line consistent-return
+  const clickedAddFunction = (type) => {
+    console.log(type);
+    setShowAddFunction(true);
+  };
+  const handleCloseDialog = () => {
+    setShowAddFunction(false);
+  };
+  const renderAddFunctionDialog = () => {
+    if (showAddFunction && showTypeScreen !== "") {
+      switch (showTypeScreen) {
+        case GROUP_FUNCTION.MEETING:
+          console.log(showTypeScreen);
+          return (
+            <BookMeetingDialog
+              open={showAddFunction}
+              handleClose={handleCloseDialog}
+              meetingId="" // Pass necessary props here for Meeting Dialog
+            />
+          );
+        case GROUP_FUNCTION.TASK:
+          // Render Task dialog or perform task-related action
+          return (
+            <CreateTaskDialog
+              open={showAddFunction}
+              handleClose={handleCloseDialog}
+              taskId="" // I assume msgIdDialog is defined somewhere
+            />
+          );
+        case GROUP_FUNCTION.VOTING:
+          // Render Voting dialog or perform voting-related action
+          return <CreateVoteDialog open={showAddFunction} handleClose={handleCloseDialog} />;
+        case GROUP_FUNCTION.FAQ:
+          // Render FAQ dialog or perform FAQ-related action
+          return <div>Add FAQ Dialog or FAQ Action</div>;
+        default:
+          return null;
+      }
+    }
+    return null;
+  };
 
   // const navigate = useNavigate();
   const { channelId } = useParams();
@@ -114,7 +160,7 @@ export default function GroupInfo() {
               className="!absolute !right-0 hover:!bg-slate-300 rounded-full"
               size="small"
               onClick={(e) => {
-                e.preventDefault();
+                clickedAddFunction(showTypeScreen);
               }}
             >
               <AddIcon />
@@ -238,6 +284,7 @@ export default function GroupInfo() {
       ) : (
         <GroupItemDetail type={showTypeScreen} />
       )}
+      {renderAddFunctionDialog()}
     </div>
   );
 }
