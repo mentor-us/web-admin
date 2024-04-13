@@ -17,6 +17,13 @@
     --event-border-color: rgb(56 189 248);
     --event-background-primary-color: rgb(50, 165, 228);
     --event-foreground-color: white;
+    --fc-event-text-color: rgb(0, 121, 187);
+    --fc-event-bg-color:--event-background-color;
+    --main-calendar-popup-width: 16rem;
+    --sub-calendar-layout-width: 13rem;
+    --side-bar-width: 4rem;
+    --total-width: calc(var(--main-calendar-popup-width) + var(--sub-calendar-layout-width) + var(--side-bar-width)); 
+    --main-calendar-width: calc(100vw - var(--total-width));
 }
   
 
@@ -81,6 +88,7 @@
 
 
 .main-calendar{
+    width: var(--main-calendar-width);
     font-size: var(--notion-smaller-font-size) !important;
     .fc-scrollgrid-section-body{
         tbody{
@@ -157,23 +165,29 @@
         padding: 5px;
 
     }
+    // .fc-timegrid-event:focus, .fc-timegrid-event:hover, .fc-timegrid-event:active, .fc-timegrid-event:active:focus,
     .fc-daygrid-event:focus, .fc-daygrid-event:hover, .fc-daygrid-event:active, .fc-daygrid-event:active:focus{
         background-color: var(--event-background-primary-color);
         border-color: var(--event-background-primary-color);
-        color: white;
+        color: white !important;
         font-weight: bold;
     }
     .fc-daygrid-day-events{
         // gap: 0.25rem;
+        padding: 2px;
     }
     .fc-more-popover{
-        --custom-left: calc(100vw - 194px);
+        --custom-left: calc(100vw - var(--main-calendar-popup-width));
         position: fixed;
         top: 0 !important;
         right: 0px !important;
         left: var(--custom-left) !important;
         bottom: 0 !important;
+        // border: none;
+        box-shadow: none;
         .fc-popover-header {
+            // background-color: white;
+            border-radius: 0px;
             padding: 0.5rem 0.25rem;
             font-weight: bold;
         }
@@ -188,6 +202,26 @@
             }
         }
     }
+    .fc-daygrid-block-event{
+        // color: rgb(0, 121, 187);
+        // border: none !important;
+        // border-left: 4px solid var(--event-border-color);
+        border-color:  var(--event-border-color) !important;
+        border-right: none !important;
+        border-bottom: none !important;
+        border-top: none !important;
+        border-left-width: 4px !important;
+        .fc-event-main{
+            // color: rgb(0, 121, 187);
+            display: flex !important;
+
+        }
+          
+    }
+    .fc-timegrid-event {
+        cursor: pointer;
+    }
+   
 }
 .fc-button-primary:focus, .fc-button-primary:active, .fc-button-primary:active:focus {
     box-shadow: none !important;
