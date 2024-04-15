@@ -166,11 +166,13 @@
 
     }
     // .fc-timegrid-event:focus, .fc-timegrid-event:hover, .fc-timegrid-event:active, .fc-timegrid-event:active:focus,
+    .fc-daygrid-block-event:focus, .fc-daygrid-block-event:hover, .fc-daygrid-block-event:active, .fc-daygrid-block-event:active:focus,
     .fc-daygrid-event:focus, .fc-daygrid-event:hover, .fc-daygrid-event:active, .fc-daygrid-event:active:focus{
-        background-color: var(--event-background-primary-color);
-        border-color: var(--event-background-primary-color);
+        background-color: var(--event-background-primary-color) !important;
+        border-color: var(--event-background-primary-color) !important;
         color: white !important;
         font-weight: bold;
+        --fc-event-text-color : white !important;
     }
     .fc-daygrid-day-events{
         // gap: 0.25rem;
@@ -211,6 +213,7 @@
         border-bottom: none !important;
         border-top: none !important;
         border-left-width: 4px !important;
+        border-radius: 3px !important;
         .fc-event-main{
             // color: rgb(0, 121, 187);
             display: flex !important;
