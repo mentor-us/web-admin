@@ -19,6 +19,9 @@ const CustomBottomNavigationAction = styled(BottomNavigationAction)({
   },
   "&:hover": {
     color: "#7ab6ed" // Color on hover
+  },
+  "&.font-size": {
+    fontSize: "4rem" // Font size
   }
 });
 
@@ -55,11 +58,23 @@ export default function GroupMeeting() {
         onChange={(event, newValue) => {
           setValue(newValue);
         }}
-        sx={{ backgroundColor: "transparent", borderBottom: "1px solid #e0e0e0" }}
+        sx={{ backgroundColor: "transparent", borderBottom: "1px solid #e0e0e0", height: "45px" }}
       >
-        <CustomBottomNavigationAction value="now" className="!p-0 !m-0" showLabel label="Sắp tới" />
+        <CustomBottomNavigationAction
+          value="now"
+          className="!p-0 !m-0"
+          showLabel
+          label="Sắp tới"
+          sx={{ fontWeight: "medium" }}
+        />
 
-        <CustomBottomNavigationAction value="past" className="!p-0 !m-0" showLabel label="Đã qua" />
+        <CustomBottomNavigationAction
+          value="past"
+          className="!p-0 !m-0"
+          showLabel
+          label="Đã qua"
+          sx={{ fontWeight: "medium" }}
+        />
       </BottomNavigation>
 
       {/* Render Meetings or Empty Message based on loading state and filtered meetings */}
