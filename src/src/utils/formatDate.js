@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { parse } from "tinyduration";
 
 const convertMinuteToYearMonthDay = (minutes) => {
@@ -76,7 +77,58 @@ const getAnotherDateFromToday = (currentDate = new Date(), value = -4, type = "y
     default:
       break;
   }
-  return date;
+  return dayjs(date);
+};
+const getMomentTime = (src) => {
+  if (!src) {
+    return "";
+  }
+  const date = new Date(src);
+  const current = new Date();
+
+  if (date.getFullYear() === current.getFullYear() && date.getMonth() === current.getMonth()) {
+    const interval = date.getDate() - current.getDate();
+    switch (interval) {
+      case -1:
+        return "hôm qua";
+      case 0:
+        return "hôm nay";
+      case 1:
+        return "ngày mai";
+      default:
+        // eslint-disable-next-line no-unused-expressions
+        `ngày ${formatDate(src)}`;
+        break;
+    }
+  }
+  return `ngày ${formatDate(src)}`;
+};
+const getTime = (src) => {
+  const date = new Date(src);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  const hh = hours > 9 ? `${hours}` : `0${hours}`;
+  const mm = minutes > 9 ? `${minutes}` : `0${minutes}`;
+
+  return `${hh}:${mm} ${getMomentTime(src)}`;
+};
+const getTimeMeeting = (start, end) => {
+  const time = {
+    from: formatDate(start, "time"),
+    to: formatDate(end, "time"),
+    date: formatDate(start, "date"),
+    display: `${formatDate(start, "time")} - ${getTime(end)}`
+  };
+
+  return time;
 };
 
-export { formatDate, formatDateExcel, formatDateFromDuration, getAnotherDateFromToday };
+export {
+  formatDate,
+  formatDateExcel,
+  formatDateFromDuration,
+  getAnotherDateFromToday,
+  getTime,
+  getTimeMeeting
+};

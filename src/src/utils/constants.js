@@ -1,15 +1,8 @@
 import { API_URL } from "config";
-import coaching from "assets/images/coaching.png";
-import group from "assets/images/group.png";
+import EMOJI_IMAGES from "assets/images/emojis";
 import jpeg from "assets/images/jpeg.png";
 import jpg from "assets/images/jpg.png";
-import mentor from "assets/images/mentor.png";
-import mentorus from "assets/images/mentor_us.png";
-import mentoring from "assets/images/mentoring.png";
-import mentorship from "assets/images/mentorship.png";
 import png from "assets/images/png.png";
-import teamwork from "assets/images/teamwork.png";
-import training from "assets/images/training.png";
 
 export const googleSignInURL = `${API_URL}oauth2/authorize/google?redirect_uri=${window.location.origin}/auth/redirect`;
 export const microsoftSignInURL = `${API_URL}oauth2/authorize/azure?redirect_uri=${window.location.origin}/auth/redirect`;
@@ -21,14 +14,14 @@ export const imageExtensionList = [
 ];
 
 export const imageIconList = [
-  { src: mentorus, name: "mentor_us.png" },
-  { src: mentor, name: "mentor.png" },
-  { src: mentoring, name: "mentoring.png" },
-  { src: mentorship, name: "mentorship.png" },
-  { src: teamwork, name: "teamwork.png" },
-  { src: training, name: "training.png" },
-  { src: coaching, name: "coaching.png" },
-  { src: group, name: "group.png" }
+  { src: "default/group-category/1.png", name: "mentor" },
+  { src: "default/group-category/2.png", name: "mentor2" },
+  { src: "default/group-category/3.png", name: "mentoring" },
+  { src: "default/group-category/4.png", name: "mentorship" },
+  { src: "default/group-category/5.png", name: "teamwork" },
+  { src: "default/group-category/6.png", name: "training.png" },
+  { src: "default/group-category/7.png", name: "coaching" },
+  { src: "default/group-category/8.png", name: "group" }
 ];
 
 export const emailDomainsValid = [
@@ -84,3 +77,188 @@ export const groupCategoryStatusList = [
   { label: "Hoạt động", textValue: "ACTIVE", value: 1, color: "green" },
   { label: "Đã xóa", textValue: "DELETED", value: 2, color: "red" }
 ];
+
+export const getRouteUrl = (...paths) => {
+  return paths.join("");
+};
+
+export const ROUTE_URL = {
+  SIGN_IN: "/sign-in",
+
+  // Admin
+  ADMIN_ROOT: "/admin",
+
+  // Group management
+  GROUP_ROOT: "/admin/groups",
+
+  // Group category management
+  GROUP_CATEGORY: "/admin/group-category",
+
+  // Account management
+  ACCOUNT_ROOT: "/admin/account-management",
+
+  // Statistic
+  STATISTIC_ROOT: "/admin/statistic"
+};
+
+export const MEETING_REPEATED_TYPE = {
+  NONE: "NONE",
+  EVERY_DAY: "EVERY_DAY",
+  ONCE_A_WEEK: "ONCE_A_WEEK",
+  ONCE_TWO_WEEKS: "ONCE_TWO_WEEKS",
+  ONCE_A_MONTH: "ONCE_A_MONTH"
+};
+
+export const INIT_TOTAL_REACTION = {
+  data: [],
+  ownerReacted: [],
+  total: 0
+};
+
+export const USER_ROLE = {
+  MENTOR: "MENTOR",
+  MENTEE: "MENTEE"
+};
+
+export const MESSAGE_TYPE = {
+  TEXT: "TEXT",
+  FILE: "FILE",
+  IMAGE: "IMAGE",
+  VOTE: "VOTE",
+  MEETING: "MEETING",
+  TASK: "TASK"
+};
+
+export const CHANNEL_PERMISSION = {
+  SEND_FILES: "SEND_FILES",
+  TASK_MANAGEMENT: "TASK_MANAGEMENT",
+  MEETING_MANAGEMENT: "MEETING_MANAGEMENT",
+  BOARD_MANAGEMENT: "BOARD_MANAGEMENT",
+  FAQ_MANAGEMENT: "FAQ_MANAGEMENT",
+  GROUP_SETTINGS: "GROUP_SETTINGS"
+};
+
+export const CHANNEL_TYPE = {
+  PUBLIC: "PUBLIC",
+  PRIVATE: "PRIVATE",
+  PRIVATE_MESSAGE: "PRIVATE_MESSAGE"
+};
+
+export const VOTE_STATUS = {
+  OPEN: "OPEN",
+  CLOSED: "CLOSED"
+};
+
+export const UPLOAD_STATUS = {
+  SUCCESS: "Success",
+  FAIL: "Fail",
+  UPLOADING: "Uploading"
+};
+
+export const SUPPORTED_FILE_UPLOAD = [".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf"];
+
+export const MAX_FILE_IMAGE_SIZE = 5; // 5MB
+
+export const SUPPORTED_IMAGE_EXT = [
+  ".jpg",
+  ".jpeg",
+  ".jpe",
+  ".jif",
+  ".jfif",
+  ".jfi",
+  ".png",
+  ".gif",
+  ".webp",
+  ".tiff",
+  ".tif",
+  ".heif",
+  ".heic"
+];
+
+export const LIMIT_IMAGES = 5; // Max 5 image can send
+
+export const TaskStatusObject = {
+  TO_DO: {
+    key: "TO_DO",
+    displayName: "Mới",
+    color: "#333",
+    backgroundColor: "#ebebeb",
+    icon: "progress-close"
+  },
+  IN_PROGRESS: {
+    key: "IN_PROGRESS",
+    displayName: "Đang thực hiện",
+    color: "#2A7BDE",
+    backgroundColor: "#2A7BDE",
+    icon: "progress-upload"
+  },
+  DONE: {
+    key: "DONE",
+    displayName: "Hoàn thành",
+    color: "#4EA05B",
+    backgroundColor: "#4EA05B",
+    icon: "progress-check"
+  },
+  OVERDUE: {
+    key: "OVERDUE",
+    displayName: "Đã trễ hạn",
+    color: "#C01C28",
+    backgroundColor: "#C01C28",
+    icon: "progress-alert"
+  },
+  NULL: {
+    key: "NULL",
+    displayName: "",
+    color: "transparent",
+    backgroundColor: "transparent",
+    icon: ""
+  }
+};
+
+export const EMOJI_ICONS = {
+  LIKE_INACTIVE: EMOJI_IMAGES.LikeEmojiInactive,
+  LIKE: EMOJI_IMAGES.LikeEmoji,
+  LOVE_EYE: EMOJI_IMAGES.LoveEyeEmoji,
+  SMILE: EMOJI_IMAGES.SmileEmoji,
+  CRY_FACE: EMOJI_IMAGES.CryFaceEmoji,
+  CURIOUS: EMOJI_IMAGES.CuriousEmoji,
+  ANGRY_FACE: EMOJI_IMAGES.AngryFaceEmoji
+};
+export const GROUP_FUNCTION = {
+  MEMBER: "MEMBER",
+  UTILITY: "UTILITY",
+  MEDIA: "MEDIA",
+  FAQ: "FAQ",
+  MEETING: "MEETING",
+  TASK: "TASK",
+  VOTING: "VOTING",
+  IMAGE: "IMAGE",
+  FILE: "FILE"
+};
+export const Color = {
+  primary: "#006EDC",
+  secondary: "#2F88FF",
+  borderActive: "#2F88FF",
+  border: "#C9C9C9",
+  backgroundChat: "#E2E9F3",
+  backgroundGray: "#ebebeb",
+  other: "#2F88FF",
+  lineSeparator: "#ccc",
+  white: "#fff",
+  black: "#000",
+  messageChat: "#333",
+  mentionListBackground: "#f5faff",
+  online: "#00FF00",
+  offline: "#CCCCCC",
+  transparent: "transparent",
+  seeMoreColor: "#A7A7A7",
+  text: ["#333", "#444", "#555", "#667", "#777", "#888", "#aaa"],
+  gray: ["#E2E9F3", "#ebebeb", "#C9C9C9", "#F1F1F1", "#454545"],
+  green: "#299C49",
+  red: "#F05B51",
+  orange: "#FD971F",
+  violet: "#A347BA",
+  blue: "#3281ef",
+  opacity: ["#0007"],
+  votePercentColor: "#C2E5F5"
+};

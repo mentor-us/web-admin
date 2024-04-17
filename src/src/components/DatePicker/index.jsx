@@ -3,6 +3,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import PropTypes from "prop-types";
 
+import dayjs from "dayjs";
+
 import MDInput from "components/MDComponents/MDInput";
 // import { getGroupStatusList } from "utils";
 // import { formatDate } from "utils/formatDate";
@@ -56,11 +58,11 @@ function BasicDatePicker({
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
-        value={currentValue}
+        value={dayjs(currentValue)}
         onChange={handleNewValue}
         disabled={disabled}
-        minDate={minDate && new Date(minDate)}
-        maxDate={maxDate && new Date(maxDate)}
+        minDate={minDate && dayjs(minDate)}
+        maxDate={maxDate && dayjs(maxDate)}
         renderInput={(params) => (
           <MDInput
             {...params}

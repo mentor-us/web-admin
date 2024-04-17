@@ -1,19 +1,28 @@
 /* eslint-disable no-unused-vars */
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, NavLink, Outlet, Route, Routes, useLocation } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   allCategoriesSelector,
   getCategoryPermissionsSelector
 } from "features/groupsCategory/selector";
 import { getAllCategory, getPermissions } from "features/groupsCategory/slice";
+import { ConfirmProvider } from "material-ui-confirm";
 
 import { privateRoutes, publicRoutes } from "routes";
 import { isAuthenticated } from "utils";
 
 import ProtectedAuth from "pages/Auth/ProtectedAuth";
+import HomeLayout from "pages/WebUser/Home";
+import Calendar from "pages/WebUser/Home/Calendar";
+import { FullCalendarComponent } from "pages/WebUser/Home/FullCalendarComponent";
+import WelcomePage from "pages/WebUser/Home/WelcomePage";
+import GroupRoutes from "pages/WebUser/Route/GroupRoutes";
 
 import "./index.css";
+import "./App.css";
 
 const publicRoutesRender = (publicRoutesList) =>
   publicRoutesList.map((route) => {
@@ -44,6 +53,8 @@ const getRoutes = (allRoutes) =>
 
     return null;
   });
+
+const queryClient = new QueryClient();
 
 function App() {
   /// --------------------- Khai báo Biến, State -------------
@@ -76,13 +87,25 @@ function App() {
   }, [token]);
 
   return (
-    <Routes>
-      {publicRoutesRender(publicRoutes)}
-      {privateRoutesRender(privateRoutes)}
-      {/* {getRoutes(routes)} */}
-      <Route path="/" element={<Navigate to="/admin/groups" replace />} />
-      <Route path="*" element={<Navigate to="/not-found" replace />} />
-    </Routes>
+    <QueryClientProvider client={queryClient}>
+      <ConfirmProvider>
+        <Routes>
+          {publicRoutesRender(publicRoutes)}
+          {privateRoutesRender(privateRoutes)}
+          {/* {getRoutes(routes)} */}
+          <Route path="/" element={<Navigate to="/admin/groups" replace />} />
+          <Route path="*" element={<Navigate to="/not-found" replace />} />
+          <Route path="/web" element={<HomeLayout />}>
+            <Route index element={<WelcomePage />} />
+            <Route path="group/:groupId/*" element={<GroupRoutes />} />
+            {/* <Route path="calendar" element={<Calendar />} /> */}
+            <Route path="calendar" element={<FullCalendarComponent />} />
+            {/* <Route path="upcoming-event" element={<UpcomingEvent />} /> */}
+          </Route>
+        </Routes>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </ConfirmProvider>
+    </QueryClientProvider>
   );
 }
 

@@ -1,0 +1,7 @@
+@tailwind base;
+
+.message-container {
+  scrollbar-width: thin;
+  --tw-bg-opacity: 1;
+  scrollbar-color: rgb(100 116 139 / var(--tw-bg-opacity)) rgb(226 232 240 / var(--tw-bg-opacity));
+}

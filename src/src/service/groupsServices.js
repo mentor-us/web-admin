@@ -162,6 +162,30 @@ const exportGroupMentor = (id, req) => GroupApi.exportGroupMentor(id, req);
 
 const exportGroupSearch = (req) => GroupApi.exportGroupSearch(req);
 
+// User Services
+const getGroupsInHomePage = async (type = "", page = 0, pageSize = 25) => {
+  try {
+    const data = await GroupApi.getGroupsInHomePage(type, page, pageSize);
+
+    if (data && data.length > 0) {
+      return data.sort((a, b) => {
+        const k1 = a.pinned ? 1 : 0;
+        const k2 = b.pinned ? 1 : 0;
+        return k2 - k1;
+      });
+    }
+
+    return [];
+  } catch (error) {
+    console.log("SERVIVES_ERROR_all: ", error);
+    return [];
+  }
+};
+
+const getWorkspace = (groupId) => GroupApi.getWorkspace(groupId);
+const getGroupDetail = (groupId) => GroupApi.getGroupDetail(groupId);
+const getGroupMembers = (groupId) => GroupApi.getGroupMembers(groupId);
+
 const groupsServices = {
   getAllGroups,
   getGroup,
@@ -179,6 +203,12 @@ const groupsServices = {
   exportGroup,
   exportGroupMentee,
   exportGroupMentor,
-  exportGroupSearch
+  exportGroupSearch,
+
+  // User Services
+  getGroupsInHomePage,
+  getWorkspace,
+  getGroupDetail,
+  getGroupMembers
 };
 export default ErrorWrapper(groupsServices);

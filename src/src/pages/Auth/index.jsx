@@ -3,6 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { ServerError } from "errors";
 
 import { ErrorAlert } from "components/SweetAlert";
+import { ROUTE_URL } from "utils/constants";
 
 function Auth() {
   const { search } = useLocation();
@@ -18,7 +19,7 @@ function Auth() {
   const errorCodeValue = new URLSearchParams(search).get("error");
   const serverError = new ServerError(errorCodeValue);
   ErrorAlert(serverError.message);
-  return <Navigate to="/admin/sign-in" replace />;
+  return <Navigate to={ROUTE_URL.SIGN_IN} replace />;
 }
 
 export default Auth;
