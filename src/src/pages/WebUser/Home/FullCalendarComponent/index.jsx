@@ -10,52 +10,11 @@ import BookMeetingDialog from "pages/WebUser/Group/ChatContainer/TextEditor/Edit
 import CreateTaskDialog from "pages/WebUser/Group/ChatContainer/TextEditor/EditorToolbar/CreateTaskIconButton/CreateTaskDialog";
 import { useGetAllEvents } from "hooks/events/queries";
 import { MESSAGE_TYPE } from "utils/constants";
-import { formatDate } from "utils/dateHelper";
+import { formatDate, getMomentTime } from "utils/dateHelper";
 
+import EventUpcoming from "./EventUpcoming/index";
 import viLocale from "./vi";
 import "./notion.scss";
-
-// const eventsExample = [
-//   {
-//     title: "Event 1",
-//     start: "2024-04-11T10:00:00", // Start date and time of the
-//     timeStart: "2024-04-11T10:00:00", // Start date and time of the
-//     end: "2024-04-11T15:00:00" // End date and time of the event (optional)
-//     // You can include additional event properties as needed
-//     // For example: description, color, textColor, etc.
-//   },
-//   {
-//     title: "Event 2",
-//     start: new Date(), // Start date and time of the event
-//     timeStart: new Date(), // End date and time of the event (optional)
-//     end: "2024-04-11T23:00:00" // End date and time of the event (optional)
-//     // You can include additional event properties as needed
-//     // For example: description, color, textColor, etc.
-//   },
-//   {
-//     title: "Event 3",
-//     start: "2024-04-11T10:00:00", // Start date and time of the event
-//     timeStart: "2024-04-11T10:00:00", // Start date and time of the event
-//     end: "2024-04-11T15:00:00" // End date and time of the event (optional)
-//     // You can include additional event properties as needed
-//     // For example: description, color, textColor, etc.
-//   },
-//   {
-//     title: "Event 4",
-//     start: new Date(), // Start date and time of the event
-//     timeStart: new Date(), // Start date and time of the event
-//     end: "2024-04-11T23:00:00" // End date and time of the event (optional)
-//     // You can include additional event properties as needed
-//     // For example: description, color, textColor, etc.
-//   },
-//   {
-//     title: "Event 5",
-//     start: "2024-04-15T13:30:00",
-//     timeStart: "2024-04-15T13:30:00",
-//     end: "2024-04-15T16:00:00"
-//   }
-//   // Add more events as needed
-// ];
 // eslint-disable-next-line import/prefer-default-export
 export function FullCalendarComponent() {
   const { data: events, isLoading, isSuccess } = useGetAllEvents();
@@ -65,7 +24,10 @@ export function FullCalendarComponent() {
   const [openDialog, setOpenDialog] = useState(false);
   const [openDialogMeeting, setOpenDialogMeeting] = useState(false);
   const [msgIdDialog, setMsgIdDialog] = useState(null);
-
+  const upcomingEvent =
+    events && events.length
+      ? events.filter((event) => getMomentTime(event.upcomingTime) === "hôm nay")
+      : [];
   // const [openModalDetail, setOpenModalDetail] = useState(false);
   // const propsModal = useRef(null);
   const mainCalendarRef = useRef(null);
@@ -81,14 +43,13 @@ export function FullCalendarComponent() {
   };
   const handleClickEvent = (event) => {
     // showModal
-    console.log("handleClickEvent");
     const element = document.querySelector(".fc-popover-close");
-    console.log(element);
     if (element) {
       element.click();
     }
+    const eventType = event?.event?.extendedProps?.type ?? event?.event?.type;
     // eslint-disable-next-line eqeqeq
-    switch (event?.event?.extendedProps?.type) {
+    switch (eventType) {
       case MESSAGE_TYPE.TASK:
         setOpenDialog(true);
         setMsgIdDialog(event.event.id);
@@ -132,42 +93,9 @@ export function FullCalendarComponent() {
             <span className="text-blue-500 pb-1">
               <strong className="font-bold uppercase">Hôm nay</strong> {formatDate(new Date())}
             </span>
-            <div className="flex flex-row py-1 rounded bg-slate-300 cursor-pointer">
-              <div className="flex justify-start max-w-4 max-h-5">
-                <div className="list-item ml-7 mt-[-11px] mr-0  text-blue-600 text-3xl" />
-              </div>
-              <div className="flex flex-col">
-                <div className="font-[400]">8:30 - 9:00 AM</div>
-                <div className="font-bold">Hop nhom mentorUs</div>
-              </div>
-            </div>
-            <div className="flex flex-row py-1 rounded hover:bg-slate-300 cursor-pointer">
-              <div className="flex justify-start max-w-4 max-h-5">
-                <div className="list-item ml-7 mt-[-11px] mr-0  text-blue-600 text-3xl" />
-              </div>
-              <div className="flex flex-col">
-                <div className="font-[400]">8:30 - 9:00 AM</div>
-                <div className="font-bold">Hop nhom mentorUs</div>
-              </div>
-            </div>
-            <div className="flex flex-row py-1 rounded hover:bg-slate-300 cursor-pointer">
-              <div className="flex justify-start max-w-4 max-h-5">
-                <div className="list-item ml-7 mt-[-11px] mr-0  text-blue-600 text-3xl" />
-              </div>
-              <div className="flex flex-col">
-                <div className="font-[400]">8:30 - 9:00 AM</div>
-                <div className="font-bold">Hop nhom mentorUs</div>
-              </div>
-            </div>
-            <div className="flex flex-row py-1 rounded hover:bg-slate-300 cursor-pointer">
-              <div className="flex justify-start max-w-4 max-h-5">
-                <div className="list-item ml-7 mt-[-11px] mr-0  text-blue-600 text-3xl" />
-              </div>
-              <div className="flex flex-col">
-                <div className="font-[400]">8:30 - 9:00 AM</div>
-                <div className="font-bold">Hop nhom mentorUs</div>
-              </div>
-            </div>
+            {upcomingEvent.map((event) => (
+              <EventUpcoming handleClickEvent={(e) => handleClickEvent(e)} event={event} />
+            ))}
           </div>
         </div>
       </div>
@@ -244,7 +172,6 @@ export function FullCalendarComponent() {
 
 // a custom render function
 function renderEventContent(eventData) {
-  console.log(eventData.event);
   return (
     <>
       {/* // <div className="event-item flex flex-row justify-start text-left bg-sky-300 hover:bg-sky-400 w-full p-1 pl-2 rounded-lg"> */}
