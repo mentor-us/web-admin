@@ -124,6 +124,16 @@ const GroupApi = {
   async getGroupMembers(groupId) {
     const res = await AxiosClient.get(`/api/groups/${groupId}/members`);
     return res?.data;
+  },
+
+  pinMessage: async (groupId, messageId) => {
+    const URL = `/api/groups/${groupId}/pin-message?messageId=${messageId}`;
+    await AxiosClient.post(URL);
+  },
+
+  unpinMessage: async (groupId, messageId) => {
+    const URL = `/api/groups/${groupId}/unpin-message?messageId=${messageId}`;
+    await AxiosClient.post(URL);
   }
 };
 

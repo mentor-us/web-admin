@@ -95,7 +95,9 @@
 .other-message-container .reaction-toolbar {
   transform: translateX(40%) translateY(-110%);
 }
+
 .reaction-toolbar {
+  z-index: 9999 !important;
   cursor: default;
   position: absolute;
   top: 0;
@@ -121,3 +123,11 @@
   cursor: pointer;
   scale: 1.2;
 }
+
+/* .more-options-container {
+  visibility: hidden;
+}
+
+.message-item-container:hover .more-options-container {
+  visibility: visible;
+} */

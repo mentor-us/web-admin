@@ -185,7 +185,8 @@ const getGroupsInHomePage = async (type = "", page = 0, pageSize = 25) => {
 const getWorkspace = (groupId) => GroupApi.getWorkspace(groupId);
 const getGroupDetail = (groupId) => GroupApi.getGroupDetail(groupId);
 const getGroupMembers = (groupId) => GroupApi.getGroupMembers(groupId);
-
+const pinMessage = (groupId, messageId) => GroupApi.pinMessage(groupId, messageId);
+const unpinMessage = (groupId, messageId) => GroupApi.unpinMessage(groupId, messageId);
 const groupsServices = {
   getAllGroups,
   getGroup,
@@ -209,6 +210,8 @@ const groupsServices = {
   getGroupsInHomePage,
   getWorkspace,
   getGroupDetail,
-  getGroupMembers
+  getGroupMembers,
+  unpinMessage,
+  pinMessage
 };
 export default ErrorWrapper(groupsServices);

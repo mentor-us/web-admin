@@ -36,8 +36,9 @@ import { useGetVoteDetail } from "hooks/votes/queries";
 import { VOTE_STATUS } from "utils/constants";
 
 import VoteDetailOption from "./VoteDetailOption";
+import VoteSetting from "./VoteSetting";
 
-function VoteDetailDialog({ open, handleClose, voteId }) {
+function VoteDetailDialog({ open, handleClose, voteId, message }) {
   const confirm = useConfirm();
   const myInfo = useMyInfo();
   const queryClient = useQueryClient();
@@ -157,7 +158,7 @@ function VoteDetailDialog({ open, handleClose, voteId }) {
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={onCancel}
       component={motion.div}
       PaperProps={{
         sx: "!p-0"
@@ -202,7 +203,7 @@ function VoteDetailDialog({ open, handleClose, voteId }) {
             ) : (
               <>
                 <LockRedIcon width={15} height={15} />
-                <Typography>Đã khoá bình chọn.</Typography>
+                <Typography className="!text-[#888] !text-sm">Đã khoá bình chọn.</Typography>
               </>
             )}
           </Stack>
@@ -217,6 +218,7 @@ function VoteDetailDialog({ open, handleClose, voteId }) {
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
             {controlledFields.map((field, index) => (
               <VoteDetailOption
+                disabled
                 key={field.id}
                 remove={remove}
                 errors={errors}
@@ -226,52 +228,73 @@ function VoteDetailDialog({ open, handleClose, voteId }) {
               />
             ))}
           </List>
-          <Button
-            className="!mx-9 !px-2"
-            size="medium"
-            startIcon={<AddIcon />}
-            onClick={() => {
-              const noOfChoices = getValues("choices").length;
-              setFocus(`choices.${noOfChoices}.name`);
-              append({
-                id: uuidv4().toString(),
-                name: "",
-                voters: [],
-                isChoisen: false,
-                isNewOption: true
-              });
-              scrollToBottom();
-            }}
-          >
-            Thêm lựa chọn
-          </Button>
+          {vote?.status === VOTE_STATUS.OPEN && (
+            <Button
+              className="!mx-9 !px-2"
+              size="medium"
+              startIcon={<AddIcon />}
+              onClick={() => {
+                const noOfChoices = getValues("choices").length;
+                setFocus(`choices.${noOfChoices}.name`);
+                append({
+                  id: uuidv4().toString(),
+                  name: "",
+                  voters: [],
+                  isChoisen: false,
+                  isNewOption: true
+                });
+                scrollToBottom();
+              }}
+            >
+              Thêm lựa chọn
+            </Button>
+          )}
+
           <Box ref={messagesEndRef} />
         </Box>
       </DialogContent>
       <Divider className="!bg-black !my-0" />
       <DialogActions className="!m-0 !my-2 !py-0">
-        <Button onClick={onCancel}>Hủy</Button>
-        <Button
-          disabled={!isDirty}
-          onClick={(event) => {
-            if (isPending) {
-              return;
-            }
-            event.preventDefault();
-            handleSubmit(handleSubmitVote)();
-          }}
+        <Stack
+          className="w-full"
+          direction={message ? "row" : "row-reverse"}
+          justifyContent="space-between"
         >
-          Xác nhận
-        </Button>
+          <VoteSetting message={message} vote={vote} />
+          {vote?.status === VOTE_STATUS.OPEN ? (
+            <Box>
+              <Button onClick={onCancel}>Hủy</Button>
+              <Button
+                disabled={!isDirty}
+                onClick={(event) => {
+                  if (isPending) {
+                    return;
+                  }
+                  event.preventDefault();
+                  handleSubmit(handleSubmitVote)();
+                }}
+              >
+                Xác nhận
+              </Button>
+            </Box>
+          ) : (
+            <Button onClick={onCancel}>Thoát</Button>
+          )}
+        </Stack>
       </DialogActions>
     </Dialog>
   );
 }
 
+VoteDetailDialog.defaultProps = {
+  message: null
+};
+
 VoteDetailDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  voteId: PropTypes.string.isRequired
+  voteId: PropTypes.string.isRequired,
+  message: PropTypes.object
 };
 
 export default VoteDetailDialog;
