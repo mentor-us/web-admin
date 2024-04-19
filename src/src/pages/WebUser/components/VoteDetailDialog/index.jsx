@@ -218,13 +218,15 @@ function VoteDetailDialog({ open, handleClose, voteId, message }) {
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
             {controlledFields.map((field, index) => (
               <VoteDetailOption
-                disabled
+                disabled={vote?.status === VOTE_STATUS.CLOSED}
                 key={field.id}
                 remove={remove}
                 errors={errors}
                 {...{ control, index, field }}
                 voteTotal={getValues("voteTotal")}
                 onVoterChange={(voteTotal) => setValue("voteTotal", voteTotal)}
+                isMultipleChoice={vote?.isMultipleChoice}
+                setValue={setValue}
               />
             ))}
           </List>

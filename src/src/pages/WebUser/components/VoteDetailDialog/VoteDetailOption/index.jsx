@@ -26,7 +26,9 @@ function VoteDetailOption({
   errors,
   field,
   voteTotal,
-  onVoterChange
+  onVoterChange,
+  isMultipleChoice,
+  setValue
 }) {
   const myInfo = useMyInfo();
   const choices = useWatch({ name: "choices", control });
@@ -49,6 +51,7 @@ function VoteDetailOption({
           >
             <Checkbox
               sx={{
+                display: disabled ? "none" : "block",
                 "&.Mui-disabled": {
                   opacity: 0.8
                 }
@@ -64,6 +67,23 @@ function VoteDetailOption({
                     imageUrl: myInfo.imageUrl
                   });
                   onVoterChange(voteTotal + 1);
+
+                  if (!isMultipleChoice) {
+                    choices.forEach((choice, idx) => {
+                      if (index === idx) {
+                        return;
+                      }
+
+                      if (choice.voters.flatMap((voter) => voter.id).includes(myInfo.id)) {
+                        setValue(`choices.${idx}`, {
+                          ...choice,
+                          isChosen: false,
+                          voters: choice.voters.filter((voter) => voter.id !== myInfo.id)
+                        });
+                        onVoterChange(voteTotal);
+                      }
+                    });
+                  }
                 } else {
                   const myVoteIndex = voters?.findIndex((voter) => voter.id === myInfo.id);
                   if (myVoteIndex !== -1) {
@@ -168,7 +188,8 @@ function VoteDetailOption({
 }
 
 VoteDetailOption.defaultProps = {
-  disabled: false
+  disabled: false,
+  isMultipleChoice: true
 };
 
 VoteDetailOption.propTypes = {
@@ -179,7 +200,9 @@ VoteDetailOption.propTypes = {
   remove: PropTypes.func.isRequired,
   errors: PropTypes.instanceOf(Object).isRequired,
   voteTotal: PropTypes.number.isRequired,
-  onVoterChange: PropTypes.func.isRequired
+  onVoterChange: PropTypes.func.isRequired,
+  isMultipleChoice: PropTypes.bool,
+  setValue: PropTypes.func.isRequired
 };
 
 export default VoteDetailOption;
