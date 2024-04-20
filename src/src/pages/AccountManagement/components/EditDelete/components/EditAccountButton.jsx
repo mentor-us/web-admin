@@ -19,6 +19,7 @@ import { editAccount } from "features/accounts/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
+import dayjs from "dayjs";
 import { useMentorUs } from "hooks";
 import { getValueOfList, isEmailValid } from "utils";
 
@@ -49,7 +50,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
           ?.filter((item) => item.textValue !== "SUPER_ADMIN")
           .map((option) => option.role);
 
-  const [birthDate, setBirthDate] = useState(new Date(data.birthDate));
+  const [birthDate, setBirthDate] = useState(dayjs(data.birthDate));
   const [status, setStatus] = useState(data.status);
   const [role, setRole] = useState(getValueOfList(roleAccountList, data.role, "textValue", "role"));
   const [gender, setGender] = useState(data.gender);
@@ -69,7 +70,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
   const GetDataConvert = () => {
     return {
       name,
-      birthDate: birthDate ? new Date(birthDate) : birthDate,
+      birthDate: birthDate ? dayjs(birthDate) : birthDate,
       gender,
       personalEmail,
       phone,
@@ -83,8 +84,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
       (personalEmail && personalEmail.length > 0 && personalEmail !== data.personalEmail) ||
       (phone && phone.length > 0 && phone !== data.phone) ||
       (name && name.length > 0 && name !== data.name) ||
-      (birthDate !== null &&
-        new Date(birthDate).getTime() !== new Date(data.birthDate).getTime()) ||
+      (birthDate !== null && dayjs(birthDate).isSame(dayjs(data.birthDate))) ||
       (role !== null && role !== getValueOfList(roleAccountList, data.role, "textValue", "role"))
     ); // || role.length > 0;
   };
@@ -94,7 +94,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
   // };
 
   const resetAllReqData = () => {
-    setBirthDate(new Date(data.birthDate));
+    setBirthDate(dayjs(data.birthDate));
     setStatus(data.status);
     setGender(data.gender);
     setPersonalEmail(data.personalEmail);
@@ -125,7 +125,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
       return true;
     }
 
-    if (birthDate && new Date(birthDate).getTime() >= new Date().getTime()) {
+    if (birthDate && birthDate.isSameOrAfter(dayjs())) {
       ErrorAlert("Ngày sinh phải nhỏ hơn hiện tại!");
       return true;
     }
@@ -315,7 +315,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
                 <BasicDatePicker
                   value={birthDate}
                   event={setBirthDate}
-                  maxDate={getAnotherDateFromToday(new Date(), 0, "date")}
+                  maxDate={getAnotherDateFromToday(dayjs(), 0, "date")}
                 />
               </MDBox>
               <MDBox className="relationship__searchBox-item" mb={2}>

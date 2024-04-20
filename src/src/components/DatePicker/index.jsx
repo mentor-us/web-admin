@@ -24,7 +24,7 @@ function BasicDatePicker({
   const { isFirst, setIsFirst, checkName } = checkValid;
 
   const handleNewValue = (newValue) => {
-    const date = new Date(newValue);
+    const date = dayjs(newValue);
 
     // if (setGroupStatus) {
     //   if (status !== "OUTDATED") {
