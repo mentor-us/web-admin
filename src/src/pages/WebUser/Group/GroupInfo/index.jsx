@@ -23,6 +23,7 @@ import { useGetGroupDetail } from "hooks/groups/queries";
 import { CHANNEL_PERMISSION, GROUP_FUNCTION } from "utils/constants";
 
 import BookMeetingDialog from "../ChatContainer/TextEditor/EditorToolbar/BookMeetingIconButton/BookMeetingDialog";
+import CreateFAQ from "../ChatContainer/TextEditor/EditorToolbar/CreateFAQ";
 import CreateTaskDialog from "../ChatContainer/TextEditor/EditorToolbar/CreateTaskIconButton/CreateTaskDialog";
 import CreateVoteDialog from "../ChatContainer/TextEditor/EditorToolbar/CreateVoteIconButton/CreateVoteDialog";
 // Define the group information
@@ -104,7 +105,7 @@ export default function GroupInfo() {
           return <CreateVoteDialog open={showAddFunction} handleClose={handleCloseDialog} />;
         case GROUP_FUNCTION.FAQ:
           // Render FAQ dialog or perform FAQ-related action
-          return <div>Add FAQ Dialog or FAQ Action</div>;
+          return <CreateFAQ open={showAddFunction} handleClose={handleCloseDialog} faqId="" />;
         default:
           return null;
       }
