@@ -49,7 +49,6 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
       : roleAccountList
           ?.filter((item) => item.textValue !== "SUPER_ADMIN")
           .map((option) => option.role);
-
   const [birthDate, setBirthDate] = useState(dayjs(data.birthDate));
   const [status, setStatus] = useState(data.status);
   const [role, setRole] = useState(getValueOfList(roleAccountList, data.role, "textValue", "role"));
@@ -134,7 +133,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
   };
 
   const isValidData = () => {
-    const isValidBirthDate = birthDate && birthDate.toString() !== "Invalid Date";
+    const isValidBirthDate = data.birthDate !== null ? birthDate && birthDate.isValid() : true;
 
     const isValidName = name && name.length > 0;
 

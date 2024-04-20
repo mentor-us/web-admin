@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -51,30 +52,26 @@ function BasicDatePicker({
     });
   };
 
-  const isDateInvalid = () => {
-    return value.toString() === "Invalid Date" || value.length === 0 || value === null;
-  };
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
-        value={dayjs(currentValue)}
+        value={currentValue && currentValue.isValid() ? dayjs(currentValue) : null}
         onChange={handleNewValue}
         disabled={disabled}
         minDate={minDate && dayjs(minDate)}
         maxDate={maxDate && dayjs(maxDate)}
-        renderInput={(params) => (
+        textField={(params) => (
           <MDInput
             {...params}
             size="small"
             sx={{ width: "70%" }}
-            error={!isFirst[checkName] && isDateInvalid()}
+            error={!isFirst[checkName] && currentValue.isValid()}
             helperText={
-              !isFirst[checkName] && isDateInvalid() ? "Vui lòng nhập ngày thích hợp" : ""
+              !isFirst[checkName] && currentValue.isValid() ? "Vui lòng nhập ngày thích hợp" : ""
             }
           />
         )}
-        inputFormat="DD/MM/YYYY"
+        format="DD/MM/YYYY"
       />
     </LocalizationProvider>
   );

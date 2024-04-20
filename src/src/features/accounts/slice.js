@@ -284,7 +284,7 @@ const accountSlice = createSlice({
         const currentIndex = state.data.findIndex((item) => item.id === action.payload.id);
         state.data[currentIndex] = addCheckedProp(
           action.payload,
-          state.data[currentIndex].isChecked
+          state.data[currentIndex]?.isChecked
         );
 
         const currentIndexSearch = state.dataSearch.findIndex(
@@ -293,7 +293,7 @@ const accountSlice = createSlice({
         if (currentIndexSearch >= 0) {
           state.dataSearch[currentIndexSearch] = addCheckedProp(
             action.payload,
-            state.data[currentIndexSearch].isChecked
+            state.data[currentIndexSearch]?.isChecked
           );
         }
       })
