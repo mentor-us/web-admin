@@ -303,10 +303,11 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                   required: "Vui lòng nhập ngày hẹn",
                   validate: {
                     gtnow: (v) => {
-                      if (!v || dayjs().isBefore(v)) {
+                      console.log("validate v");
+                      console.log(v);
+                      if (!v || dayjs().isBefore(v) || dayjs(v).isSame(dayjs(), "day")) {
                         return true;
                       }
-
                       return "Ngày hẹn phải lớn hơn hoặc bằng ngày hiện tại";
                     }
                   }
