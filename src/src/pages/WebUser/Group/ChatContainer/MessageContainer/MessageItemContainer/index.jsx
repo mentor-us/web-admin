@@ -1,17 +1,17 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/forbid-prop-types */
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import PushPinIcon from "@mui/icons-material/PushPin";
 import { Box, ListItem, ListItemAvatar, Stack, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { getTime } from "utils";
+import { PinIconMessenger } from "assets/svgs";
 
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
 import ReactedEmoji from "pages/WebUser/components/ReactedEmoji";
 import ReactionButton from "pages/WebUser/components/ReactionButton";
 import { useGetGroupDetail } from "hooks/groups/queries";
+import { MESSAGE_STATUS } from "utils/constants";
 
 import FloatingOptions from "../FloatingOptions";
 
@@ -49,18 +49,23 @@ function MessageItemContainer({ children, message, isOwner }) {
       };
 
   const renderMessageSubHeader = () => {
-    let content = "";
+    const content = [];
 
     if (channelDetail?.pinnedMessageIds.includes(message.id)) {
-      content = (
-        <Stack direction="row" justifyContent="center" alignItems="center" spacing={0.2}>
-          <PushPinIcon />
-          <span>Tin nhắn đã được ghim</span>
-        </Stack>
-      );
+      content.push("Đã ghim");
     }
 
-    return <div className={`text-sm mb-1 ${!isOwner ? "ml-[32px]" : ""}`}>{content}</div>;
+    if (message?.status === MESSAGE_STATUS.EDITED) {
+      content.push("Đã chỉnh sửa");
+    }
+
+    return (
+      <div className={`text-sm mb-1 ${!isOwner ? "ml-10" : ""}`}>
+        <Stack direction="row" justifyContent="center" alignItems="center" spacing={0.2}>
+          <span>{content.join(" · ")}</span>
+        </Stack>
+      </div>
+    );
   };
 
   return (
@@ -92,6 +97,9 @@ function MessageItemContainer({ children, message, isOwner }) {
               </ListItemAvatar>
             )}
             <div className="message-item-content h-full space-y-1" style={containerStyle}>
+              {channelDetail?.pinnedMessageIds.includes(message.id) && (
+                <PinIconMessenger className="absolute right-0 top-0 translate-x-[50%] translate-y-[-50%] transform scale-x-[-1] scale-y-[1]" />
+              )}
               {!isOwner && (
                 <Typography className="!text-xs font-bold text-[#299C49]">
                   {message?.sender?.name}
@@ -106,21 +114,25 @@ function MessageItemContainer({ children, message, isOwner }) {
               >
                 {getTime(message?.createdDate)}
               </Typography>
-              <Stack className="reaction-button-container" spacing={1} direction="row">
-                <ReactedEmoji
-                  className="reacted-emoji-container"
-                  reactions={message?.reactions}
-                  totalReaction={message?.totalReaction}
-                />
-                <ReactionButton
-                  className={`reaction-icon-button ${
-                    message?.totalReaction?.ownerReacted.length !== 0 ? "flex" : "hidden"
-                  }`}
-                  message={message}
-                />
-              </Stack>
+              {message.status !== MESSAGE_STATUS.DELETED && (
+                <Stack className="reaction-button-container" spacing={1} direction="row">
+                  <ReactedEmoji
+                    className="reacted-emoji-container"
+                    reactions={message?.reactions}
+                    totalReaction={message?.totalReaction}
+                  />
+                  <ReactionButton
+                    className={`reaction-icon-button ${
+                      message?.totalReaction?.ownerReacted.length !== 0 ? "flex" : "hidden"
+                    }`}
+                    message={message}
+                  />
+                </Stack>
+              )}
             </div>
-            <FloatingOptions message={message} isShow={isShowFloatOpts} />
+            {message.status !== MESSAGE_STATUS.DELETED && (
+              <FloatingOptions message={message} isShow={isShowFloatOpts} />
+            )}
           </Stack>
         </Stack>
       </ListItem>

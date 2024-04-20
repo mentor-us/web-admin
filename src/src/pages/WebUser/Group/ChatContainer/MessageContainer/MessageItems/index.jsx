@@ -1,10 +1,9 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/forbid-prop-types */
 import { Box } from "@mui/material";
 import PropTypes from "prop-types";
 
-import { MESSAGE_TYPE } from "utils/constants";
+import { MESSAGE_STATUS, MESSAGE_TYPE } from "utils/constants";
 
 import FileItem from "./FileItem";
 import ImageItem from "./ImageItem";
@@ -16,6 +15,17 @@ import "./styles.css";
 
 function MessageItems({ message, isOwner }) {
   function Content() {
+    if (message.status === MESSAGE_STATUS.DELETED) {
+      return (
+        <TextItem
+          message={{
+            ...message,
+            content: "Tin nhắn đã được xóa"
+          }}
+          isOwner={isOwner}
+        />
+      );
+    }
     switch (message.type) {
       case MESSAGE_TYPE.TEXT:
         return <TextItem message={message} isOwner={isOwner} />;

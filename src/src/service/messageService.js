@@ -1,7 +1,5 @@
 import MessageApi from "api/MessageApi";
 
-// import UserApi from "api/UserApi";
-// import ServerError from "errors/ServerError";
 import ErrorWrapper from "./ErrorServiceWrapper";
 
 const getMessages = async (userId, groupId, page = 0, size = 25) => {
@@ -45,10 +43,16 @@ const addReaction = (messageId, senderId, emojiId) =>
 
 const removeReaction = (messageId, senderId) => MessageApi.removeReaction(messageId, senderId);
 
+const editMessage = (messageId, newContent) => MessageApi.editMessage(messageId, newContent);
+
+const deleteMessage = (messageId) => MessageApi.deleteMessage(messageId);
+
 const messageService = {
   getMessages,
   addReaction,
-  removeReaction
+  removeReaction,
+  editMessage,
+  deleteMessage
 };
 
 export default ErrorWrapper(messageService);

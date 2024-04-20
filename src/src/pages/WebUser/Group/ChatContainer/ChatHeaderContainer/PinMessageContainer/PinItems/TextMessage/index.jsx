@@ -11,15 +11,15 @@ function TextMessage({ message }) {
   const handleClose = () => setOpen(false);
 
   return (
-    <>
+    <Box className="w-[80%]">
       <Box onClick={() => setOpen(true)}>
         <Typography className="!text-xs !font-bold">Tin nhắn</Typography>
-        <Typography className="!line-clamp-1 !text-xs !text-[#7589A3]">
+        <Typography className="!line-clamp-1 text-ellipsis !text-xs !text-[#7589A3] !max-w-[500px]">
           {message.sender.name}: {convertToPlain(message.content)}
         </Typography>
       </Box>
       <TextMessagePopup open={open} handleClose={handleClose} message={message} />
-    </>
+    </Box>
   );
 }
 
