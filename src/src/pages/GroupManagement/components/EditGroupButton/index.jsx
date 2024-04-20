@@ -122,7 +122,7 @@ function EditGroupButton({ data, setState, typeButton, isInDetail }) {
 
   const changeStatus = (value, type) => {
     let newStatus = null;
-    console.log("startDate,", startDate);
+
     const date = dayjs(value);
     if (type === "start") {
       if (date.isSameOrAfter(endDate)) {
