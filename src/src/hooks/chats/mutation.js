@@ -10,6 +10,8 @@ import {
   CreateMeetingMutationKey,
   CreateTaskMutationKey,
   CreateVoteMutationKey,
+  DeleteMessageMutationKey,
+  EditMessageMutationKey,
   RemoveReactionMutationKey
 } from "./keys";
 
@@ -50,4 +52,16 @@ export const useRemoveReactMutation = () =>
   useMutation({
     mutationKey: RemoveReactionMutationKey,
     mutationFn: ({ messageId, senderId }) => MessageService.removeReaction(messageId, senderId)
+  });
+
+export const useEditMessageMutation = () =>
+  useMutation({
+    mutationKey: EditMessageMutationKey,
+    mutationFn: ({ messageId, newContent }) => MessageService.editMessage(messageId, newContent)
+  });
+
+export const useDeleteMessageMutation = () =>
+  useMutation({
+    mutationKey: DeleteMessageMutationKey,
+    mutationFn: ({ messageId }) => MessageService.deleteMessage(messageId)
   });

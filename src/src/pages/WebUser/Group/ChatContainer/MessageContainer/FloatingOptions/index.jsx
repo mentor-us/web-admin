@@ -1,5 +1,4 @@
 /* eslint-disable react/forbid-prop-types */
-/* eslint-disable no-unused-vars */
 import React, { useMemo } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -9,10 +8,14 @@ import { Box, IconButton, Menu, MenuItem, Stack, Tooltip } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
+import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
+import { useDeleteMessageMutation } from "hooks/chats/mutation";
+import useChatStore from "hooks/client/useChatStore";
 import { GetGroupDetailKey } from "hooks/groups/keys";
 import { usePinMessageMutation, useRemovePinMessageMutation } from "hooks/groups/mutation";
 import { useGetGroupDetail } from "hooks/groups/queries";
 import useMyInfo from "hooks/useMyInfo";
+import { MESSAGE_TYPE } from "utils/constants";
 
 const ITEM_HEIGHT = 48;
 
@@ -25,6 +28,9 @@ function FloatingOptions({ message, isShow }) {
   const { data: channelDetail } = useGetGroupDetail(channelId);
   const { mutateAsync: pinMessageAsync } = usePinMessageMutation();
   const { mutateAsync: unpinMessageAsync } = useRemovePinMessageMutation();
+  const { mutateAsync: deleteMessageAsync } = useDeleteMessageMutation();
+
+  const chatStore = useChatStore();
 
   const isOwner = useMemo(() => myInfo?.id === message?.sender?.id, [message, myInfo]);
 
@@ -76,7 +82,7 @@ function FloatingOptions({ message, isShow }) {
     handleClose();
   };
 
-  const onUnpinMessage = async () => {
+  const onUnpinMessage = () => {
     unpinMessageAsync(
       {
         channelId,
@@ -87,7 +93,7 @@ function FloatingOptions({ message, isShow }) {
           queryClient.invalidateQueries({
             queryKey: GetGroupDetailKey(channelId)
           });
-          toast.success("Bỏ ghim bình chọn thành công", {
+          toast.success("Bỏ ghim tin nhắn thành công", {
             style: {
               minWidth: "400px"
             }
@@ -96,6 +102,38 @@ function FloatingOptions({ message, isShow }) {
         onError: () => {}
       }
     );
+    handleClose();
+  };
+
+  const onDeleteMessage = () => {
+    deleteMessageAsync(
+      { messageId: message?.id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: GetAllChatMessageInfinityKey(channelId)
+          });
+          if (chatStore.isReplyMessage) {
+            chatStore.clearReplyMessage();
+          }
+          if (chatStore.isEditMessage) {
+            chatStore.clearEditMessage();
+          }
+        },
+        onError: () => {}
+      }
+    );
+    handleClose();
+  };
+
+  const onEditMessage = () => {
+    chatStore.setIsEditMessage(true);
+    chatStore.setEditMessage(message);
+  };
+
+  const onReplyClick = () => {
+    chatStore.setIsReplyMessage(true);
+    chatStore.setReplyMessage(message);
     handleClose();
   };
 
@@ -120,6 +158,7 @@ function FloatingOptions({ message, isShow }) {
             aria-expanded={open ? "true" : undefined}
             aria-haspopup="true"
             className="hover:!bg-[#d5d5d5] !w-7 !h-7"
+            onClick={onReplyClick}
           >
             <ReplyIcon />
           </IconButton>
@@ -165,14 +204,16 @@ function FloatingOptions({ message, isShow }) {
           horizontal: "center"
         }}
       >
-        <MenuItem
-          className="!font-normal !text-black"
-          onClick={() => {
-            handleClose();
-          }}
-        >
-          Xóa
-        </MenuItem>
+        {message?.sender?.id === myInfo?.id && (
+          <MenuItem className="!font-normal !text-black" onClick={onDeleteMessage}>
+            Xóa
+          </MenuItem>
+        )}
+        {message?.sender?.id === myInfo?.id && message?.type === MESSAGE_TYPE.TEXT && (
+          <MenuItem className="!font-normal !text-black" onClick={onEditMessage}>
+            Chỉnh sửa
+          </MenuItem>
+        )}
         <MenuItem
           className="!font-normal !text-black"
           onClick={() => {
