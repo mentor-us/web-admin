@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 
+import FaqService from "service/faqService";
 import MeetingService from "service/meetingService";
 import MessageService from "service/messageService";
 import TaskService from "service/taskService";
@@ -7,6 +8,7 @@ import VoteService from "service/voteService";
 
 import {
   AddReactionMutationKey,
+  CreateFaqMutationKey,
   CreateMeetingMutationKey,
   CreateTaskMutationKey,
   CreateVoteMutationKey,
@@ -50,4 +52,9 @@ export const useRemoveReactMutation = () =>
   useMutation({
     mutationKey: RemoveReactionMutationKey,
     mutationFn: ({ messageId, senderId }) => MessageService.removeReaction(messageId, senderId)
+  });
+export const useCreateFaqMutation = () =>
+  useMutation({
+    mutationKey: CreateFaqMutationKey,
+    mutationFn: (task) => FaqService.createFaq(task)
   });

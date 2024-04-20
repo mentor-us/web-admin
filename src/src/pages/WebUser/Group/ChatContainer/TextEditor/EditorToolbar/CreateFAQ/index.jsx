@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 import { AccountCircle } from "@mui/icons-material";
 import {
   Box,
@@ -17,7 +19,9 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
+import { useCreateFaqMutation } from "hooks/chats/mutation";
 import { useGetGroupDetail } from "hooks/groups/queries";
+import { GetAllMeetingInChannelKey } from "hooks/meeting/keys";
 import { CHANNEL_PERMISSION } from "utils/constants";
 
 function CreateFAQ({ open, handleClose, faqId = null }) {
@@ -26,10 +30,8 @@ function CreateFAQ({ open, handleClose, faqId = null }) {
   const [isEditable, setIsEditable] = useState(!faqId);
   const titlebtnDialog = isEditable ? "Tạo mới" : "";
   const queryClient = useQueryClient();
-
-  const onSubmit = async (data) => {
-    console.log(data);
-  };
+  const { groupId } = useParams();
+  const { mutateAsync: createFaqMutationAsync, isPending } = useCreateFaqMutation();
   const {
     control,
     handleSubmit,
@@ -38,15 +40,42 @@ function CreateFAQ({ open, handleClose, faqId = null }) {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      title: "",
-      description: ""
+      question: "ttt",
+      answer: "eeee"
     }
   });
+  console.log("error", errors);
+  const adapterData = (data) => {
+    return {
+      ...data,
+      groupId
+    };
+  };
   const onCancel = () => {
     reset();
     handleClose();
   };
-  const isPending = false;
+  const onSubmit = (data) => {
+    toast.promise(
+      new Promise((resolve, reject) => {
+        createFaqMutationAsync(adapterData(data))
+          .then(() => {
+            queryClient.refetchQueries({
+              queryKey: GetAllMeetingInChannelKey(groupId)
+            });
+            resolve();
+          })
+          .catch(reject);
+      }),
+      {
+        loading: "Đang tạo FAQ...",
+        success: "Tạo FAQ thành công",
+        error: "Tạo FAQ thất bại"
+      }
+    );
+    onCancel();
+  };
+
   return (
     <Dialog
       open={open}
@@ -62,14 +91,14 @@ function CreateFAQ({ open, handleClose, faqId = null }) {
           return;
         }
         event.preventDefault();
-        // handleSubmit(onSubmit)();
+        handleSubmit(onSubmit)();
       }}
     >
       <DialogTitle alignSelf="center">{titleDialog}</DialogTitle>
       <DialogContent className="!py-4">
         <Controller
           getGroupDetailColumnHeadersMentorSelector
-          name="title"
+          name="question"
           control={control}
           disabled={!isEditable}
           rules={{
@@ -80,15 +109,15 @@ function CreateFAQ({ open, handleClose, faqId = null }) {
               className="!mb-6"
               label="Câu hỏi *"
               fullWidth
-              error={!!errors?.title}
-              helperText={errors?.title?.message}
+              error={!!errors?.question}
+              helperText={errors?.question?.message}
               {...field}
             />
           )}
         />
 
         <Controller
-          name="description"
+          name="answer"
           control={control}
           disabled={!isEditable}
           rules={{
@@ -105,6 +134,8 @@ function CreateFAQ({ open, handleClose, faqId = null }) {
                 color="info"
                 fullWidth
                 minRows={5}
+                error={!!errors?.answer}
+                helperText={errors?.answer?.message}
                 {...field}
               />
             );
