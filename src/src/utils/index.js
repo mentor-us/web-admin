@@ -156,7 +156,7 @@ export const makeRequestSearch = (req) => {
 };
 
 export const calculateDays = (date1, date2, type = "date") => {
-  const difference = date1.getTime() - date2.getTime();
+  const difference = date1.diff(date2);
   let result;
 
   if (type === "date") {
