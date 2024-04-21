@@ -6,7 +6,8 @@ const FaqApi = {
   createFaq: (task) => AxiosClient.post(FAQ_URL, task),
   getDetailFaq: (taskId, params = {}) => AxiosClient.get(`${FAQ_URL}/${taskId}`, params),
   updateFaq: (task) => AxiosClient.patch(`${FAQ_URL}/${task.id}`, task),
-  getAllFaqInGroup: (channelId) => AxiosClient.get(`api/channels/${channelId}/tasks`)
+  getAllFaqInGroup: (channelId) =>
+    AxiosClient.get(`${FAQ_URL}`, { params: { channel_id: channelId } })
 };
 
 export default FaqApi;
