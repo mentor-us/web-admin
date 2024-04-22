@@ -13,3 +13,13 @@ export const useGetGroupFaqs = (groupId, select) =>
     enabled: !!groupId,
     select
   });
+export const useGetFaq = (faqId) =>
+  useQuery({
+    queryKey: ["faq", faqId],
+    queryFn: async () => {
+      if (!faqId) return null;
+      const res = await FaqService.getDetailFaq(faqId);
+      return res;
+    },
+    enabled: true
+  });

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -19,19 +19,49 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
-import { useCreateFaqMutation } from "hooks/chats/mutation";
-import { useGetGroupDetail } from "hooks/groups/queries";
+import { useGetGroupMembers } from "hooks/channels/queries";
+import { useCreateFaqMutation, useUpdateFaqMutation } from "hooks/chats/mutation";
+import { useGetFaq } from "hooks/faqs/queries";
+import { useGetGroupDetail, useGetWorkSpace } from "hooks/groups/queries";
 import { GetAllMeetingInChannelKey } from "hooks/meeting/keys";
+import useMyInfo from "hooks/useMyInfo";
 import { CHANNEL_PERMISSION } from "utils/constants";
 
 function CreateFAQ({ open, handleClose, faqId = null }) {
   console.log("CreateFAQ");
   const [titleDialog, setTitleDialog] = useState(faqId ? "Chi tiết FAQ" : "FAQ mới");
   const [isEditable, setIsEditable] = useState(!faqId);
-  const titlebtnDialog = isEditable ? "Tạo mới" : "";
+  const titlebtnDialog = isEditable ? "LƯU FAQ" : "";
   const queryClient = useQueryClient();
   const { groupId } = useParams();
-  const { mutateAsync: createFaqMutationAsync, isPending } = useCreateFaqMutation();
+  const myInfo = useMyInfo();
+  const { data: memberList, isLoading: isLoadingMembers } = useGetGroupMembers(groupId, (data) => {
+    const mergeList = [];
+    if (data && data?.mentors) {
+      mergeList.push(...data.mentors.map((mentor) => ({ ...mentor, category: "Mentor" })));
+    }
+    if (data && data?.mentees) {
+      mergeList.push(...data.mentees.map((mentee) => ({ ...mentee, category: "Mentee" })));
+    }
+
+    return mergeList;
+  });
+  console.log("memberList", memberList);
+
+  // check user is mentor or not
+  useEffect(() => {
+    memberList?.forEach((mentor) => {
+      if (mentor.id === myInfo.id && mentor.role === "MENTOR") {
+        console.log("mentor", mentor);
+        setIsEditable(true);
+      }
+    });
+  }, [memberList]);
+
+  const { data: faqDetail } = useGetFaq(faqId);
+  const { mutateAsync: createFaqMutationAsync, isPending } = faqId
+    ? useUpdateFaqMutation()
+    : useCreateFaqMutation();
   const {
     control,
     handleSubmit,
@@ -40,15 +70,15 @@ function CreateFAQ({ open, handleClose, faqId = null }) {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      question: "ttt",
-      answer: "eeee"
+      question: "",
+      answer: ""
     }
   });
-  console.log("error", errors);
   const adapterData = (data) => {
     return {
       ...data,
-      groupId
+      groupId,
+      id: faqId ?? null
     };
   };
   const onCancel = () => {
@@ -75,6 +105,14 @@ function CreateFAQ({ open, handleClose, faqId = null }) {
     );
     onCancel();
   };
+
+  useEffect(() => {
+    if (faqId) {
+      setValue("question", faqDetail?.question);
+      setValue("answer", faqDetail?.answer);
+      console.log("taskDetail", faqDetail);
+    }
+  }, [faqDetail]);
 
   return (
     <Dialog

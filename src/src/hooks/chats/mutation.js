@@ -58,3 +58,8 @@ export const useCreateFaqMutation = () =>
     mutationKey: CreateFaqMutationKey,
     mutationFn: (task) => FaqService.createFaq(task)
   });
+export const useUpdateFaqMutation = () =>
+  useMutation({
+    mutationKey: CreateFaqMutationKey,
+    mutationFn: (task) => FaqService.updateFaq(task)
+  });

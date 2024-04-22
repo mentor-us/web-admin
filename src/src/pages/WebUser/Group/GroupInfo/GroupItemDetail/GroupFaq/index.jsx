@@ -3,21 +3,19 @@
 import { useParams } from "react-router-dom";
 
 import VoteItem from "pages/WebUser/Group/ChatContainer/MessageContainer/MessageItems/VoteItem";
+import { useGetGroupFaqs } from "hooks/faqs/queries";
 import { useGetChannelVotes } from "hooks/votes/queries";
+
+import FaqItem from "./FaqItem";
 
 export default function GroupFaq() {
   const { groupId } = useParams();
-  const { data: votes, isLoading, isSuccess } = useGetChannelVotes(channelId);
+  const { data: faqs, isLoading, isSuccess } = useGetGroupFaqs(groupId);
 
   return (
     <div className="overflow-auto">
-      {votes?.map((vote) => (
-        <VoteItem
-          className="border-inherit"
-          containerClassName="bg-white rounded-lg w-full p-2 border-2 border-gray-200 m-2"
-          message={vote}
-          key={vote.id}
-        />
+      {faqs?.map((faq) => (
+        <FaqItem faq={faq} />
       ))}
     </div>
   );

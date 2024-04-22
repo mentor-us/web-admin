@@ -19,7 +19,7 @@ import ListItemText from "@mui/material/ListItemText";
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
 import GroupInfoItem from "pages/WebUser/Group/GroupInfo/GroupFunction";
 import GroupItemDetail from "pages/WebUser/Group/GroupInfo/GroupItemDetail";
-import { useGetGroupDetail } from "hooks/groups/queries";
+import { useGetGroupDetail, useGetWorkSpace } from "hooks/groups/queries";
 import { CHANNEL_PERMISSION, GROUP_FUNCTION } from "utils/constants";
 
 import BookMeetingDialog from "../ChatContainer/TextEditor/EditorToolbar/BookMeetingIconButton/BookMeetingDialog";
@@ -114,13 +114,14 @@ export default function GroupInfo() {
   };
 
   // const navigate = useNavigate();
-  const { channelId } = useParams();
+  const { channelId, groupId } = useParams();
   const {
     data: groupDetail,
     isLoading,
     isSuccess
   } = useGetGroupDetail(channelId === "null" ? null : channelId);
 
+  const { data: workspace } = useGetWorkSpace(groupId);
   if (isLoading) {
     return null;
   }
@@ -175,7 +176,7 @@ export default function GroupInfo() {
           <div className="header-info p-3">
             <div className="header-info ava flex justify-center items-center space-x-4 p-4 ">
               <AsyncMDAvatar
-                src={groupDetail?.imageUrl}
+                src={groupDetail?.imageUrl ?? workspace?.imageUrl}
                 alt="detail-image"
                 shadow="md"
                 size="md"
@@ -190,12 +191,12 @@ export default function GroupInfo() {
             </div>
             <div className="header-info name w-full font-bold text-base border-white flex justify-center items-center p-1">
               {isSuccess && groupDetail?.name}
-              <IconButton size="small">
+              {/* <IconButton size="small">
                 <EditOutlinedIcon fontSize="inherit" />
-              </IconButton>
+              </IconButton> */}
             </div>
             <div className="header-info flex justify-center gap-8 text-xs items-center tools ">
-              <div>
+              {/* <div>
                 {isSuccess && groupDetail?.permissions.includes("GROUP_SETTINGS") && (
                   <div className="tool-item bg-gray-100 hover:bg-slate-300 rounded-full">
                     <IconButton size="small" color="black">
@@ -208,7 +209,7 @@ export default function GroupInfo() {
                 <IconButton size="small" color="black">
                   <NotificationsOutlinedIcon />
                 </IconButton>
-              </div>
+              </div> */}
             </div>
           </div>
           <Divider
