@@ -14,6 +14,7 @@ import { searchByButton, searchGroup, updateSearchRequest } from "features/group
 import { allCategoriesSelector } from "features/groupsCategory/selector";
 
 import { setLoading } from "context";
+import dayjs from "dayjs";
 import { useMentorUs } from "hooks";
 import { calculateDays, getValueOfList, isEmailValid } from "utils";
 
@@ -36,7 +37,7 @@ function SearchBox() {
   const dispatch = useDispatch();
   const [, dispatchContext] = useMentorUs();
   const listCategories = useSelector(allCategoriesSelector);
-  const today = new Date();
+  const today = dayjs();
   const [groupName, setGroupName] = useState("");
   const [emailMentor, setEmailMentor] = useState("");
   const [emailMentee, setEmailMentee] = useState("");
@@ -78,7 +79,7 @@ function SearchBox() {
   };
 
   const isFailCase = () => {
-    if (startDayEnabled && startDay.from.getTime() > startDay.to.getTime()) {
+    if (startDayEnabled && startDay.from.isAfter(startDay.to)) {
       ErrorAlert("Thời điểm kết thúc phải lớn hơn hoặc bằng thời điểm bắt đầu!");
       return true;
     }
@@ -88,7 +89,7 @@ function SearchBox() {
       return true;
     }
 
-    if (endDayEnabled && endDay.from.getTime() > endDay.to.getTime()) {
+    if (endDayEnabled && endDay.from.isAfter(endDay.to)) {
       ErrorAlert("Thời điểm kết thúc phải lớn hơn hoặc bằng thời điểm bắt đầu!");
       return true;
     }
@@ -134,13 +135,13 @@ function SearchBox() {
     }
 
     if (startDayEnabled) {
-      req.timeStart1 = new Date(startDay.from.setUTCHours(0, 0, 0, 0)).toISOString();
-      req.timeEnd1 = new Date(startDay.to.setUTCHours(23, 59, 59, 999)).toISOString();
+      req.timeStart1 = startDay.from.startOf("day").toISOString();
+      req.timeEnd1 = startDay.to.endOf("day").toISOString();
     }
 
     if (endDayEnabled) {
-      req.timeStart2 = new Date(endDay.from.setUTCHours(0, 0, 0, 0)).toISOString();
-      req.timeEnd2 = new Date(endDay.to.setUTCHours(23, 59, 59, 999)).toISOString();
+      req.timeStart2 = endDay.from.startOf("day").toISOString();
+      req.timeEnd2 = endDay.to.endOf("day").toISOString();
     }
 
     return req;
@@ -342,8 +343,8 @@ function SearchBox() {
                         value={startDay}
                         event={setStartDay}
                         type="from"
-                        minDate={getAnotherDateFromToday(new Date(startDay.from), -4, "year")}
-                        maxDate={getAnotherDateFromToday(new Date(), 7, "year")}
+                        minDate={getAnotherDateFromToday(startDay.from, -4, "year")}
+                        maxDate={getAnotherDateFromToday(today, 7, "year")}
                         disabled={!startDayEnabled}
                       />
                       <MDTypography variant="body2" fontWeight="light" sx={{ mx: 1 }}>
@@ -353,8 +354,8 @@ function SearchBox() {
                         value={startDay}
                         event={setStartDay}
                         type="to"
-                        minDate={getAnotherDateFromToday(new Date(startDay.from), 0, "year")}
-                        maxDate={getAnotherDateFromToday(new Date(startDay.from), 31, "date")}
+                        minDate={getAnotherDateFromToday(startDay.from, 0, "year")}
+                        maxDate={getAnotherDateFromToday(startDay.from, 31, "date")}
                         disabled={!startDayEnabled}
                       />
                     </MDBox>
@@ -383,8 +384,8 @@ function SearchBox() {
                         value={endDay}
                         event={setEndDay}
                         type="from"
-                        minDate={getAnotherDateFromToday(new Date(endDay.from), -4, "year")}
-                        maxDate={getAnotherDateFromToday(new Date(), 7, "year")}
+                        minDate={getAnotherDateFromToday(endDay.from, -4, "year")}
+                        maxDate={getAnotherDateFromToday(today, 7, "year")}
                         disabled={!endDayEnabled}
                       />
                       <MDTypography variant="body2" fontWeight="light" sx={{ mx: 1 }}>
@@ -394,8 +395,8 @@ function SearchBox() {
                         value={endDay}
                         event={setEndDay}
                         type="to"
-                        minDate={getAnotherDateFromToday(new Date(endDay.from), 0, "year")}
-                        maxDate={getAnotherDateFromToday(new Date(endDay.from), 31, "date")}
+                        minDate={getAnotherDateFromToday(endDay.from, 0, "year")}
+                        maxDate={getAnotherDateFromToday(endDay.from, 31, "date")}
                         disabled={!endDayEnabled}
                       />
                     </MDBox>

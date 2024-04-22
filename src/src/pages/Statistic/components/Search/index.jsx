@@ -21,6 +21,7 @@ import { searchByButton, searchStatistic, updateSearchRequest } from "features/s
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
+import dayjs from "dayjs";
 import { useMentorUs } from "hooks";
 import { calculateDays, getValueOfList } from "utils";
 
@@ -38,7 +39,7 @@ import "./index.css";
 
 function SearchBox() {
   /// --------------------- Khai báo Biến, State -------------
-  const today = new Date();
+  const today = dayjs();
   const isSearch = useSelector(getIsSearchStatisticSelector);
   const [, dispatchContext] = useMentorUs();
   const dispatch = useDispatch();
@@ -80,8 +81,8 @@ function SearchBox() {
       req.status = getValueOfList(groupStatusList, status, "label", "textValue");
     }
     if (recentActiveDayEnabled) {
-      req.timeStart = new Date(recentActiveDay.from.setUTCHours(0, 0, 0, 0)).toISOString();
-      req.timeEnd = new Date(recentActiveDay.to.setUTCHours(23, 59, 59, 999)).toISOString();
+      req.timeStart = recentActiveDay.from.startOf("day").toISOString();
+      req.timeEnd = recentActiveDay.to.endOf("day").toISOString();
     }
     if (filterValue !== "") {
       req.groupCategory = filterValue;
@@ -92,7 +93,7 @@ function SearchBox() {
   const isFailCase = () => {
     // Kiểm tra các trường hợp fail
 
-    if (recentActiveDay.from.getTime() > recentActiveDay.to.getTime()) {
+    if (recentActiveDay.from.isAfter(recentActiveDay.to)) {
       ErrorAlert("Thời điểm kết thúc phải lớn hơn hoặc bằng thời điểm bắt đầu!");
       return true;
     }
@@ -227,8 +228,8 @@ function SearchBox() {
                       value={recentActiveDay}
                       event={setRecentActiveDay}
                       type="from"
-                      minDate={getAnotherDateFromToday(new Date(recentActiveDay.from), -4, "year")}
-                      maxDate={getAnotherDateFromToday(new Date(), 7, "year")}
+                      minDate={getAnotherDateFromToday(recentActiveDay.from, -4, "year")}
+                      maxDate={getAnotherDateFromToday(today, 7, "year")}
                       disabled={!recentActiveDayEnabled}
                     />
                     <MDTypography variant="body2" fontWeight="light" sx={{ mx: 1 }}>
@@ -238,8 +239,8 @@ function SearchBox() {
                       value={recentActiveDay}
                       event={setRecentActiveDay}
                       type="to"
-                      minDate={getAnotherDateFromToday(new Date(recentActiveDay.from), 0, "year")}
-                      maxDate={getAnotherDateFromToday(new Date(recentActiveDay.from), 31, "date")}
+                      minDate={getAnotherDateFromToday(recentActiveDay.from, 0, "year")}
+                      maxDate={getAnotherDateFromToday(recentActiveDay.from, 31, "date")}
                       disabled={!recentActiveDayEnabled}
                     />
                   </MDBox>

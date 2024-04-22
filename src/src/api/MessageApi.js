@@ -70,6 +70,19 @@ const MessageApi = {
   removeReaction: (messageId, senderId) => {
     const URL = `api/messages/react?messageId=${messageId}&senderId=${senderId}`;
     return AxiosClient.delete(URL);
+  },
+
+  editMessage: async (messageId, newContent) => {
+    const URL = `api/messages/edit`;
+    return AxiosClient.post(URL, {
+      messageId,
+      newContent
+    });
+  },
+
+  deleteMessage: async (messageId) => {
+    const URL = `api/messages/${messageId}`;
+    return AxiosClient.delete(URL);
   }
 };
 
