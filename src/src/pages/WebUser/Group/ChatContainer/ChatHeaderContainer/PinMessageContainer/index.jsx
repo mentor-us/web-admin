@@ -24,10 +24,7 @@ function PinMessageContainer(props) {
   };
 
   return (
-    <div
-      layoutId="expandable-card"
-      className="h-12 w-full bg-white border-t-2 px-4 border-b-2 flex items-center relative"
-    >
+    <div className="h-12 w-full bg-white border-t-2 px-4 border-b-2 flex items-center relative">
       {!isExpanded ? (
         <>
           <Box className="hover:cursor-pointer w-full">

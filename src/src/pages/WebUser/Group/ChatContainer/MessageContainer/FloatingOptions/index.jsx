@@ -150,19 +150,21 @@ function FloatingOptions({ message, isShow }) {
         justifyContent="center"
         alignItems="center"
       >
-        <Tooltip title="Trả lời" placement="top">
-          <IconButton
-            aria-label="more"
-            id="long-button"
-            aria-controls={open ? "long-menu" : undefined}
-            aria-expanded={open ? "true" : undefined}
-            aria-haspopup="true"
-            className="hover:!bg-[#d5d5d5] !w-7 !h-7"
-            onClick={onReplyClick}
-          >
-            <ReplyIcon />
-          </IconButton>
-        </Tooltip>
+        {message?.type === MESSAGE_TYPE.TEXT && (
+          <Tooltip title="Trả lời" placement="top">
+            <IconButton
+              aria-label="more"
+              id="long-button"
+              aria-controls={open ? "long-menu" : undefined}
+              aria-expanded={open ? "true" : undefined}
+              aria-haspopup="true"
+              className="hover:!bg-[#d5d5d5] !w-7 !h-7"
+              onClick={onReplyClick}
+            >
+              <ReplyIcon />
+            </IconButton>
+          </Tooltip>
+        )}
         <Tooltip title="Xem thêm" placement="top">
           <IconButton
             aria-label="more"
@@ -214,14 +216,14 @@ function FloatingOptions({ message, isShow }) {
             Chỉnh sửa
           </MenuItem>
         )}
-        <MenuItem
+        {/* <MenuItem
           className="!font-normal !text-black"
           onClick={() => {
             handleClose();
           }}
         >
           Chuyển tiếp
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
           className="!font-normal !text-black"
           onClick={

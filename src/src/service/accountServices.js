@@ -147,6 +147,8 @@ const exportAccountSearch = async (req) => {
   return response;
 };
 
+const getMe = () => UserApi.getMe();
+
 const accountServices = {
   getAllAccount,
   getAllAccountPaging,
@@ -166,7 +168,8 @@ const accountServices = {
   importAccount,
   exportAccountMentor,
   exportAccountMentee,
-  exportAccountSearch
+  exportAccountSearch,
+  getMe
 };
 
 export default ErrorWrapper(accountServices);
