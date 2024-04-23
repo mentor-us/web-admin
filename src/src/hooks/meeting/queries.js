@@ -2,6 +2,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import MeetingService from "service/meetingService";
+import { CreateMeetingMutationKey } from "hooks/chats/keys";
 
 import { GetAllMeetingInChannelKey } from "./keys";
 

@@ -16,7 +16,18 @@ const TaskService = {
       status: !ownAssignee ? "NULL" : ownAssignee.status
     };
   },
-  getAllTaskInChannel: (channelId) => TaskApi.getAllTaskInChannel(channelId)
+  getAllTaskInChannel: (channelId) => TaskApi.getAllTaskInChannel(channelId),
+  formatTask: (task) => {
+    console.log("task", task);
+    return {
+      ...task,
+      deadlineTimeModel: {
+        time: formatDate(task?.deadline, "time"),
+        date: formatDate(task?.deadline, "date"),
+        displayName: getTime(task?.deadline)
+      }
+    };
+  }
 };
 
 export default TaskService;

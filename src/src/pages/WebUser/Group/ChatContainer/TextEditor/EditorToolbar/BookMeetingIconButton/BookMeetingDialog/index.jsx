@@ -29,6 +29,7 @@ import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
 import { useCreateMeetingMutation, useUpdateMeetingMutation } from "hooks/chats/mutation";
 import { useGetDetailMeeting } from "hooks/events/queries";
+import { GetAllMeetingInChannelKey } from "hooks/meeting/keys";
 import useMyInfo from "hooks/useMyInfo";
 import { MEETING_REPEATED_TYPE } from "utils/constants";
 
@@ -103,6 +104,9 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
           .then(() => {
             queryClient.invalidateQueries({
               queryKey: GetAllChatMessageInfinityKey(channelId)
+            });
+            queryClient.refetchQueries({
+              queryKey: GetAllMeetingInChannelKey(channelId)
             });
             resolve();
           })

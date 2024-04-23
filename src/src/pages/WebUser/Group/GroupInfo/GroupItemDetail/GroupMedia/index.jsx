@@ -9,6 +9,8 @@ import {
   Divider,
   ImageList,
   ImageListItem,
+  Skeleton,
+  Stack,
   styled,
   Tab,
   Tabs
@@ -21,10 +23,12 @@ import FileApi from "api/FileApi";
 import File from "pages/WebUser/components/File";
 import { useGetGroupMedia } from "hooks/channels/queries";
 
-const AntTabs = styled(Tabs)({
-  borderBottom: "1px solid #e8e8e8",
-  "& .MuiTabs-indicator": {
-    backgroundColor: "#1890ff"
+const CustomBottomNavigationAction = styled(BottomNavigationAction)({
+  "&.Mui-selected": {
+    color: "#1890ff" // Color when selected
+  },
+  "&:hover": {
+    color: "#7ab6ed" // Color on hover
   }
 });
 
@@ -62,18 +66,28 @@ export default function GroupMedia({ type }) {
   }
 
   return (
-    <Box className="overflow-y-scroll no-scrollbar">
+    <Box className="overflow-y-scroll overflow-x-hidden no-scrollbar">
       <BottomNavigation
         showLabels
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue);
         }}
-        className="bg-white font-bold text-base border-b-2 mb-1 !h-[2rem]"
+        sx={{ backgroundColor: "transparent", borderBottom: "1px solid #e0e0e0" }}
       >
-        <BottomNavigationAction value="IMAGE" className="!p-0 !m-0" showLabel label="Hình ảnh" />
+        <CustomBottomNavigationAction
+          value="IMAGE"
+          className="!p-0 !m-0"
+          showLabel
+          label="Hình ảnh"
+        />
 
-        <BottomNavigationAction value="FILE" className="!p-0 !m-0" showLabel label="Tập tin" />
+        <CustomBottomNavigationAction
+          value="FILE"
+          className="!p-0 !m-0"
+          showLabel
+          label="Tập tin"
+        />
       </BottomNavigation>
       {loading ? ( // Display spinner when loading
         <div
@@ -111,13 +125,20 @@ export default function GroupMedia({ type }) {
               ))}
             </div>
           )}
-          {value === "IMAGE" && images.length === 0 && (
+          {value === "IMAGE" && images.length === 0 && isSuccess && (
             <div className="flex justify-center items-center">Chưa có hình ảnh</div>
           )}
-          {value === "FILE" && files.length === 0 && (
+          {value === "FILE" && files.length === 0 && isSuccess && (
             <div className="flex justify-center items-center">Chưa có file</div>
           )}
         </>
+      )}
+      {isLoading && (
+        <Stack spacing={1}>
+          <Skeleton variant="rounded" height={80} />
+          <Skeleton variant="rounded" height={80} />
+          <Skeleton variant="rounded" height={80} />
+        </Stack>
       )}
     </Box>
   );
