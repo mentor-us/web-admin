@@ -1,4 +1,4 @@
-import { CLEAR_EDITOR_COMMAND } from "lexical";
+import { CLEAR_EDITOR_COMMAND, CLEAR_HISTORY_COMMAND } from "lexical";
 import { create } from "zustand";
 
 const useChatStore = create((set) => ({
@@ -26,6 +26,8 @@ const useChatStore = create((set) => ({
   clearEditMessage: () =>
     set((state) => {
       state.richTextRef?.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+      state.richTextRef?.current?.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
+
       return { ...state, isEditMessage: false, editMessage: null };
     }),
 

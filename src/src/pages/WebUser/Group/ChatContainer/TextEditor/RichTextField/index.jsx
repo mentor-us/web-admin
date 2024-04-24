@@ -19,7 +19,13 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { $createParagraphNode, $getRoot, $getSelection, CLEAR_EDITOR_COMMAND } from "lexical";
+import {
+  $createParagraphNode,
+  $getRoot,
+  $getSelection,
+  CLEAR_EDITOR_COMMAND,
+  CLEAR_HISTORY_COMMAND
+} from "lexical";
 import { v4 as uuidv4 } from "uuid";
 
 import SocketService from "service/socketService";
@@ -110,16 +116,22 @@ function RichTextField() {
 
     // Send message
     SocketService.sendMessage(message);
-    addNewestMessage(message);
     updateChannelState();
 
     // Clear the editor
     editorRef?.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+    editorRef?.current?.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
 
     // Clear reply state if reply message
     if (chatStore.isReplyMessage) {
+      message.reply = {
+        senderName: chatStore?.replyMessage?.sender.name,
+        content: chatStore?.replyMessage?.content
+      };
       chatStore.clearReplyMessage();
     }
+
+    addNewestMessage(message);
   };
 
   const onEditMessage = (html) => {
