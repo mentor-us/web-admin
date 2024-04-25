@@ -147,6 +147,10 @@ const exportAccountSearch = async (req) => {
   return response;
 };
 
+const updateProfile = async (req) => {
+  const response = await UserApi.updateProfile(req);
+  return response;
+};
 const accountServices = {
   getAllAccount,
   getAllAccountPaging,
@@ -166,7 +170,8 @@ const accountServices = {
   importAccount,
   exportAccountMentor,
   exportAccountMentee,
-  exportAccountSearch
+  exportAccountSearch,
+  updateProfile
 };
 
 export default ErrorWrapper(accountServices);

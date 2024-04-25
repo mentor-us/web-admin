@@ -12,6 +12,7 @@ export default function useMyInfo() {
   useEffect(() => {
     if (isEmptyObject(myInfo)) {
       dispatch(getMyInfo());
+      console.log("DISPATCH INFO");
     }
   }, [myInfo]);
 

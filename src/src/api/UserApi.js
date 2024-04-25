@@ -93,6 +93,9 @@ const UserApi = {
     };
 
     return AxiosClient.post(`api/users/import`, data, config);
+  },
+  updateProfile(data) {
+    return AxiosClient.patch(`api/users/${data.id}/profile`, data);
   }
 };
 

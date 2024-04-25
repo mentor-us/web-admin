@@ -1,10 +1,12 @@
 /* eslint-disable react/forbid-prop-types */
+import { useState } from "react";
 import { Box, ListItem, ListItemAvatar, Stack, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { getTime } from "utils";
 
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
+import ProfileDialog from "pages/WebUser/components/ProfileDialog";
 import ReactedEmoji from "pages/WebUser/components/ReactedEmoji";
 import ReactionButton from "pages/WebUser/components/ReactionButton";
 
@@ -27,6 +29,7 @@ const styles = {
 };
 
 function MessageItemContainer({ children, message, isOwner }) {
+  const [openProfile, setOpenProfile] = useState(false);
   const containerStyle = isOwner
     ? {
         ...styles.container,
@@ -36,7 +39,13 @@ function MessageItemContainer({ children, message, isOwner }) {
         ...styles.container,
         ...styles.otherContainer
       };
-
+  const handleProfileOpen = () => {
+    setOpenProfile(true);
+    console.log("message sender: ", message?.sender);
+  };
+  const handleProfileClose = () => {
+    setOpenProfile(false);
+  };
   return (
     <Box
       className={`message-item-container flex space-x-2 items-start px-2 ${
@@ -54,9 +63,18 @@ function MessageItemContainer({ children, message, isOwner }) {
                 padding: 0
               }}
               src={message?.sender?.imageUrl}
+              onClick={handleProfileOpen}
             />
+            {openProfile && (
+              <ProfileDialog
+                open={openProfile}
+                onClose={handleProfileClose}
+                user={message?.sender}
+              />
+            )}
           </ListItemAvatar>
         )}
+
         <div className="message-item-content h-full space-y-1" style={containerStyle}>
           {!isOwner && (
             <Typography className="!text-xs font-bold text-[#299C49]">
