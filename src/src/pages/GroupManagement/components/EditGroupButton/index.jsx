@@ -18,6 +18,7 @@ import { allCategoriesSelector } from "features/groupsCategory/selector";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
+import dayjs from "dayjs";
 import { useMentorUs } from "hooks";
 // import { groupStatusList } from "utils/constants";
 import { getGroupStatusList } from "utils";
@@ -38,7 +39,7 @@ function EditGroupButton({ data, setState, typeButton, isInDetail }) {
   const [, dispatchContext] = useMentorUs();
   const listCategories = useSelector(allCategoriesSelector);
   const [open, setOpen] = useState(false);
-  const today = new Date();
+  const today = dayjs();
   const statusList = getGroupStatusList();
   const [groupName, setGroupName] = useState(data.name);
   const [category, setCategory] = useState(
@@ -46,8 +47,8 @@ function EditGroupButton({ data, setState, typeButton, isInDetail }) {
   );
   const [status, setStatus] = useState(statusList.find((item) => item.textValue === data.status));
   const [description, setDescription] = useState(data.description);
-  const [startDate, setStartDate] = useState(new Date(data.timeStart));
-  const [endDate, setEndDate] = useState(new Date(data.timeEnd));
+  const [startDate, setStartDate] = useState(dayjs(data.timeStart));
+  const [endDate, setEndDate] = useState(dayjs(data.timeEnd));
   const [firstLoad, setFirstLoad] = useState({
     groupName: true,
     description: true,
@@ -80,8 +81,8 @@ function EditGroupButton({ data, setState, typeButton, isInDetail }) {
       description !== data.description ||
       status !== statusList.find((item) => item.textValue === data.status) ||
       category !== listCategories?.find((item) => item.id === data.groupCategory)?.name ||
-      new Date(startDate).getTime() !== new Date(data.timeStart).getTime() ||
-      new Date(endDate).getTime() !== new Date(data.timeEnd).getTime()
+      dayjs(startDate).isSame(dayjs(data.timeStart)) ||
+      dayjs(endDate).isSame(dayjs(data.timeEnd))
     );
   };
 
@@ -93,8 +94,8 @@ function EditGroupButton({ data, setState, typeButton, isInDetail }) {
     setGroupName(data.name);
     setStatus(statusList.find((item) => item.textValue === data.status));
     setCategory(listCategories?.find((item) => item.id === data.groupCategory)?.name);
-    setStartDate(new Date(data.timeStart));
-    setEndDate(new Date(data.timeEnd));
+    setStartDate(dayjs(data.timeStart));
+    setEndDate(dayjs(data.timeEnd));
     // setStatusList(getGroupStatusList(data.status));
     setFirstLoad({
       groupName: true,
@@ -121,29 +122,30 @@ function EditGroupButton({ data, setState, typeButton, isInDetail }) {
 
   const changeStatus = (value, type) => {
     let newStatus = null;
-    const date = new Date(value);
+
+    const date = dayjs(value);
     if (type === "start") {
-      if (date.getTime() >= endDate.getTime()) {
+      if (date.isSameOrAfter(endDate)) {
         setStatus(null);
         return;
       }
 
-      if (today.getTime() < date.getTime()) {
+      if (today.isBefore(date)) {
         newStatus = statusList.find((item) => item.textValue === "INACTIVE");
-      } else if (today.getTime() < endDate.getTime()) {
+      } else if (today.isBefore(endDate)) {
         newStatus = statusList.find((item) => item.textValue === "ACTIVE");
       } else {
         newStatus = statusList.find((item) => item.textValue === "OUTDATED");
       }
     } else if (type === "end") {
-      if (startDate.getTime() >= date.getTime()) {
+      if (startDate.isSameOrAfter(date)) {
         setStatus(null);
         return;
       }
 
-      if (today.getTime() < startDate.getTime()) {
+      if (today.isBefore(startDate)) {
         newStatus = statusList.find((item) => item.textValue === "INACTIVE");
-      } else if (today.getTime() < date.getTime()) {
+      } else if (today.isBefore(date)) {
         newStatus = statusList.find((item) => item.textValue === "ACTIVE");
       } else {
         newStatus = statusList.find((item) => item.textValue === "OUTDATED");

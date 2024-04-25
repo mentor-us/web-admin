@@ -18,6 +18,7 @@ import { allCategoriesSelector } from "features/groupsCategory/selector";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
+import dayjs from "dayjs";
 import { useMentorUs } from "hooks";
 
 import ImportEmailButton from "pages/GroupDetail/components/ImportEmailButton";
@@ -47,7 +48,7 @@ function AddNewGroupModal({ open, onClose }) {
   const categories = useSelector(allCategoriesSelector);
   const allUserEmails = useSelector(getAccountsTableSelector);
   const fromToRange = useSelector(getFromToRangeSelector);
-  const today = new Date();
+  const today = dayjs();
   const tomorrow = getAnotherDateFromToday(today, 1, "date");
 
   // Form Data

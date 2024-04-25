@@ -13,6 +13,8 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 
+import { getImageUrlWithKey } from "utils";
+
 import MDAvatar from "components/MDComponents/MDAvatar";
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
@@ -85,7 +87,7 @@ function IconSelectButton({ setState }) {
                       sx={{ mb: 1.5, cursor: "pointer!important", alignItems: "center" }}
                     >
                       <MDAvatar
-                        src={item.src}
+                        src={getImageUrlWithKey(item.src)}
                         alt={item.name}
                         shadow="lg"
                         size="xl"

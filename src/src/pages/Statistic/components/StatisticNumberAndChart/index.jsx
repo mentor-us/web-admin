@@ -39,9 +39,9 @@ function StatisticNumberAndChart() {
     totalUsers: 0
   };
   const allData = useSelector(getStatisticGeneralSelector);
-  const today = new Date();
-  const initYear = today.getFullYear();
-  const [year, setYear] = useState(dayjs(today));
+  const today = dayjs();
+  const initYear = today.year();
+  const [year, setYear] = useState(today);
   const [yearStatistic, setYearStatistic] = useState(initYear);
   const dataByMonth = useSelector(getStatisticByMonthSelector);
   const filterValue = useSelector(getStatisticFilterValueSelector);
@@ -278,8 +278,8 @@ function StatisticNumberAndChart() {
 
                             handleChangeYearStatistic(value);
                           }}
-                          minDate={new Date().setFullYear(2023)}
-                          maxDate={new Date()}
+                          minDate={today.year(2023)}
+                          maxDate={today}
                           renderInput={(params) => <TextField {...params} />}
                         />
                       </LocalizationProvider>

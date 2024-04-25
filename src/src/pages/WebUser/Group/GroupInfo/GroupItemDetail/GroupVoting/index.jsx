@@ -16,6 +16,7 @@ export default function GroupVoting() {
           className="border-inherit"
           containerClassName="bg-white rounded-lg w-full p-2 border-2 border-gray-200 m-2"
           message={vote}
+          isInGroupInfo
           key={vote.id}
         />
       ))}

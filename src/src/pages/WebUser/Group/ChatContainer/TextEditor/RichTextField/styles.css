@@ -6,8 +6,19 @@
   word-wrap: break-word;
 }
 
-.editor-container {
+.editor-container-parent {
   border-top: 1px solid #d6dbe1;
+}
+
+.editor-container-parent:focus-within {
+  border-top: 1px solid #0068ff;
+}
+
+.reply-message-container {
+  padding: 10px 12px;
+}
+
+.editor-container {
   box-sizing: border-box;
   width: 100%;
   display: flex;
@@ -17,10 +28,6 @@
   flex-wrap: wrap;
   gap: 4px;
   padding: 10px 12px;
-}
-
-.editor-container:focus-within {
-  border-top: 1px solid #0068ff;
 }
 
 .editor-container .editor-inner {

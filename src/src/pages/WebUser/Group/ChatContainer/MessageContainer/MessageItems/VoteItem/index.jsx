@@ -12,7 +12,7 @@ import VoteDetailDialog from "pages/WebUser/components/VoteDetailDialog";
 import useMyInfo from "hooks/useMyInfo";
 import { VOTE_STATUS } from "utils/constants";
 
-function VoteItem({ message, containerClassName }) {
+function VoteItem({ message, containerClassName, isInGroupInfo }) {
   const myInfo = useMyInfo();
   const [openVoteDetail, setOpenVoteDetail] = useState(false);
 
@@ -73,14 +73,14 @@ function VoteItem({ message, containerClassName }) {
 
   return (
     <>
-      <Box
-        className="vote-message-container cursor-pointer"
-        onClick={() => setOpenVoteDetail(true)}
-      >
+      <Box className="vote-message-container">
         <Box
           className={
-            containerClassName !== "" ? containerClassName : "bg-white rounded-lg w-[70%] p-4"
+            containerClassName !== ""
+              ? containerClassName
+              : "bg-white rounded-lg w-[70%] p-4 cursor-pointer"
           }
+          onClick={() => setOpenVoteDetail(true)}
         >
           <Box display="flex" alignItems="center" justifyContent="flex-start">
             <img
@@ -154,6 +154,7 @@ function VoteItem({ message, containerClassName }) {
           open={openVoteDetail}
           handleClose={() => setOpenVoteDetail(false)}
           voteId={vote?.id}
+          message={isInGroupInfo ? null : message}
         />
       )}
     </>
@@ -163,11 +164,13 @@ function VoteItem({ message, containerClassName }) {
 VoteItem.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   message: PropTypes.object.isRequired,
-  containerClassName: PropTypes.string
+  containerClassName: PropTypes.string,
+  isInGroupInfo: PropTypes.bool
 };
 
 VoteItem.defaultProps = {
-  containerClassName: ""
+  containerClassName: "",
+  isInGroupInfo: false
 };
 
 export default VoteItem;

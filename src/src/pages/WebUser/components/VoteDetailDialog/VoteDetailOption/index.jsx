@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Controller, useWatch } from "react-hook-form";
 import {
   Avatar,
@@ -17,11 +18,22 @@ import { getImageUrlWithKey } from "utils";
 
 import useMyInfo from "hooks/useMyInfo";
 
-function VoteDetailOption({ control, index, remove, errors, field, voteTotal, onVoterChange }) {
+function VoteDetailOption({
+  control,
+  disabled,
+  index,
+  remove,
+  errors,
+  field,
+  voteTotal,
+  onVoterChange,
+  isMultipleChoice,
+  setValue
+}) {
   const myInfo = useMyInfo();
   const choices = useWatch({ name: "choices", control });
   const choiceName = useWatch({ name: `choices.${index}.name`, control });
-  const votePercent = field.voters.length
+  const votePercent = field.voters?.length
     ? `${((field.voters.length / voteTotal) * 100).toFixed(2)}%`
     : "0%";
 
@@ -39,23 +51,41 @@ function VoteDetailOption({ control, index, remove, errors, field, voteTotal, on
           >
             <Checkbox
               sx={{
+                display: disabled ? "none" : "block",
                 "&.Mui-disabled": {
                   opacity: 0.8
                 }
               }}
-              disabled={choiceName.length === 0}
+              disabled={choiceName?.length === 0 || disabled}
               checked={field.isChosen || false}
               onChange={(e, isChosen) => {
                 let voters = [...field.voters];
                 if (!field.isChosen) {
-                  voters.push({
+                  voters?.push({
                     id: myInfo.id,
                     name: myInfo.name,
                     imageUrl: myInfo.imageUrl
                   });
                   onVoterChange(voteTotal + 1);
+
+                  if (!isMultipleChoice) {
+                    choices.forEach((choice, idx) => {
+                      if (index === idx) {
+                        return;
+                      }
+
+                      if (choice.voters.flatMap((voter) => voter.id).includes(myInfo.id)) {
+                        setValue(`choices.${idx}`, {
+                          ...choice,
+                          isChosen: false,
+                          voters: choice.voters.filter((voter) => voter.id !== myInfo.id)
+                        });
+                        onVoterChange(voteTotal);
+                      }
+                    });
+                  }
                 } else {
-                  const myVoteIndex = voters.findIndex((voter) => voter.id === myInfo.id);
+                  const myVoteIndex = voters?.findIndex((voter) => voter.id === myInfo.id);
                   if (myVoteIndex !== -1) {
                     onVoterChange(voteTotal - 1);
                     voters = voters.filter((voter) => voter.id !== myInfo.id);
@@ -133,7 +163,7 @@ function VoteDetailOption({ control, index, remove, errors, field, voteTotal, on
                 <Stack direction="row" justifyContent="flex-end" alignItems="center" spacing={1}>
                   <AvatarGroup className="!z-20">
                     {field.voters
-                      .flatMap((voter) => voter.imageUrl)
+                      ?.flatMap((voter) => voter.imageUrl)
                       .map((image) => {
                         return (
                           <Avatar
@@ -145,7 +175,7 @@ function VoteDetailOption({ control, index, remove, errors, field, voteTotal, on
                       })}
                   </AvatarGroup>
                   <Typography className="vote-option-number line-clamp-1 !text-sm !z-20">
-                    {field.voters.length}
+                    {field.voters?.length}
                   </Typography>
                 </Stack>
               </Box>
@@ -157,14 +187,22 @@ function VoteDetailOption({ control, index, remove, errors, field, voteTotal, on
   );
 }
 
+VoteDetailOption.defaultProps = {
+  disabled: false,
+  isMultipleChoice: true
+};
+
 VoteDetailOption.propTypes = {
+  disabled: PropTypes.bool,
   control: PropTypes.instanceOf(Object).isRequired,
   index: PropTypes.number.isRequired,
   field: PropTypes.instanceOf(Object).isRequired,
   remove: PropTypes.func.isRequired,
   errors: PropTypes.instanceOf(Object).isRequired,
   voteTotal: PropTypes.number.isRequired,
-  onVoterChange: PropTypes.func.isRequired
+  onVoterChange: PropTypes.func.isRequired,
+  isMultipleChoice: PropTypes.bool,
+  setValue: PropTypes.func.isRequired
 };
 
 export default VoteDetailOption;

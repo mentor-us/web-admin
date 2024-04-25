@@ -93,6 +93,10 @@ const UserApi = {
     };
 
     return AxiosClient.post(`api/users/import`, data, config);
+  },
+
+  getMe() {
+    return AxiosClient.get("api/users/me");
   }
 };
 

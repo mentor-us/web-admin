@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { calculateDays } from "utils";
 import GroupApi from "api/GroupApi";
 
@@ -82,10 +83,10 @@ const deleteGroup = async (req) => {
 };
 
 const checkRequestDataCreateGroup = (req, fromToRange) => {
-  const today = new Date();
+  const today = dayjs();
 
   // kiểm tra ngày kết thúc so với hiện tại
-  if (req.timeEnd.getTime() <= today.getTime()) {
+  if (req.timeEnd.isSameOrBefore(today)) {
     return {
       status: false,
       message: "Thời gian kết thúc phải lớn hơn thời điểm hiện tại!"
@@ -93,7 +94,7 @@ const checkRequestDataCreateGroup = (req, fromToRange) => {
   }
 
   // kiểm tra ngày kết thúc so với ngày bắt đầu
-  if (req.timeEnd.getTime() <= req.timeStart.getTime()) {
+  if (req.timeEnd.isSameOrBefore(req.timeStart)) {
     return {
       status: false,
       message: "Thời gian kết thúc phải lớn hơn thời gian bắt đầu!"
@@ -109,7 +110,7 @@ const checkRequestDataCreateGroup = (req, fromToRange) => {
   }
 
   // kiểm tra trạng thái của thời gian bắt đầu so với hiện tại
-  if (req.timeStart.getTime() > today.getTime()) {
+  if (req.timeStart.isAfter(today)) {
     req.status = "INACTIVE";
   }
 
@@ -122,7 +123,7 @@ const checkRequestDataCreateGroup = (req, fromToRange) => {
 
 const checkRequestDataEditGroup = (req, fromToRange) => {
   // kiểm tra ngày kết thúc so với ngày bắt đầu
-  if (req.timeEnd.getTime() <= req.timeStart.getTime()) {
+  if (req.timeEnd.isSameOrBefore(req.timeStart)) {
     return {
       status: false,
       message: "Thời gian kết thúc phải lớn hơn thời gian bắt đầu!"
@@ -185,7 +186,8 @@ const getGroupsInHomePage = async (type = "", page = 0, pageSize = 25) => {
 const getWorkspace = (groupId) => GroupApi.getWorkspace(groupId);
 const getGroupDetail = (groupId) => GroupApi.getGroupDetail(groupId);
 const getGroupMembers = (groupId) => GroupApi.getGroupMembers(groupId);
-
+const pinMessage = (groupId, messageId) => GroupApi.pinMessage(groupId, messageId);
+const unpinMessage = (groupId, messageId) => GroupApi.unpinMessage(groupId, messageId);
 const groupsServices = {
   getAllGroups,
   getGroup,
@@ -209,6 +211,8 @@ const groupsServices = {
   getGroupsInHomePage,
   getWorkspace,
   getGroupDetail,
-  getGroupMembers
+  getGroupMembers,
+  unpinMessage,
+  pinMessage
 };
 export default ErrorWrapper(groupsServices);

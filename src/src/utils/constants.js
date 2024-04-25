@@ -1,16 +1,8 @@
 import { API_URL } from "config";
-import coaching from "assets/images/coaching.png";
 import EMOJI_IMAGES from "assets/images/emojis";
-import group from "assets/images/group.png";
 import jpeg from "assets/images/jpeg.png";
 import jpg from "assets/images/jpg.png";
-import mentor from "assets/images/mentor.png";
-import mentorus from "assets/images/mentor_us.png";
-import mentoring from "assets/images/mentoring.png";
-import mentorship from "assets/images/mentorship.png";
 import png from "assets/images/png.png";
-import teamwork from "assets/images/teamwork.png";
-import training from "assets/images/training.png";
 
 export const googleSignInURL = `${API_URL}oauth2/authorize/google?redirect_uri=${window.location.origin}/auth/redirect`;
 export const microsoftSignInURL = `${API_URL}oauth2/authorize/azure?redirect_uri=${window.location.origin}/auth/redirect`;
@@ -22,14 +14,14 @@ export const imageExtensionList = [
 ];
 
 export const imageIconList = [
-  { src: mentorus, name: "mentor_us.png" },
-  { src: mentor, name: "mentor.png" },
-  { src: mentoring, name: "mentoring.png" },
-  { src: mentorship, name: "mentorship.png" },
-  { src: teamwork, name: "teamwork.png" },
-  { src: training, name: "training.png" },
-  { src: coaching, name: "coaching.png" },
-  { src: group, name: "group.png" }
+  { src: "default/group-category/1.png", name: "mentor" },
+  { src: "default/group-category/2.png", name: "mentor2" },
+  { src: "default/group-category/3.png", name: "mentoring" },
+  { src: "default/group-category/4.png", name: "mentorship" },
+  { src: "default/group-category/5.png", name: "teamwork" },
+  { src: "default/group-category/6.png", name: "training.png" },
+  { src: "default/group-category/7.png", name: "coaching" },
+  { src: "default/group-category/8.png", name: "group" }
 ];
 
 export const emailDomainsValid = [
@@ -126,6 +118,11 @@ export const INIT_TOTAL_REACTION = {
 export const USER_ROLE = {
   MENTOR: "MENTOR",
   MENTEE: "MENTEE"
+};
+
+export const MESSAGE_STATUS = {
+  DELETED: "DELETED",
+  EDITED: "EDITED"
 };
 
 export const MESSAGE_TYPE = {
