@@ -184,7 +184,7 @@
         // gap: 0.25rem;
         padding: 2px;
     }
-    // .fc-more-popover{
+    .fc-more-popover{
     //     --custom-left: calc(100vw - var(--main-calendar-popup-width));
     //     position: fixed;
     //     top: 0 !important;
@@ -193,13 +193,15 @@
     //     bottom: 0 !important;
     //     // border: none;
     //     box-shadow: none;
-    //     .fc-popover-header {
+        // .fc-popover-header {
     //         // background-color: white;
     //         border-radius: 0px;
     //         padding: 0.5rem 0.25rem;
     //         font-weight: bold;
     //     }
-    //     .fc-popover-body {
+        .fc-popover-body {
+            height: 40vh;
+            overflow: scroll;
     //         display: flex;
     //         flex-direction: column;
     //         gap: 2px;
@@ -208,8 +210,8 @@
     //         .fc-daygrid-event{
     //             padding: 5px;
     //         }
-    //     }
-    // }
+        }
+    }
     .fc-daygrid-block-event{
         border-right: none !important;
         border-bottom: none !important;
