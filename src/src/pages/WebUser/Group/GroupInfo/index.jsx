@@ -9,12 +9,14 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { Avatar, Box, IconButton, Tooltip } from "@mui/material";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+
+import { getImageUrlWithKey } from "utils";
 
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
 import GroupInfoItem from "pages/WebUser/Group/GroupInfo/GroupFunction";
@@ -175,7 +177,7 @@ export default function GroupInfo() {
         <div className="overflow-auto">
           <div className="header-info p-3">
             <div className="header-info ava flex justify-center items-center space-x-4 p-4 ">
-              <AsyncMDAvatar
+              {/* <AsyncMDAvatar
                 src={groupDetail?.imageUrl ?? workspace?.imageUrl}
                 alt="detail-image"
                 shadow="md"
@@ -187,7 +189,8 @@ export default function GroupInfo() {
                   border: "1px solid white",
                   "border-radius": "34px"
                 }}
-              />
+              /> */}
+              <Avatar src={getImageUrlWithKey(groupDetail?.imageUrl ?? workspace?.imageUrl)} />
             </div>
             <div className="header-info name w-full font-bold text-base border-white flex justify-center items-center p-1">
               {isSuccess && groupDetail?.name}

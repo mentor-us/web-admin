@@ -1,10 +1,9 @@
 /* eslint-disable no-unused-vars */
 
 import { useParams } from "react-router-dom";
+import { Box, Skeleton, Stack } from "@mui/material";
 
-import VoteItem from "pages/WebUser/Group/ChatContainer/MessageContainer/MessageItems/VoteItem";
 import { useGetGroupFaqs } from "hooks/faqs/queries";
-import { useGetChannelVotes } from "hooks/votes/queries";
 
 import FaqItem from "./FaqItem";
 
@@ -13,10 +12,22 @@ export default function GroupFaq() {
   const { data: faqs, isLoading, isSuccess } = useGetGroupFaqs(groupId);
 
   return (
-    <div className="overflow-auto">
+    <Box className="overflow-auto">
       {faqs?.map((faq) => (
-        <FaqItem faq={faq} />
+        <FaqItem key={faq.id} faq={faq} />
       ))}
-    </div>
+
+      {isLoading && (
+        <Stack spacing={1}>
+          <Skeleton variant="rounded" height={90} />
+          <Skeleton variant="rounded" height={90} />
+          <Skeleton variant="rounded" height={90} />
+        </Stack>
+      )}
+
+      {isSuccess && faqs.length === 0 && (
+        <p className="flex mt-4 justify-center text-base items-center">Chưa có câu hỏi nào</p>
+      )}
+    </Box>
   );
 }

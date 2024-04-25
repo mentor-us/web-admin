@@ -18,14 +18,14 @@ function MeetingItem({ meeting }) {
         onClick={() => {
           setOpenDialogMeeting(true);
         }}
-        className="w-full max-w-screen-md hover:!shadow-lg !border-solid border-2 my-1 gap-1 rounded-xl p-3 pt-10 relative hover:cursor-pointer"
+        className="w-full max-w-screen-md hover:!shadow-lg !border-solid border-2 my-0.5 gap-1 rounded-xl p-2 pt-10 relative hover:cursor-pointer"
       >
         <Box className="bg-blue-500 absolute top-0 right-0 px-2 py-2 rounded-tr-xl rounded-bl-xl">
           {/* <p className="text-white  text-xs text-center">{formateMeeting?.time?.display}</p> */}
           <p className="text-white  text-xs text-center">Lịch hẹn</p>
         </Box>
-        <Box className="absolute top-1 left-0 px-3 py-2  rounded-r-md">
-          <p className="text-black text-xl">{formateMeeting?.title}</p>
+        <Box className="absolute top-0.5 left-0 px-3 py-2  rounded-r-md">
+          <p className="text-black text-base">{formateMeeting?.title}</p>
         </Box>
         <p className="text-gray-500 text-sm">{formateMeeting?.time?.display}</p>
       </Box>
