@@ -43,10 +43,10 @@ export function FullCalendarComponent() {
   };
   const handleClickEvent = (event) => {
     // showModal
-    const element = document.querySelector(".fc-popover-close");
-    if (element) {
-      element.click();
-    }
+    // const element = document.querySelector(".fc-popover-close");
+    // if (element) {
+    //   element.click();
+    // }
     const eventType = event?.event?.extendedProps?.type ?? event?.event?.type;
     // eslint-disable-next-line eqeqeq
     switch (eventType) {
