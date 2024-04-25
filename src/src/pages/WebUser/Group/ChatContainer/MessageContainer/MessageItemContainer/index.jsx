@@ -101,6 +101,7 @@ function MessageItemContainer({ children, message, isOwner }) {
                     marginRight: 0,
                     padding: 0
                   }}
+                  className="cursor-pointer"
                   src={message?.sender?.imageUrl}
                   onClick={handleProfileOpen}
                 />

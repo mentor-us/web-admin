@@ -35,8 +35,7 @@ function ProfileDialog(props) {
   const myInfo = useMyInfo();
 
   const isEditable = myInfo.id === user.id;
-  console.log("MYINFO", myInfo);
-  console.log("USER", user);
+
   const handleUpdateProfileOpen = () => {
     setOpenUpdateProfile(true);
   };
@@ -57,7 +56,7 @@ function ProfileDialog(props) {
                 padding: 0,
                 margin: 0,
                 borderRadius: 0,
-                marginBottom: 12
+                marginBottom: 7
               }}
               image="https://wallpapers.com/images/featured/blue-dgmxybg4kb7eab7x.jpg"
             />
