@@ -22,8 +22,10 @@
     --main-calendar-popup-width: 16rem;
     --sub-calendar-layout-width: 13rem;
     --side-bar-width: 4rem;
-    --total-width: calc(var(--main-calendar-popup-width) + var(--sub-calendar-layout-width) + var(--side-bar-width)); 
+    --total-width: calc(var(--sub-calendar-layout-width) + var(--side-bar-width)); 
     --main-calendar-width: calc(100vw - var(--total-width));
+    --color-task: rgb(249 115 22);
+    --color-meeting: rgb(59 130 246);
 }
   
 
@@ -157,14 +159,15 @@
     .fc-daygrid-event{
         cursor: pointer;
         margin-top: 3px !important;
-        border-left: 4px solid var(--event-border-color);
+        border-left: 4px solid var(--color-task);
         line-height: 1.25;
         background-color: var(--event-background-color);
-        color: rgb(0, 121, 187);
+        // color: rgb(0, 121, 187);
         // padding-left: 5px;
         padding: 5px;
 
     }
+   
     // .fc-timegrid-event:focus, .fc-timegrid-event:hover, .fc-timegrid-event:active, .fc-timegrid-event:active:focus,
     .fc-daygrid-block-event:focus, .fc-daygrid-block-event:hover, .fc-daygrid-block-event:active, .fc-daygrid-block-event:active:focus,
     .fc-daygrid-event:focus, .fc-daygrid-event:hover, .fc-daygrid-event:active, .fc-daygrid-event:active:focus{
@@ -173,49 +176,49 @@
         color: white !important;
         font-weight: bold;
         --fc-event-text-color : white !important;
+        .fc-event-main{
+            color: white !important;
+        }
     }
     .fc-daygrid-day-events{
         // gap: 0.25rem;
         padding: 2px;
     }
     .fc-more-popover{
-        --custom-left: calc(100vw - var(--main-calendar-popup-width));
-        position: fixed;
-        top: 0 !important;
-        right: 0px !important;
-        left: var(--custom-left) !important;
-        bottom: 0 !important;
-        // border: none;
-        box-shadow: none;
-        .fc-popover-header {
-            // background-color: white;
-            border-radius: 0px;
-            padding: 0.5rem 0.25rem;
-            font-weight: bold;
-        }
+    //     --custom-left: calc(100vw - var(--main-calendar-popup-width));
+    //     position: fixed;
+    //     top: 0 !important;
+    //     right: 0px !important;
+    //     left: var(--custom-left) !important;
+    //     bottom: 0 !important;
+    //     // border: none;
+    //     box-shadow: none;
+        // .fc-popover-header {
+    //         // background-color: white;
+    //         border-radius: 0px;
+    //         padding: 0.5rem 0.25rem;
+    //         font-weight: bold;
+    //     }
         .fc-popover-body {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            min-width: 0px !important;
-            padding: 5px !important;
-            .fc-daygrid-event{
-                padding: 5px;
-            }
+            height: 40vh;
+            overflow: scroll;
+    //         display: flex;
+    //         flex-direction: column;
+    //         gap: 2px;
+    //         min-width: 0px !important;
+    //         padding: 5px !important;
+    //         .fc-daygrid-event{
+    //             padding: 5px;
+    //         }
         }
     }
     .fc-daygrid-block-event{
-        // color: rgb(0, 121, 187);
-        // border: none !important;
-        // border-left: 4px solid var(--event-border-color);
-        border-color:  var(--event-border-color) !important;
         border-right: none !important;
         border-bottom: none !important;
         border-top: none !important;
         border-left-width: 4px !important;
         border-radius: 3px !important;
         .fc-event-main{
-            // color: rgb(0, 121, 187);
             display: flex !important;
         }
           
@@ -223,6 +226,25 @@
     .fc-timegrid-event {
         cursor: pointer;
         background-color: white !important;
+    }
+    .fc-daygrid-block-event:has(.MEETING-mentor),
+    .fc-daygrid-event:has(.MEETING-mentor){
+        border-color: var(--color-meeting);
+        color: var(--color-meeting);
+        .fc-event-main{
+            color: var(--color-meeting);
+        }
+    }
+    .fc-daygrid-block-event:has(.TASK-mentor),
+    .fc-daygrid-event:has(.TASK-mentor){
+        border-color: var(--color-task);
+        color: var(--color-task);
+        .fc-event-main{
+            color: var(--color-task);
+        }
+    }
+    .fc-event{
+        margin-left: 0 !important;
     }
    
 }

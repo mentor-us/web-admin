@@ -42,7 +42,12 @@ export default function SideBar() {
       </div>
       <div className="">
         <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600">
-          <NavLink className="w-full h-full flex justify-center items-center " to="calendar">
+          <NavLink
+            to="calendar"
+            className={({ isActive }) =>
+              `w-full h-full flex justify-center items-center ${isActive ? "bg-sky-600" : ""}`
+            }
+          >
             {({ isActive }) => (
               <IconButton color="white" aria-label="Setting">
                 {isActive ? (
