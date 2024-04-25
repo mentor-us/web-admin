@@ -147,6 +147,10 @@ const exportAccountSearch = async (req) => {
   return response;
 };
 
+const updateProfile = async (req) => {
+  const response = await UserApi.updateProfile(req);
+  return response;
+};
 const getMe = () => UserApi.getMe();
 
 const accountServices = {
@@ -169,6 +173,7 @@ const accountServices = {
   exportAccountMentor,
   exportAccountMentee,
   exportAccountSearch,
+  updateProfile,
   getMe
 };
 

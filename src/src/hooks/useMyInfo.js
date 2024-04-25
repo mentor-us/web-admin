@@ -10,6 +10,7 @@ export default function useMyInfo() {
   useEffect(() => {
     if (token && Object.keys(myInfo).length === 0) {
       dispatch(getMyInfo());
+      console.log("DISPATCH INFO");
     }
   }, [myInfo]);
 

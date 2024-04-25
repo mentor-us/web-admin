@@ -8,6 +8,7 @@ import { getTime } from "utils";
 import { PinIconMessenger } from "assets/svgs";
 
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
+import ProfileDialog from "pages/WebUser/components/ProfileDialog";
 import ReactedEmoji from "pages/WebUser/components/ReactedEmoji";
 import ReactionButton from "pages/WebUser/components/ReactionButton";
 import { useGetGroupDetail } from "hooks/groups/queries";
@@ -34,6 +35,7 @@ const styles = {
 };
 
 function MessageItemContainer({ children, message, isOwner }) {
+  const [openProfile, setOpenProfile] = useState(false);
   const { channelId } = useParams();
   const { data: channelDetail } = useGetGroupDetail(channelId);
   const [isShowFloatOpts, setIsShowFloatOpts] = useState(false);
@@ -67,7 +69,14 @@ function MessageItemContainer({ children, message, isOwner }) {
       </div>
     );
   };
+  const handleProfileOpen = () => {
+    setOpenProfile(true);
+    console.log("message sender: ", message?.sender);
+  };
 
+  const handleProfileClose = () => {
+    setOpenProfile(false);
+  };
   return (
     <Box
       className={`message-item-container flex space-x-2 items-start px-2 ${
@@ -92,8 +101,17 @@ function MessageItemContainer({ children, message, isOwner }) {
                     marginRight: 0,
                     padding: 0
                   }}
+                  className="cursor-pointer"
                   src={message?.sender?.imageUrl}
+                  onClick={handleProfileOpen}
                 />
+                {openProfile && (
+                  <ProfileDialog
+                    open={openProfile}
+                    onClose={handleProfileClose}
+                    user={message?.sender}
+                  />
+                )}
               </ListItemAvatar>
             )}
             <div className="message-item-content h-full space-y-1" style={containerStyle}>

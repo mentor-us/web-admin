@@ -7,19 +7,27 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { Button, IconButton, Tooltip } from "@mui/material";
 
+import ProfileDialog from "pages/WebUser/components/ProfileDialog";
 import MDAvatar from "components/MDComponents/MDAvatar";
 import useMyInfo from "hooks/useMyInfo";
 
 import ListGroup from "../ListGroup";
 
 export default function SideBar() {
+  const [openProfile, setOpenProfile] = React.useState(false);
   const myInfo = useMyInfo();
-
+  const handleProfileOpen = () => {
+    setOpenProfile(true);
+    // console.log("message sender: ", message?.sender);
+  };
+  const handleProfileClose = () => {
+    setOpenProfile(false);
+  };
   return (
     <div className="flex flex-col justify-between h-full" style={{ backgroundColor: "#0091FF" }}>
       <div className="h-20 flex flex-col hover:bg-sky-600">
         <Tooltip title={myInfo.name} placement="right">
-          <Button>
+          <Button onClick={handleProfileOpen}>
             <MDAvatar
               src={myInfo.imageUrl}
               alt="detail-image"
@@ -35,6 +43,9 @@ export default function SideBar() {
             />
           </Button>
         </Tooltip>
+        {openProfile && (
+          <ProfileDialog open={openProfile} onClose={handleProfileClose} user={myInfo} />
+        )}
       </div>
       {/* <hr /> */}
       <div className="grow overflow-y-scroll no-scrollbar">
