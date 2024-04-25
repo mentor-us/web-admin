@@ -6,7 +6,7 @@ import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
-import { Avatar, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Avatar, Button, DialogContent, DialogTitle, Stack, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -15,7 +15,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
-import { getMyInfo } from "features/myInfo/slice";
+import { getMyInfo, logout } from "features/myInfo/slice";
 import PropTypes from "prop-types";
 
 import useMyInfo from "hooks/useMyInfo";
@@ -28,7 +28,7 @@ const WALLPAPER_WIDTH = "100%";
 function ProfileDialog(props) {
   const { open, onClose, user } = props;
   const [openUpdateProfile, setOpenUpdateProfile] = useState(false);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // useEffect(() => {
   //   dispatch(getMyInfo());
   // }, []);
@@ -45,7 +45,21 @@ function ProfileDialog(props) {
   const userDate = new Date(Date.parse(user.birthDate)).toLocaleDateString("vi-VN");
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-      <DialogTitle alignSelf="flex-start">Thông tin tài khoản</DialogTitle>
+      <DialogTitle className="w-full !py-2" alignSelf="flex-start">
+        <Stack className="w-full" direction="row" justifyContent="space-between">
+          <span className="!p-2">Thông tin tài khoản</span>
+          {isEditable && (
+            <Button
+              className="!p-2 !py-0 !text-red-400"
+              onClick={() => {
+                dispatch(logout());
+              }}
+            >
+              Đăng xuất
+            </Button>
+          )}
+        </Stack>
+      </DialogTitle>
       <DialogContent sx={{ padding: 0, margin: 0 }}>
         <Card sx={{ padding: 0, margin: 0 }}>
           <div>
