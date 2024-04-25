@@ -70,7 +70,7 @@ function MessageContainer({ channelId }) {
 
   return (
     <div
-      className="overflow-x-hidden message-container "
+      className="overflow-x-hidden message-container"
       id="scrollableDiv"
       style={{
         height: "calc(100% - 10px)",
@@ -105,18 +105,17 @@ function MessageContainer({ channelId }) {
         }
         endMessage={<MessageFooterItem />}
       >
-        {isSuccess &&
-          messagesList.pages.map((page) => {
-            return page.map((item) => {
-              return (
-                <MessageItems
-                  key={item?.id}
-                  message={item}
-                  isOwner={myInfo?.id === item?.sender?.id}
-                />
-              );
-            });
-          })}
+        {messagesList?.pages.map((page) => {
+          return page.map((item) => {
+            return (
+              <MessageItems
+                key={item?.id}
+                message={item}
+                isOwner={myInfo?.id === item?.sender?.id}
+              />
+            );
+          });
+        })}
         <div />
       </InfiniteScroll>
     </div>

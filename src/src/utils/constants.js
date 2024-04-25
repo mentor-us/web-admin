@@ -120,6 +120,11 @@ export const USER_ROLE = {
   MENTEE: "MENTEE"
 };
 
+export const MESSAGE_STATUS = {
+  DELETED: "DELETED",
+  EDITED: "EDITED"
+};
+
 export const MESSAGE_TYPE = {
   TEXT: "TEXT",
   FILE: "FILE",

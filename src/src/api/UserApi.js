@@ -96,6 +96,10 @@ const UserApi = {
   },
   updateProfile(data) {
     return AxiosClient.patch(`api/users/${data.id}/profile`, data);
+  },
+
+  getMe() {
+    return AxiosClient.get("api/users/me");
   }
 };
 

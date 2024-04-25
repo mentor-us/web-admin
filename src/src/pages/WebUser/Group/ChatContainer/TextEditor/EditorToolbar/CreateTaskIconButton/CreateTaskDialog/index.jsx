@@ -28,8 +28,10 @@ import TaskApi from "api/TaskApi";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
+// eslint-disable-next-line import/namespace
 import { useCreateTaskMutation, useUpdateTaskMutation } from "hooks/chats/mutation";
 import { useGetDetailTasks } from "hooks/chats/queries";
+import { GetAllTaskInChannelKey } from "hooks/tasks/keys";
 import useMyInfo from "hooks/useMyInfo";
 
 function CreateTaskDialog({ open, handleClose, taskId = null }) {
@@ -101,6 +103,9 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
           .then(() => {
             queryClient.invalidateQueries({
               queryKey: GetAllChatMessageInfinityKey(channelId)
+            });
+            queryClient.refetchQueries({
+              queryKey: GetAllTaskInChannelKey(channelId)
             });
             resolve();
           })

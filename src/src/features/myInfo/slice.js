@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import jwtDecode from "jwt-decode";
 
 import accountServices from "service/accountServices";
 
@@ -10,10 +9,8 @@ const initialState = {
 };
 
 export const getMyInfo = createAsyncThunk("myInfo/get", async () => {
-  const token = localStorage.getItem("access_token");
-  const decode = jwtDecode(token);
-  const response = await accountServices.getAccountDetail(decode.sub);
-  return response;
+  const response = await accountServices.getMe();
+  return response?.data;
 });
 
 const myInfoSlice = createSlice({

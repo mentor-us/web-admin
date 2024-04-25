@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Dropdown } from "@mui/base/Dropdown";
 import { Menu } from "@mui/base/Menu";
 import { MenuButton as BaseMenuButton } from "@mui/base/MenuButton";
@@ -111,11 +112,11 @@ const MenuItem = styled(BaseMenuItem)(
 // );
 
 function GroupHeader({ groupName, isLoading }) {
-  const createHandleMenuClick = (menuItem) => {
-    return () => {
-      console.log(`Clicked on ${menuItem}`);
-    };
-  };
+  // const createHandleMenuClick = (menuItem) => {
+  //   return () => {
+  //     console.log(`Clicked on ${menuItem}`);
+  //   };
+  // };
 
   return (
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -129,11 +130,11 @@ function GroupHeader({ groupName, isLoading }) {
               <div className="text-base font-bold line-clamp-2">{groupName}</div>
             </Tooltip>
 
-            <KeyboardArrowDownIcon fontSize="small" />
+            {/* <KeyboardArrowDownIcon fontSize="small" /> */}
           </>
         )}
       </BaseMenuButton>
-      <Menu slots={{ listbox: Listbox }}>
+      {/* <Menu slots={{ listbox: Listbox }}>
         <MenuItem onClick={createHandleMenuClick("Profile")}>
           <div className="cursor-pointer">Profile</div>
         </MenuItem>
@@ -143,7 +144,7 @@ function GroupHeader({ groupName, isLoading }) {
         <MenuItem onClick={createHandleMenuClick("Log out")}>
           <div className="cursor-pointer">Log out</div>
         </MenuItem>
-      </Menu>
+      </Menu> */}
     </Dropdown>
   );
 }

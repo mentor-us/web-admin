@@ -13,14 +13,11 @@ export const useGetAllEvents = () =>
       const res = await EventService.getAllEvent();
       if (res.data && res.data.length > 0) {
         let events = res.data;
-        console.log("events");
-        console.log(events);
         events = events.map((event) => {
           return {
             ...event,
             start: new Date(event.deadline ?? event.timeStart),
             timeStart: event.deadline ?? event.timeStart
-            // backgroundColor: "rgb(125 211 252)"
           };
         });
         return events;

@@ -29,6 +29,7 @@ import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
 import { useCreateMeetingMutation, useUpdateMeetingMutation } from "hooks/chats/mutation";
 import { useGetDetailMeeting } from "hooks/events/queries";
+import { GetAllMeetingInChannelKey } from "hooks/meeting/keys";
 import useMyInfo from "hooks/useMyInfo";
 import { MEETING_REPEATED_TYPE } from "utils/constants";
 
@@ -103,6 +104,9 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
           .then(() => {
             queryClient.invalidateQueries({
               queryKey: GetAllChatMessageInfinityKey(channelId)
+            });
+            queryClient.refetchQueries({
+              queryKey: GetAllMeetingInChannelKey(channelId)
             });
             resolve();
           })
@@ -303,10 +307,11 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                   required: "Vui lòng nhập ngày hẹn",
                   validate: {
                     gtnow: (v) => {
-                      if (!v || dayjs().isBefore(v)) {
+                      console.log("validate v");
+                      console.log(v);
+                      if (!v || dayjs().isBefore(v) || dayjs(v).isSame(dayjs(), "day")) {
                         return true;
                       }
-
                       return "Ngày hẹn phải lớn hơn hoặc bằng ngày hiện tại";
                     }
                   }
