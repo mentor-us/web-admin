@@ -45,7 +45,7 @@ export default function GroupMeeting() {
   // Determine which message to display when no meetings are available
   let emptyMessage = "";
   if (isSuccess) {
-    emptyMessage = value === "now" ? "Không có cuộc họp hiện tại" : "Không có cuộc họp đã diễn ra";
+    emptyMessage = value === "now" ? "Chưa có lịch hẹn mới nào" : "Chưa có lịch hẹn";
   }
 
   return (
@@ -90,7 +90,11 @@ export default function GroupMeeting() {
             filteredMeetings.map((meeting) => <MeetingItem key={meeting.id} meeting={meeting} />)
           ) : (
             <Box>
-              {isSuccess && <div className="flex justify-center items-center">{emptyMessage}</div>}
+              {isSuccess && (
+                <div className="flex mt-4 justify-center text-base items-center">
+                  {emptyMessage}
+                </div>
+              )}
             </Box>
           )}
         </Box>

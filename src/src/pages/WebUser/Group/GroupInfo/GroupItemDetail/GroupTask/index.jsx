@@ -34,7 +34,7 @@ export default function GroupTask() {
 
   // Determine which message to display when no tasks are available
   const emptyMessage =
-    isSuccess && (tabValue === "now" ? "Chưa có công việc hiện tại" : "Chưa có công việc đã qua");
+    isSuccess && (tabValue === "now" ? "Chưa có công việc mới nào" : "Chưa có công việc");
 
   return (
     <Box className="border overflow-y-scroll overflow-x-hidden">
@@ -63,7 +63,11 @@ export default function GroupTask() {
                 // eslint-disable-next-line no-sequences
                 (task) => <TaskItem key={task.id} task={task} />
               )
-            : isSuccess && <div className="flex justify-center items-center">{emptyMessage}</div>}
+            : isSuccess && (
+                <div className="flex justify-center text-base mt-4 items-center">
+                  {emptyMessage}
+                </div>
+              )}
         </Box>
       )}
     </Box>

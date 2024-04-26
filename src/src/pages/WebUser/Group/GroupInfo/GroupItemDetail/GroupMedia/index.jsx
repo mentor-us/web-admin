@@ -126,10 +126,10 @@ export default function GroupMedia({ type }) {
             </div>
           )}
           {value === "IMAGE" && images.length === 0 && isSuccess && (
-            <div className="flex justify-center items-center">Chưa có hình ảnh</div>
+            <div className="flex justify-center text-base items-center mt-4">Chưa có hình ảnh</div>
           )}
           {value === "FILE" && files.length === 0 && isSuccess && (
-            <div className="flex justify-center items-center">Chưa có file</div>
+            <div className="flex justify-center text-base items-center mt-4">Chưa có tập tin</div>
           )}
         </>
       )}
