@@ -20,7 +20,11 @@ import StatisticDetail from "pages/StatisticDetail";
 import TermOfService from "pages/TermOfService";
 import MobileUserGuide from "pages/UserGuide/Mobile";
 import WebAdminGuideline from "pages/UserGuide/Web";
-import { ROUTE_URL } from "utils/constants";
+import HomeLayout from "pages/WebUser/Home";
+import { FullCalendarComponent } from "pages/WebUser/Home/FullCalendarComponent";
+import WelcomePage from "pages/WebUser/Home/WelcomePage";
+import GroupRoutes from "pages/WebUser/Route/GroupRoutes";
+import { ROLE, ROUTE_URL } from "utils/constants";
 
 const pagesMap = {
   groups: "Quản lý nhóm",
@@ -36,12 +40,15 @@ export const translateToVNmeseByKey = (key) => {
   return pagesMap[key] ?? "";
 };
 
+const adminAccessRoles = [ROLE.ADMIN, ROLE.SUPER_ADMIN];
+
 export const privateRoutes = [
   {
     key: "groups",
     name: translateToVNmeseByKey("groups"),
     icon: <Icon fontSize="small">groups</Icon>,
     path: "/admin/groups",
+    roles: adminAccessRoles,
     element: <GroupManagement />
   },
   {
@@ -49,6 +56,7 @@ export const privateRoutes = [
     name: translateToVNmeseByKey("group-category"),
     icon: <Icon fontSize="small">category</Icon>,
     path: "/admin/group-category",
+    roles: adminAccessRoles,
     element: <GroupCategory />
   },
   {
@@ -56,6 +64,7 @@ export const privateRoutes = [
     name: translateToVNmeseByKey("group-detail"),
     icon: null,
     path: "/admin/groups/group-detail/:id",
+    roles: adminAccessRoles,
     element: <GroupDetail />
   },
   {
@@ -63,12 +72,14 @@ export const privateRoutes = [
     name: translateToVNmeseByKey("account-management"),
     icon: <Icon fontSize="small">account_circle</Icon>,
     path: "/admin/account-management",
+    roles: adminAccessRoles,
     element: <AccountManagement />
   },
   {
     key: "account-detail",
     name: translateToVNmeseByKey("account-detail"),
     path: "/admin/account-management/account-detail/:id",
+    roles: adminAccessRoles,
     element: <AccountDetail />
   },
   {
@@ -76,13 +87,40 @@ export const privateRoutes = [
     name: translateToVNmeseByKey("statistic"),
     icon: <Icon fontSize="small">query_stats</Icon>,
     path: "/admin/statistic",
+    roles: adminAccessRoles,
     element: <Statistic />
   },
   {
     key: "statistic-detail",
     name: translateToVNmeseByKey("statistic-detail"),
     path: "/admin/statistic/statistic-detail/:id",
+    roles: adminAccessRoles,
     element: <StatisticDetail />
+  },
+
+  // USER ROUTE
+  {
+    key: "HomeLayout",
+    path: ROUTE_URL.CHAT_ROOT,
+    roles: [ROLE.USER],
+    element: <HomeLayout />,
+    children: [
+      {
+        key: "WelcomePage",
+        index: true,
+        element: <WelcomePage />
+      },
+      {
+        key: "WelcomePage",
+        path: "group/:groupId/*",
+        element: <GroupRoutes />
+      },
+      {
+        key: "FullCalendarComponent",
+        path: ROUTE_URL.CALENDAR_ROOT,
+        element: <FullCalendarComponent />
+      }
+    ]
   }
 ];
 
