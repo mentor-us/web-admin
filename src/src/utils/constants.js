@@ -4,6 +4,13 @@ import jpeg from "assets/images/jpeg.png";
 import jpg from "assets/images/jpg.png";
 import png from "assets/images/png.png";
 
+export const ROLE = {
+  SUPER_ADMIN: "SUPER_ADMIN",
+  ADMIN: "ADMIN",
+  ROLE_USER: "ROLE_USER",
+  USER: "USER"
+};
+
 export const googleSignInURL = `${API_URL}oauth2/authorize/google?redirect_uri=${window.location.origin}/auth/redirect`;
 export const microsoftSignInURL = `${API_URL}oauth2/authorize/azure?redirect_uri=${window.location.origin}/auth/redirect`;
 
@@ -33,9 +40,9 @@ export const emailDomainsValid = [
 ];
 
 export const roleAccountList = [
-  { role: "Quản trị viên cấp cao", value: 2, textValue: "SUPER_ADMIN" },
-  { role: "Quản trị viên", value: 1, textValue: "ADMIN" },
-  { role: "Người dùng", value: 0, textValue: "USER" }
+  { role: "Quản trị viên cấp cao", value: 2, textValue: ROLE.SUPER_ADMIN },
+  { role: "Quản trị viên", value: 1, textValue: ROLE.ADMIN },
+  { role: "Người dùng", value: 0, textValue: ROLE.USER }
 ];
 
 export const groupStatusList = [
@@ -98,7 +105,12 @@ export const ROUTE_URL = {
   ACCOUNT_ROOT: "/admin/account-management",
 
   // Statistic
-  STATISTIC_ROOT: "/admin/statistic"
+  STATISTIC_ROOT: "/admin/statistic",
+
+  // USER_URL
+  CHAT_ROOT: "chat",
+
+  CALENDAR_ROOT: "calendar"
 };
 
 export const MEETING_REPEATED_TYPE = {
