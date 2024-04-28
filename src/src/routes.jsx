@@ -14,6 +14,7 @@ import MobileLandingPage from "pages/LandingPage/Mobile";
 import WebLandingPage from "pages/LandingPage/Web";
 import PageNotFound from "pages/NotFound";
 import Privacy from "pages/Privacy";
+import RootPage from "pages/RootPage";
 import SignIn from "pages/SignIn";
 import Statistic from "pages/Statistic";
 import StatisticDetail from "pages/StatisticDetail";
@@ -138,7 +139,11 @@ export const publicRoutes = [
   {
     key: "mobile-landing-page",
     path: "/",
-    element: <MobileLandingPage />
+    element: (
+      <RootPage>
+        <MobileLandingPage />
+      </RootPage>
+    )
   },
   {
     key: "user-guide",

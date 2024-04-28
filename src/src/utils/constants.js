@@ -108,7 +108,7 @@ export const ROUTE_URL = {
   STATISTIC_ROOT: "/admin/statistic",
 
   // USER_URL
-  CHAT_ROOT: "chat",
+  CHAT_ROOT: "/chat",
 
   CALENDAR_ROOT: "calendar"
 };

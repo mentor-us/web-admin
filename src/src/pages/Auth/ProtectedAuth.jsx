@@ -36,7 +36,7 @@ function ProtectedAuth({ children, roles }) {
 
   const userHasRequiredRole = !!(myInfo && checkRoles(myInfo, roles));
 
-  if (isAuthenticated && !userHasRequiredRole) {
+  if (isAuthenticated() && !userHasRequiredRole) {
     return <AccessDenied />;
   }
 
