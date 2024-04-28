@@ -263,11 +263,12 @@ function GroupSidebar({ workspace, isLoading }) {
 
 GroupSidebar.propTypes = {
   isLoading: PropTypes.bool,
-  workspace: PropTypes.object.isRequired
+  workspace: PropTypes.object
 };
 
 GroupSidebar.defaultProps = {
-  isLoading: false
+  isLoading: false,
+  workspace: undefined
 };
 
 export default GroupSidebar;

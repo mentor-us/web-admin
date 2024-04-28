@@ -49,8 +49,14 @@ export default function SideBar() {
     setAnchorEl(null);
   };
 
-  const onLogoutClick = () => {
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
     dispatch(logout());
+    navigate(ROUTE_URL.SIGN_IN, { replace: true });
+  };
+
+  const onLogoutClick = () => {
+    handleLogout();
     handleSettingClose();
   };
 
@@ -158,17 +164,16 @@ export default function SideBar() {
           transformOrigin={{ horizontal: "right", vertical: "bottom" }}
           anchorOrigin={{ horizontal: "right", vertical: "top" }}
         >
-          {myInfo?.roles?.includes(ROLE.SUPER_ADMIN) ||
-            (myInfo?.roles?.includes(ROLE.ADMIN) && (
-              <MenuItem onClick={onOpenAdminPageClick}>
-                <ListItemIcon>
-                  <TableChartOutlinedIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>
-                  <Typography fontSize="small">Chuyển sang giao diện quản lí</Typography>
-                </ListItemText>
-              </MenuItem>
-            ))}
+          {(myInfo?.roles?.includes(ROLE.SUPER_ADMIN) || myInfo?.roles?.includes(ROLE.ADMIN)) && (
+            <MenuItem onClick={onOpenAdminPageClick}>
+              <ListItemIcon>
+                <TableChartOutlinedIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>
+                <Typography fontSize="small">Chuyển sang giao diện quản lí</Typography>
+              </ListItemText>
+            </MenuItem>
+          )}
 
           <MenuItem onClick={onLogoutClick}>
             <ListItemIcon>

@@ -11,7 +11,6 @@ const formatTime = (event) => {
     .join(" - ");
 };
 const getTextColorClass = (event) => {
-  console.log(event);
   switch (event.type) {
     case "MEETING":
       return "text-blue-500";

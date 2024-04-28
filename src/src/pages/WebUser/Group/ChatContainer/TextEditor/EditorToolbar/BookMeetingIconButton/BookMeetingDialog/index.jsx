@@ -132,8 +132,6 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
       };
       if (meetingDetail) {
         // taskData.role === "MENTOR" || taskData.assigner.id == currentUser.id
-        console.log("meetingDetail");
-        console.log(meetingDetail);
         if (meetingDetail.canEdit) {
           setTitleDialog("Cập nhật lịch hẹn");
           setIsEditable(true);
@@ -307,8 +305,6 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                   required: "Vui lòng nhập ngày hẹn",
                   validate: {
                     gtnow: (v) => {
-                      console.log("validate v");
-                      console.log(v);
                       if (!v || dayjs().isBefore(v) || dayjs(v).isSame(dayjs(), "day")) {
                         return true;
                       }

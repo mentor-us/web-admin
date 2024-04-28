@@ -71,7 +71,6 @@ function MessageItemContainer({ children, message, isOwner }) {
   };
   const handleProfileOpen = () => {
     setOpenProfile(true);
-    console.log("message sender: ", message?.sender);
   };
 
   const handleProfileClose = () => {

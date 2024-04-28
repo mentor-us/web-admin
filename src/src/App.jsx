@@ -38,7 +38,7 @@ const privateRoutesRender = (privateRoutesList) =>
             exact
             index={childRoute?.index}
             path={childRoute?.path}
-            key={childRoute?.path}
+            key={childRoute?.key}
             element={childRoute?.element}
           />
         ))}
@@ -98,7 +98,6 @@ function App() {
           {publicRoutesRender(publicRoutes)}
           {privateRoutesRender(privateRoutes)}
           {/* {getRoutes(routes)} */}
-          <Route path="/" element={<Navigate to="/admin/groups" replace />} />
           <Route path="*" element={<Navigate to="/not-found" replace />} />
         </Routes>
         <ReactQueryDevtools initialIsOpen={false} />

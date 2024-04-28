@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
@@ -15,10 +16,11 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
-import { getMyInfo, logout } from "features/myInfo/slice";
+import { logout } from "features/myInfo/slice";
 import PropTypes from "prop-types";
 
 import useMyInfo from "hooks/useMyInfo";
+import { ROUTE_URL } from "utils/constants";
 
 import UpdateProfileDialog from "./UpdateProfileDialog";
 
@@ -33,6 +35,7 @@ function ProfileDialog(props) {
   //   dispatch(getMyInfo());
   // }, []);
   const myInfo = useMyInfo();
+  const navigate = useNavigate();
 
   const isEditable = myInfo.id === user.id;
 
@@ -42,6 +45,13 @@ function ProfileDialog(props) {
   const handleUpdateProfileClose = () => {
     setOpenUpdateProfile(false);
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    dispatch(logout());
+    navigate(ROUTE_URL.SIGN_IN, { replace: true });
+  };
+
   const userDate = new Date(Date.parse(user.birthDate)).toLocaleDateString("vi-VN");
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
@@ -49,12 +59,7 @@ function ProfileDialog(props) {
         <Stack className="w-full" direction="row" justifyContent="space-between">
           <span className="!p-2">Thông tin tài khoản</span>
           {isEditable && (
-            <Button
-              className="!p-2 !py-0 !text-red-400"
-              onClick={() => {
-                dispatch(logout());
-              }}
-            >
+            <Button className="!p-2 !py-0 !text-red-400" onClick={handleLogout}>
               Đăng xuất
             </Button>
           )}

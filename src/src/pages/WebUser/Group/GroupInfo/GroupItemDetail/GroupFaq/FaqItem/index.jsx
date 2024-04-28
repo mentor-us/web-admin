@@ -39,7 +39,6 @@ function FaqItem({ faq }) {
               className="hover:shadow-lg"
               onClick={(e) => {
                 e.stopPropagation();
-                console.log("click");
               }}
             />
           </Tooltip>

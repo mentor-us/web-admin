@@ -29,7 +29,6 @@ import useMyInfo from "hooks/useMyInfo";
 import { CHANNEL_PERMISSION } from "utils/constants";
 
 function CreateFAQ({ open, handleClose, faqId = null }) {
-  console.log("CreateFAQ");
   const [titleDialog, setTitleDialog] = useState(faqId ? "Chi tiết FAQ" : "FAQ mới");
   const [isEditable, setIsEditable] = useState(!faqId);
   const titlebtnDialog = isEditable ? "LƯU FAQ" : "";
@@ -47,13 +46,11 @@ function CreateFAQ({ open, handleClose, faqId = null }) {
 
     return mergeList;
   });
-  console.log("memberList", memberList);
 
   // check user is mentor or not
   useEffect(() => {
     memberList?.forEach((mentor) => {
       if (mentor.id === myInfo.id && mentor.role === "MENTOR") {
-        console.log("mentor", mentor);
         setIsEditable(true);
       }
     });
@@ -111,7 +108,6 @@ function CreateFAQ({ open, handleClose, faqId = null }) {
     if (faqId) {
       setValue("question", faqDetail?.question);
       setValue("answer", faqDetail?.answer);
-      console.log("taskDetail", faqDetail);
     }
   }, [faqDetail]);
 

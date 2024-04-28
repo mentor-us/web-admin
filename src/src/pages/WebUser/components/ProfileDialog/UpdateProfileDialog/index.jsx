@@ -12,7 +12,6 @@ import { useUpdateProfileMutation } from "hooks/profile/mutation";
 
 function UpdateProfileDialog(props) {
   const { open, onClose, info } = props;
-  console.log("userdob", dayjs(info.birthDate));
   const { mutateAsync: updateProfileMutation, isPending } = useUpdateProfileMutation();
   const {
     control,

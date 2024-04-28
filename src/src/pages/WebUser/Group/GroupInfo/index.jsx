@@ -75,7 +75,6 @@ export default function GroupInfo() {
   const headerInfo = renderHeaderInfor(showTypeScreen);
   // eslint-disable-next-line consistent-return
   const clickedAddFunction = (type) => {
-    console.log(type);
     setShowAddFunction(true);
   };
   const handleCloseDialog = () => {
@@ -85,7 +84,6 @@ export default function GroupInfo() {
     if (showAddFunction && showTypeScreen !== "") {
       switch (showTypeScreen) {
         case GROUP_FUNCTION.MEETING:
-          console.log(showTypeScreen);
           return (
             <BookMeetingDialog
               open={showAddFunction}
