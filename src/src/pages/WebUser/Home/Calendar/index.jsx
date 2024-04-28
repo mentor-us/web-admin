@@ -25,7 +25,6 @@ export default function Calendar() {
     return <div className="">isLoading</div>;
   }
   //   const data = EventApi.getSchedulesData();
-  console.log(events);
   // console.log(API_URL);
   // console.log(CALENDAR_ID);
   // console.log(SECRECT_API_KEY_CALENDAR);
@@ -37,7 +36,6 @@ export default function Calendar() {
   //   crossDomain: true
   // });
   function onDataBinding(e) {
-    console.log("onDataBinding");
     // const data = e.result;
     const items = e.result;
     // const { items } = data;
@@ -64,8 +62,6 @@ export default function Calendar() {
         });
       }
     }
-    console.log("schedulerData");
-    console.log(schedulerData);
 
     e.result = schedulerData;
   }
