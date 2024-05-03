@@ -14,7 +14,7 @@ const checkRoles = (myInfo, routeRoles) => {
   }
 
   const isAdmin = myInfo?.roles?.includes(ROLE.ADMIN);
-  if (isAdmin && routeRoles.includes(ROLE.SUPER_ADMIN)) {
+  if (isAdmin && routeRoles.includes(ROLE.SUPER_ADMIN) && !routeRoles.includes(ROLE.ADMIN)) {
     return false;
   }
 

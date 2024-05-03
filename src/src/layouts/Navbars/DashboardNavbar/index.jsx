@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -148,11 +149,11 @@ function DashboardNavbar({ absolute, light, isMini }) {
               justifyContent="center"
             >
               <MDTypography variant="h5" fontWeight="medium" sx={{ mb: 1 }}>
-                {myInfo.name}{" "}
+                {myInfo.name}
               </MDTypography>
-              <MDTypography variant="button" color="text" fontWeight="regular" fontSize="small">
+              {/* <MDTypography variant="button" color="text" fontWeight="regular" fontSize="small">
                 {getValueOfList(roleAccountList, myInfo.role, "textValue", "role")}{" "}
-              </MDTypography>
+              </MDTypography> */}
             </MDBox>
           </MDBox>
         </MenuItem>
