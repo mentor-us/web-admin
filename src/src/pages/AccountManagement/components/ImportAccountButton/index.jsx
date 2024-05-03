@@ -17,6 +17,7 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
 import useMyInfo from "hooks/useMyInfo";
+import { ROLE } from "utils/constants";
 import { formatDateExcel } from "utils/formatDate";
 
 export default function ImportAccountButton() {
@@ -86,7 +87,9 @@ export default function ImportAccountButton() {
     const outputFilename = `MentorUS_Import_danh_sách_tài_khoản_${date}.xlsx`;
 
     const link = document.createElement("a");
-    link.href = myInfo.role === "SUPER_ADMIN" ? importAccountAdminTemplate : importAccountTemplate;
+    link.href = myInfo.roles.includes(ROLE.SUPER_ADMIN)
+      ? importAccountAdminTemplate
+      : importAccountTemplate;
     link.setAttribute("download", outputFilename);
     document.body.appendChild(link);
     link.click();

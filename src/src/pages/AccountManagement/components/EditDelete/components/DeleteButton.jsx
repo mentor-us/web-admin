@@ -13,6 +13,7 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
 import useMyInfo from "hooks/useMyInfo";
+import { ROLE } from "utils/constants";
 
 function DeleteButton({ data, setState, typeButton, redirectURL, isMultiple }) {
   /// --------------------- Khai báo Biến, State -------------
@@ -30,9 +31,9 @@ function DeleteButton({ data, setState, typeButton, redirectURL, isMultiple }) {
   };
 
   const isDeleteAdminRole = () => {
-    if (myInfo.role === "ADMIN") {
-      if (isMultiple) return data.find((item) => item.role === "ADMIN");
-      return data.status === "ADMIN";
+    if (myInfo.roles.includes(ROLE.ADMIN)) {
+      if (isMultiple) return data.find((item) => item.role === ROLE.ADMIN);
+      return data.status === ROLE.ADMIN;
     }
 
     return false;

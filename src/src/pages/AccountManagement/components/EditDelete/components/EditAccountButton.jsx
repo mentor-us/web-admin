@@ -31,7 +31,7 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
 import useMyInfo from "hooks/useMyInfo";
-import { accountStatusList, genderList, roleAccountList } from "utils/constants";
+import { accountStatusList, genderList, ROLE, roleAccountList } from "utils/constants";
 import { getAnotherDateFromToday } from "utils/formatDate";
 // import { getEmailDomainsValidSelector } from "features/configuration/selector";
 
@@ -42,13 +42,12 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
   const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
 
-  const currentAccount = useMyInfo();
-  const roleList =
-    currentAccount.role === "SUPER_ADMIN"
-      ? roleAccountList?.map((option) => option.role)
-      : roleAccountList
-          ?.filter((item) => item.textValue !== "SUPER_ADMIN")
-          .map((option) => option.role);
+  const myInfo = useMyInfo();
+  const roleList = myInfo.roles.includes(ROLE.SUPER_ADMIN)
+    ? roleAccountList?.map((option) => option.role)
+    : roleAccountList
+        ?.filter((item) => item.textValue !== "SUPER_ADMIN")
+        .map((option) => option.role);
   const [birthDate, setBirthDate] = useState(dayjs(data.birthDate));
   const [status, setStatus] = useState(data.status);
   const [role, setRole] = useState(getValueOfList(roleAccountList, data.role, "textValue", "role"));
@@ -275,7 +274,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
                   value={personalEmail || ""}
                   onChange={handlePersonalEmailChange}
                   inputProps={{ maxLength: 100 }}
-                  error={personalEmail && !isEmailValid(personalEmail)}
+                  error={!!(personalEmail && !isEmailValid(personalEmail))}
                   helperText={
                     personalEmail && !isEmailValid(personalEmail) ? "Email không hợp lệ" : ""
                   }
@@ -384,7 +383,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
                   </MDBox>
                 </MDBox>
               )}
-              {currentAccount.id !== data.id && (
+              {myInfo.id !== data.id && (
                 <MDBox className="relationship__searchBox-item" mb={2}>
                   <MDTypography
                     variant="body2"

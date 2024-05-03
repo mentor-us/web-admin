@@ -10,11 +10,12 @@ import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import TooltipCustom from "components/Tooltip";
 import useMyInfo from "hooks/useMyInfo";
+import { ROLE } from "utils/constants";
 
 function EditDeleteBackBox({ data }) {
   const myInfo = useMyInfo();
   const isCurrentAccount = myInfo.id === data.id;
-  const isNotAllow = myInfo.role === "ADMIN" && data.role === "SUPER_ADMIN";
+  const isNotAllow = myInfo.roles.includes(ROLE.ADMIN) && data.role === "SUPER_ADMIN";
   const navigate = useNavigate();
 
   const renderBlockButton = () => {

@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 import MDBox from "components/MDComponents/MDBox";
 import useMyInfo from "hooks/useMyInfo";
+import { ROLE } from "utils/constants";
 
 import DeleteButton from "./components/DeleteButton";
 import DisableAccountButton from "./components/DisableAccountButton";
@@ -14,7 +15,8 @@ function EditDelete({ data }) {
   const [menu, setMenu] = useState(null);
   const myInfo = useMyInfo();
   const isCurrentAccount = myInfo.id === data.id;
-  const canDelete = !isCurrentAccount && !(myInfo.role === "ADMIN" && data.role === "ADMIN");
+  const canDelete =
+    !isCurrentAccount && !(myInfo.roles.includes(ROLE.ADMIN) && data.role === ROLE.ADMIN);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
