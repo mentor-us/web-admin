@@ -33,11 +33,12 @@ function AddAccountButton() {
   const [open, setOpen] = useState(false);
   const myInfo = useMyInfo();
 
-  const roleList = myInfo.roles.includes(ROLE.SUPER_ADMIN)
-    ? roleAccountList?.map((option) => option.role)
-    : roleAccountList
-        ?.filter((item) => item.textValue !== "SUPER_ADMIN")
-        .map((option) => option.role);
+  const roleList =
+    myInfo.roles && myInfo.roles.includes(ROLE.SUPER_ADMIN)
+      ? roleAccountList?.map((option) => option.role)
+      : roleAccountList
+          ?.filter((item) => item.textValue !== "SUPER_ADMIN")
+          .map((option) => option.role);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

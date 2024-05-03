@@ -274,7 +274,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
                   value={personalEmail || ""}
                   onChange={handlePersonalEmailChange}
                   inputProps={{ maxLength: 100 }}
-                  error={personalEmail && !isEmailValid(personalEmail)}
+                  error={!!(personalEmail && !isEmailValid(personalEmail))}
                   helperText={
                     personalEmail && !isEmailValid(personalEmail) ? "Email không hợp lệ" : ""
                   }
