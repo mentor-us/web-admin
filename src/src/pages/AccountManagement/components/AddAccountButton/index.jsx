@@ -23,7 +23,7 @@ import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import useMyInfo from "hooks/useMyInfo";
-import { roleAccountList } from "utils/constants";
+import { ROLE, roleAccountList } from "utils/constants";
 
 function AddAccountButton() {
   /// --------------------- Khai báo Biến, State -------------
@@ -31,14 +31,13 @@ function AddAccountButton() {
   const dispatch = useDispatch();
   const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
-
   const myInfo = useMyInfo();
-  const roleList =
-    myInfo.role === "SUPER_ADMIN"
-      ? roleAccountList?.map((option) => option.role)
-      : roleAccountList
-          ?.filter((item) => item.textValue !== "SUPER_ADMIN")
-          .map((option) => option.role);
+
+  const roleList = myInfo.roles.includes(ROLE.SUPER_ADMIN)
+    ? roleAccountList?.map((option) => option.role)
+    : roleAccountList
+        ?.filter((item) => item.textValue !== "SUPER_ADMIN")
+        .map((option) => option.role);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
