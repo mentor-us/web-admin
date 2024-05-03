@@ -149,7 +149,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
               justifyContent="center"
             >
               <MDTypography variant="h5" fontWeight="medium" sx={{ mb: 1 }}>
-                {myInfo.name}
+                {myInfo?.name ?? ""}
               </MDTypography>
               {/* <MDTypography variant="button" color="text" fontWeight="regular" fontSize="small">
                 {getValueOfList(roleAccountList, myInfo.role, "textValue", "role")}{" "}
