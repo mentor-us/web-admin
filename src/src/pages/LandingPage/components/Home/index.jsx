@@ -11,7 +11,6 @@ import "../../styles.css";
 
 // eslint-disable-next-line react/prop-types
 function Home({ isMobile, isChatpage }) {
-  console.log("Test");
   return (
     <section className="section home" id="home">
       <div className="home-text animate__animated animate__fadeInLeft animate__slow">

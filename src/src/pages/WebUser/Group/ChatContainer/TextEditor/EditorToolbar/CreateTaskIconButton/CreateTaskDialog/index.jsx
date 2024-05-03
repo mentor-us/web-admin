@@ -28,8 +28,10 @@ import TaskApi from "api/TaskApi";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
+// eslint-disable-next-line import/namespace
 import { useCreateTaskMutation, useUpdateTaskMutation } from "hooks/chats/mutation";
 import { useGetDetailTasks } from "hooks/chats/queries";
+import { GetAllTaskInChannelKey } from "hooks/tasks/keys";
 import useMyInfo from "hooks/useMyInfo";
 
 function CreateTaskDialog({ open, handleClose, taskId = null }) {
@@ -40,7 +42,6 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
     (members) => members ?? []
   );
   const { data: taskDetail } = useGetDetailTasks(taskId);
-  console.log(taskDetail);
   // if (taskId && isLoadingTaskDetail) {
   //   return <Skeleton />;
   // }
@@ -70,8 +71,6 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
     ? useCreateTaskMutation()
     : useUpdateTaskMutation(taskId);
   useEffect(() => {
-    console.log("channelMembers");
-    console.log(channelMembers);
     setValue("attendees", channelMembers ?? []);
   }, [channelMembers]);
 
@@ -102,6 +101,9 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
             queryClient.invalidateQueries({
               queryKey: GetAllChatMessageInfinityKey(channelId)
             });
+            queryClient.refetchQueries({
+              queryKey: GetAllTaskInChannelKey(channelId)
+            });
             resolve();
           })
           .catch(reject);
@@ -126,8 +128,6 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
       };
       if (taskDetail) {
         // taskData.role === "MENTOR" || taskData.assigner.id == currentUser.id
-        console.log("taskDetail");
-        console.log(taskDetail);
         if (taskDetail.role === "MENTOR" || taskDetail?.assigner?.id === myInfo.id) {
           setTitleDialog("Cập nhật công việc");
           setIsEditable(true);

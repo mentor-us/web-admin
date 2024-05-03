@@ -96,6 +96,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
     navigate(ROUTE_URL.SIGN_IN, { replace: true });
   };
 
+  const openChatPage = () => {
+    navigate(ROUTE_URL.CHAT_ROOT);
+  };
+
   const menuBox = () => {
     return (
       <Menu
@@ -199,6 +203,11 @@ function DashboardNavbar({ absolute, light, isMini }) {
         </MDBox>
         <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
           <MDBox color={light ? "white" : "inherit"}>
+            <TooltipCustom title="Mở giao diện nhắn tin">
+              <IconButton size="large" disableRipple color="inherit" onClick={openChatPage}>
+                <Icon fontSize="medium">chat</Icon>
+              </IconButton>
+            </TooltipCustom>
             <TooltipCustom title={miniSidenav ? "Chế độ menu thu nhỏ" : "Chế độ menu mở rộng"}>
               <IconButton size="large" disableRipple color="inherit" onClick={handleMiniSidenav}>
                 <Icon fontSize="medium">{miniSidenav ? "menu_open" : "menu"}</Icon>

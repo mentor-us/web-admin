@@ -29,6 +29,7 @@ import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
 import { useCreateMeetingMutation, useUpdateMeetingMutation } from "hooks/chats/mutation";
 import { useGetDetailMeeting } from "hooks/events/queries";
+import { GetAllMeetingInChannelKey } from "hooks/meeting/keys";
 import useMyInfo from "hooks/useMyInfo";
 import { MEETING_REPEATED_TYPE } from "utils/constants";
 
@@ -104,6 +105,9 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
             queryClient.invalidateQueries({
               queryKey: GetAllChatMessageInfinityKey(channelId)
             });
+            queryClient.refetchQueries({
+              queryKey: GetAllMeetingInChannelKey(channelId)
+            });
             resolve();
           })
           .catch(reject);
@@ -128,8 +132,6 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
       };
       if (meetingDetail) {
         // taskData.role === "MENTOR" || taskData.assigner.id == currentUser.id
-        console.log("meetingDetail");
-        console.log(meetingDetail);
         if (meetingDetail.canEdit) {
           setTitleDialog("Cập nhật lịch hẹn");
           setIsEditable(true);
@@ -303,10 +305,9 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                   required: "Vui lòng nhập ngày hẹn",
                   validate: {
                     gtnow: (v) => {
-                      if (!v || dayjs().isBefore(v)) {
+                      if (!v || dayjs().isBefore(v) || dayjs(v).isSame(dayjs(), "day")) {
                         return true;
                       }
-
                       return "Ngày hẹn phải lớn hơn hoặc bằng ngày hiện tại";
                     }
                   }

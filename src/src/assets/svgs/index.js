@@ -82,6 +82,7 @@ import PencilBlack from "./_raw/pencil-svgrepo-com.svg?react";
 import PhoneNumberIcon from "./_raw/phone-number-icon.svg?react";
 import PhoneRound from "./_raw/phone-round.svg?react";
 import PinIcon from "./_raw/pin-icon.svg?react";
+import PinIconMessenger from "./_raw/pin-icon-messenger.svg?react";
 import PinMessageIcon from "./_raw/pin-message-icon.svg?react";
 import PinnedMessageIcon from "./_raw/pinned-message-icon.svg?react";
 import PlayVideoIcon from "./_raw/play-video-icon.svg?react";
@@ -186,6 +187,7 @@ export {
   PencilEditOffice,
   PhoneNumberIcon,
   PinIcon,
+  PinIconMessenger,
   PinMessageIcon,
   PinnedMessageIcon,
   PlayVideoIcon,

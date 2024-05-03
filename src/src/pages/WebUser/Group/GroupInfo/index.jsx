@@ -9,18 +9,25 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { Avatar, Box, IconButton, Tooltip } from "@mui/material";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 
+import { getImageUrlWithKey } from "utils";
+
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
 import GroupInfoItem from "pages/WebUser/Group/GroupInfo/GroupFunction";
 import GroupItemDetail from "pages/WebUser/Group/GroupInfo/GroupItemDetail";
-import { useGetGroupDetail } from "hooks/groups/queries";
+import { useGetGroupDetail, useGetWorkSpace } from "hooks/groups/queries";
 import { CHANNEL_PERMISSION, GROUP_FUNCTION } from "utils/constants";
+
+import BookMeetingDialog from "../ChatContainer/TextEditor/EditorToolbar/BookMeetingIconButton/BookMeetingDialog";
+import CreateFAQ from "../ChatContainer/TextEditor/EditorToolbar/CreateFAQ";
+import CreateTaskDialog from "../ChatContainer/TextEditor/EditorToolbar/CreateTaskIconButton/CreateTaskDialog";
+import CreateVoteDialog from "../ChatContainer/TextEditor/EditorToolbar/CreateVoteIconButton/CreateVoteDialog";
 // Define the group information
 
 // eslint-disable-next-line react/prop-types, no-shadow
@@ -60,20 +67,61 @@ export default function GroupInfo() {
     setShowGroupMedia((pre) => !pre);
   };
   const [showTypeScreen, setShowTypeScreen] = useState("");
+  const [showAddFunction, setShowAddFunction] = useState(false);
   // click to show member list
   const selectedType = (type) => {
     setShowTypeScreen(type);
   };
   const headerInfo = renderHeaderInfor(showTypeScreen);
+  // eslint-disable-next-line consistent-return
+  const clickedAddFunction = (type) => {
+    setShowAddFunction(true);
+  };
+  const handleCloseDialog = () => {
+    setShowAddFunction(false);
+  };
+  const renderAddFunctionDialog = () => {
+    if (showAddFunction && showTypeScreen !== "") {
+      switch (showTypeScreen) {
+        case GROUP_FUNCTION.MEETING:
+          return (
+            <BookMeetingDialog
+              open={showAddFunction}
+              handleClose={handleCloseDialog}
+              meetingId="" // Pass necessary props here for Meeting Dialog
+            />
+          );
+        case GROUP_FUNCTION.TASK:
+          // Render Task dialog or perform task-related action
+          return (
+            <CreateTaskDialog
+              open={showAddFunction}
+              handleClose={handleCloseDialog}
+              taskId="" // I assume msgIdDialog is defined somewhere
+            />
+          );
+        case GROUP_FUNCTION.VOTING:
+          // Render Voting dialog or perform voting-related action
+          return <CreateVoteDialog open={showAddFunction} handleClose={handleCloseDialog} />;
+        case GROUP_FUNCTION.FAQ:
+          // Render FAQ dialog or perform FAQ-related action
+          return <CreateFAQ open={showAddFunction} handleClose={handleCloseDialog} faqId="" />;
+        default:
+          return null;
+      }
+    }
+    return null;
+  };
 
   // const navigate = useNavigate();
-  const { channelId } = useParams();
+  const { channelId, groupId } = useParams();
   const {
     data: groupDetail,
     isLoading,
     isSuccess
   } = useGetGroupDetail(channelId === "null" ? null : channelId);
 
+  const { data: workspace } = useGetWorkSpace(groupId);
   if (isLoading) {
     return null;
   }
@@ -114,7 +162,7 @@ export default function GroupInfo() {
               className="!absolute !right-0 hover:!bg-slate-300 rounded-full"
               size="small"
               onClick={(e) => {
-                e.preventDefault();
+                clickedAddFunction(showTypeScreen);
               }}
             >
               <AddIcon />
@@ -127,8 +175,8 @@ export default function GroupInfo() {
         <div className="overflow-auto">
           <div className="header-info p-3">
             <div className="header-info ava flex justify-center items-center space-x-4 p-4 ">
-              <AsyncMDAvatar
-                src={groupDetail?.imageUrl}
+              {/* <AsyncMDAvatar
+                src={groupDetail?.imageUrl ?? workspace?.imageUrl}
                 alt="detail-image"
                 shadow="md"
                 size="md"
@@ -139,16 +187,17 @@ export default function GroupInfo() {
                   border: "1px solid white",
                   "border-radius": "34px"
                 }}
-              />
+              /> */}
+              <Avatar src={getImageUrlWithKey(groupDetail?.imageUrl ?? workspace?.imageUrl)} />
             </div>
             <div className="header-info name w-full font-bold text-base border-white flex justify-center items-center p-1">
               {isSuccess && groupDetail?.name}
-              <IconButton size="small">
+              {/* <IconButton size="small">
                 <EditOutlinedIcon fontSize="inherit" />
-              </IconButton>
+              </IconButton> */}
             </div>
             <div className="header-info flex justify-center gap-8 text-xs items-center tools ">
-              <div>
+              {/* <div>
                 {isSuccess && groupDetail?.permissions.includes("GROUP_SETTINGS") && (
                   <div className="tool-item bg-gray-100 hover:bg-slate-300 rounded-full">
                     <IconButton size="small" color="black">
@@ -161,7 +210,7 @@ export default function GroupInfo() {
                 <IconButton size="small" color="black">
                   <NotificationsOutlinedIcon />
                 </IconButton>
-              </div>
+              </div> */}
             </div>
           </div>
           <Divider
@@ -238,6 +287,7 @@ export default function GroupInfo() {
       ) : (
         <GroupItemDetail type={showTypeScreen} />
       )}
+      {renderAddFunctionDialog()}
     </div>
   );
 }

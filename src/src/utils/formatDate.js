@@ -62,22 +62,13 @@ const formatDateFromDuration = (duration) => {
   return `${result[0]}, ${result[1]}`; // mảng 2 phần tử nghĩa là tính theo tháng , ngày
 };
 
-const getAnotherDateFromToday = (currentDate = new Date(), value = -4, type = "year") => {
-  const date = new Date(currentDate);
-  switch (type) {
-    case "date":
-      date.setDate(date.getDate() + value);
-      break;
-    case "month":
-      date.setMonth(date.getMonth() + value);
-      break;
-    case "year":
-      date.setFullYear(date.getFullYear() + value);
-      break;
-    default:
-      break;
+const getAnotherDateFromToday = (currentDate = dayjs(), value = -4, type = "year") => {
+  const date = dayjs(currentDate);
+  if (type === "date") {
+    return date.add(value, "day");
   }
-  return dayjs(date);
+
+  return date.add(value, type);
 };
 const getMomentTime = (src) => {
   if (!src) {

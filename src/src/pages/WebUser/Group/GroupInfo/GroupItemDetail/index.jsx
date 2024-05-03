@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 
 import { GROUP_FUNCTION } from "utils/constants";
 
+import GroupFaq from "./GroupFaq";
 import GroupMedia from "./GroupMedia";
 import GroupMeeting from "./GroupMeeting";
 import GroupMember from "./GroupMember";
@@ -22,7 +23,7 @@ function GroupItemDetail({ type }) {
     return <GroupMedia type={type} />;
   }
   if (type === GROUP_FUNCTION.FAQ) {
-    return <div>FAQ</div>;
+    return <GroupFaq />;
   }
   if (type === GROUP_FUNCTION.VOTING) {
     return <GroupVoting />;

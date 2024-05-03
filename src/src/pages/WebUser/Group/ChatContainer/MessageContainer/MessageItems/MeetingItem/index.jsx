@@ -12,8 +12,7 @@ import BookMeetingDialog from "../../../TextEditor/EditorToolbar/BookMeetingIcon
 function MeetingItem({ meeting }) {
   const meetingData = MeetingService.fulfillMeetingTime(meeting);
   const [openDialogMeeting, setOpenDialogMeeting] = useState(false);
-  console.log("meetingData");
-  console.log(meetingData);
+
   return (
     <Box className="meeting-message-container ">
       <Box className="bg-white rounded-lg w-[70%] p-4">

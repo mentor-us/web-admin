@@ -152,7 +152,6 @@ export const useMessageQueryState = (channelId) => {
         return data;
       }
 
-      // console.log(data);
       const [firstPage, ...rest] = data.pages;
       const newPage = [...firstPage];
       newPage.unshift(message);

@@ -10,7 +10,7 @@ import { GetAllTaskInChannelKey } from "./keys";
 export const useGetChannelTasks = (channelId, select) =>
   useQuery({
     queryKey: GetAllTaskInChannelKey(channelId),
-    queryFn: () => TaskService.getAllMeetingInChannel(channelId),
+    queryFn: () => TaskService.getAllTaskInChannel(channelId),
     enabled: !!channelId,
     select
   });

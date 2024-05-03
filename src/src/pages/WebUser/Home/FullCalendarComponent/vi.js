@@ -14,6 +14,8 @@ export default {
     day: "Ngày",
     list: "Lịch"
   },
+  noEventsText: "Không có sự kiện nào để hiển thị",
+  moreLinkText: "Thêm",
   weekLabel: "Tuần",
   allDayText: "Cả ngày",
   eventLimitText(n) {
