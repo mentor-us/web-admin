@@ -6,7 +6,7 @@ import {
   categoryCheckboxSingleChange
 } from "features/groupsCategory/slice";
 
-import { compareVietnameseWord } from "utils";
+import { compareVietnameseWord, getImageUrlWithKey } from "utils";
 
 import CustomCheckbox from "components/Checkbox";
 import { groupCategoryStatusList } from "utils/constants";
@@ -109,7 +109,7 @@ export default function categoryTableData(
             no: numberOrder,
             name: item.name,
             description: item.description,
-            iconUrl: item.iconUrl,
+            iconUrl: getImageUrlWithKey(item.iconUrl),
             status: status.label,
             statusColor: status.color,
             "is-checked":

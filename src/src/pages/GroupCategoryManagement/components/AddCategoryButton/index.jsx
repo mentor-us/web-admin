@@ -6,6 +6,7 @@ import { addNewCategory } from "features/groupsCategory/slice";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
+import { getImageUrlWithKey } from "utils";
 
 import AutoCompleteCheckbox from "components/AutoComplete/AutoCompleteCheckbox";
 import MDAvatar from "components/MDComponents/MDAvatar";
@@ -25,7 +26,7 @@ function AddCategoryButton() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [iconURL, setIconURL] = useState(imageIconList[0].src);
+  const [iconURL, setIconURL] = useState(getImageUrlWithKey(imageIconList[0].src));
   const [selectedPermissions, setSelectedPermission] = useState([]);
   const [firstLoad, setFirstLoad] = useState({
     name: true
