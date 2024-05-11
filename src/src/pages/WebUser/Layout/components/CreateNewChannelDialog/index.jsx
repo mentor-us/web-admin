@@ -1,11 +1,12 @@
 /* eslint-disable react/no-unstable-nested-components */
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import {
   Autocomplete,
   Button,
+  Chip,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -42,10 +43,6 @@ function CreateNewChannelDialog({ open, handleClose }) {
 
     return mergeList;
   });
-  const optionMemberList = useMemo(
-    () => (memberList ? memberList.filter((member) => member.id !== myInfo.id) : []),
-    [memberList]
-  );
 
   const queryClient = useQueryClient();
   const {
@@ -65,8 +62,8 @@ function CreateNewChannelDialog({ open, handleClose }) {
   const { mutateAsync: submitChannelAsync, isPending } = useCreateChannelMutation();
 
   useEffect(() => {
-    setValue("userIds", optionMemberList);
-  }, [optionMemberList]);
+    setValue("userIds", [myInfo, ...memberList.filter((member) => member.id !== myInfo.id)]);
+  }, [memberList]);
 
   const prepareData = (data) => {
     const newData = { ...data };
@@ -76,9 +73,7 @@ function CreateNewChannelDialog({ open, handleClose }) {
     newData.groupId = groupId;
     newData.creatorId = myInfo.id;
     newData.type =
-      newData.userIds.length === optionMemberList.length
-        ? CHANNEL_TYPE.PUBLIC
-        : CHANNEL_TYPE.PRIVATE;
+      newData.userIds.length === memberList.length ? CHANNEL_TYPE.PUBLIC : CHANNEL_TYPE.PRIVATE;
     return newData;
   };
 
@@ -181,13 +176,18 @@ function CreateNewChannelDialog({ open, handleClose }) {
           control={control}
           rules={{
             required: "Vui lòng chọn thành viên cho kênh",
-            minLength: {
-              value: 1,
-              message: "error message"
+            validate: {
+              min3Member: (v) => {
+                if (v && v.length < 2) {
+                  return "Phải có ít nhất 2 thành viên trong kênh";
+                }
+
+                return true;
+              }
             }
           }}
           onChange={([, data]) => data}
-          defaultValue={optionMemberList ?? []}
+          defaultValue={memberList ?? []}
           render={({ field: { onChange, ...props } }) => {
             return (
               <Autocomplete
@@ -197,10 +197,21 @@ function CreateNewChannelDialog({ open, handleClose }) {
                 multiple
                 width={350}
                 filterSelectedOptions
-                options={optionMemberList ?? []}
+                options={memberList ?? []}
                 noOptionsText="Không có thành viên nào"
                 groupBy={(option) => option.category}
                 getOptionLabel={(option) => option.name ?? ""}
+                renderTags={(tagValue, getTagProps) =>
+                  tagValue.map((option, index) => {
+                    return (
+                      <Chip
+                        label={option.name}
+                        {...getTagProps({ index })}
+                        disabled={option.id === myInfo.id}
+                      />
+                    );
+                  })
+                }
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -222,7 +233,7 @@ function CreateNewChannelDialog({ open, handleClose }) {
                 clearText="Xóa hết"
                 closeText="Đóng"
                 onChange={(e, data) => {
-                  onChange(data);
+                  onChange([myInfo, ...data.filter((option) => option.id !== myInfo.id)]);
                 }}
                 {...props}
               />

@@ -73,13 +73,41 @@ function GroupDetail() {
 
   useEffect(() => {
     if (mentees && Array.isArray(groupDetail?.mentees)) {
-      dispatch(loadByIds({ req: groupDetail?.mentees, type: roleMemberEnum.mentee }));
+      if (groupDetail?.mentees.length > 0) {
+        if (
+          typeof groupDetail.mentees[0] === "string" ||
+          groupDetail.mentees[0] instanceof String
+        ) {
+          dispatch(loadByIds({ req: groupDetail?.mentees, type: roleMemberEnum.mentee }));
+        } else {
+          dispatch(
+            loadByIds({
+              req: groupDetail?.mentees.flatMap((mentee) => mentee.id),
+              type: roleMemberEnum.mentee
+            })
+          );
+        }
+      }
     }
   }, [groupDetail?.mentees]);
 
   useEffect(() => {
     if (mentors && Array.isArray(groupDetail?.mentors)) {
-      dispatch(loadByIds({ req: groupDetail?.mentors, type: roleMemberEnum.mentor }));
+      if (groupDetail?.mentors.length > 0) {
+        if (
+          typeof groupDetail.mentors[0] === "string" ||
+          groupDetail.mentors[0] instanceof String
+        ) {
+          dispatch(loadByIds({ req: groupDetail?.mentors, type: roleMemberEnum.mentor }));
+        } else {
+          dispatch(
+            loadByIds({
+              req: groupDetail?.mentors.flatMap((mentor) => mentor.id),
+              type: roleMemberEnum.mentor
+            })
+          );
+        }
+      }
     }
   }, [groupDetail?.mentors]);
 
