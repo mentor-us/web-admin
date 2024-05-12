@@ -43,6 +43,7 @@
 
 .message-item-content {
   position: relative;
+  z-index: 2;
 }
 
 .reaction-button-container {
@@ -79,7 +80,6 @@
 
 .reaction-icon-button img {
   background-size: 13px;
-  position: relative;
   width: 14px;
   height: 14px;
   background-repeat: no-repeat;
@@ -97,7 +97,6 @@
 }
 
 .reaction-toolbar {
-  z-index: 9999 !important;
   cursor: default;
   position: absolute;
   top: 0;
