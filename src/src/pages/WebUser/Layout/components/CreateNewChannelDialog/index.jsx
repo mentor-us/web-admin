@@ -62,7 +62,9 @@ function CreateNewChannelDialog({ open, handleClose }) {
   const { mutateAsync: submitChannelAsync, isPending } = useCreateChannelMutation();
 
   useEffect(() => {
-    setValue("userIds", [myInfo, ...memberList.filter((member) => member.id !== myInfo.id)]);
+    if (memberList) {
+      setValue("userIds", [myInfo, ...memberList.filter((member) => member.id !== myInfo.id)]);
+    }
   }, [memberList]);
 
   const prepareData = (data) => {

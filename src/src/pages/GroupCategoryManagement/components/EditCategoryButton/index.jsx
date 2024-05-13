@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
+import { getImageUrlWithKey } from "utils";
 
 import AutoCompleteCheckbox from "components/AutoComplete/AutoCompleteCheckbox";
 import MDAvatar from "components/MDComponents/MDAvatar";
@@ -28,12 +29,12 @@ function EditCategoryButton({ data, setState }) {
   const defaultValue = {
     name: data.name,
     description: data.description,
-    iconURL: data.iconUrl,
+    iconURL: getImageUrlWithKey(data.iconUrl),
     permissions: currentPermissions.filter((item) => data.permissions.includes(item.name))
   };
   const [name, setName] = useState(defaultValue.name);
   const [description, setDescription] = useState(defaultValue.description);
-  const [iconURL, setIconURL] = useState(data.iconUrl);
+  const [iconURL, setIconURL] = useState(getImageUrlWithKey(data.iconUrl));
   const [permission, setPermission] = useState(defaultValue.permissions);
   const [firstLoad, setFirstLoad] = useState({
     name: true
@@ -45,7 +46,7 @@ function EditCategoryButton({ data, setState }) {
   const resetAllData = () => {
     setName(data.name);
     setDescription(data.description);
-    setIconURL(data.iconUrl);
+    setIconURL(getImageUrlWithKey(data.iconUrl));
     setPermission(currentPermissions.filter((item) => data.permissions.includes(item.name)));
     setFirstLoad({
       name: true

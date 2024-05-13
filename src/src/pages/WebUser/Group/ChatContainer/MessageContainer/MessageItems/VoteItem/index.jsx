@@ -22,7 +22,7 @@ function VoteItem({ message, containerClassName, isInGroupInfo }) {
   }
 
   const [noOfDiffVoters, voteTotal] = useMemo(() => {
-    const allVotersId = vote.choices.flatMap((choice) => choice.voters);
+    const allVotersId = vote?.choices?.flatMap((choice) => choice.voters) ?? [];
 
     if (allVotersId.every((item) => typeof item === "string" || item instanceof String)) {
       return [new Set(allVotersId).size, allVotersId.length];
@@ -33,7 +33,7 @@ function VoteItem({ message, containerClassName, isInGroupInfo }) {
 
   const renderVoteItems = useMemo(
     () =>
-      vote?.choices.map((item) => {
+      vote?.choices?.map((item) => {
         let votePercent = "0%";
         if (voteTotal) {
           votePercent = `${((item.voters.length / voteTotal) * 100).toFixed(2)}%`;

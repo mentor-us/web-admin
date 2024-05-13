@@ -15,6 +15,8 @@ import {
 import { getGroup, resetState } from "features/groupDetail/slice";
 import { getCategorySelector } from "features/groupsCategory/selector";
 
+import { getImageUrlWithKey } from "utils";
+
 import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import MDBox from "components/MDComponents/MDBox";
@@ -127,7 +129,7 @@ function GroupDetail() {
                 <InfoCardDetail
                   title={groupDetail?.name}
                   subtitle={category?.name}
-                  iconURL={category?.iconUrl}
+                  iconURL={getImageUrlWithKey(groupDetail?.imageUrl ?? "")}
                   description={groupDetail?.description}
                   style={{ height: "10rem" }}
                 />
