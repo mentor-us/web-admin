@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { translateToVNmeseByKey } from "routes";
 
 import MDTypography from "components/MDComponents/MDTypography";
+import { ROUTE_URL } from "utils/constants";
 
 /**
  * Breadcrumbs
@@ -28,7 +29,7 @@ function Breadcrumbs({ icon, routes, light }) {
         }
       }}
     >
-      <Link to="/admin">
+      <Link to={ROUTE_URL.ADMIN_ROOT}>
         <MDTypography
           component="span"
           variant="body2"
@@ -40,7 +41,7 @@ function Breadcrumbs({ icon, routes, light }) {
         </MDTypography>
       </Link>
       {remainRoutes.map((route) => (
-        <Link to={`/${route}`} key={route}>
+        <Link to={`${ROUTE_URL.ADMIN_ROOT}/${route}`} key={route}>
           <MDTypography
             component="span"
             variant="button"
