@@ -1,5 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -17,12 +17,15 @@ import { useGetGroupDetail } from "hooks/groups/queries";
 import useMyInfo from "hooks/useMyInfo";
 import { MESSAGE_TYPE } from "utils/constants";
 
+import ForwardMessageDialog from "../ForwardMessageDialog";
+
 const ITEM_HEIGHT = 48;
 
 function FloatingOptions({ message, isShow }) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [openDialogForward, setOpenDialogForward] = useState(false);
   const open = Boolean(anchorEl);
   const queryClient = useQueryClient();
   const { data: channelDetail } = useGetGroupDetail(channelId);
@@ -125,7 +128,10 @@ function FloatingOptions({ message, isShow }) {
     );
     handleClose();
   };
-
+  const onForwardMessage = () => {
+    console.log("forward");
+    setOpenDialogForward(true);
+  };
   const onEditMessage = () => {
     chatStore.setIsEditMessage(true);
     chatStore.setEditMessage(message);
@@ -224,6 +230,11 @@ function FloatingOptions({ message, isShow }) {
         >
           Chuyển tiếp
         </MenuItem> */}
+        {message?.sender?.id === myInfo?.id && (
+          <MenuItem className="!font-normal !text-black" onClick={onForwardMessage}>
+            Chuyển tiếp
+          </MenuItem>
+        )}
         <MenuItem
           className="!font-normal !text-black"
           onClick={
@@ -233,6 +244,13 @@ function FloatingOptions({ message, isShow }) {
           {channelDetail?.pinnedMessageIds.includes(message?.id) ? "Bỏ ghim " : "Ghim "}
         </MenuItem>
       </Menu>
+      {openDialogForward && (
+        <ForwardMessageDialog
+          open={openDialogForward}
+          message={message}
+          handleClose={() => setOpenDialogForward(false)}
+        />
+      )}
     </Box>
   );
 }
