@@ -38,7 +38,7 @@ function EventUpcoming({ event, handleClickEvent }) {
         <div className="list-item ml-7 mt-[-11px] mr-0 text-3xl" />
       </div>
       <div className="flex flex-col">
-        <div className="font-[400]">{formatTime(event)}</div>
+        <div className="font-[400] text-gray-900">{formatTime(event)}</div>
         <div className="font-bold text-xs">{event?.title ?? ""}</div>
       </div>
     </div>
