@@ -1,7 +1,9 @@
-/* eslint-disable no-shadow */
 /* eslint-disable import/no-unresolved */
+import React, { forwardRef, useRef } from "react";
 import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 import { CircularProgress, IconButton, Tooltip } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useFilePicker } from "use-file-picker";
 import {
@@ -12,10 +14,13 @@ import {
 
 import { v4 as uuidv4 } from "uuid";
 import { MediaIcon } from "assets/svgs";
+import GroupApi from "api/GroupApi";
 import MessageApi from "api/MessageApi";
 
+import { GetAllHomeGroupInfinityKey, GetWorkspaceQueryKey } from "hooks/groups/keys";
 import useMyInfo from "hooks/useMyInfo";
 import {
+  ACTION_IMAGE,
   INIT_TOTAL_REACTION,
   LIMIT_IMAGES,
   MAX_FILE_IMAGE_SIZE,
@@ -23,8 +28,11 @@ import {
   SUPPORTED_IMAGE_EXT
 } from "utils/constants";
 
-function ImageIconButton({ channelId }) {
+const ImageIconButton = forwardRef(({ channelId, type = ACTION_IMAGE.SEND_IMAGE }, ref) => {
   const myInfo = useMyInfo();
+  const queryClient = useQueryClient();
+  const { groupId } = useParams();
+  const buttonRef = ref || useRef(null);
 
   const { openFilePicker, loading } = useFilePicker({
     accept: SUPPORTED_IMAGE_EXT,
@@ -66,31 +74,56 @@ function ImageIconButton({ channelId }) {
         };
 
         // Upload file
-        toast.promise(
-          MessageApi.sendImagesMessage({
-            messageId: message.id,
-            images: plainFiles,
-            groupId: channelId,
-            senderId: myInfo.id
-          }),
-          {
-            loading: "Đang tải lên...",
-            success: "Tải lên thành công",
-            error: "Tải lên thất bại"
-          },
-          {
-            style: {
-              minWidth: "250px"
+        if (type === ACTION_IMAGE.SEND_IMAGE) {
+          toast.promise(
+            MessageApi.sendImagesMessage({
+              messageId: message.id,
+              images: plainFiles,
+              groupId: channelId,
+              senderId: myInfo.id
+            }),
+            {
+              loading: "Đang tải lên...",
+              success: "Tải lên thành công",
+              error: "Tải lên thất bại"
+            },
+            {
+              style: {
+                minWidth: "250px"
+              }
             }
-          }
-        );
+          );
+        }
+        if (type === ACTION_IMAGE.UPDATE_AVATAR) {
+          toast.promise(
+            GroupApi.updateAvatarGroup({
+              image: plainFiles[0],
+              groupId: channelId
+            }),
+            {
+              loading: "Đang tải lên...",
+              success: () => {
+                queryClient.invalidateQueries({ queryKey: GetWorkspaceQueryKey(groupId) });
+                queryClient.refetchQueries({ queryKey: GetAllHomeGroupInfinityKey });
+
+                return "Tải lên thành công";
+              },
+              error: "Tải lên thất bại"
+            },
+            {
+              style: {
+                minWidth: "250px"
+              }
+            }
+          );
+        }
       }
     }
   });
 
   return (
     <Tooltip title="Gửi ảnh" placement="top">
-      <IconButton onClick={() => openFilePicker()}>
+      <IconButton ref={buttonRef} onClick={() => openFilePicker()}>
         {loading ? (
           <CircularProgress color="info" size={30} />
         ) : (
@@ -99,10 +132,12 @@ function ImageIconButton({ channelId }) {
       </IconButton>
     </Tooltip>
   );
-}
+});
 
 ImageIconButton.propTypes = {
-  channelId: PropTypes.string.isRequired
+  channelId: PropTypes.string.isRequired,
+  // eslint-disable-next-line react/require-default-props
+  type: PropTypes.string
 };
 
 export default ImageIconButton;

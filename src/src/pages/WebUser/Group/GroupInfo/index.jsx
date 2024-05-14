@@ -1,9 +1,11 @@
+/* eslint-disable react/no-this-in-sfc */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // eslint-disable-next-line no-unused-vars
 import { useNavigate, useParams } from "react-router";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
@@ -22,12 +24,19 @@ import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
 import GroupInfoItem from "pages/WebUser/Group/GroupInfo/GroupFunction";
 import GroupItemDetail from "pages/WebUser/Group/GroupInfo/GroupItemDetail";
 import { useGetGroupDetail, useGetWorkSpace } from "hooks/groups/queries";
-import { CHANNEL_PERMISSION, GROUP_FUNCTION } from "utils/constants";
+import {
+  ACTION_IMAGE,
+  AVATAR_SIZE,
+  CHANNEL_PERMISSION,
+  GROUP_FUNCTION,
+  WALLPAPER_HEIGHT
+} from "utils/constants";
 
 import BookMeetingDialog from "../ChatContainer/TextEditor/EditorToolbar/BookMeetingIconButton/BookMeetingDialog";
 import CreateFAQ from "../ChatContainer/TextEditor/EditorToolbar/CreateFAQ";
 import CreateTaskDialog from "../ChatContainer/TextEditor/EditorToolbar/CreateTaskIconButton/CreateTaskDialog";
 import CreateVoteDialog from "../ChatContainer/TextEditor/EditorToolbar/CreateVoteIconButton/CreateVoteDialog";
+import ImageIconButton from "../ChatContainer/TextEditor/EditorToolbar/ImageIconButton";
 // Define the group information
 
 // eslint-disable-next-line react/prop-types, no-shadow
@@ -115,6 +124,8 @@ export default function GroupInfo() {
 
   // const navigate = useNavigate();
   const { channelId, groupId } = useParams();
+  const imageIconButtonRef = useRef(null);
+
   const {
     data: groupDetail,
     isLoading,
@@ -129,6 +140,13 @@ export default function GroupInfo() {
   if (!channelId) {
     return null;
   }
+
+  const handleAvatarClick = () => {
+    // Trigger click event on ImageIconButton
+    if (imageIconButtonRef.current) {
+      imageIconButtonRef.current.click();
+    }
+  };
 
   return (
     <div className="flex flex-col w-80 h-full bg-white border-r-[2px]">
@@ -174,7 +192,7 @@ export default function GroupInfo() {
       {showTypeScreen === "" ? (
         <div className="overflow-auto">
           <div className="header-info p-3">
-            <div className="header-info ava flex justify-center items-center space-x-4 p-4 ">
+            <div className="header-info ava flex justify-center items-center space-x-2 p-2 ">
               {/* <AsyncMDAvatar
                 src={groupDetail?.imageUrl ?? workspace?.imageUrl}
                 alt="detail-image"
@@ -188,13 +206,34 @@ export default function GroupInfo() {
                   "border-radius": "34px"
                 }}
               /> */}
-              <Avatar src={getImageUrlWithKey(groupDetail?.imageUrl ?? workspace?.imageUrl)} />
+
+              <div className="hidden">
+                <ImageIconButton
+                  ref={imageIconButtonRef}
+                  channelId={groupId}
+                  type={ACTION_IMAGE.UPDATE_AVATAR}
+                />
+              </div>
+              <div className="!relative">
+                <Avatar
+                  sx={{ width: 54, height: 54 }}
+                  src={getImageUrlWithKey(groupDetail?.imageUrl ?? workspace?.imageUrl)}
+                />
+                <div className="absolute hover:cursor-pointer bottom-0 right-0 translate-x-1 translate-y-1">
+                  <Avatar
+                    sx={{
+                      height: 26,
+                      width: 26
+                    }}
+                    onClick={handleAvatarClick}
+                  >
+                    <CameraAltOutlinedIcon />
+                  </Avatar>
+                </div>
+              </div>
             </div>
             <div className="header-info name w-full font-bold text-base border-white flex justify-center items-center p-1">
               {isSuccess && groupDetail?.name}
-              {/* <IconButton size="small">
-                <EditOutlinedIcon fontSize="inherit" />
-              </IconButton> */}
             </div>
             <div className="header-info flex justify-center gap-8 text-xs items-center tools ">
               {/* <div>
