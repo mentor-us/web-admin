@@ -6,7 +6,12 @@ import PropTypes from "prop-types";
 import MDAvatarRoot from "components/MDComponents/MDAvatar/MDAvatarRoot";
 
 const MDAvatar = forwardRef(({ bgColor, size, shadow, ...rest }, ref) => (
-  <MDAvatarRoot ref={ref} ownerState={{ shadow, bgColor, size }} {...rest} />
+  <MDAvatarRoot
+    ref={ref}
+    ownerState={{ shadow, bgColor, size }}
+    slotProps={{ img: { referrerPolicy: "no-referrer" } }}
+    {...rest}
+  />
 ));
 
 // Setting default values for the props of MDAvatar
