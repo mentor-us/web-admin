@@ -20,13 +20,10 @@ import { logout } from "features/myInfo/slice";
 import PropTypes from "prop-types";
 
 import useMyInfo from "hooks/useMyInfo";
-import { ROUTE_URL } from "utils/constants";
+import { AVATAR_SIZE, ROUTE_URL, WALLPAPER_HEIGHT, WALLPAPER_WIDTH } from "utils/constants";
 
 import UpdateProfileDialog from "./UpdateProfileDialog";
 
-const AVATAR_SIZE = 90;
-const WALLPAPER_HEIGHT = 200;
-const WALLPAPER_WIDTH = "100%";
 function ProfileDialog(props) {
   const { open, onClose, user } = props;
   const [openUpdateProfile, setOpenUpdateProfile] = useState(false);

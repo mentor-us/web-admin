@@ -134,6 +134,30 @@ const GroupApi = {
   unpinMessage: async (groupId, messageId) => {
     const URL = `/api/groups/${groupId}/unpin-message?messageId=${messageId}`;
     await AxiosClient.post(URL);
+  },
+  updateAvatarGroup: async ({ groupId, image }) => {
+    const UPDATE_AVATAR_URL = `/api/groups/${groupId}/avatar`;
+
+    const formData = new FormData();
+    console.log("image", image);
+
+    formData.append("file", image);
+    formData.append("groupId", groupId);
+
+    try {
+      await AxiosClient.post(UPDATE_AVATAR_URL, formData, {
+        timeout: 20000,
+        headers: {
+          accept: "application/json",
+          "content-type": "multipart/form-data"
+        }
+      });
+    } catch (error) {
+      console.log("GroupAPI.updateAvatarGroup:", error);
+      return false;
+    }
+
+    return true;
   }
 };
 

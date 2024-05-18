@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 import { Avatar, Button, Tooltip } from "@mui/material";
 import PropTypes from "prop-types";
 
+import { getImageUrlWithKey } from "utils";
 import FileApi from "api/FileApi";
 
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
@@ -43,8 +44,8 @@ function GroupItem({ group, handleListItemClick, selectedGroupId }) {
         <Tooltip title={group.name} placement="right">
           <Button>
             {group.imageUrl ? (
-              <AsyncMDAvatar
-                src={group.imageUrl}
+              <Avatar
+                src={getImageUrlWithKey(group.imageUrl)}
                 alt="detail-image"
                 shadow="xl"
                 size="md"
