@@ -1,10 +1,7 @@
-/* eslint-disable no-unused-vars */
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router";
-import { ExpandLess } from "@mui/icons-material";
+import { useParams } from "react-router";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 
-import { GroupIcon } from "assets/svgs";
 import UserApi from "api/UserApi";
 
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
@@ -15,7 +12,7 @@ export default function GroupMember() {
   const { channelId } = useParams();
   const [openProfile, setOpenProfile] = useState(false);
   const [selectedMember, setSelectedMember] = useState({});
-  const { data: channelMember, isLoading, isSuccess } = useGetChannelMembers(channelId);
+  const { data: channelMember } = useGetChannelMembers(channelId);
 
   const handleProfileOpen = () => {
     setOpenProfile(true);
@@ -63,7 +60,12 @@ export default function GroupMember() {
             </ListItemButton>
           ))}
           {openProfile && (
-            <ProfileDialog open={openProfile} onClose={handleProfileClose} user={selectedMember} />
+            <ProfileDialog
+              open={openProfile}
+              onClose={handleProfileClose}
+              user={selectedMember}
+              isFromGroupMember
+            />
           )}
         </List>
       </Collapse>

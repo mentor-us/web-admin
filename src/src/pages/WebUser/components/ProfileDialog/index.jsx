@@ -28,14 +28,12 @@ import { AVATAR_SIZE, ROUTE_URL, WALLPAPER_HEIGHT, WALLPAPER_WIDTH } from "utils
 import UpdateProfileDialog from "./UpdateProfileDialog";
 
 function ProfileDialog(props) {
-  const { open, onClose, user } = props;
+  const { open, onClose, user, isFromGroupMember } = props;
   const [openUpdateProfile, setOpenUpdateProfile] = useState(false);
   const { mutateAsync: createChannel } = useCreateChannelMutation();
   const dispatch = useDispatch();
   const { groupId } = useParams();
-  // useEffect(() => {
-  //   dispatch(getMyInfo());
-  // }, []);
+
   const myInfo = useMyInfo();
   const navigate = useNavigate();
 
@@ -65,8 +63,7 @@ function ProfileDialog(props) {
     };
     const res = await createChannel(data);
     if (res) {
-      console.log("res", res);
-      navigate(`channel/${res.id}`, { replace: true });
+      navigate(`${isFromGroupMember ? "" : "../"}channel/${res.id}`);
       onClose();
     }
   };
@@ -297,9 +294,15 @@ function ProfileDialog(props) {
     </Dialog>
   );
 }
+
+ProfileDialog.defaultProps = {
+  isFromGroupMember: false
+};
+
 ProfileDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  user: PropTypes.objectOf(PropTypes.any).isRequired
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
+  isFromGroupMember: PropTypes.bool
 };
 export default ProfileDialog;
