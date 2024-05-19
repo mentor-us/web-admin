@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable simple-import-sort/imports */
 import React from "react";
 import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -6,12 +8,10 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
 import {
   Button,
   IconButton,
   ListItemIcon,
-  ListItemText,
   Menu,
   MenuItem,
   Tooltip,
@@ -24,6 +24,7 @@ import MDAvatar from "components/MDComponents/MDAvatar";
 import useMyInfo from "hooks/useMyInfo";
 import { ROLE, ROUTE_URL } from "utils/constants";
 
+import { images } from "assets/images";
 import ListGroup from "../ListGroup";
 
 export default function SideBar() {
@@ -60,14 +61,32 @@ export default function SideBar() {
     handleSettingClose();
   };
 
-  const onOpenAdminPageClick = () => {
-    navigate(ROUTE_URL.ADMIN_ROOT);
-    handleSettingClose();
-  };
-
   return (
     <div className="flex flex-col justify-between h-full" style={{ backgroundColor: "#0091FF" }}>
-      <div className="h-20 flex flex-col hover:bg-sky-600">
+      {(myInfo?.roles?.includes(ROLE.SUPER_ADMIN) || myInfo?.roles?.includes(ROLE.ADMIN)) && (
+        <Tooltip title="Mở giao diện quản lý" placement="right">
+          <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600">
+            <NavLink
+              to={ROUTE_URL.GROUP_ROOT}
+              className={({ isActive }) =>
+                `w-full h-full flex justify-center items-center ${isActive ? "bg-sky-600" : ""}`
+              }
+            >
+              {({ isActive }) => (
+                <IconButton color="white" aria-label="Setting">
+                  {isActive ? (
+                    <img alt="admin-icon" src={images.AdminManagementIcon} width={32} height={32} />
+                  ) : (
+                    <img alt="admin-icon" src={images.AdminManagementIcon} width={32} height={32} />
+                  )}
+                </IconButton>
+              )}
+            </NavLink>
+          </div>
+        </Tooltip>
+      )}
+
+      <div className="h-16 flex flex-col hover:bg-sky-600">
         <Tooltip title={myInfo.name} placement="right">
           <Button onClick={handleProfileOpen}>
             <MDAvatar
@@ -89,47 +108,66 @@ export default function SideBar() {
           <ProfileDialog open={openProfile} onClose={handleProfileClose} user={myInfo} />
         )}
       </div>
-      {/* <hr /> */}
+      <hr className="border-gray-200" />
       <div className="grow overflow-y-scroll no-scrollbar">
         <ListGroup />
       </div>
       <div className="">
-        <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600">
-          <NavLink
-            to="calendar"
-            className={({ isActive }) =>
-              `w-full h-full flex justify-center items-center ${isActive ? "bg-sky-600" : ""}`
-            }
-          >
-            {({ isActive }) => (
-              <IconButton color="white" aria-label="Setting">
-                {isActive ? (
-                  <CalendarMonthIcon fontSize="medium" />
-                ) : (
-                  <CalendarMonthOutlinedIcon fontSize="medium" />
-                )}
-              </IconButton>
-            )}
-          </NavLink>
-        </div>
-        <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600">
-          {/* <SettingsIcon /> */}
-          <IconButton
-            color="white"
-            aria-label="Setting"
-            onClick={handleSettingClick}
-            size="small"
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-          >
-            {anchorEl ? (
-              <SettingsIcon fontSize="medium" />
-            ) : (
-              <SettingsOutlinedIcon fontSize="medium" />
-            )}
-          </IconButton>
-        </div>
+        <Tooltip title="Mở lịch" placement="right">
+          <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600">
+            <NavLink
+              to="calendar"
+              className={({ isActive }) =>
+                `w-full h-full flex justify-center items-center ${isActive ? "bg-sky-600" : ""}`
+              }
+            >
+              {({ isActive }) => (
+                <IconButton color="white" aria-label="Setting">
+                  {isActive ? (
+                    <CalendarMonthIcon fontSize="medium" />
+                  ) : (
+                    <CalendarMonthOutlinedIcon fontSize="medium" />
+                  )}
+                </IconButton>
+              )}
+            </NavLink>
+          </div>
+        </Tooltip>
+        <Tooltip title="Đăng xuất" placement="right">
+          <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600 hover:cursor-pointer">
+            <IconButton
+              color="white"
+              aria-label="Setting"
+              onClick={handleSettingClick}
+              size="small"
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+            >
+              <Logout fontSize="small" />
+            </IconButton>
+          </div>
+        </Tooltip>
+        {/* <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600 hover:cursor-pointer">
+          <Tooltip title="Cài đặt" placement="right">
+            <IconButton
+              color="white"
+              aria-label="Setting"
+              onClick={handleSettingClick}
+              size="small"
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+            >
+              {anchorEl ? (
+                <SettingsIcon fontSize="medium" />
+              ) : (
+                <SettingsOutlinedIcon fontSize="medium" />
+              )}
+            </IconButton>
+          </Tooltip>
+        </div> */}
+
         <Menu
           anchorEl={anchorEl}
           id="account-menu"
@@ -164,17 +202,6 @@ export default function SideBar() {
           transformOrigin={{ horizontal: "right", vertical: "bottom" }}
           anchorOrigin={{ horizontal: "right", vertical: "top" }}
         >
-          {(myInfo?.roles?.includes(ROLE.SUPER_ADMIN) || myInfo?.roles?.includes(ROLE.ADMIN)) && (
-            <MenuItem onClick={onOpenAdminPageClick}>
-              <ListItemIcon>
-                <TableChartOutlinedIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>
-                <Typography fontSize="small">Chuyển sang giao diện quản lí</Typography>
-              </ListItemText>
-            </MenuItem>
-          )}
-
           <MenuItem onClick={onLogoutClick}>
             <ListItemIcon>
               <Logout color="error" fontSize="small" />

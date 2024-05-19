@@ -1,9 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable import/no-unresolved */
-/* eslint-disable no-unused-vars */
 import toast from "react-hot-toast";
 import { CircularProgress, IconButton, Tooltip } from "@mui/material";
-import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useFilePicker } from "use-file-picker";
 import {
@@ -16,8 +14,6 @@ import { v4 as uuidv4 } from "uuid";
 import { MediaIcon } from "assets/svgs";
 import MessageApi from "api/MessageApi";
 
-import { useMessageQueryState } from "hooks/channels/queries";
-import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
 import useMyInfo from "hooks/useMyInfo";
 import {
   INIT_TOTAL_REACTION,
@@ -29,7 +25,6 @@ import {
 
 function ImageIconButton({ channelId }) {
   const myInfo = useMyInfo();
-  const { manualAddNewMessage, updateNewImageMessageStatus } = useMessageQueryState(channelId);
 
   const { openFilePicker, loading } = useFilePicker({
     accept: SUPPORTED_IMAGE_EXT,
@@ -70,19 +65,25 @@ function ImageIconButton({ channelId }) {
           reactions: []
         };
 
-        manualAddNewMessage(message);
-
         // Upload file
-        MessageApi.sendImagesMessage({
-          messageId: message.id,
-          images: plainFiles,
-          groupId: channelId,
-          senderId: myInfo.id
-        }).then((uploaded) => {
-          setTimeout(() => {
-            updateNewImageMessageStatus(message, uploaded);
-          }, 1000);
-        });
+        toast.promise(
+          MessageApi.sendImagesMessage({
+            messageId: message.id,
+            images: plainFiles,
+            groupId: channelId,
+            senderId: myInfo.id
+          }),
+          {
+            loading: "Đang tải lên...",
+            success: "Tải lên thành công",
+            error: "Tải lên thất bại"
+          },
+          {
+            style: {
+              minWidth: "250px"
+            }
+          }
+        );
       }
     }
   });

@@ -13,7 +13,6 @@ import { v4 as uuidv4 } from "uuid";
 import { AttachmentIcon } from "assets/svgs";
 import MessageApi from "api/MessageApi";
 
-import { useMessageQueryState } from "hooks/channels/queries";
 import useMyInfo from "hooks/useMyInfo";
 import {
   INIT_TOTAL_REACTION,
@@ -25,7 +24,6 @@ import {
 
 function FileIconButton({ channelId }) {
   const myInfo = useMyInfo();
-  const { manualAddNewMessage, updateNewFileMessageStatus } = useMessageQueryState(channelId);
 
   const { openFilePicker, loading } = useFilePicker({
     accept: SUPPORTED_FILE_UPLOAD,
@@ -68,23 +66,12 @@ function FileIconButton({ channelId }) {
           reactions: []
         };
 
-        manualAddNewMessage(message);
-
         toast.promise(
-          new Promise((resolve, reject) => {
-            MessageApi.sendFileMessage({
-              messageId: message.id,
-              groupId: channelId,
-              senderId: myInfo.id,
-              file: plainFiles[0]
-            })
-              .then((newUrl) => {
-                setTimeout(() => {
-                  updateNewFileMessageStatus(message, newUrl);
-                  resolve();
-                }, 1000);
-              })
-              .catch(reject);
+          MessageApi.sendFileMessage({
+            messageId: message.id,
+            groupId: channelId,
+            senderId: myInfo.id,
+            file: plainFiles[0]
           }),
           {
             loading: "Đang tải lên...",

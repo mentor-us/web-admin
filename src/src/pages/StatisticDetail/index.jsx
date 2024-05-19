@@ -9,7 +9,7 @@ import {
 } from "features/statisticDetail/selector";
 import { getStatisticDetail, resetState } from "features/statisticDetail/slice";
 
-import { numberWithCommas } from "utils";
+import { getImageUrlWithKey, numberWithCommas } from "utils";
 
 import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
@@ -87,7 +87,7 @@ function StatisticDetail() {
             <InfoCardChart
               title={dataDetail?.name}
               subtitle={category?.name}
-              iconURL={category?.iconUrl}
+              iconURL={getImageUrlWithKey(dataDetail?.imageUrl)}
             />
           </Grid>
           <Grid item xs={12} md={5} lg={3}>

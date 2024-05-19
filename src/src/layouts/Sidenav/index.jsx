@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Box, IconButton } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Icon from "@mui/material/Icon";
 import List from "@mui/material/List";
@@ -10,6 +12,8 @@ import { useMentorUs } from "hooks";
 
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
+import TooltipCustom from "components/Tooltip";
+import { ROUTE_URL } from "utils/constants";
 
 import SlideNavCollapseList from "./components/SlidenavCollapseList";
 import sidenavLogoLabel from "./styles/sidenav";
@@ -18,6 +22,7 @@ import SidenavRoot from "./SidenavRoot";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatchContext] = useMentorUs();
+  const navigate = useNavigate();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode } = controller;
   const location = useLocation();
   const collapseName = location.pathname.split("/");
@@ -28,6 +33,10 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
 
   const checkActive = (key, collapseNameAray) => {
     return collapseNameAray.filter((item) => item.includes(key)).length > 0;
+  };
+
+  const openChatPage = () => {
+    navigate(ROUTE_URL.CHAT_ROOT);
   };
 
   useEffect(() => {
@@ -99,7 +108,22 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           </MDTypography>
         </MDBox>
         <MDBox component={NavLink} to="/admin" display="flex" alignItems="center">
-          {brand && <MDBox component="img" src={brand} alt="Brand" width="2.3rem" />}
+          {brand && (
+            <MDBox
+              component="img"
+              src={brand}
+              alt="Brand"
+              width="2.3rem"
+              borderRadius="0.875rem"
+              sx={(theme) => {
+                const { borders } = theme;
+                const { borderRadius } = borders;
+                return {
+                  borderRadius: borderRadius.md
+                };
+              }}
+            />
+          )}
           <MDBox
             width={!brandName && "100%"}
             mx={1.5}
@@ -117,11 +141,18 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           </MDBox>
         </MDBox>
       </MDBox>
+      <Box style={{ marginTop: 1 }}>
+        <Link to={ROUTE_URL.CHAT_ROOT}>
+          <SidenavCollapse name="Nhắn tin" icon={<Icon>chat</Icon>} />
+        </Link>
+      </Box>
       <Divider
-        light={
-          (!darkMode && !whiteSidenav && !transparentSidenav) ||
-          (darkMode && !transparentSidenav && whiteSidenav)
-        }
+        variant="middle"
+        sx={{
+          marginTop: 1,
+          marginX: 3,
+          backgroundColor: "black!important"
+        }}
       />
       <List>{renderRoutes}</List>
     </SidenavRoot>

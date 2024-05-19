@@ -7,6 +7,7 @@ import bgImage from "assets/images/hcmus.jpg";
 
 import FullPageCenter from "layouts/components/FullPageCenter";
 import FullBgImageLayout from "layouts/FullBgImageLayout";
+import useAutoLogin from "hooks/useAutoLogin";
 import useMyInfo from "hooks/useMyInfo";
 import { ROUTE_URL } from "utils/constants";
 
@@ -35,6 +36,8 @@ function SignIn() {
     //   navigate("/sign-in", { replace: true });
     // }
   };
+
+  useAutoLogin();
 
   const renderBody = () => {
     const isAuth = isAuthenticated();
