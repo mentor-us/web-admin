@@ -52,7 +52,9 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
     control,
     handleSubmit,
     reset,
+    getValues,
     setValue,
+    watch,
     formState: { errors }
   } = useForm({
     defaultValues: {
@@ -113,6 +115,19 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
 
     onCancel();
   };
+
+  const watchDateField = watch("date");
+  useEffect(() => {
+    if (watchDateField) {
+      setValue(
+        "deadline",
+        getValues("deadline")
+          .date(watchDateField.date())
+          .month(watchDateField.month())
+          .year(watchDateField.year())
+      );
+    }
+  }, [watchDateField]);
 
   useEffect(() => {
     if (open) {
@@ -297,7 +312,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
                   filterSelectedOptions
                   options={channelMembers ?? []}
                   noOptionsText="Không có thành viên nào"
-                  getOptionLabel={(member) => member.name ?? ""}
+                  getOptionLabel={(member) => member?.name ?? ""}
                   renderOption={(optProps, member, state, ownerState) => {
                     return (
                       <ListItem {...optProps} ownerState={ownerState}>

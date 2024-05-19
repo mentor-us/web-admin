@@ -110,6 +110,12 @@ function RichTextField() {
       senderId: myInfo.id,
       createdDate: new Date(),
       type: MESSAGE_TYPE.TEXT,
+      reactions: [],
+      totalReaction: {
+        data: [],
+        ownerReacted: [],
+        total: 0
+      },
       reply: chatStore?.replyMessage ? chatStore.replyMessage.id : null,
       sender: myInfo
     };

@@ -24,6 +24,7 @@ export default function ListGroup() {
         paginationList.pages.map((group) => {
           return (
             <GroupItem
+              key={group.id}
               group={group}
               selectedGroupId={selectedGroupId}
               handleListItemClick={handleListItemClick}
