@@ -85,6 +85,7 @@ function ProfileDialog(props) {
                 top: WALLPAPER_HEIGHT - AVATAR_SIZE / 2,
                 border: "2px solid white"
               }}
+              slotProps={{ img: { referrerPolicy: "no-referrer" } }}
               src={
                 user
                   ? user.imageUrl

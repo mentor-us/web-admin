@@ -55,6 +55,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
     reset,
     getValues,
     setValue,
+    watch,
     formState: { errors }
   } = useForm({
     defaultValues: {
@@ -121,6 +122,27 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
 
     onCancel();
   };
+
+  const watchDateField = watch("date");
+  useEffect(() => {
+    if (watchDateField) {
+      setValue(
+        "timeStart",
+        getValues("timeStart")
+          .date(watchDateField.date())
+          .month(watchDateField.month())
+          .year(watchDateField.year())
+      );
+      setValue(
+        "timeEnd",
+        getValues("timeEnd")
+          .date(watchDateField.date())
+          .month(watchDateField.month())
+          .year(watchDateField.year())
+      );
+    }
+  }, [watchDateField]);
+
   useEffect(() => {
     if (open) {
       // eslint-disable-next-line no-shadow
@@ -142,7 +164,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
           place: meetingDetail.place || "",
           timeStart: dayjs(meetingDetail.timeStart) || today,
           timeEnd: dayjs(meetingDetail.timeEnd) || today,
-          date: dayjs(meetingDetail.date) || today,
+          date: dayjs(meetingDetail.timeStart) || today,
           attendees: meetingDetail.attendees || []
         });
         // setValue("attendees", [
@@ -157,6 +179,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
       }
     }
   }, [meetingDetail]);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Dialog
