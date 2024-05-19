@@ -72,7 +72,7 @@ export function FullCalendarComponent() {
   return (
     <div className="flex h-full w-full calendar-page">
       <div className="w-52 flex flex-col sub-calendar bg-gray-100">
-        <div className="grow">
+        <div className="h-full grow flex flex-col">
           <div className="text-center h-11" />
           <div className="calendar-wraper p-2 rounded-lg">
             <FullCalendar
@@ -96,14 +96,16 @@ export function FullCalendarComponent() {
             />
           </div>
           <hr />
-          <div className="h-full overflow-x-auto p-2 text-xs flex flex-col">
+          <div className="grow overflow-y-hidden p-2 text-xs flex flex-col">
             <Note />
             <span className="text-blue-500 pb-1">
               <strong className="font-bold uppercase">Hôm nay</strong> {formatDate(new Date())}
             </span>
-            {upcomingEvent.map((event) => (
-              <EventUpcoming handleClickEvent={(e) => handleClickEvent(e)} event={event} />
-            ))}
+            <div className="lg:block overflow-y-auto">
+              {upcomingEvent.map((event) => (
+                <EventUpcoming handleClickEvent={(e) => handleClickEvent(e)} event={event} />
+              ))}
+            </div>
           </div>
         </div>
       </div>

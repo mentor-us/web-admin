@@ -279,3 +279,11 @@ export const Color = {
   opacity: ["#0007"],
   votePercentColor: "#C2E5F5"
 };
+export const ACTION_IMAGE = {
+  SEND_IMAGE: "SEND_IMAGE",
+  UPLOAD_IMAGE: "UPLOAD_IMAGE",
+  UPDATE_AVATAR: "UPDATE_AVATAR"
+};
+export const AVATAR_SIZE = 90;
+export const WALLPAPER_HEIGHT = 200;
+export const WALLPAPER_WIDTH = "100%";
