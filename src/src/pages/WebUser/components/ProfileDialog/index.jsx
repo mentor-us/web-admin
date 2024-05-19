@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
@@ -19,6 +19,9 @@ import ListItemText from "@mui/material/ListItemText";
 import { logout } from "features/myInfo/slice";
 import PropTypes from "prop-types";
 
+import wallpaper from "assets/images/default-wallpaper.jpg";
+
+import { useCreateChannelMutation } from "hooks/channels/mutation";
 import useMyInfo from "hooks/useMyInfo";
 import { AVATAR_SIZE, ROUTE_URL, WALLPAPER_HEIGHT, WALLPAPER_WIDTH } from "utils/constants";
 
@@ -27,7 +30,9 @@ import UpdateProfileDialog from "./UpdateProfileDialog";
 function ProfileDialog(props) {
   const { open, onClose, user } = props;
   const [openUpdateProfile, setOpenUpdateProfile] = useState(false);
+  const { mutateAsync: createChannel } = useCreateChannelMutation();
   const dispatch = useDispatch();
+  const { groupId } = useParams();
   // useEffect(() => {
   //   dispatch(getMyInfo());
   // }, []);
@@ -47,6 +52,23 @@ function ProfileDialog(props) {
     localStorage.removeItem("access_token");
     dispatch(logout());
     navigate(ROUTE_URL.SIGN_IN, { replace: true });
+  };
+
+  const openChat = async () => {
+    const data = {
+      channelName: "",
+      description: "",
+      groupId,
+      creatorId: myInfo.id,
+      type: "PRIVATE_MESSAGE",
+      userIds: [myInfo.id, user.id]
+    };
+    const res = await createChannel(data);
+    if (res) {
+      console.log("res", res);
+      navigate(`channel/${res.id}`, { replace: true });
+      onClose();
+    }
   };
 
   const userDate = new Date(Date.parse(user.birthDate)).toLocaleDateString("vi-VN");
@@ -74,7 +96,7 @@ function ProfileDialog(props) {
                 borderRadius: 0,
                 marginBottom: 7
               }}
-              image="https://wallpapers.com/images/featured/blue-dgmxybg4kb7eab7x.jpg"
+              image={user.wallpaper ? user.wallpaper : wallpaper}
             />
           </div>
           <div className="grid justify-items-center absolute w-full">
@@ -107,11 +129,7 @@ function ProfileDialog(props) {
           </div>
 
           <CardContent>
-            {/* <Button sx={{ marginBottom: 5 }} variant="contained" fullWidth>
-              Nhắn tin
-            </Button> */}
-
-            <div className="flex justify-between">
+            <div className="flex justify-between items-end">
               <Typography variant="h4" component="div">
                 Thông tin
               </Typography>
@@ -238,15 +256,40 @@ function ProfileDialog(props) {
                 />
               </ListItem>
             </List>
-            {isEditable && (
-              <div className="flex justify-between">
+            {isEditable ? (
+              <div className="flex justify-between items-end">
                 <Typography variant="h4" component="div">
                   Liên kết email
                 </Typography>
-                <Typography variant="h7" component="div" color="skyblue" fontStyle="italic">
+                <Typography
+                  className="cursor-pointer hover:underline"
+                  variant="h7"
+                  component="div"
+                  color="skyblue"
+                  fontStyle="italic"
+                >
                   Cập nhật
                 </Typography>
               </div>
+            ) : (
+              <Button
+                sx={{
+                  float: "right",
+                  borderRadius: "20px",
+                  fontSize: 15,
+                  fontWeight: "500",
+                  marginTop: 5,
+                  backgroundColor: "#d0def6",
+                  textTransform: "none",
+                  "&:hover": {
+                    backgroundColor: "#abc7f7"
+                  }
+                }}
+                variant="text"
+                onClick={openChat}
+              >
+                Nhắn tin
+              </Button>
             )}
           </CardContent>
         </Card>
