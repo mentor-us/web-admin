@@ -28,7 +28,9 @@ import {
   ACTION_IMAGE,
   AVATAR_SIZE,
   CHANNEL_PERMISSION,
+  CHANNEL_TYPE,
   GROUP_FUNCTION,
+  USER_ROLE,
   WALLPAPER_HEIGHT
 } from "utils/constants";
 
@@ -219,17 +221,20 @@ export default function GroupInfo() {
                   sx={{ width: 54, height: 54 }}
                   src={getImageUrlWithKey(groupDetail?.imageUrl ?? workspace?.imageUrl)}
                 />
-                <div className="absolute hover:cursor-pointer bottom-0 right-0 translate-x-1 translate-y-1">
-                  <Avatar
-                    sx={{
-                      height: 26,
-                      width: 26
-                    }}
-                    onClick={handleAvatarClick}
-                  >
-                    <CameraAltOutlinedIcon />
-                  </Avatar>
-                </div>
+                {groupDetail.type !== CHANNEL_TYPE.PRIVATE_MESSAGE &&
+                  groupDetail.role === USER_ROLE.MENTOR && (
+                    <div className="absolute hover:cursor-pointer bottom-0 right-0 translate-x-1 translate-y-1">
+                      <Avatar
+                        sx={{
+                          height: 26,
+                          width: 26
+                        }}
+                        onClick={handleAvatarClick}
+                      >
+                        <CameraAltOutlinedIcon />
+                      </Avatar>
+                    </div>
+                  )}
               </div>
             </div>
             <div className="header-info name w-full font-bold text-base border-white flex justify-center items-center p-1">
