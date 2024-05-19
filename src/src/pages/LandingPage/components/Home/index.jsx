@@ -1,10 +1,13 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { PropTypes } from "prop-types";
 
-import apple from "assets/images/apple-logo.png";
-import chplay from "assets/images/google-play.png";
+// import apple from "assets/images/apple-logo.png";
+// import chplay from "assets/images/google-play.png";
+import googleplay from "assets/images/google-play-badge.png";
 import logo from "assets/images/logo_mentorus.jpg";
 import website from "assets/images/www.png";
+import { AppStoreBadge } from "assets/svgs";
 
 import MDButton from "components/MDComponents/MDButton";
 
@@ -18,57 +21,22 @@ function Home({ isMobile, isChatpage }) {
         <h1>MentorUS</h1>
         <h2>Hệ thống hỗ trợ cố vấn học tập</h2>
         <div
-          className="home-text__btn"
+          className="home-text__btn flex items-center"
           style={{
             marginBottom: "20px"
           }}
         >
-          <MDButton
-            component="a"
-            rel="noreferrer"
-            variant="outlined"
-            size="medium"
-            color="info"
-            href="https://play.google.com/store/apps/details?id=com.mentorus"
-            style={{ marginRight: "20px", border: "solid 2px" }}
+          <a
+            href="https://play.google.com/store/apps/details?id=com.mentorus&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
+            style={{ width: "30%", height: "30%", marginRight: "2rem" }}
           >
-            <div className="flex my-2 mr-4">
-              <img src={chplay} alt="website" style={{ width: "3rem", marginRight: "1rem" }} />
-              <div className="break-normal">
-                <span
-                  style={{
-                    fontSize: "0.7rem",
-                    display: "block",
-                    textAlign: "left"
-                  }}
-                >
-                  Tải xuống với
-                </span>
-                <span style={{ fontSize: "1.5rem", display: "block" }}>Google Play</span>
-              </div>
-            </div>
-          </MDButton>
-          <MDButton
-            component="a"
-            rel="noreferrer"
-            variant="outlined"
-            size="medium"
-            color="info"
-            href="https://apps.apple.com/vn/app/mentorus/id6478803453?l=vi"
-            style={{ marginRight: "10px", border: "solid 2px" }}
-          >
-            <div className="flex my-2 mr-4">
-              <img src={apple} alt="website" style={{ width: "40px", marginRight: "1rem" }} />
-              <div className="break-normal">
-                <span style={{ fontSize: "0.7rem", display: "block", textAlign: "left" }}>
-                  Cài đặt trên
-                </span>
-                <span style={{ fontSize: "1.5rem", display: "block" }}>App Store</span>
-              </div>
-            </div>
-          </MDButton>
+            <img src={googleplay} alt="Tải nội dung trên Google Play" />
+          </a>
+          <a href="https://apps.apple.com/vn/app/mentorus/id6478803453?l=vi" className="p-0">
+            <AppStoreBadge width="185px" height="80px" />
+          </a>
         </div>
-        {!isMobile && !isChatpage && (
+        {/* {!isMobile && !isChatpage && (
           <MDButton
             component="a"
             rel="noreferrer"
@@ -81,7 +49,7 @@ function Home({ isMobile, isChatpage }) {
             <img src={website} alt="website" style={{ width: "3rem", marginRight: "1rem" }} />
             <span style={{ fontSize: "1rem" }}>Truy cập Website</span>
           </MDButton>
-        )}
+        )} */}
       </div>
       <div className="home-img animate__animated animate__fadeInRight animate__slow">
         <img src={logo} alt="logo-mentorus" />
