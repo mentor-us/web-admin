@@ -38,17 +38,12 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
   const [listChannelForward, setListChannelForward] = useState([]);
   const [search, setSearch] = useState("");
   const { data: listChannel } = useGetAllChannelsCanForward(search.trim());
-  // console.log("listChannel");
-  // console.log(listChannel);
 
   const onCancel = () => {
     handleClose();
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Submit");
-    console.log(listChannelForward);
-    console.log(message.id);
     toast.promise(
       new Promise((resolve, reject) => {
         channelService
@@ -67,8 +62,6 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
     );
   };
   const toggleChoseChannel = (channelId) => {
-    console.log("listChannelForward");
-    console.log(listChannelForward.includes(channelId));
     if (listChannelForward.includes(channelId)) {
       // eslint-disable-next-line eqeqeq
       setListChannelForward((pre) => pre.filter((id) => id != channelId));
@@ -76,10 +69,20 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
       setListChannelForward((pre) => [...pre, channelId]);
     }
   };
+  // eslint-disable-next-line no-shadow
+  const getContentFw = (msg) => {
+    switch (msg.type) {
+      case "TEXT":
+        return msg.content;
+      case "IMAGE":
+        return `Chuyển tiếp ${message.images?.length} hình ảnh`;
+      case "FILE":
+        return "Chuyển tiếp 1 file";
+      default:
+        return msg.content;
+    }
+  };
   useEffect(() => {
-    console.log("textSearch");
-    console.log(textSearch);
-
     const delayDebounceFn = setTimeout(() => {
       // Send Axios request here
       if (search !== textSearch) {
@@ -136,7 +139,7 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
           <div className="div max-h-24 overflow-y-scroll pl-2 pr-2">
             <div
               className="bg-slate-50 p-3 text-black"
-              dangerouslySetInnerHTML={{ __html: message.content }}
+              dangerouslySetInnerHTML={{ __html: getContentFw(message) }}
             />
           </div>
         </div>

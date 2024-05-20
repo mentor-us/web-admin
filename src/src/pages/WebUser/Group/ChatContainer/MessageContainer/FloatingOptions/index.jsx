@@ -129,8 +129,8 @@ function FloatingOptions({ message, isShow }) {
     handleClose();
   };
   const onForwardMessage = () => {
-    console.log("forward");
     setOpenDialogForward(true);
+    handleClose();
   };
   const onEditMessage = () => {
     chatStore.setIsEditMessage(true);
