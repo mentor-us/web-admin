@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import {
   Button,
   Dialog,
@@ -9,6 +10,7 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 
+import channelService from "service/channelService";
 import { useGetAllChannelsCanForward } from "hooks/channels/queries";
 
 import ChannelCheckBox from "./ChannelCheckBox";
@@ -34,17 +36,35 @@ function generateData(numItems) {
 function ForwardMessageDialog({ open, handleClose, message = null }) {
   const [textSearch, setTextSearch] = useState("");
   const [listChannelForward, setListChannelForward] = useState([]);
-  const { data: listChannel } = useGetAllChannelsCanForward(textSearch);
+  const [search, setSearch] = useState("");
+  const { data: listChannel } = useGetAllChannelsCanForward(search.trim());
   // console.log("listChannel");
   // console.log(listChannel);
 
   const onCancel = () => {
     handleClose();
   };
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     console.log("Submit");
-    setListChannelForward();
     console.log(listChannelForward);
+    console.log(message.id);
+    toast.promise(
+      new Promise((resolve, reject) => {
+        channelService
+          .forward(message.id, listChannelForward)
+          .then(() => {
+            handleClose();
+            resolve();
+          })
+          .catch(reject);
+      }),
+      {
+        loading: `Đang chuyển tiếp tin nhắn...`,
+        success: `Chuyển tiếp tin nhắn thành công`,
+        error: `Chuyển tiếp tin nhắn thất bại`
+      }
+    );
   };
   const toggleChoseChannel = (channelId) => {
     console.log("listChannelForward");
@@ -56,6 +76,19 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
       setListChannelForward((pre) => [...pre, channelId]);
     }
   };
+  useEffect(() => {
+    console.log("textSearch");
+    console.log(textSearch);
+
+    const delayDebounceFn = setTimeout(() => {
+      // Send Axios request here
+      if (search !== textSearch) {
+        setSearch(textSearch);
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [textSearch]);
   return (
     <Dialog
       open={open}
@@ -75,7 +108,7 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
             <TextField
               id="outlined-basic"
               value={textSearch}
-              onChange={(text) => setTextSearch(text)}
+              onChange={(event) => setTextSearch(event.target.value)}
               fullWidth
               label="TÌm kiếm nhóm cần chuyển tiếp"
               variant="outlined"
@@ -100,7 +133,7 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
           <div className="p-2 text-black">
             <strong>Nội dung chuyển tiếp</strong>
           </div>
-          <div className="div h-24 overflow-y-scroll pl-2 pr-2">
+          <div className="div max-h-24 overflow-y-scroll pl-2 pr-2">
             <div
               className="bg-slate-50 p-3 text-black"
               dangerouslySetInnerHTML={{ __html: message.content }}
@@ -114,7 +147,7 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
         <Button
           type="submit"
           disabled={!listChannel || !listChannel.length}
-          onClick={() => handleSubmit([])}
+          onClick={(event) => handleSubmit(event)}
         >
           Chuyển tiếp
         </Button>

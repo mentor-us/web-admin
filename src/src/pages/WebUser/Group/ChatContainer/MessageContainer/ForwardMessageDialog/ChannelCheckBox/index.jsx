@@ -1,25 +1,29 @@
 import React from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { Avatar, Button, Checkbox, Typography } from "@mui/material";
+import { Avatar, Checkbox, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { getImageUrlWithKey } from "utils";
 
 function ChannelCheckBox({ channel, listChannelForward, toggleChoseChannel }) {
-  console.log(channel, listChannelForward);
-
+  const handleClick = () => {
+    toggleChoseChannel(channel.id);
+  };
+  // onClick={() => toggleChoseChannel(channel.id)}
   return (
-    <Button
-      className="flex justify-between align-middle align-center w-full"
-      onClick={() => toggleChoseChannel(channel.id)}
-      sx={{
-        "&:hover": {
-          backgroundColor: "rgb(226 232 240);" // Change to the desired hover background color
-        }
-      }}
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+    <div
+      className="flex justify-between items-center cursor-pointer text-sm align-center w-full hover:bg-slate-200 pt-2 pb-2 gap-x-2 rounded"
+      onClick={handleClick}
+      onKeyDown={handleClick}
     >
-      <div className="flex flex-row gap-x-4 w-full align-middle">
+      <Checkbox
+        checked={listChannelForward.includes(channel.id)}
+        icon={<CheckCircleOutlineIcon />}
+        checkedIcon={<CheckCircleIcon />}
+      />
+      <div className="flex flex-row gap-x-4 w-full items-center">
         <Avatar
           alt="chat-avatar"
           className="!w-10 !h-10"
@@ -28,18 +32,26 @@ function ChannelCheckBox({ channel, listChannelForward, toggleChoseChannel }) {
         <div
           style={{
             display: "flex",
-            alignItems: "center"
+            alignItems: "center",
+            textAlign: "left"
           }}
         >
-          <Typography align="bottom">{channel.name}</Typography>
+          <Typography fontSize="medium" align="bottom">
+            {channel.name}
+          </Typography>
         </div>
       </div>
-      <Checkbox
-        checked={listChannelForward.includes(channel.id)}
-        icon={<CheckCircleOutlineIcon />}
-        checkedIcon={<CheckCircleIcon />}
-      />
-    </Button>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center"
+        }}
+      >
+        <Typography fontSize="medium" align="bottom" className="truncate max-w-24">
+          {channel?.group?.name ?? ""}
+        </Typography>
+      </div>
+    </div>
   );
 }
 ChannelCheckBox.propTypes = {

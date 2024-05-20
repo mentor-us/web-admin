@@ -230,11 +230,9 @@ function FloatingOptions({ message, isShow }) {
         >
           Chuyển tiếp
         </MenuItem> */}
-        {message?.sender?.id === myInfo?.id && (
-          <MenuItem className="!font-normal !text-black" onClick={onForwardMessage}>
-            Chuyển tiếp
-          </MenuItem>
-        )}
+        <MenuItem className="!font-normal !text-black" onClick={onForwardMessage}>
+          Chuyển tiếp
+        </MenuItem>
         <MenuItem
           className="!font-normal !text-black"
           onClick={

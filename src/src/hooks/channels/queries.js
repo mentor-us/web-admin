@@ -35,7 +35,7 @@ export const useGetAllChannelsByGroupId = (groupId, select) =>
   });
 export const useGetAllChannelsCanForward = (name, select) =>
   useQuery({
-    queryKey: GetAllChannelsForwardKey(name),
+    queryKey: ["channels", name],
     queryFn: () => channelService.getAllChannelsCanForward(name),
     select
   });
