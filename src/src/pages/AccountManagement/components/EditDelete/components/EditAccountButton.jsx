@@ -118,7 +118,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
   };
 
   const isFailCase = () => {
-    if (personalEmail.length > 0 && !isEmailValid(personalEmail)) {
+    if (personalEmail && personalEmail.length > 0 && !isEmailValid(personalEmail)) {
       ErrorAlert("Email cá nhân không hợp lệ!");
       return true;
     }
@@ -136,7 +136,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
 
     const isValidName = name && name.length > 0;
 
-    const isValidEmail = personalEmail === "" || isEmailValid(personalEmail);
+    const isValidEmail = personalEmail === "" || !personalEmail || isEmailValid(personalEmail);
 
     const isValidPhoneNumber = phone === "" || phone.length === 10;
 
