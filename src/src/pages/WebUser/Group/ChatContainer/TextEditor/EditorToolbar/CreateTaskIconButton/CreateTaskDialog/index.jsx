@@ -15,7 +15,6 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  // Skeleton,
   TextField
 } from "@mui/material";
 import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
@@ -28,7 +27,6 @@ import TaskApi from "api/TaskApi";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
-// eslint-disable-next-line import/namespace
 import { useCreateTaskMutation, useUpdateTaskMutation } from "hooks/chats/mutation";
 import { useGetDetailTasks } from "hooks/chats/queries";
 import { GetAllTaskInChannelKey } from "hooks/tasks/keys";
@@ -42,9 +40,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
     (members) => members ?? []
   );
   const { data: taskDetail } = useGetDetailTasks(taskId);
-  // if (taskId && isLoadingTaskDetail) {
-  //   return <Skeleton />;
-  // }
+
   const [titleDialog, setTitleDialog] = useState(taskId ? "Chi tiết công việc" : "Công việc mới");
   const [isEditable, setIsEditable] = useState(!taskId);
   const titlebtnDialog = isEditable ? "Lưu công việc" : "";
@@ -56,7 +52,9 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
     control,
     handleSubmit,
     reset,
+    getValues,
     setValue,
+    watch,
     formState: { errors }
   } = useForm({
     defaultValues: {
@@ -109,14 +107,28 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
           .catch(reject);
       }),
       {
-        loading: "Đang tạo công việc...",
-        success: "Lưu công việc thành công",
-        error: "Tạo công việc thất bại"
+        loading: `Đang ${isEditable ? "lưu" : "tạo"} công việc...`,
+        success: `${isEditable ? "Lưu" : "Tạo"} công việc thành công`,
+        error: `${isEditable ? "Lưu" : "Tạo"} công việc thất bại`
       }
     );
 
     onCancel();
   };
+
+  const watchDateField = watch("date");
+  useEffect(() => {
+    if (watchDateField) {
+      setValue(
+        "deadline",
+        getValues("deadline")
+          .date(watchDateField.date())
+          .month(watchDateField.month())
+          .year(watchDateField.year())
+      );
+    }
+  }, [watchDateField]);
+
   useEffect(() => {
     if (open) {
       // eslint-disable-next-line no-shadow
@@ -132,6 +144,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
           setTitleDialog("Cập nhật công việc");
           setIsEditable(true);
         }
+
         reset({
           title: taskDetail.title || "",
           description: taskDetail.description || "",
@@ -139,18 +152,12 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
           date: dayjs(taskDetail.deadline) || today,
           attendees: channelMembers || []
         });
-        // setValue("attendees", [
-        //   {
-        //     id: "650fa97f0ee45f4e461b6bd0",
-        //     imageUrl:
-        //       "https://lh3.googleusercontent.com/a/ACg8ocLc8pAbl-MFsj5x56rb0dxVS3jpp1GhMQ4mkVjqAS7Qsf4=s96-c",
-        //     name: "Võ Thanh Sương"
-        //   }
-        // ]);
+
         getTaskAssignee(taskDetail);
       }
     }
   }, [taskDetail]);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Dialog
@@ -305,7 +312,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
                   filterSelectedOptions
                   options={channelMembers ?? []}
                   noOptionsText="Không có thành viên nào"
-                  getOptionLabel={(member) => member.name ?? ""}
+                  getOptionLabel={(member) => member?.name ?? ""}
                   renderOption={(optProps, member, state, ownerState) => {
                     return (
                       <ListItem {...optProps} ownerState={ownerState}>

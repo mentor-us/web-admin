@@ -26,9 +26,7 @@ export function getImageUrlWithKey(key) {
     return key;
   }
 
-  const searchParams = new URLSearchParams();
-  searchParams.append("key", key);
-  return `${API_URL}api/files?${searchParams.toString()}`;
+  return `${API_URL}infra/blob/mentorus/${key}`;
 }
 
 export function stringToColor(string) {

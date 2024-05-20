@@ -35,7 +35,7 @@ function GroupSidebar({ workspace, isLoading }) {
   const { channelId } = useParams();
   const navigate = useNavigate();
 
-  const isHasChannels = workspace?.channels?.length !== 1;
+  const isHasChannels = workspace?.channels?.length !== 0;
   const isHasPersonalChannels = workspace?.privates?.length !== 0;
 
   const [openCreateChannelDialog, setOpenCreateChannelDialog] = React.useState(false);

@@ -99,8 +99,11 @@ function DropFileField({ setState, maxSize, accept }) {
           onDragLeave={onDragLeave}
           onDrop={onDrop}
         >
-          <div className="drop-file-input__label">
-            <img src={cloud} alt="" />
+          <div className="drop-file-input__label ">
+            <div className="flex justify-center">
+              <img src={cloud} alt="" />
+            </div>
+
             <MDTypography component="p">
               Kéo thả tập tin <span style={{ fontWeight: "bold" }}>({accept})</span> vào đây
             </MDTypography>

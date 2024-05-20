@@ -5,6 +5,7 @@ import AddIcon from "./_raw/add-icon.svg?react";
 import AddMemberIcon from "./_raw/add-member-icon.svg?react";
 import AddNode from "./_raw/add-node.svg?react";
 import AdjustmentIcon from "./_raw/adjustment-icon.svg?react";
+import AppStoreBadge from "./_raw/app-store-badge.svg?react";
 import AppsIcon from "./_raw/apps-icon.svg?react";
 import ArrowDownCircleIcon from "./_raw/arrow-down-circle-icon.svg?react";
 import ArrowDownFilledIcon from "./_raw/arrow-down-filled-icon.svg?react";
@@ -125,6 +126,7 @@ export {
   AddNode,
   AdjustmentIcon,
   AppsIcon,
+  AppStoreBadge,
   ArrowDownCircleIcon,
   ArrowDownFilledIcon,
   ArrowheadDownIcon,
