@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/no-this-in-sfc */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
@@ -174,10 +175,22 @@ export default function GroupInfo() {
           <Tooltip title={headerInfo}>
             <span className="line-clamp-1 max-w-[74%]">{headerInfo}</span>
           </Tooltip>
+          {showTypeScreen === GROUP_FUNCTION.FAQ && groupDetail?.role === USER_ROLE.MENTOR && (
+            <IconButton
+              className="!absolute !right-0 hover:!bg-slate-300 rounded-full"
+              size="small"
+              onClick={(e) => {
+                clickedAddFunction(showTypeScreen);
+              }}
+            >
+              <AddIcon />
+            </IconButton>
+          )}
           {showTypeScreen !== "" &&
           showTypeScreen !== GROUP_FUNCTION.MEMBER &&
           showTypeScreen !== GROUP_FUNCTION.IMAGE &&
-          showTypeScreen !== GROUP_FUNCTION.FILE ? (
+          showTypeScreen !== GROUP_FUNCTION.FILE &&
+          showTypeScreen !== GROUP_FUNCTION.FAQ ? (
             <IconButton
               className="!absolute !right-0 hover:!bg-slate-300 rounded-full"
               size="small"

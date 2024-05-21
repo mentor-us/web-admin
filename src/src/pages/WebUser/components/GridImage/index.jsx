@@ -28,7 +28,7 @@ function ImageSkeleton() {
 
 function GridImage({ images, galleryID, uploadFailed }) {
   const [imageUrlList, setImageUrlList] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(true); 
   const lightBoxRef = useRef(null);
 
   const imagesToShow = [...images];
