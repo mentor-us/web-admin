@@ -241,11 +241,11 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                   required: "Vui lòng nhập giờ bắt đầu",
                   validate: {
                     gtnow: (v) => {
-                      if (!v || dayjs().isBefore(v)) {
+                      if (!v || dayjs().isSameOrBefore(v)) {
                         return true;
                       }
 
-                      return "Thời điểm bắt đầu phải lớn hơn thời điểm hiện tại";
+                      return "Giờ bắt đầu phải lớn hơn giờ hiện tại";
                     }
                   }
                 }}
@@ -255,8 +255,6 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                       className="!mb-6"
                       fullWidth
                       label="Từ *"
-                      minTime={dayjs()}
-                      disablePast
                       slotProps={{
                         textField: {
                           fullWidth: true,
@@ -280,19 +278,19 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                 rules={{
                   required: "Vui lòng nhập giờ kết thúc",
                   validate: {
-                    gtnow: (v) => {
-                      if (!v || dayjs().isBefore(v)) {
-                        return true;
-                      }
-
-                      return "Thời điểm kết thúc phải luôn lớn hơn thời điểm hiện tại";
-                    },
                     gtstart: (v) => {
-                      if (!v || getValues("timeStart").isBefore(v)) {
+                      if (!v || watch("timeStart").isBefore(v)) {
                         return true;
                       }
 
                       return "Giờ kết thúc phải luôn lớn hơn giờ bắt đầu";
+                    },
+                    gtnow: (v) => {
+                      if (!v || dayjs().isSameOrBefore(v)) {
+                        return true;
+                      }
+
+                      return "Giờ kết thúc phải luôn lớn hơn giờ hiện tại";
                     }
                   }
                 }}
@@ -302,8 +300,6 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                       className="!mb-6"
                       fullWidth
                       label="Đến *"
-                      minTime={getValues("timeStart")?.add(1, "m")}
-                      disablePast
                       slotProps={{
                         textField: {
                           fullWidth: true,
@@ -328,7 +324,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                   required: "Vui lòng nhập ngày hẹn",
                   validate: {
                     gtnow: (v) => {
-                      if (!v || dayjs().isBefore(v) || dayjs(v).isSame(dayjs(), "day")) {
+                      if (!v || dayjs().isSameOrBefore(v, "date")) {
                         return true;
                       }
                       return "Ngày hẹn phải lớn hơn hoặc bằng ngày hiện tại";

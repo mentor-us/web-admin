@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable global-require */
+import AdminTopIcon from "./admin_top_icon.png";
 import AdminManagementIcon from "./admin-page-outline.png";
 import AnimationPerson from "./animation-person.png";
 import ColumnChartImage from "./column_chart_img.png";
@@ -14,6 +15,7 @@ export { AnimationPerson };
 
 export const images = {
   AdminManagementIcon,
+  AdminTopIcon,
   docx,
   png,
   excel,
