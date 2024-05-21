@@ -109,7 +109,7 @@ function MessageContainer({ channelId }) {
           return page.map((item) => {
             return (
               <MessageItems
-                key={item?.id}
+                key={`msg-${item?.id}`}
                 message={item}
                 isOwner={myInfo?.id === item?.sender?.id}
               />
