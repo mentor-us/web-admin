@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 import {
   Button,
   Dialog,
@@ -8,10 +9,12 @@ import {
   DialogTitle,
   TextField
 } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 import channelService from "service/channelService";
 import { useGetAllChannelsCanForward } from "hooks/channels/queries";
+import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
 
 import ChannelCheckBox from "./ChannelCheckBox";
 
@@ -38,7 +41,9 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
   const [listChannelForward, setListChannelForward] = useState([]);
   const [search, setSearch] = useState("");
   const { data: listChannel } = useGetAllChannelsCanForward(search.trim());
-
+  const queryClient = useQueryClient();
+  const param = useParams();
+  const channelIdFw = param.channelId;
   const onCancel = () => {
     handleClose();
   };
@@ -50,6 +55,9 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
           .forward(message.id, listChannelForward)
           .then(() => {
             handleClose();
+            queryClient.invalidateQueries({
+              queryKey: GetAllChatMessageInfinityKey(channelIdFw)
+            });
             resolve();
           })
           .catch(reject);
