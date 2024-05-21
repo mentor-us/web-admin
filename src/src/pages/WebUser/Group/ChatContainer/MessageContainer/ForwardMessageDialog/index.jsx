@@ -132,6 +132,7 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
               (listChannel ?? generateData(15)).map((channel) => {
                 return (
                   <ChannelCheckBox
+                    key={`check-box-${channel.id}`}
                     channel={channel}
                     listChannelForward={listChannelForward}
                     toggleChoseChannel={toggleChoseChannel}

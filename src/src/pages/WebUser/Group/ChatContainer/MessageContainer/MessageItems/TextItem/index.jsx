@@ -1,4 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
+import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import { Box, ListItemText, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
@@ -10,9 +11,16 @@ function TextItem({ message, isOwner }) {
   return (
     <div className="flex flex-col">
       {message.isForward && (
-        <span className={` text-xs ${isOwner ? "text-right  pr-4" : "text-left pl-12"}`}>
-          {isOwner ? "Bạn" : message.sender.name} đã chuyển tiếp một tin nhắn
-        </span>
+        <div
+          className={`flex flex-row  items-center ${
+            isOwner ? "justify-end" : "justify-start pl-12"
+          }`}
+        >
+          <ForwardToInboxIcon fontSize="small" />
+          <span className={` text-xs ml-1 ${isOwner ? "text-right pr-4" : "text-left"}`}>
+            {isOwner ? "Bạn" : message.sender.name} đã chuyển tiếp một tin nhắn
+          </span>
+        </div>
       )}
       <MessageItemContainer isOwner={isOwner} message={message}>
         {message?.reply && (
