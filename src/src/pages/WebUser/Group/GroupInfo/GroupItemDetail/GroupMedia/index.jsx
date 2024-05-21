@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable no-unused-vars */
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
@@ -6,15 +7,13 @@ import {
   BottomNavigationAction,
   Box,
   CircularProgress,
-  Divider,
   ImageList,
   ImageListItem,
   Skeleton,
   Stack,
-  styled,
-  Tab,
-  Tabs
+  styled
 } from "@mui/material";
+import PhotoSwipeLightbox from "photoswipe/lightbox";
 import PropTypes from "prop-types";
 
 import { getImageUrlWithKey } from "utils";
@@ -25,21 +24,18 @@ import { useGetGroupMedia } from "hooks/channels/queries";
 
 const CustomBottomNavigationAction = styled(BottomNavigationAction)({
   "&.Mui-selected": {
-    color: "#1890ff" // Color when selected
+    color: "#1890ff"
   },
   "&:hover": {
-    color: "#7ab6ed" // Color on hover
+    color: "#7ab6ed"
   }
 });
 
-const sizeRender = 10;
 export default function GroupMedia({ type }) {
   const { channelId } = useParams();
   const [value, setValue] = useState(type);
   const { data: channelMedia, isLoading, isSuccess } = useGetGroupMedia(channelId);
-  const [ImageItem, setImageItem] = useState([]); // State for image items
   const [loading, setLoading] = useState(false);
-  const containerRef = useRef(null); // Reference to the container div
 
   const images = useMemo(() => {
     return (
@@ -56,14 +52,105 @@ export default function GroupMedia({ type }) {
     return channelMedia?.filter((item) => item.type === "FILE") || [];
   }, [channelMedia]);
 
-  // Function to handle scrolling
+  const lightBoxRef = useRef(null);
 
-  function a11yProps(index) {
-    return {
-      id: `simple-tab-${index}`,
-      "aria-controls": `simple-tabpanel-${index}`
+  const registerUI = (lightbox) => {
+    if (!lightbox) {
+      return;
+    }
+
+    lightbox.on("uiRegister", () => {
+      lightbox.pswp.ui.registerElement({
+        name: "download-button",
+        order: 8,
+        isButton: true,
+        tagName: "a",
+        html: {
+          isCustomSVG: true,
+          inner:
+            '<path d="M20.5 14.3 17.1 18V10h-2.2v7.9l-3.4-3.6L10 16l6 6.1 6-6.1ZM23 23H9v2h14Z" class="w-48 h-48" id="pswp__icn-download"/>',
+          outlineID: "pswp__icn-download"
+        },
+        onInit: (el, pswp) => {
+          el.setAttribute("download", "");
+          el.setAttribute("target", "_blank");
+          el.setAttribute("rel", "noopener");
+          pswp.on("change", () => {
+            // eslint-disable-next-line no-param-reassign
+            el.href = pswp.currSlide?.data?.sourceUrl;
+          });
+        }
+      });
+
+      lightbox.pswp.ui.registerElement({
+        name: "bulletsIndicator",
+        className: "pswp__bullets-indicator",
+        appendTo: "wrapper",
+        onInit: (el, pswp) => {
+          const bullets = [];
+          let bullet;
+          let prevIndex = -1;
+          // eslint-disable-next-line no-plusplus
+          for (let i = 0; i < pswp.getNumItems(); i++) {
+            bullet = document.createElement("div");
+            bullet.className = "pswp__bullet";
+            bullet.onclick = (e) => {
+              pswp.goTo(bullets.indexOf(e.target));
+            };
+            el.appendChild(bullet);
+            bullets.push(bullet);
+          }
+          pswp.on("change", (a) => {
+            if (prevIndex >= 0) {
+              bullets[prevIndex].classList.remove("pswp__bullet--active");
+            }
+            bullets[pswp.currIndex].classList.add("pswp__bullet--active");
+            prevIndex = pswp.currIndex;
+          });
+        }
+      });
+    });
+  };
+
+  useEffect(() => {
+    let lightbox = new PhotoSwipeLightbox({
+      dataSource: [],
+      imageClickAction: "next",
+      tapAction: "next",
+      bgOpacity: 0.7,
+      closeTitle: "Đóng chế độ xem ảnh",
+      zoomTitle: "Phong to ảnh",
+      arrowPrevTitle: "Xem ảnh trước",
+      arrowNextTitle: "Xem ảnh tiếp theo",
+      errorMsg: "Có lỗi xảy ra!. Không thể xem ảnh",
+      indexIndicatorSep: " trên ",
+      pswpModule: () => import("photoswipe")
+    });
+
+    lightBoxRef.current = lightbox;
+    registerUI(lightbox);
+    lightbox.init();
+
+    return () => {
+      lightbox.destroy();
+      lightbox = null;
     };
-  }
+  }, []);
+
+  const onOpenImagePreview = (index) => {
+    if (!isSuccess) {
+      return;
+    }
+    lightBoxRef?.current.loadAndOpen(
+      index ?? 0,
+      images.map((image) => {
+        return {
+          sourceUrl: image.url,
+          html: `<div class="h-full w-full flex justify-center items-center py-12"><img src=${image.url} class="h-full w-[80%] object-contain"/></div>`
+        };
+      })
+    );
+  };
 
   return (
     <Box className="overflow-y-scroll overflow-x-hidden no-scrollbar">
@@ -75,21 +162,10 @@ export default function GroupMedia({ type }) {
         }}
         sx={{ backgroundColor: "transparent", borderBottom: "1px solid #e0e0e0" }}
       >
-        <CustomBottomNavigationAction
-          value="IMAGE"
-          className="!p-0 !m-0"
-          showLabel
-          label="Hình ảnh"
-        />
-
-        <CustomBottomNavigationAction
-          value="FILE"
-          className="!p-0 !m-0"
-          showLabel
-          label="Tập tin"
-        />
+        <CustomBottomNavigationAction value="IMAGE" showLabel label="Hình ảnh" />
+        <CustomBottomNavigationAction value="FILE" showLabel label="Tập tin" />
       </BottomNavigation>
-      {loading ? ( // Display spinner when loading
+      {isLoading ? (
         <div
           style={{
             display: "flex",
@@ -105,8 +181,12 @@ export default function GroupMedia({ type }) {
           {value === "IMAGE" && images.length > 0 && (
             <ImageList cols={3}>
               {images.map((item, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <ImageListItem key={`${item.imageUrl}-${index}`}>
+                <ImageListItem
+                  className="cursor-pointer"
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={`${item.imageUrl}-${index}`}
+                  onClick={() => onOpenImagePreview(index)}
+                >
                   <img src={item.url} alt="hình ảnh" loading="lazy" />
                 </ImageListItem>
               ))}
@@ -115,11 +195,7 @@ export default function GroupMedia({ type }) {
           {value === "FILE" && files.length > 0 && (
             <div>
               {files.map((item) => (
-                <Box
-                  sx={{
-                    padding: "2px"
-                  }}
-                >
+                <Box key={item.id} sx={{ padding: "2px" }}>
                   <File file={item.file} isDownloadable />
                 </Box>
               ))}
@@ -143,6 +219,7 @@ export default function GroupMedia({ type }) {
     </Box>
   );
 }
+
 GroupMedia.propTypes = {
   // eslint-disable-next-line react/require-default-props
   type: PropTypes.string
