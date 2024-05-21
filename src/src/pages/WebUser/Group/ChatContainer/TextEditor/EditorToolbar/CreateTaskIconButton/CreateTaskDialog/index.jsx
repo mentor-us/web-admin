@@ -218,15 +218,24 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
                 name="deadline"
                 control={control}
                 disabled={!isEditable}
-                rules={{ required: false }}
+                rules={{
+                  required: false,
+                  validate: {
+                    gtnow: (v) => {
+                      if (!v || dayjs().isSameOrBefore(v)) {
+                        return true;
+                      }
+
+                      return "Thời hạn phải lớn hơn thời gian hiện tại";
+                    }
+                  }
+                }}
                 render={({ field: { onChange, ...rest } }) => {
                   return (
                     <MobileTimePicker
                       className="!mb-6"
                       fullWidth
                       label="Tới hạn lúc *"
-                      minTime={dayjs().add(1, "m")}
-                      disablePast
                       slotProps={{
                         textField: {
                           fullWidth: true,
@@ -234,7 +243,9 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
                           helperText: errors?.deadline?.message
                         }
                       }}
-                      onChange={(newValue) => onChange(newValue)}
+                      onChange={(newValue) => {
+                        onChange(newValue);
+                      }}
                       renderInput={(params) => <TextField {...params} label="Tới hạn *" />}
                       {...rest}
                     />
@@ -252,7 +263,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
 
                   validate: {
                     gtnow: (v) => {
-                      if (!v || dayjs().isBefore(v)) {
+                      if (!v || dayjs().isSameOrBefore(v, "date")) {
                         return true;
                       }
 
@@ -280,8 +291,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
                       localeText={{
                         todayButtonLabel: "Hôm nay"
                       }}
-                      minDate={today}
-                      maxDate={dayjs().date(31).month(11)}
+                      minDate={dayjs()}
                       onChange={(newValue) => onChange(newValue)}
                       renderInput={(params) => <TextField {...params} label="Ngày *" />}
                       {...rest}

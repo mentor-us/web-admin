@@ -39,14 +39,19 @@ AxiosClient.interceptors.response.use(
     // Do something with response error
 
     if (error.response.status === 401) {
-      ErrorAlertConfirm("Phiên đăng nhập của bạn đã hết!", "Vui lòng đăng nhập lại!").then(
-        (result) => {
-          if (result.isConfirmed) {
-            localStorage.removeItem("access_token");
-            window.location.assign(ROUTE_URL.SIGN_IN);
+      if (window.location.pathname !== ROUTE_URL.SIGN_IN) {
+        ErrorAlertConfirm("Phiên đăng nhập của bạn đã hết!", "Vui lòng đăng nhập lại!").then(
+          (result) => {
+            if (result.isConfirmed) {
+              localStorage.removeItem("access_token");
+              window.location.assign(ROUTE_URL.SIGN_IN);
+            }
           }
-        }
-      );
+        );
+        return Promise.reject(new Error(error.response.status));
+      }
+
+      localStorage.removeItem("access_token");
 
       return Promise.reject(new Error(error.response.status));
     }
