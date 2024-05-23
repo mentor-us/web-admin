@@ -15,7 +15,7 @@ import { images as imagesStatic } from "assets/images";
 import PinVote from "./PinVote";
 import TextMessage from "./TextMessage";
 
-function PinMessageItem({ message }) {
+function PinMessageItem({ message, isHiddenDeleteIcon }) {
   const { channelId } = useParams();
   const { mutateAsync } = useRemovePinMessageMutation();
   const queryClient = useQueryClient();
@@ -107,17 +107,24 @@ function PinMessageItem({ message }) {
     >
       <Box>{renderIcon()}</Box>
       <Box className="!w-[80%] flex-grow">{renderPinMessage()}</Box>
-      <Tooltip title="Bỏ ghim">
-        <IconButton className="hover:!bg-gray-200 !w-8 !h-8" onClick={unpinMessage}>
-          <ClearIcon color="error" />
-        </IconButton>
-      </Tooltip>
+      {isHiddenDeleteIcon && (
+        <Tooltip title="Bỏ ghim">
+          <IconButton className="hover:!bg-gray-200 !w-8 !h-8" onClick={unpinMessage}>
+            <ClearIcon color="error" />
+          </IconButton>
+        </Tooltip>
+      )}
     </Stack>
   );
 }
 
+PinMessageItem.defaultProps = {
+  isHiddenDeleteIcon: false
+};
+
 PinMessageItem.propTypes = {
-  message: PropTypes.object.isRequired
+  message: PropTypes.object.isRequired,
+  isHiddenDeleteIcon: PropTypes.bool
 };
 
 export default PinMessageItem;
