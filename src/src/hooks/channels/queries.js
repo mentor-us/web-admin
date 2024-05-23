@@ -72,6 +72,9 @@ export const useMessageQueryState = (channelId) => {
     queryClient.setQueryData(GetAllChatMessageInfinityKey(channelId), (data) => {
       const { pages } = data;
       const [firstPage, ...restPages] = pages;
+      if (firstPage.some((item) => item.id === message.id)) {
+        return data;
+      }
 
       return {
         ...data,

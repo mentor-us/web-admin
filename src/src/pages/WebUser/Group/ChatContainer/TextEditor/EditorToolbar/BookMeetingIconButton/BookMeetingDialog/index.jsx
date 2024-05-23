@@ -5,7 +5,9 @@ import { useParams } from "react-router-dom";
 import {
   Autocomplete,
   Avatar,
+  Box,
   Button,
+  Chip,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -15,7 +17,9 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  TextField
+  TextField,
+  Tooltip,
+  Typography
 } from "@mui/material";
 import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -23,6 +27,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 import dayjs from "dayjs";
+import { getImageUrlWithKey } from "utils";
 import MeetingApi from "api/MeetingApi";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
@@ -199,7 +204,10 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
           handleSubmit(onSubmit)();
         }}
       >
-        <DialogTitle alignSelf="center">{titleDialog}</DialogTitle>
+        <DialogTitle alignSelf="center" className="m-0 !pb-2">
+          {titleDialog}
+        </DialogTitle>
+
         <DialogContent className="!py-4">
           <Controller
             getGroupDetailColumnHeadersMentorSelector
@@ -227,7 +235,16 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
             control={control}
             rules={{ required: false }}
             render={({ field }) => {
-              return <TextField className="!mb-6" label="Mô tả" fullWidth {...field} />;
+              return (
+                <TextField
+                  multiline
+                  maxRows={4}
+                  className="!mb-6"
+                  label="Mô tả"
+                  fullWidth
+                  {...field}
+                />
+              );
             }}
           />
 
@@ -380,67 +397,89 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
             )}
           />
 
-          <Controller
-            name="attendees"
-            disabled={!isEditable}
-            control={control}
-            rules={{
-              required: "Vui lòng chọn người tham gia lịch hẹn"
-            }}
-            onChange={([, data]) => data}
-            render={({ field: { onChange, ...props } }) => {
-              return (
-                <Autocomplete
-                  className="!mt-2"
-                  label="Người tham dự *"
-                  loading={isLoadingMembers}
-                  limitTags={3}
-                  multiple
-                  width={350}
-                  filterSelectedOptions
-                  options={channelMembers ?? []}
-                  noOptionsText="Không có thành viên nào"
-                  getOptionLabel={(member) => member.name ?? ""}
-                  renderOption={(optProps, member, state, ownerState) => {
-                    return (
-                      <ListItem {...optProps} ownerState={ownerState}>
-                        <ListItemAvatar>
-                          <Avatar src={member.imageUrl} className="!w-8 !h-8" />
-                        </ListItemAvatar>
-                        <ListItemText>{member.name}</ListItemText>
-                      </ListItem>
-                    );
-                  }}
-                  renderInput={(params) => (
-                    <TextField
+          <Grid container spacing={2} justifyContent="space-between">
+            <Grid item xs>
+              <Controller
+                name="attendees"
+                disabled={!isEditable}
+                control={control}
+                rules={{
+                  required: "Vui lòng chọn người tham gia lịch hẹn"
+                }}
+                onChange={([, data]) => data}
+                render={({ field: { onChange, ...props } }) => {
+                  return (
+                    <Autocomplete
+                      className="!mt-2"
                       label="Người tham dự *"
-                      error={!!errors?.attendees}
-                      helperText={errors?.attendees?.message}
-                      InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                          <>
-                            {isLoadingMembers ? (
-                              <CircularProgress color="inherit" size={20} />
-                            ) : null}
-                            {params.InputProps.endAdornment}
-                          </>
-                        )
+                      loading={isLoadingMembers}
+                      limitTags={3}
+                      multiple
+                      width={350}
+                      filterSelectedOptions
+                      options={channelMembers ?? []}
+                      noOptionsText="Không có thành viên nào"
+                      getOptionLabel={(member) => member.name ?? ""}
+                      renderOption={(optProps, member, state, ownerState) => {
+                        return (
+                          <ListItem {...optProps} ownerState={ownerState}>
+                            <ListItemAvatar>
+                              <Avatar src={member.imageUrl} className="!w-8 !h-8" />
+                            </ListItemAvatar>
+                            <ListItemText>{member.name}</ListItemText>
+                          </ListItem>
+                        );
                       }}
-                      {...params}
+                      renderInput={(params) => (
+                        <TextField
+                          label="Người tham dự *"
+                          error={!!errors?.attendees}
+                          helperText={errors?.attendees?.message}
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <>
+                                {isLoadingMembers ? (
+                                  <CircularProgress color="inherit" size={20} />
+                                ) : null}
+                                {params.InputProps.endAdornment}
+                              </>
+                            )
+                          }}
+                          {...params}
+                        />
+                      )}
+                      isOptionEqualToValue={(option, value) => option.id === value.id}
+                      clearText="Xóa hết"
+                      closeText="Đóng"
+                      onChange={(e, data) => {
+                        onChange(data);
+                      }}
+                      {...props}
                     />
-                  )}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
-                  clearText="Xóa hết"
-                  closeText="Đóng"
-                  onChange={(e, data) => {
-                    onChange(data);
-                  }}
-                  {...props}
-                />
-              );
-            }}
-          />
+                  );
+                }}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              {meetingDetail && (
+                <Box className="ml-2">
+                  <Typography className="!text-sm !mb-1">Người tổ chức</Typography>
+                  <Tooltip title={meetingDetail?.organizer?.name}>
+                    <Chip
+                      avatar={
+                        <Avatar
+                          alt={meetingDetail?.organizer?.name}
+                          src={getImageUrlWithKey(meetingDetail?.organizer?.imageUrl)}
+                        />
+                      }
+                      label={meetingDetail?.organizer?.name}
+                    />
+                  </Tooltip>
+                </Box>
+              )}
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={onCancel}>Hủy</Button>
