@@ -178,7 +178,10 @@ export function FullCalendarComponent() {
 // a custom render function
 function renderEventContent(eventData) {
   return (
-    <div key={`event-mentor-${eventData.event.id} flex flex-col w-full`}>
+    <div
+      key={`event-mentor-${eventData.event.id}`}
+      className={`event-mentor-${eventData.event.id} flex flex-col w-full`}
+    >
       <span className={`${eventData.event.extendedProps.type ?? ""}-mentor`}>
         {formatDate(eventData.event.extendedProps.timeStart ?? "", "time")}:
       </span>
