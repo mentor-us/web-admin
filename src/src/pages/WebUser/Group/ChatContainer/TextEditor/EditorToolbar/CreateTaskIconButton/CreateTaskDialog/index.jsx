@@ -99,6 +99,9 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
             queryClient.invalidateQueries({
               queryKey: GetAllChatMessageInfinityKey(channelId)
             });
+            queryClient.invalidateQueries({
+              queryKey: ["events"]
+            });
             queryClient.refetchQueries({
               queryKey: GetAllTaskInChannelKey(channelId)
             });

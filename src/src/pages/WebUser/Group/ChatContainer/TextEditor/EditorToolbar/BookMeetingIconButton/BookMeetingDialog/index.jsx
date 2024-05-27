@@ -111,6 +111,9 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
             queryClient.invalidateQueries({
               queryKey: GetAllChatMessageInfinityKey(channelId)
             });
+            queryClient.invalidateQueries({
+              queryKey: ["events"]
+            });
             queryClient.refetchQueries({
               queryKey: GetAllMeetingInChannelKey(channelId)
             });
