@@ -43,7 +43,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
 
   const [titleDialog, setTitleDialog] = useState(taskId ? "Chi tiết công việc" : "Công việc mới");
   const [isEditable, setIsEditable] = useState(!taskId);
-  const titlebtnDialog = isEditable ? "Lưu công việc" : "";
+  const titlebtnDialog = taskDetail ? "Lưu công việc" : "Tạo công việc";
   const queryClient = useQueryClient();
 
   const today = dayjs().add(1, "h");
@@ -376,11 +376,15 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
   );
 }
 
+CreateTaskDialog.defaultProps = {
+  taskId: null
+};
+
 CreateTaskDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  taskId: PropTypes.string.isRequired
+  taskId: PropTypes.string
 };
 
 export default CreateTaskDialog;

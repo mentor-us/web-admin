@@ -1,16 +1,7 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/forbid-prop-types */
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
-import {
-  Box,
-  CircularProgress,
-  IconButton,
-  Paper,
-  Skeleton,
-  Tooltip,
-  Typography
-} from "@mui/material";
+import { Box, CircularProgress, IconButton, Paper, Skeleton, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { formatFileSize, getFileExtention } from "utils";
@@ -18,6 +9,7 @@ import { images } from "assets/images";
 import { AttachmentIcon, DownloadIcon } from "assets/svgs";
 import FileApi from "api/FileApi";
 
+import TooltipCustom from "components/Tooltip";
 import { UPLOAD_STATUS } from "utils/constants";
 
 const styles = {
@@ -143,32 +135,37 @@ function File({ file, isDownloadable }) {
 
   return (
     <Paper sx={styles.container}>
-      <Box display="flex" alignItems="center" gap="0.4rem">
-        <Box>
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="start"
+        gap="0.4rem"
+      >
+        <Box className="!min-w-fit">
           <FileIcon filename={file?.filename} />
         </Box>
-
-        <Box flex={1}>
-          <Tooltip title={file?.filename}>
-            <Typography className="!text-base line-clamp-2 cursor-default">
-              {file?.filename}
-            </Typography>
-          </Tooltip>
+        <Box className="!line-clamp-2" flex={1}>
+          <TooltipCustom title={file?.filename}>
+            <Typography className="!text-base cursor-default">{file?.filename}</Typography>
+          </TooltipCustom>
           <Typography className="!text-xs text-gray-500">{formatFileSize(file?.size)}</Typography>
         </Box>
         {isDownloadable && (
-          <IconButton
-            className={`${isDownloading ? "!cursor-not-allowed" : ""}`}
-            sx={styles.downloadIconContainer}
-            disableTouchRipple={isDownloading}
-            onClick={onDownloadFileClick}
-          >
-            {isDownloading ? (
-              <CircularProgress color="info" size="1rem" />
-            ) : (
-              <DownloadIcon className="text-inherit fill-current" />
-            )}
-          </IconButton>
+          <Box>
+            <IconButton
+              className={`${isDownloading ? "!cursor-not-allowed" : ""}`}
+              sx={styles.downloadIconContainer}
+              disableTouchRipple={isDownloading}
+              onClick={onDownloadFileClick}
+            >
+              {isDownloading ? (
+                <CircularProgress color="info" size="1rem" />
+              ) : (
+                <DownloadIcon className="text-inherit fill-current" />
+              )}
+            </IconButton>
+          </Box>
         )}
       </Box>
     </Paper>

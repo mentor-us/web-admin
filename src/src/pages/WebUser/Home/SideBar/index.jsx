@@ -74,6 +74,7 @@ export default function SideBar() {
               className={({ isActive }) =>
                 `w-full h-full flex justify-center items-center ${isActive ? "bg-sky-600" : ""}`
               }
+              onClick={clearSelectedGroupId}
             >
               <IconButton color="white" aria-label="Setting">
                 <img alt="admin-icon" src={images.AdminTopIcon} width={32} height={32} />

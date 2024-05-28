@@ -1,15 +1,26 @@
 /* eslint-disable import/prefer-default-export */
-import { useMutation } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import channelService from "service/channelService";
+import { GetWorkspaceQueryKey } from "hooks/groups/keys";
 
 import { CreateChannelMutationKey, DeleteChannelMutationKey } from "./keys";
 
-export const useCreateChannelMutation = () =>
-  useMutation({
+export const useCreateChannelMutation = () => {
+  const params = useParams();
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationKey: CreateChannelMutationKey,
-    mutationFn: (channel) => channelService.createChannel(channel)
+    mutationFn: (channel) => channelService.createChannel(channel),
+    onSuccess: () => {
+      queryClient.refetchQueries({
+        queryKey: GetWorkspaceQueryKey(params?.groupId)
+      });
+    }
   });
+};
 
 export const useDeleteChannelMutation = () =>
   useMutation({

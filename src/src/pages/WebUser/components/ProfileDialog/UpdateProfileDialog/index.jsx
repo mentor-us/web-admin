@@ -1,9 +1,11 @@
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { Button, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { getMyInfo } from "features/myInfo/slice";
 import PropTypes from "prop-types";
 
 import dayjs from "dayjs";
@@ -13,6 +15,7 @@ import { useUpdateProfileMutation } from "hooks/profile/mutation";
 function UpdateProfileDialog(props) {
   const { open, onClose, info } = props;
   const { mutateAsync: updateProfileMutation, isPending } = useUpdateProfileMutation();
+  const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
@@ -44,6 +47,7 @@ function UpdateProfileDialog(props) {
       new Promise((resolve, reject) => {
         updateProfileMutation(prepare(data))
           .then(() => {
+            dispatch(getMyInfo());
             resolve();
           })
           .catch(reject);
