@@ -52,7 +52,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
     meetingId ? "Chi tiết lịch hẹn " : "Lịch hẹn  mới"
   );
   const [isEditable, setIsEditable] = useState(!meetingId);
-  const titlebtnDialog = isEditable ? "Lưu lịch hẹn " : "";
+  const titlebtnDialog = meetingDetail ? "Lưu lịch hẹn " : "Tạo lịch hẹn";
 
   const {
     control,
@@ -122,9 +122,11 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
           .catch(reject);
       }),
       {
-        loading: "Đang tạo lịch hẹn",
-        success: "Tạo lịch hẹn thành công",
-        error: "Tạo lịch hẹn thất bại"
+        loading: `Đang ${meetingDetail ? "lưu" : "tạo"} lịch hẹn...`,
+        success: () => {
+          return `${meetingDetail ? "Lưu" : "Tạo"} lịch hẹn thành công`;
+        },
+        error: `${meetingDetail ? "Lưu" : "Tạo"} lịch hẹn thất bại`
       }
     );
 
@@ -493,10 +495,14 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
   );
 }
 
+BookMeetingDialog.defaultProps = {
+  meetingId: ""
+};
+
 BookMeetingDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  meetingId: PropTypes.string.isRequired
+  meetingId: PropTypes.string
 };
 
 export default BookMeetingDialog;

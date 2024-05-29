@@ -1,10 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import FaqService from "service/faqService";
 import MeetingService from "service/meetingService";
 import MessageService from "service/messageService";
 import TaskService from "service/taskService";
 import VoteService from "service/voteService";
+import { GetAllVotesInChannelKey } from "hooks/votes/key";
 
 import {
   AddReactionMutationKey,
@@ -37,11 +38,17 @@ export const useUpdateTaskMutation = () =>
     mutationKey: CreateTaskMutationKey,
     mutationFn: (task) => TaskService.updateTask(task)
   });
-export const useCreateVoteMutation = () =>
-  useMutation({
+export const useCreateVoteMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationKey: CreateVoteMutationKey,
-    mutationFn: (vote) => VoteService.createVote(vote)
+    mutationFn: (vote) => VoteService.createVote(vote),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(GetAllVotesInChannelKey(data?.groupId));
+    }
   });
+};
 
 export const useAddReactMutation = () =>
   useMutation({

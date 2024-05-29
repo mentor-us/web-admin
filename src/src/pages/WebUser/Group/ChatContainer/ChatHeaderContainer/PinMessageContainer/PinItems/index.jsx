@@ -107,7 +107,7 @@ function PinMessageItem({ message, isHiddenDeleteIcon }) {
     >
       <Box>{renderIcon()}</Box>
       <Box className="!w-[80%] flex-grow">{renderPinMessage()}</Box>
-      {isHiddenDeleteIcon && (
+      {!isHiddenDeleteIcon && (
         <Tooltip title="Bỏ ghim">
           <IconButton className="hover:!bg-gray-200 !w-8 !h-8" onClick={unpinMessage}>
             <ClearIcon color="error" />
