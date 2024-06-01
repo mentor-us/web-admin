@@ -46,7 +46,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
   const roleList = myInfo.roles.includes(ROLE.SUPER_ADMIN)
     ? roleAccountList?.map((option) => option.role)
     : roleAccountList
-        ?.filter((item) => item.textValue !== "SUPER_ADMIN")
+        ?.filter((item) => item.textValue !== ROLE.SUPER_ADMIN)
         .map((option) => option.role);
   const [birthDate, setBirthDate] = useState(dayjs(data.birthDate));
   const [status, setStatus] = useState(data.status);

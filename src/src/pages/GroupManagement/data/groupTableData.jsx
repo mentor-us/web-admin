@@ -22,12 +22,6 @@ export default function groupTableData(
   itemsPerPage,
   columnHeaders
 ) {
-  const groupCategoryName = (id) => {
-    return allCategories && allCategories.length !== 0
-      ? allCategories?.find((item) => item.id === id)?.name
-      : "";
-  };
-
   let columns = [
     {
       Header: "STT",
@@ -130,7 +124,7 @@ export default function groupTableData(
             no: numberOrder,
             href: `/admin/groups/group-detail/${item.id}`,
             name: item.name,
-            groupCategory: groupCategoryName(item.groupCategory),
+            groupCategory: item.groupCategory,
             status: status.label,
             statusColor: status.color,
             timeStart: formatDate(item.timeStart),
