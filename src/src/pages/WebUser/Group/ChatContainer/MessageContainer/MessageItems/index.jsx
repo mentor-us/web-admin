@@ -5,10 +5,13 @@ import PropTypes from "prop-types";
 
 import { MESSAGE_STATUS, MESSAGE_TYPE } from "utils/constants";
 
+// eslint-disable-next-line import/no-cycle
 import FileItem from "./FileItem";
+// eslint-disable-next-line import/no-cycle
 import ImageItem from "./ImageItem";
 import MeetingItem from "./MeetingItem";
 import TaskItem from "./TaskItem";
+// eslint-disable-next-line import/no-cycle
 import TextItem from "./TextItem";
 import VoteItem from "./VoteItem";
 import "./styles.css";

@@ -1,5 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -17,7 +17,9 @@ import { useGetGroupDetail } from "hooks/groups/queries";
 import useMyInfo from "hooks/useMyInfo";
 import { MESSAGE_TYPE } from "utils/constants";
 
-import ForwardMessageDialog from "../ForwardMessageDialog";
+import { ForwardContext } from "../../ForwardContext";
+
+// import ForwardMessageDialog from "../ForwardMessageDialog";
 
 const ITEM_HEIGHT = 48;
 
@@ -25,16 +27,14 @@ function FloatingOptions({ message, isShow }) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [openDialogForward, setOpenDialogForward] = useState(false);
   const open = Boolean(anchorEl);
   const queryClient = useQueryClient();
   const { data: channelDetail } = useGetGroupDetail(channelId);
   const { mutateAsync: pinMessageAsync } = usePinMessageMutation();
   const { mutateAsync: unpinMessageAsync } = useRemovePinMessageMutation();
   const { mutateAsync: deleteMessageAsync } = useDeleteMessageMutation();
-
+  const forward = useContext(ForwardContext);
   const chatStore = useChatStore();
-
   const isOwner = useMemo(() => myInfo?.id === message?.sender?.id, [message, myInfo]);
 
   const handleClick = (event) => {
@@ -129,7 +129,7 @@ function FloatingOptions({ message, isShow }) {
     handleClose();
   };
   const onForwardMessage = () => {
-    setOpenDialogForward(true);
+    forward(message);
     handleClose();
   };
   const onEditMessage = () => {
@@ -242,13 +242,13 @@ function FloatingOptions({ message, isShow }) {
           {channelDetail?.pinnedMessageIds.includes(message?.id) ? "Bỏ ghim " : "Ghim "}
         </MenuItem>
       </Menu>
-      {openDialogForward && (
+      {/* {openDialogForward && (
         <ForwardMessageDialog
           open={openDialogForward}
           message={message}
           handleClose={() => setOpenDialogForward(false)}
         />
-      )}
+      )} */}
     </Box>
   );
 }

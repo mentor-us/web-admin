@@ -1,6 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import { Box, ListItem, ListItemAvatar, Stack, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
@@ -12,7 +13,7 @@ import ProfileDialog from "pages/WebUser/components/ProfileDialog";
 import ReactedEmoji from "pages/WebUser/components/ReactedEmoji";
 import ReactionButton from "pages/WebUser/components/ReactionButton";
 import { useGetGroupDetail } from "hooks/groups/queries";
-import { MESSAGE_STATUS } from "utils/constants";
+import { MESSAGE_CONTENT, MESSAGE_STATUS } from "utils/constants";
 
 import FloatingOptions from "../FloatingOptions";
 
@@ -51,6 +52,7 @@ function MessageItemContainer({ children, message, isOwner }) {
       };
 
   const renderMessageSubHeader = () => {
+    const messageType = message.type;
     const content = [];
 
     if (channelDetail?.pinnedMessageIds.includes(message.id)) {
@@ -60,10 +62,16 @@ function MessageItemContainer({ children, message, isOwner }) {
     if (message?.status === MESSAGE_STATUS.EDITED) {
       content.push("Đã chỉnh sửa");
     }
-
+    if (message.isForward) {
+      const temp = `${isOwner ? "Bạn" : message.sender.name} đã chuyển tiếp một ${
+        MESSAGE_CONTENT[messageType]
+      }`;
+      content.unshift(temp);
+    }
     return (
-      <div className={`text-sm mb-1 ${!isOwner ? "ml-10" : ""}`}>
-        <Stack direction="row" justifyContent="center" alignItems="center" spacing={0.2}>
+      <div className={`text-sm mb-1  ${!isOwner ? "ml-10" : ""}`}>
+        <Stack direction="row" justifyContent="center" alignItems="center" spacing={0.3}>
+          {message.isForward && <ForwardToInboxIcon fontSize="small" />}
           <span>{content.join(" · ")}</span>
         </Stack>
       </div>
