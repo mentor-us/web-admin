@@ -8,3 +8,9 @@ export const useUpdateProfileMutation = () =>
     mutationKey: "update-profile",
     mutationFn: (req) => AccountService.updateProfile(req)
   });
+
+export const useUpdateAvatarMutation = () =>
+  useMutation({
+    mutationKey: "update-avatar",
+    mutationFn: (req) => AccountService.updateAvatar(req)
+  });

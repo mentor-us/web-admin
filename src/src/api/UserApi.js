@@ -100,6 +100,23 @@ const UserApi = {
 
   getMe() {
     return AxiosClient.get("api/users/me");
+  },
+  updateAvatar: async ({ file }) => {
+    const URL = "api/users/avatar";
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      await AxiosClient.post(URL, formData, {
+        timeout: 15000,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data"
+        }
+      });
+    } catch (error) {
+      return false;
+    }
+    return true;
   }
 };
 

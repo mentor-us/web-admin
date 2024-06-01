@@ -33,7 +33,7 @@ function Home({ isMobile, isChatpage }) {
             <img src={googleplay} alt="Tải nội dung trên Google Play" />
           </a>
           <a href="https://apps.apple.com/vn/app/mentorus/id6478803453?l=vi" className="p-0">
-            <AppStoreBadge width="185px" height="80px" />
+            <AppStoreBadge width="165px" height="60px" />
           </a>
         </div>
         {/* {!isMobile && !isChatpage && (
