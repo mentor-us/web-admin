@@ -43,7 +43,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
 
   const [titleDialog, setTitleDialog] = useState(taskId ? "Chi tiết công việc" : "Công việc mới");
   const [isEditable, setIsEditable] = useState(!taskId);
-  const titlebtnDialog = isEditable ? "Lưu công việc" : "";
+  const titlebtnDialog = taskDetail ? "Lưu công việc" : "Tạo công việc";
   const queryClient = useQueryClient();
 
   const today = dayjs().add(1, "h");
@@ -98,6 +98,9 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
           .then(() => {
             queryClient.invalidateQueries({
               queryKey: GetAllChatMessageInfinityKey(channelId)
+            });
+            queryClient.invalidateQueries({
+              queryKey: ["events"]
             });
             queryClient.refetchQueries({
               queryKey: GetAllTaskInChannelKey(channelId)
@@ -218,15 +221,24 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
                 name="deadline"
                 control={control}
                 disabled={!isEditable}
-                rules={{ required: false }}
+                rules={{
+                  required: false,
+                  validate: {
+                    gtnow: (v) => {
+                      if (!v || dayjs().isSameOrBefore(v)) {
+                        return true;
+                      }
+
+                      return "Thời hạn phải lớn hơn thời gian hiện tại";
+                    }
+                  }
+                }}
                 render={({ field: { onChange, ...rest } }) => {
                   return (
                     <MobileTimePicker
                       className="!mb-6"
                       fullWidth
                       label="Tới hạn lúc *"
-                      minTime={dayjs().add(1, "m")}
-                      disablePast
                       slotProps={{
                         textField: {
                           fullWidth: true,
@@ -234,7 +246,9 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
                           helperText: errors?.deadline?.message
                         }
                       }}
-                      onChange={(newValue) => onChange(newValue)}
+                      onChange={(newValue) => {
+                        onChange(newValue);
+                      }}
                       renderInput={(params) => <TextField {...params} label="Tới hạn *" />}
                       {...rest}
                     />
@@ -252,7 +266,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
 
                   validate: {
                     gtnow: (v) => {
-                      if (!v || dayjs().isBefore(v)) {
+                      if (!v || dayjs().isSameOrBefore(v, "date")) {
                         return true;
                       }
 
@@ -280,8 +294,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
                       localeText={{
                         todayButtonLabel: "Hôm nay"
                       }}
-                      minDate={today}
-                      maxDate={dayjs().date(31).month(11)}
+                      minDate={dayjs()}
                       onChange={(newValue) => onChange(newValue)}
                       renderInput={(params) => <TextField {...params} label="Ngày *" />}
                       {...rest}
@@ -363,11 +376,15 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
   );
 }
 
+CreateTaskDialog.defaultProps = {
+  taskId: null
+};
+
 CreateTaskDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  taskId: PropTypes.string.isRequired
+  taskId: PropTypes.string
 };
 
 export default CreateTaskDialog;

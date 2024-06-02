@@ -20,6 +20,7 @@ import GroupApi from "api/GroupApi";
 import MessageApi from "api/MessageApi";
 import UserApi from "api/UserApi";
 
+import { GetChannelMediaKey } from "hooks/channels/keys";
 import { GetAllHomeGroupInfinityKey, GetWorkspaceQueryKey } from "hooks/groups/keys";
 import useMyInfo from "hooks/useMyInfo";
 import {
@@ -88,7 +89,11 @@ const ImageIconButton = forwardRef(({ channelId, type = ACTION_IMAGE.SEND_IMAGE 
             }),
             {
               loading: "Đang tải lên...",
-              success: "Tải lên thành công",
+              success: () => {
+                queryClient.refetchQueries({ queryKey: GetChannelMediaKey(channelId) });
+
+                return "Tải lên thành công";
+              },
               error: "Tải lên thất bại"
             },
             {

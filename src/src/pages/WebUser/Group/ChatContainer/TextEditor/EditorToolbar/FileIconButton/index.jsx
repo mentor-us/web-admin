@@ -1,6 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import toast from "react-hot-toast";
 import { CircularProgress, IconButton, Tooltip } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useFilePicker } from "use-file-picker";
 import {
@@ -13,6 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 import { AttachmentIcon } from "assets/svgs";
 import MessageApi from "api/MessageApi";
 
+import { GetChannelMediaKey } from "hooks/channels/keys";
 import useMyInfo from "hooks/useMyInfo";
 import {
   INIT_TOTAL_REACTION,
@@ -24,6 +26,7 @@ import {
 
 function FileIconButton({ channelId }) {
   const myInfo = useMyInfo();
+  const queryClient = useQueryClient();
 
   const { openFilePicker, loading } = useFilePicker({
     accept: SUPPORTED_FILE_UPLOAD,
@@ -75,7 +78,12 @@ function FileIconButton({ channelId }) {
           }),
           {
             loading: "Đang tải lên...",
-            success: "Tải lên thành công",
+            success: () => {
+              queryClient.refetchQueries({
+                queryKey: GetChannelMediaKey(channelId)
+              });
+              return "Tải lên thành công";
+            },
             error: "Tải lên thất bại"
           },
           {

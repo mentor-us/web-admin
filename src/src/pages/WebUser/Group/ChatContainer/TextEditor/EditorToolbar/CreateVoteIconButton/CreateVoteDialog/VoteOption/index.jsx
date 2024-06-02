@@ -1,15 +1,27 @@
-import { Controller } from "react-hook-form";
+import { Controller, useWatch } from "react-hook-form";
 import { IconButton, Stack, TextField, Tooltip } from "@mui/material";
 import { ClearIcon } from "@mui/x-date-pickers";
 import PropTypes from "prop-types";
 
 function VoteOption({ control, index, remove, errors }) {
+  const watchChoices = useWatch({ control, name: "choices" });
+  const watchCurrChoice = useWatch({ control, name: `choices.${index}` });
   return (
     <Controller
       control={control}
       name={`choices.${index}.name`}
       rules={{
-        required: "Không được để trống bình chọn"
+        required: "Không được để trống bình chọn",
+        validate: {
+          checkDuplicate: (v) => {
+            return (
+              !watchChoices
+                .filter((choice) => choice.id !== watchCurrChoice.id)
+                .flatMap((choice) => choice.name)
+                .includes(v) || "Phương án đã tồn tại"
+            );
+          }
+        }
       }}
       render={({ field: innerField }) => (
         <Stack direction="row">

@@ -11,6 +11,7 @@ import { GetWorkspaceQueryKey } from "hooks/groups/keys";
 import { UPLOAD_STATUS } from "utils/constants";
 
 import {
+  GetAllChannelsForwardKey,
   GetAllChannelsKey,
   GetChannelMediaKey,
   GetChannelMembersKey,
@@ -30,6 +31,12 @@ export const useGetAllChannelsByGroupId = (groupId, select) =>
     queryKey: GetAllChannelsKey(groupId),
     queryFn: () => channelService.getAllChannelsByGroupId(groupId),
     enabled: !!groupId,
+    select
+  });
+export const useGetAllChannelsCanForward = (name, select) =>
+  useQuery({
+    queryKey: ["channels", name],
+    queryFn: () => channelService.getAllChannelsCanForward(name),
     select
   });
 
@@ -65,6 +72,9 @@ export const useMessageQueryState = (channelId) => {
     queryClient.setQueryData(GetAllChatMessageInfinityKey(channelId), (data) => {
       const { pages } = data;
       const [firstPage, ...restPages] = pages;
+      if (firstPage.some((item) => item.id === message.id)) {
+        return data;
+      }
 
       return {
         ...data,

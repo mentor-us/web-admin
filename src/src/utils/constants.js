@@ -145,6 +145,14 @@ export const MESSAGE_TYPE = {
   MEETING: "MEETING",
   TASK: "TASK"
 };
+export const MESSAGE_CONTENT = {
+  TEXT: "tin nhắn",
+  FILE: "file",
+  IMAGE: "hình ảnh",
+  VOTE: "bình chọn",
+  MEETING: "lịch hẹn",
+  TASK: "công việc"
+};
 
 export const CHANNEL_PERMISSION = {
   SEND_FILES: "SEND_FILES",

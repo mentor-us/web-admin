@@ -2,13 +2,15 @@
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
+import useListGroupStore from "hooks/client/useListGroupStore";
 import { useGetAllHomeGroupInfinity } from "hooks/groups/queries";
 
 import GroupItem from "./GroupItem";
 
 export default function ListGroup() {
   const { data: paginationList, isSuccess, isLoading } = useGetAllHomeGroupInfinity();
-  const [selectedGroupId, setSelectedGroupId] = useState("");
+
+  const { selectedGroupId, setSelectedGroupId } = useListGroupStore();
 
   const handleListItemClick = (groupId) => {
     setSelectedGroupId(groupId);
