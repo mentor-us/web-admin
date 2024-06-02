@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { AspectRatio } from "@mui/icons-material";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
@@ -146,17 +147,22 @@ function ProfileDialog(props) {
               />
             </div>
             <Avatar
+              sizes={100}
               sx={{
                 height: AVATAR_SIZE,
                 width: AVATAR_SIZE,
                 top: WALLPAPER_HEIGHT - AVATAR_SIZE / 2,
                 border: "2px solid white"
               }}
-              slotProps={{ img: { referrerPolicy: "no-referrer" } }}
               src={getImageUrlWithKey(
                 user?.imageUrl ??
                   "https://img.freepik.com/free-photo/ultra-detailed-nebula-abstract-wallpaper-10_1562-745.jpg"
               )}
+              slotProps={{
+                img: {
+                  referrerPolicy: "no-referrer"
+                }
+              }}
             />
             {isEditable && (
               <Avatar

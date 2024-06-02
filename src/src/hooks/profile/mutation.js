@@ -22,7 +22,7 @@ export const useUpdateProfileMutation = () => {
       });
     }
   });
-
+};
 export const useUpdateAvatarMutation = () =>
   useMutation({
     mutationKey: "update-avatar",
