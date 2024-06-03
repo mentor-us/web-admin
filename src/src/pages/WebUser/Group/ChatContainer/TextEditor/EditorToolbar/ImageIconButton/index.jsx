@@ -1,9 +1,11 @@
 /* eslint-disable import/no-unresolved */
 import React, { forwardRef, useRef } from "react";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { CircularProgress, IconButton, Tooltip } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
+import { getMyInfo } from "features/myInfo/slice";
 import PropTypes from "prop-types";
 import { useFilePicker } from "use-file-picker";
 import {
@@ -16,6 +18,7 @@ import { v4 as uuidv4 } from "uuid";
 import { MediaIcon } from "assets/svgs";
 import GroupApi from "api/GroupApi";
 import MessageApi from "api/MessageApi";
+import UserApi from "api/UserApi";
 
 import { GetChannelMediaKey } from "hooks/channels/keys";
 import { GetAllHomeGroupInfinityKey, GetWorkspaceQueryKey } from "hooks/groups/keys";
@@ -31,6 +34,7 @@ import {
 
 const ImageIconButton = forwardRef(({ channelId, type = ACTION_IMAGE.SEND_IMAGE }, ref) => {
   const myInfo = useMyInfo();
+  const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const { groupId } = useParams();
   const buttonRef = ref || useRef(null);
@@ -99,7 +103,7 @@ const ImageIconButton = forwardRef(({ channelId, type = ACTION_IMAGE.SEND_IMAGE 
             }
           );
         }
-        if (type === ACTION_IMAGE.UPDATE_AVATAR) {
+        if (type === ACTION_IMAGE.UPDATE_AVATAR_GROUP) {
           toast.promise(
             GroupApi.updateAvatarGroup({
               image: plainFiles[0],
@@ -111,6 +115,26 @@ const ImageIconButton = forwardRef(({ channelId, type = ACTION_IMAGE.SEND_IMAGE 
                 queryClient.invalidateQueries({ queryKey: GetWorkspaceQueryKey(groupId) });
                 queryClient.refetchQueries({ queryKey: GetAllHomeGroupInfinityKey });
 
+                return "Tải lên thành công";
+              },
+              error: "Tải lên thất bại"
+            },
+            {
+              style: {
+                minWidth: "250px"
+              }
+            }
+          );
+        }
+        if (type === ACTION_IMAGE.UPDATE_AVATAR_USER) {
+          toast.promise(
+            UserApi.updateAvatar({
+              file: plainFiles[0]
+            }),
+            {
+              loading: "Đang tải lên...",
+              success: () => {
+                dispatch(getMyInfo());
                 return "Tải lên thành công";
               },
               error: "Tải lên thất bại"
@@ -139,8 +163,12 @@ const ImageIconButton = forwardRef(({ channelId, type = ACTION_IMAGE.SEND_IMAGE 
   );
 });
 
+ImageIconButton.defaultProps = {
+  channelId: null
+};
+
 ImageIconButton.propTypes = {
-  channelId: PropTypes.string.isRequired,
+  channelId: PropTypes.string,
   // eslint-disable-next-line react/require-default-props
   type: PropTypes.string
 };

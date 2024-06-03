@@ -151,6 +151,10 @@ const updateProfile = async (req) => {
   const response = await UserApi.updateProfile(req);
   return response;
 };
+const updateAvatar = async (req) => {
+  const response = await UserApi.updateAvatar(req);
+  return response;
+};
 const getMe = () => UserApi.getMe();
 
 const accountServices = {
@@ -174,6 +178,7 @@ const accountServices = {
   exportAccountMentee,
   exportAccountSearch,
   updateProfile,
+  updateAvatar,
   getMe
 };
 

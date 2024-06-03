@@ -23,3 +23,8 @@ export const useUpdateProfileMutation = () => {
     }
   });
 };
+export const useUpdateAvatarMutation = () =>
+  useMutation({
+    mutationKey: "update-avatar",
+    mutationFn: (req) => AccountService.updateAvatar(req)
+  });

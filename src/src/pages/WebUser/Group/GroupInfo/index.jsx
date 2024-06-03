@@ -226,7 +226,7 @@ export default function GroupInfo() {
                 <ImageIconButton
                   ref={imageIconButtonRef}
                   channelId={groupId}
-                  type={ACTION_IMAGE.UPDATE_AVATAR}
+                  type={ACTION_IMAGE.UPDATE_AVATAR_GROUP}
                 />
               </div>
               <div className="!relative">
