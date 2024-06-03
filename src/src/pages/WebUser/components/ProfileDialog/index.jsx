@@ -36,6 +36,8 @@ import {
   WALLPAPER_WIDTH
 } from "utils/constants";
 
+import GradeBoard from "../GradeBoard";
+
 import UpdateProfileDialog from "./UpdateProfileDialog";
 
 function ProfileDialog(props) {
@@ -312,8 +314,9 @@ function ProfileDialog(props) {
                 />
               </ListItem>
             </List>
+            <GradeBoard />
             {isEditable ? (
-              <div className="flex justify-between items-end">
+              <div className="flex justify-between items-end mt-2">
                 <Typography variant="h4" component="div">
                   Liên kết email
                 </Typography>
