@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Autocomplete, createTheme, TextField, ThemeProvider, Typography } from "@mui/material";
+import PropTypes from "prop-types";
 
 import GradeItem from "./GradeItem";
 import "./index.css";
@@ -17,17 +18,24 @@ const grades = [
     id: 2,
     name: "Thiết kế web",
     score: 5,
-    verified: false
+    verified: true
   },
   {
     id: 3,
     name: "Thiết kế giao dien",
     score: 7,
     verified: false
+  },
+  {
+    id: 3,
+    name: null,
+    score: 0,
+    verified: false
   }
 ];
 
-export default function GradeBoard() {
+function GradeBoard(props) {
+  const { isEditable } = props;
   const [year, setYear] = useState(new Date().getFullYear().toString());
   const [semester, setSemester] = useState(null);
   const theme = createTheme({
@@ -105,12 +113,17 @@ export default function GradeBoard() {
             )}
           />
         </div>
-        <div className="space-y-2">
+        <div className="flex flex-col space-y-6">
           {grades.map((grade) => {
-            return <GradeItem item={grade} />;
+            return <GradeItem item={grade} isEditable={isEditable} />;
           })}
         </div>
       </div>
     </ThemeProvider>
   );
 }
+GradeBoard.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  isEditable: PropTypes.bool.isRequired
+};
+export default GradeBoard;
