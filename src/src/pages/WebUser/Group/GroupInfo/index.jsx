@@ -21,7 +21,6 @@ import ListItemText from "@mui/material/ListItemText";
 
 import { getImageUrlWithKey } from "utils";
 
-import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
 import GroupInfoItem from "pages/WebUser/Group/GroupInfo/GroupFunction";
 import GroupItemDetail from "pages/WebUser/Group/GroupInfo/GroupItemDetail";
 import { useGetGroupDetail, useGetWorkSpace } from "hooks/groups/queries";

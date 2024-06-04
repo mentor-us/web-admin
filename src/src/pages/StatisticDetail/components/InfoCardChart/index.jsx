@@ -1,6 +1,8 @@
 import Card from "@mui/material/Card";
 import PropTypes from "prop-types";
 
+import { getImageUrlWithKey } from "utils";
+
 import MDAvatar from "components/MDComponents/MDAvatar";
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
@@ -28,7 +30,7 @@ function InfoCardChart({ title, subtitle, iconURL, style }) {
       >
         <MDBox mb={2}>
           <MDAvatar
-            src={iconURL}
+            src={getImageUrlWithKey(iconURL)}
             alt="detail-image"
             shadow="sm"
             size="xl"

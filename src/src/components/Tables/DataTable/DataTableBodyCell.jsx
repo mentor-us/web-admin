@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 
+import { getImageUrlWithKey } from "utils";
+
 import MDAvatar from "components/MDComponents/MDAvatar";
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
@@ -48,7 +50,7 @@ function DataTableBodyCell({ noBorder, align, children, type, info }) {
         return (
           <MDBox sx={{ display: "inline-block", verticalAlign: "middle" }}>
             <MDAvatar
-              src={info.iconUrl}
+              src={getImageUrlWithKey(info.iconUrl)}
               alt="category-image"
               shadow="sm"
               size="sm"

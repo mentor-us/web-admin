@@ -213,7 +213,7 @@ function EditCategoryButton({ data, setState }) {
                   Biểu tượng <span style={{ color: "red" }}>(*)</span>
                 </MDTypography>
                 <MDAvatar
-                  src={iconURL}
+                  src={getImageUrlWithKey(iconURL)}
                   alt="category-image"
                   shadow="sm"
                   size="lg"

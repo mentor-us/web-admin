@@ -429,7 +429,10 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                         return (
                           <ListItem {...optProps} ownerState={ownerState}>
                             <ListItemAvatar>
-                              <Avatar src={member.imageUrl} className="!w-8 !h-8" />
+                              <Avatar
+                                src={getImageUrlWithKey(member.imageUrl)}
+                                className="!w-8 !h-8"
+                              />
                             </ListItemAvatar>
                             <ListItemText>{member.name}</ListItemText>
                           </ListItem>

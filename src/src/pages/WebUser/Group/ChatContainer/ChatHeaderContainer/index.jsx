@@ -6,7 +6,6 @@ import PropTypes from "prop-types";
 
 import { getImageUrlWithKey } from "utils";
 
-import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
 import { useGetGroupDetail, useGetWorkSpace } from "hooks/groups/queries";
 
 import PinMessageContainer from "./PinMessageContainer";

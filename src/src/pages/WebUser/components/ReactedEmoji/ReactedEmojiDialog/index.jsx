@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 
+import { getImageUrlWithKey } from "utils";
 import { CloseFillIcon } from "assets/svgs";
 
 import { EMOJI_ICONS } from "utils/constants";
@@ -44,7 +45,7 @@ function ReactedEmojiDialog({ open, handleClose, reactions }) {
                 <ListItemAvatar>
                   <Avatar
                     className="!rounded-lg"
-                    src={react.imageUrl}
+                    src={getImageUrlWithKey(react.imageUrl)}
                     sx={{ width: "40px", height: "40px" }}
                   />
                 </ListItemAvatar>
