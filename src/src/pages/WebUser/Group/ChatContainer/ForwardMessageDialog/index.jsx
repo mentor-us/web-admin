@@ -40,6 +40,7 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
   const [textSearch, setTextSearch] = useState("");
   const [listChannelForward, setListChannelForward] = useState([]);
   const [search, setSearch] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { data: listChannel } = useGetAllChannelsCanForward(search.trim());
   const queryClient = useQueryClient();
   const param = useParams();
@@ -47,8 +48,7 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
   const onCancel = () => {
     handleClose();
   };
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const submitForm = () => {
     toast.promise(
       new Promise((resolve, reject) => {
         channelService
@@ -69,6 +69,18 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
       }
     );
   };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+  };
+  useEffect(() => {
+    if (isSubmitting) {
+      const submitAsync = async () => {
+        await submitForm();
+      };
+      submitAsync();
+    }
+  }, [isSubmitting]);
   const toggleChoseChannel = (channelId) => {
     if (listChannelForward.includes(channelId)) {
       // eslint-disable-next-line eqeqeq
@@ -158,7 +170,7 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
         <Button onClick={onCancel}>Hủy</Button>
         <Button
           type="submit"
-          disabled={!listChannel || !listChannel.length}
+          disabled={isSubmitting || !listChannel || !listChannel.length}
           onClick={(event) => handleSubmit(event)}
         >
           Chuyển tiếp
