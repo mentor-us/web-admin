@@ -46,6 +46,8 @@ function GradeBoard(props) {
   const [year, setYear] = useState(new Date().getFullYear().toString());
   const [semester, setSemester] = useState(null);
   const [grades, setGrades] = useState(gradesList);
+  const disableYearAndSemester = grades.find((grade) => !grade.id);
+
   const theme = createTheme({
     components: {
       MuiAutocomplete: {
@@ -75,6 +77,13 @@ function GradeBoard(props) {
     newArray.splice(index, 1);
     setGrades(newArray);
   };
+  const handelSubmitGrade = (item) => {
+    console.log("handelSubmitGrade");
+    console.log(year, semester);
+    const temp = [...grades];
+    temp[item.index] = item;
+    setGrades(temp);
+  };
   return (
     <ThemeProvider theme={theme}>
       <div className="flex-col justify-between items-end space-y-2">
@@ -93,6 +102,7 @@ function GradeBoard(props) {
             onChange={(e, newValue) => {
               setYear(newValue);
             }}
+            disabled={disableYearAndSemester}
             sx={{
               width: "100%",
               pl: "0!important",
@@ -113,6 +123,7 @@ function GradeBoard(props) {
           <Autocomplete
             noOptionsText="Trống"
             value={semester}
+            disabled={disableYearAndSemester}
             onChange={(e, newValue) => {
               setSemester(newValue);
             }}
@@ -132,10 +143,13 @@ function GradeBoard(props) {
           {grades.map((grade, idx) => {
             return (
               <GradeItem
+                // eslint-disable-next-line react/no-array-index-key
+                key={`grade-item-${idx}`}
+                onSubmitGrade={handelSubmitGrade}
                 onDeleteGrade={handleDeleteGrade}
                 item={{ ...grade, index: idx }}
                 isEditable={isEditable}
-                isSubmitable={!!(semester && year)}
+                isCreateable={!!(semester && year)}
               />
             );
           })}

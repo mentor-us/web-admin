@@ -5,14 +5,14 @@ import { IconButton, TextField } from "@mui/material";
 import PropTypes from "prop-types";
 
 function GradeItem(props) {
-  const { item, isEditable, onDeleteGrade, isSubmitable } = props;
+  const { item, isEditable, onDeleteGrade, isCreateable, onSubmitGrade } = props;
   const [score, setScore] = useState(item.score ?? "");
   const [gradeName, setGradeName] = useState(item.name ?? "");
   const [verified, setVerified] = useState(item.verified ?? false);
   const [disableSubmit, setDisableSubmit] = useState(false);
-
+  const [isSubmiting, setIsSubmiting] = useState(false);
   const handleScoreChange = (event) => {
-    if (!isEditable || !isSubmitable) return;
+    if (!isEditable) return;
     const { value } = event.target;
     const numValue = Number(value);
 
@@ -21,7 +21,7 @@ function GradeItem(props) {
     }
   };
   const handleNameChange = (event) => {
-    if (!isEditable || !isSubmitable) return;
+    if (!isEditable) return;
     setGradeName(event.target.value);
   };
 
@@ -29,8 +29,15 @@ function GradeItem(props) {
     onDeleteGrade(item.index);
   };
   const handleSubmitGrade = () => {
-    onDeleteGrade(item.index);
+    setDisableSubmit(true);
+    setIsSubmiting(true);
   };
+  useEffect(() => {
+    if (isSubmiting) {
+      onSubmitGrade({ ...item, score: +score, gradeName, verified });
+      setIsSubmiting(false);
+    }
+  }, [isSubmiting]);
   useEffect(() => {
     // eslint-disable-next-line eqeqeq
     if (item.name != gradeName || item.score != score) {
@@ -50,7 +57,7 @@ function GradeItem(props) {
             label="Tên môn học"
             InputLabelProps={{
               shrink: true,
-              readOnly: disableSubmit && isEditable
+              readOnly: !isEditable
             }}
             variant="standard"
             value={gradeName}
@@ -63,7 +70,7 @@ function GradeItem(props) {
           label="Điểm"
           InputLabelProps={{
             shrink: true,
-            readOnly: disableSubmit && isEditable
+            readOnly: !isEditable
           }}
           sx={{
             width: "15%"
@@ -80,17 +87,19 @@ function GradeItem(props) {
       )}
       {isEditable && (
         <div className="flex flex-row">
-          {isSubmitable && (
-            <IconButton
-              onClick={handleSubmitGrade}
-              color="primary"
-              size="small"
-              aria-label="add to shopping cart"
-              disabled={disableSubmit}
-            >
-              <CheckCircleIcon color={disableSubmit ? "disabled" : "primary"} />
-            </IconButton>
-          )}
+          <IconButton
+            onClick={handleSubmitGrade}
+            color="primary"
+            size="small"
+            aria-label="add to shopping cart"
+            disabled={disableSubmit || isSubmiting || (!isCreateable && !item.id)}
+          >
+            <CheckCircleIcon
+              color={
+                disableSubmit || isSubmiting || (!isCreateable && !item.id) ? "disabled" : "primary"
+              }
+            />
+          </IconButton>
           <IconButton
             onClick={handleDeleteGrade}
             color="primary"
@@ -108,7 +117,8 @@ GradeItem.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   item: PropTypes.object.isRequired,
   isEditable: PropTypes.bool.isRequired,
-  isSubmitable: PropTypes.bool.isRequired,
-  onDeleteGrade: PropTypes.func.isRequired
+  isCreateable: PropTypes.bool.isRequired,
+  onDeleteGrade: PropTypes.func.isRequired,
+  onSubmitGrade: PropTypes.func.isRequired
 };
 export default GradeItem;
