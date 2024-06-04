@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Autocomplete, createTheme, TextField, ThemeProvider, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  createTheme,
+  TextField,
+  ThemeProvider,
+  Typography
+} from "@mui/material";
 import PropTypes from "prop-types";
 
 import GradeItem from "./GradeItem";
@@ -7,7 +14,7 @@ import "./index.css";
 
 const years = ["2024", "2023", "2022", "2021"];
 const semesters = ["HK1", "HK2", "HK3"];
-const grades = [
+const gradesList = [
   {
     id: 1,
     name: "Thiết kế phần mềm",
@@ -25,19 +32,20 @@ const grades = [
     name: "Thiết kế giao dien",
     score: 7,
     verified: false
-  },
-  {
-    id: 3,
-    name: null,
-    score: 0,
-    verified: false
   }
 ];
 
+const gradeExample = {
+  id: null,
+  name: null,
+  score: 0,
+  verified: false
+};
 function GradeBoard(props) {
   const { isEditable } = props;
   const [year, setYear] = useState(new Date().getFullYear().toString());
   const [semester, setSemester] = useState(null);
+  const [grades, setGrades] = useState(gradesList);
   const theme = createTheme({
     components: {
       MuiAutocomplete: {
@@ -59,6 +67,9 @@ function GradeBoard(props) {
       }
     }
   });
+  const handleAddGrade = () => {
+    setGrades((pre) => [...pre, gradeExample]);
+  };
   return (
     <ThemeProvider theme={theme}>
       <div className="flex-col justify-between items-end space-y-2">
@@ -106,7 +117,6 @@ function GradeBoard(props) {
               pt: "0!important"
             }}
             color="text"
-            disableClearable
             options={semesters}
             renderInput={(params) => (
               <TextField {...params} placeholder="Chọn học kì" size="small" />
@@ -115,9 +125,22 @@ function GradeBoard(props) {
         </div>
         <div className="flex flex-col space-y-6">
           {grades.map((grade) => {
-            return <GradeItem item={grade} isEditable={isEditable} />;
+            return <GradeItem item={grade} isEditable={isEditable && semester && year} />;
           })}
         </div>
+        {isEditable && (
+          <div className="flex flex-row justify-end">
+            <Button
+              className="mt-4 align-right"
+              // variant="contained"
+              color="success"
+              disabled={!semester || !year}
+              onClick={handleAddGrade}
+            >
+              Thêm điểm
+            </Button>
+          </div>
+        )}
       </div>
     </ThemeProvider>
   );
