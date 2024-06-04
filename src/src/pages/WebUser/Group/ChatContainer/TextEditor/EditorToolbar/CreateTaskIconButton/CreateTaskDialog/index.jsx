@@ -23,6 +23,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 import dayjs from "dayjs";
+import { getImageUrlWithKey } from "utils";
 import TaskApi from "api/TaskApi";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
@@ -330,7 +331,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
                     return (
                       <ListItem {...optProps} ownerState={ownerState}>
                         <ListItemAvatar>
-                          <Avatar src={member.imageUrl} className="!w-8 !h-8" />
+                          <Avatar src={getImageUrlWithKey(member.imageUrl)} className="!w-8 !h-8" />
                         </ListItemAvatar>
                         <ListItemText>{member.name}</ListItemText>
                       </ListItem>

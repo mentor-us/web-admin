@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams } from "react-router";
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 
+import { getImageUrlWithKey } from "utils";
 import UserApi from "api/UserApi";
 
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
@@ -37,7 +38,7 @@ export default function GroupMember() {
             >
               <ListItemIcon>
                 <AsyncMDAvatar
-                  src={member.imageUrl}
+                  src={getImageUrlWithKey(member.imageUrl)}
                   alt="detail-image"
                   shadow="md"
                   size="md"

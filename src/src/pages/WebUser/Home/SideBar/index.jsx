@@ -27,6 +27,7 @@ import { ROLE, ROUTE_URL } from "utils/constants";
 
 import { images } from "assets/images";
 import useListGroupStore from "hooks/client/useListGroupStore";
+import { getImageUrlWithKey } from "utils";
 import ListGroup from "../ListGroup";
 
 export default function SideBar() {
@@ -88,7 +89,7 @@ export default function SideBar() {
         <Tooltip title={myInfo.name} placement="right">
           <Button onClick={handleProfileOpen}>
             <MDAvatar
-              src={myInfo.imageUrl}
+              src={getImageUrlWithKey(myInfo.imageUrl)}
               alt="detail-image"
               shadow="md"
               size="md"

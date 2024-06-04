@@ -2,6 +2,7 @@
 import { Avatar } from "@mui/material";
 import PropTypes from "prop-types";
 
+import { getImageUrlWithKey } from "utils";
 import { Hashtag, LockIcon } from "assets/svgs";
 
 function ChannelIcon({ channel }) {
@@ -13,7 +14,7 @@ function ChannelIcon({ channel }) {
     return <LockIcon width={18} height={18} />;
   }
 
-  return <Avatar src={channel?.imageUrl} className="!w-6 !h-6" />;
+  return <Avatar src={getImageUrlWithKey(channel?.imageUrl)} className="!w-6 !h-6" />;
 }
 
 ChannelIcon.propTypes = {

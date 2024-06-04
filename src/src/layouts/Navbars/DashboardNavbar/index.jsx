@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import { setMiniSidenav, setTransparentNavbar } from "context";
 import { useMentorUs } from "hooks";
 import { translateToVNmeseByKey } from "routes";
-import { getValueOfList } from "utils";
+import { getImageUrlWithKey, getValueOfList } from "utils";
 import admin from "assets/images/admin.png";
 
 import Breadcrumbs from "components/Breadcrumbs";
@@ -128,7 +128,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
             lineHeight={1}
           >
             <MDAvatar
-              src={myInfo.imageUrl || admin}
+              src={getImageUrlWithKey(myInfo.imageUrl) || admin}
               alt="profile-image"
               shadow="sm"
               size="lg"
@@ -206,7 +206,12 @@ function DashboardNavbar({ absolute, light, isMini }) {
               </IconButton>
             </TooltipCustom>
             <IconButton sx={navbarIconButton} size="medium" onClick={handleClick}>
-              <MDAvatar src={myInfo.imageUrl || admin} alt="profile-image" size="sm" shadow="sm" />
+              <MDAvatar
+                src={getImageUrlWithKey(myInfo.imageUrl) || admin}
+                alt="profile-image"
+                size="sm"
+                shadow="sm"
+              />
             </IconButton>
             {menuBox()}
           </MDBox>

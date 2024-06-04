@@ -4,6 +4,8 @@ import CardMedia from "@mui/material/CardMedia";
 import Tooltip from "@mui/material/Tooltip";
 import PropTypes from "prop-types";
 
+import { getImageUrlWithKey } from "utils";
+
 import MDAvatar from "components/MDComponents/MDAvatar";
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
@@ -13,7 +15,7 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
   const renderAuthors = authors.map(({ image: media, name }) => (
     <Tooltip key={name} title={name} placement="bottom">
       <MDAvatar
-        src={media}
+        src={getImageUrlWithKey(media)}
         alt={name}
         size="xs"
         sx={({ borders: { borderWidth }, palette: { white } }) => ({

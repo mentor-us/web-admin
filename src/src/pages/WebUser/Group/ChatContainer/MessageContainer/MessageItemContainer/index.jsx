@@ -5,7 +5,7 @@ import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import { Box, ListItem, ListItemAvatar, Stack, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
-import { getTime } from "utils";
+import { getImageUrlWithKey, getTime } from "utils";
 import { PinIconMessenger } from "assets/svgs";
 
 import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
@@ -109,7 +109,7 @@ function MessageItemContainer({ children, message, isOwner }) {
                     padding: 0
                   }}
                   className="cursor-pointer"
-                  src={message?.sender?.imageUrl}
+                  src={getImageUrlWithKey(message?.sender?.imageUrl)}
                   onClick={handleProfileOpen}
                 />
                 {openProfile && (
