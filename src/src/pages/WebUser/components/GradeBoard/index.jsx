@@ -70,6 +70,11 @@ function GradeBoard(props) {
   const handleAddGrade = () => {
     setGrades((pre) => [...pre, gradeExample]);
   };
+  const handleDeleteGrade = (index) => {
+    const newArray = [...grades];
+    newArray.splice(index, 1);
+    setGrades(newArray);
+  };
   return (
     <ThemeProvider theme={theme}>
       <div className="flex-col justify-between items-end space-y-2">
@@ -124,8 +129,15 @@ function GradeBoard(props) {
           />
         </div>
         <div className="flex flex-col space-y-6">
-          {grades.map((grade) => {
-            return <GradeItem item={grade} isEditable={isEditable && semester && year} />;
+          {grades.map((grade, idx) => {
+            return (
+              <GradeItem
+                onDeleteGrade={handleDeleteGrade}
+                item={{ ...grade, index: idx }}
+                isEditable={isEditable}
+                isSubmitable={!!(semester && year)}
+              />
+            );
           })}
         </div>
         {isEditable && (
