@@ -9,11 +9,11 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 
+import { getAllSemesterOfYear, useGetAllYears } from "hooks/grades/queries";
+
 import GradeItem from "./GradeItem";
 import "./index.css";
 
-const years = ["2024", "2023", "2022", "2021"];
-const semesters = ["HK1", "HK2", "HK3"];
 const gradesList = [
   {
     id: 1,
@@ -47,7 +47,8 @@ function GradeBoard(props) {
   const [semester, setSemester] = useState(null);
   const [grades, setGrades] = useState(gradesList);
   const disableYearAndSemester = grades.find((grade) => !grade.id);
-
+  const { data: years } = useGetAllYears();
+  const { data: semesters } = getAllSemesterOfYear();
   const theme = createTheme({
     components: {
       MuiAutocomplete: {
@@ -81,7 +82,7 @@ function GradeBoard(props) {
     console.log("handelSubmitGrade");
     console.log(year, semester);
     const temp = [...grades];
-    temp[item.index] = item;
+    temp[item.index] = { ...item, year, semester };
     setGrades(temp);
   };
   return (
@@ -110,7 +111,7 @@ function GradeBoard(props) {
             }}
             color="text"
             disableClearable
-            options={years}
+            options={years ?? []}
             renderInput={(params) => <TextField {...params} placeholder="Chọn năm" size="small" />}
           />
         </div>
@@ -133,7 +134,7 @@ function GradeBoard(props) {
               pt: "0!important"
             }}
             color="text"
-            options={semesters}
+            options={semesters ?? []}
             renderInput={(params) => (
               <TextField {...params} placeholder="Chọn học kì" size="small" />
             )}
