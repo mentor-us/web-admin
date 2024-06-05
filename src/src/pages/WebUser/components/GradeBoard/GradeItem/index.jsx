@@ -26,7 +26,7 @@ function GradeItem(props) {
   };
 
   const handleDeleteGrade = () => {
-    onDeleteGrade(item.index);
+    onDeleteGrade(item);
   };
   const handleSubmitGrade = () => {
     setDisableSubmit(true);
@@ -54,6 +54,7 @@ function GradeItem(props) {
         <div className="min-w-32">
           <TextField
             id="name"
+            required={isEditable}
             label="Tên môn học"
             InputLabelProps={{
               shrink: true,
@@ -68,12 +69,13 @@ function GradeItem(props) {
           id="standard-number"
           type="number"
           label="Điểm"
+          required={isEditable}
           InputLabelProps={{
             shrink: true,
             readOnly: !isEditable
           }}
           sx={{
-            width: "15%"
+            width: "20%"
           }}
           variant="standard"
           value={score}

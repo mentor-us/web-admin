@@ -27,8 +27,15 @@ export const useUpdateGradeMutation = (year, semester) => {
   });
 };
 
-export const useDeleteGradeMutation = () =>
-  useMutation({
+export const useDeleteGradeMutation = (year, semester) => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationKey: ["delete-grade"],
-    mutationFn: (channelId) => GradeApi.deleteChannel(channelId)
+    mutationFn: (gradeId) => GradeApi.deleteGrade(gradeId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["grades", year, semester]
+      });
+    }
   });
+};

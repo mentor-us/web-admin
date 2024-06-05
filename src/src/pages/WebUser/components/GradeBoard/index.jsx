@@ -9,8 +9,13 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 
-import { useCreateGradeMutation } from "hooks/grades/mutation";
+import {
+  useCreateGradeMutation,
+  useDeleteGradeMutation,
+  useUpdateGradeMutation
+} from "hooks/grades/mutation";
 import { getAllSemesterOfYear, useGetAllGrades, useGetAllYears } from "hooks/grades/queries";
+import useMyInfo from "hooks/useMyInfo";
 
 import GradeItem from "./GradeItem";
 import "./index.css";
@@ -25,11 +30,13 @@ function GradeBoard(props) {
   const { isEditable } = props;
   const [year, setYear] = useState(new Date().getFullYear().toString());
   const [semester, setSemester] = useState(null);
+  const myInfo = useMyInfo();
   const { data: years } = useGetAllYears();
   const { data: semesters } = getAllSemesterOfYear();
-  const { data: grades } = useGetAllGrades(year, semester);
+  const { data: grades } = useGetAllGrades(year, semester, myInfo.id);
   const createGradeMutator = useCreateGradeMutation(year, semester);
-  const updateGradeMutator = useCreateGradeMutation(year, semester);
+  const updateGradeMutator = useUpdateGradeMutation(year, semester);
+  const deleteGradeMutator = useDeleteGradeMutation(year, semester);
   const disableYearAndSemester = [...(grades ?? [])].find((grade) => !grade.id);
 
   const theme = createTheme({
@@ -56,10 +63,8 @@ function GradeBoard(props) {
   const handleAddGrade = () => {
     createGradeMutator.mutate({ ...gradeExample, year, semester });
   };
-  const handleDeleteGrade = (index) => {
-    const newArray = [...grades];
-    newArray.splice(index, 1);
-    // setGrades(newArray);
+  const handleDeleteGrade = (item) => {
+    deleteGradeMutator.mutate(item.id);
   };
   const handelSubmitGrade = (item) => {
     console.log("handelSubmitGrade");

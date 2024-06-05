@@ -28,17 +28,18 @@ const gradesList = [
 ];
 
 // eslint-disable-next-line import/prefer-default-export
-export const useGetAllGrades = (year, semester) =>
+export const useGetAllGrades = (year, semester, userId) =>
   useQuery({
     queryKey: ["grades", year, semester],
     queryFn: async () => {
       try {
-        console.log(year, semester);
+        console.log(year, semester, userId);
         return gradesList;
         // const dataReq = {
         //   parmas: {
         //     year,
-        //     semester
+        //     semester,
+        //     userId
         //   }
         // };
         // const res = await GradeApi.getAllGrades(dataReq);
