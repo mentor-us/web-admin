@@ -9,31 +9,11 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 
-import { getAllSemesterOfYear, useGetAllYears } from "hooks/grades/queries";
+import { useCreateGradeMutation } from "hooks/grades/mutation";
+import { getAllSemesterOfYear, useGetAllGrades, useGetAllYears } from "hooks/grades/queries";
 
 import GradeItem from "./GradeItem";
 import "./index.css";
-
-const gradesList = [
-  {
-    id: 1,
-    name: "Thiết kế phần mềm",
-    score: 10,
-    verified: true
-  },
-  {
-    id: 2,
-    name: "Thiết kế web",
-    score: 5,
-    verified: true
-  },
-  {
-    id: 3,
-    name: "Thiết kế giao dien",
-    score: 7,
-    verified: false
-  }
-];
 
 const gradeExample = {
   id: null,
@@ -45,10 +25,13 @@ function GradeBoard(props) {
   const { isEditable } = props;
   const [year, setYear] = useState(new Date().getFullYear().toString());
   const [semester, setSemester] = useState(null);
-  const [grades, setGrades] = useState(gradesList);
-  const disableYearAndSemester = grades.find((grade) => !grade.id);
   const { data: years } = useGetAllYears();
   const { data: semesters } = getAllSemesterOfYear();
+  const { data: grades } = useGetAllGrades(year, semester);
+  const createGradeMutator = useCreateGradeMutation(year, semester);
+  const updateGradeMutator = useCreateGradeMutation(year, semester);
+  const disableYearAndSemester = [...(grades ?? [])].find((grade) => !grade.id);
+
   const theme = createTheme({
     components: {
       MuiAutocomplete: {
@@ -71,19 +54,22 @@ function GradeBoard(props) {
     }
   });
   const handleAddGrade = () => {
-    setGrades((pre) => [...pre, gradeExample]);
+    createGradeMutator.mutate({ ...gradeExample, year, semester });
   };
   const handleDeleteGrade = (index) => {
     const newArray = [...grades];
     newArray.splice(index, 1);
-    setGrades(newArray);
+    // setGrades(newArray);
   };
   const handelSubmitGrade = (item) => {
     console.log("handelSubmitGrade");
     console.log(year, semester);
-    const temp = [...grades];
-    temp[item.index] = { ...item, year, semester };
-    setGrades(temp);
+    if (item.id) {
+      createGradeMutator.mutate({ ...item, year, semester });
+    } else {
+      updateGradeMutator.mutate(item);
+    }
+    // setGrades(temp);
   };
   return (
     <ThemeProvider theme={theme}>
@@ -141,19 +127,20 @@ function GradeBoard(props) {
           />
         </div>
         <div className="flex flex-col space-y-6">
-          {grades.map((grade, idx) => {
-            return (
-              <GradeItem
-                // eslint-disable-next-line react/no-array-index-key
-                key={`grade-item-${idx}`}
-                onSubmitGrade={handelSubmitGrade}
-                onDeleteGrade={handleDeleteGrade}
-                item={{ ...grade, index: idx }}
-                isEditable={isEditable}
-                isCreateable={!!(semester && year)}
-              />
-            );
-          })}
+          {grades &&
+            [...grades].map((grade, idx) => {
+              return (
+                <GradeItem
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={`grade-item-${idx}`}
+                  onSubmitGrade={handelSubmitGrade}
+                  onDeleteGrade={handleDeleteGrade}
+                  item={{ ...grade, index: idx }}
+                  isEditable={isEditable}
+                  isCreateable={!!(semester && year)}
+                />
+              );
+            })}
         </div>
         {isEditable && (
           <div className="flex flex-row justify-end">
