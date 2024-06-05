@@ -70,9 +70,9 @@ function GradeBoard(props) {
     console.log("handelSubmitGrade");
     console.log(year, semester);
     if (item.id) {
-      createGradeMutator.mutate({ ...item, year, semester });
-    } else {
       updateGradeMutator.mutate(item);
+    } else {
+      createGradeMutator.mutate({ ...item, year, semester });
     }
     // setGrades(temp);
   };
