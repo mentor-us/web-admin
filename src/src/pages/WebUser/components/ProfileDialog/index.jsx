@@ -135,7 +135,7 @@ function ProfileDialog(props) {
                 borderRadius: 0,
                 marginBottom: 7
               }}
-              image={user.wallpaper ? user.wallpaper : wallpaper}
+              image={user.wallpaper ? getImageUrlWithKey(user.wallpaper) : wallpaper}
             />
           </div>
           <div className="grid justify-items-center absolute w-full">
