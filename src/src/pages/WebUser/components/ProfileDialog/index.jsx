@@ -227,7 +227,7 @@ function ProfileDialog(props) {
                   }
                   secondary={
                     <Typography variant="h7" color={user.name ? "black" : "grey"}>
-                      {user.name ? user.name : "Chưa cập nhật"}
+                      {user.name ?? "Chưa cập nhật"}
                     </Typography>
                   }
                 />
@@ -246,7 +246,7 @@ function ProfileDialog(props) {
                   }
                   secondary={
                     <Typography variant="h7" color={user.email ? "black" : "grey"}>
-                      {user.email ? user.email : "Chưa cập nhật"}
+                      {user.email ?? "Chưa cập nhật"}
                     </Typography>
                   }
                 />
@@ -266,7 +266,7 @@ function ProfileDialog(props) {
                     }
                     secondary={
                       <Typography variant="h7" color={user.additionalEmails[0] ? "black" : "grey"}>
-                        {user.additionalEmails[0] ? user.emadditionalEmails[0] : "Chưa cập nhật"}
+                        {user.personalEmail ?? "Chưa cập nhật"}
                       </Typography>
                     }
                   />
@@ -306,7 +306,7 @@ function ProfileDialog(props) {
                   }
                   secondary={
                     <Typography variant="h7" color={user.phone ? "black" : "grey"}>
-                      {user.phone ? user.phone : "Chưa cập nhật"}
+                      {user.phone ?? "Chưa cập nhật"}
                     </Typography>
                   }
                 />
