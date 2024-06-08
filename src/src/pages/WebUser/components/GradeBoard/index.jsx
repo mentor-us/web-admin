@@ -45,7 +45,7 @@ function GradeBoard(props) {
     isLoading: isLoadingDefaultYear,
     isSuccess: loadYearSuccess
   } = useGetAllYears();
-  const { data: semesters } = getAllSemesterOfYear(year);
+  const { data: semesters } = getAllSemesterOfYear();
   const { data: grades } = useGetAllGrades(year, semester, myInfo.id);
   const createGradeMutator = useCreateGradeMutation(year, semester);
   const updateGradeMutator = useUpdateGradeMutation(year, semester);
@@ -155,7 +155,7 @@ function GradeBoard(props) {
           />
         </div>
         <div className="flex flex-col space-y-6">
-          {!isLoadingDefaultYear && (
+          {isLoadingDefaultYear && (
             <div className="flex flex-row justify-center">
               <Skeleton variant="rectangular" width="100%" height={60} />
             </div>

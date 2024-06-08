@@ -9,21 +9,54 @@ import EventService from "service/EventService";
 const gradesList = [
   {
     id: 1,
-    name: "Thiết kế phần mềm",
+    course: {
+      id: 1,
+      name: "Thiết kế phần mềm"
+    },
     score: 10,
-    verified: true
+    verified: true,
+    creator: {
+      id: 222,
+      name: "Thong"
+    },
+    Semester: {
+      id: 1,
+      name: "2023-2024"
+    }
   },
   {
     id: 2,
-    name: "Thiết kế web 3",
-    score: 5,
-    verified: true
+    course: {
+      id: 2,
+      name: "Lap Trinh phần mềm"
+    },
+    score: 20,
+    verified: true,
+    creator: {
+      id: 222,
+      name: "Thong"
+    },
+    Semester: {
+      id: 2,
+      name: "2024-2025"
+    }
   },
   {
     id: 3,
-    name: "Thiết kế giao dien",
-    score: 7,
-    verified: false
+    course: {
+      id: 3,
+      name: "Lap Trinh phần mềm"
+    },
+    score: 30,
+    verified: true,
+    creator: {
+      id: 333,
+      name: "Thong"
+    },
+    Semester: {
+      id: 3,
+      name: "2023-2024"
+    }
   }
 ];
 
@@ -78,9 +111,9 @@ export const useGetAllYears = () =>
     },
     enabled: true
   });
-export const getAllSemesterOfYear = (year) =>
+export const getAllSemesterOfYear = () =>
   useQuery({
-    queryKey: ["years/semester", year?.id],
+    queryKey: ["years/semester"],
     queryFn: async () => {
       try {
         return semesters;

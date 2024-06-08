@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 function GradeItem(props) {
   const { item, isEditable, onDeleteGrade, isCreateable, onSubmitGrade } = props;
   const [score, setScore] = useState(item.score ?? "");
-  const [gradeName, setGradeName] = useState(item.name ?? "");
+  const [gradeName, setGradeName] = useState(item?.course?.name ?? "");
   const [verified, setVerified] = useState(item.verified ?? false);
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [isSubmiting, setIsSubmiting] = useState(false);
