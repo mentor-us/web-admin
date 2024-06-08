@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Autocomplete,
   Button,
   createTheme,
+  Skeleton,
   TextField,
   ThemeProvider,
   Typography
@@ -26,13 +27,25 @@ const gradeExample = {
   score: 0,
   verified: false
 };
+
+// const getDefaultYear = () => {
+//   const currentYear = new Date().getFullYear();
+//   const previousYear = currentYear - 1;
+//   const yearRange = `${previousYear} - ${currentYear}`;
+//   return yearRange;
+// };
 function GradeBoard(props) {
   const { isEditable } = props;
-  const [year, setYear] = useState(new Date().getFullYear().toString());
+  const [year, setYear] = useState(null);
+  console.log(year);
   const [semester, setSemester] = useState(null);
   const myInfo = useMyInfo();
-  const { data: years } = useGetAllYears();
-  const { data: semesters } = getAllSemesterOfYear();
+  const {
+    data: years,
+    isLoading: isLoadingDefaultYear,
+    isSuccess: loadYearSuccess
+  } = useGetAllYears();
+  const { data: semesters } = getAllSemesterOfYear(year);
   const { data: grades } = useGetAllGrades(year, semester, myInfo.id);
   const createGradeMutator = useCreateGradeMutation(year, semester);
   const updateGradeMutator = useUpdateGradeMutation(year, semester);
@@ -76,6 +89,11 @@ function GradeBoard(props) {
     }
     // setGrades(temp);
   };
+  useEffect(() => {
+    if (loadYearSuccess) {
+      setYear(years[0]);
+    }
+  }, [loadYearSuccess]);
   return (
     <ThemeProvider theme={theme}>
       <div className="flex-col justify-between items-end space-y-2">
@@ -92,6 +110,8 @@ function GradeBoard(props) {
             noOptionsText="Trống"
             value={year}
             onChange={(e, newValue) => {
+              console.log("newValue");
+              console.log(newValue);
               setYear(newValue);
             }}
             disabled={disableYearAndSemester}
@@ -102,7 +122,9 @@ function GradeBoard(props) {
             }}
             color="text"
             disableClearable
+            // eslint-disable-next-line no-shadow
             options={years ?? []}
+            getOptionLabel={(option) => option?.name || ""}
             renderInput={(params) => <TextField {...params} placeholder="Chọn năm" size="small" />}
           />
         </div>
@@ -126,13 +148,20 @@ function GradeBoard(props) {
             }}
             color="text"
             options={semesters ?? []}
+            getOptionLabel={(option) => option?.name || ""}
             renderInput={(params) => (
               <TextField {...params} placeholder="Chọn học kì" size="small" />
             )}
           />
         </div>
         <div className="flex flex-col space-y-6">
+          {!isLoadingDefaultYear && (
+            <div className="flex flex-row justify-center">
+              <Skeleton variant="rectangular" width="100%" height={60} />
+            </div>
+          )}
           {grades &&
+            !isLoadingDefaultYear &&
             [...grades].map((grade, idx) => {
               return (
                 <GradeItem
