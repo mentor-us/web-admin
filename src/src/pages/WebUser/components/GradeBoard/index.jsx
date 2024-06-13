@@ -100,12 +100,10 @@ function GradeBoard(props) {
     } else {
       createGradeMutator.mutate({ ...item, year, semester });
     }
-    // setGrades(temp);
   };
   useEffect(() => {
     if (loadYearSuccess) {
       dispatch({ type: "SET_YEAR", payload: years[0] });
-      // setYear(years[0]);
     }
   }, [loadYearSuccess]);
   return (
@@ -121,8 +119,9 @@ function GradeBoard(props) {
         </div>
         <div>
           <Autocomplete
-            noOptionsText="Trống"
+            noOptionsText="Không có thông tin năm học"
             value={year}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
             onChange={(e, newValue) => {
               dispatch({ type: "SET_YEAR", payload: newValue });
             }}
@@ -149,8 +148,9 @@ function GradeBoard(props) {
         </div>
         <div>
           <Autocomplete
-            noOptionsText="Trống"
+            noOptionsText="Không có thông tin học kì"
             value={semester}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
             onChange={(e, newValue) => {
               dispatch({ type: "SET_SEMESTER", payload: newValue });
             }}

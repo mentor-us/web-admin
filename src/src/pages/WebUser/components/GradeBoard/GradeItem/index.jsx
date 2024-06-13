@@ -56,7 +56,7 @@ function GradeItem(props) {
       <div className="flex flex-row gap-x-3 items-center w-4/6">
         <div className="w-full">
           <Autocomplete
-            noOptionsText="Trống"
+            noOptionsText="Không có thông tin môn học"
             value={course}
             required={isEditable}
             disabled={!isEditable}
