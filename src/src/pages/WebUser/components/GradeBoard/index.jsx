@@ -96,7 +96,7 @@ function GradeBoard(props) {
   }, [loadYearSuccess]);
   return (
     <ThemeProvider theme={theme}>
-      <div className="flex-col justify-between items-end space-y-2">
+      <div className="flex flex-col gap-y-2">
         <Typography variant="h5" component="div" fontWeight="bold">
           Bảng Điểm
         </Typography>
@@ -154,7 +154,7 @@ function GradeBoard(props) {
             )}
           />
         </div>
-        <div className="flex flex-col space-y-6">
+        <div className="flex flex-col gap-y-4 mt-3">
           {isLoadingDefaultYear && (
             <div className="flex flex-row justify-center">
               <Skeleton variant="rectangular" width="100%" height={60} />

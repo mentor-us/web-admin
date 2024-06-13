@@ -6,60 +6,6 @@ import YearApi from "api/YearApi";
 
 import EventService from "service/EventService";
 
-const gradesList = [
-  {
-    id: 1,
-    course: {
-      id: 1,
-      name: "Thiết kế phần mềm"
-    },
-    score: 10,
-    verified: true,
-    creator: {
-      id: 222,
-      name: "Thong"
-    },
-    Semester: {
-      id: 1,
-      name: "2023-2024"
-    }
-  },
-  {
-    id: 2,
-    course: {
-      id: 2,
-      name: "Lap Trinh phần mềm"
-    },
-    score: 20,
-    verified: true,
-    creator: {
-      id: 222,
-      name: "Thong"
-    },
-    Semester: {
-      id: 2,
-      name: "2024-2025"
-    }
-  },
-  {
-    id: 3,
-    course: {
-      id: 3,
-      name: "Lap Trinh phần mềm"
-    },
-    score: 30,
-    verified: true,
-    creator: {
-      id: 333,
-      name: "Thong"
-    },
-    Semester: {
-      id: 3,
-      name: "2023-2024"
-    }
-  }
-];
-
 const years = [
   { id: 1, name: "2023-2024" },
   { id: 2, name: "2022-2023" },
@@ -73,6 +19,62 @@ const semesters = [
   { id: 3, name: "HK3", year: years[3] },
   { id: 4, name: "HK4", year: years[4] }
 ];
+
+const courses = [
+  {
+    id: 1,
+    name: "Thiết kế phần mềm"
+  },
+  {
+    id: 2,
+    name: "Lap Trinh phần mềm"
+  },
+  {
+    id: 3,
+    name: "Lap Trinh web"
+  },
+  {
+    id: 4,
+    name: "Lap Trinh mobile"
+  }
+];
+
+const gradesList = [
+  {
+    id: 1,
+    course: courses[0],
+    score: 10,
+    verified: true,
+    creator: {
+      id: 222,
+      name: "Thong"
+    },
+    Semester: semesters[0]
+  },
+  {
+    id: 2,
+    course: courses[1],
+    score: 8,
+    verified: false,
+    creator: {
+      id: 222,
+      name: "Thong"
+    },
+    Semester: semesters[1]
+  },
+  {
+    id: 3,
+    course: courses[2],
+    score: 5,
+    verified: true,
+    creator: {
+      id: 333,
+      name: "Thong"
+    },
+    Semester: semesters[2]
+  }
+];
+
 // eslint-disable-next-line import/prefer-default-export
 export const useGetAllGrades = (year, semester, userId) =>
   useQuery({
@@ -121,6 +123,20 @@ export const getAllSemesterOfYear = () =>
         // return res.data;
       } catch (error) {
         return semesters;
+      }
+    },
+    enabled: true
+  });
+export const getAllCourse = (name) =>
+  useQuery({
+    queryKey: ["course", name],
+    queryFn: async () => {
+      try {
+        return courses;
+        // const res = await YearApi.getAllSemesterOfYear(year?.id);
+        // return res.data;
+      } catch (error) {
+        return courses;
       }
     },
     enabled: true

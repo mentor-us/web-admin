@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import { IconButton, TextField } from "@mui/material";
+import { Autocomplete, IconButton, TextField } from "@mui/material";
 import PropTypes from "prop-types";
+
+import { getAllCourse } from "hooks/grades/queries";
 
 function GradeItem(props) {
   const { item, isEditable, onDeleteGrade, isCreateable, onSubmitGrade } = props;
+  const { data: courses } = getAllCourse();
   const [score, setScore] = useState(item.score ?? "");
-  const [gradeName, setGradeName] = useState(item?.course?.name ?? "");
+  const [course, setCourse] = useState(item?.course ?? "");
   const [verified, setVerified] = useState(item.verified ?? false);
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [isSubmiting, setIsSubmiting] = useState(false);
@@ -20,10 +23,10 @@ function GradeItem(props) {
       setScore(value);
     }
   };
-  const handleNameChange = (event) => {
-    if (!isEditable) return;
-    setGradeName(event.target.value);
-  };
+  // const handleNameChange = (event) => {
+  //   if (!isEditable) return;
+  //   setGradeName(event.target.value);
+  // };
 
   const handleDeleteGrade = () => {
     onDeleteGrade(item);
@@ -34,35 +37,43 @@ function GradeItem(props) {
   };
   useEffect(() => {
     if (isSubmiting) {
-      onSubmitGrade({ ...item, score: +score, gradeName, verified });
+      onSubmitGrade({ ...item, score: +score, course, verified });
       setIsSubmiting(false);
     }
   }, [isSubmiting]);
   useEffect(() => {
     // eslint-disable-next-line eqeqeq
-    if (item.name != gradeName || item.score != score) {
+    if (item?.course?.id != course?.id || item.score != score) {
       setVerified(false);
       setDisableSubmit(false);
     } else {
       setVerified(item.verified);
       setDisableSubmit(true);
     }
-  }, [gradeName, score]);
+  }, [course, score]);
   return (
-    <div className="grade flex flex-row items-center gap-x-2">
-      <div className="flex flex-row gap-x-3 items-center">
-        <div className="min-w-32">
-          <TextField
-            id="name"
+    <div className="grade flex flex-row items-center gap-x-2 w-full">
+      <div className="flex flex-row gap-x-3 items-center w-4/6">
+        <div className="w-full">
+          <Autocomplete
+            noOptionsText="Trống"
+            value={course}
             required={isEditable}
-            label="Tên môn học"
-            InputLabelProps={{
-              shrink: true,
-              readOnly: !isEditable
+            disabled={!isEditable}
+            onChange={(e, newValue) => {
+              setCourse(newValue);
             }}
-            variant="standard"
-            value={gradeName}
-            onChange={handleNameChange}
+            sx={{
+              width: "100%",
+              pl: "0!important",
+              pt: "0!important"
+            }}
+            color="text"
+            options={courses ?? []}
+            getOptionLabel={(option) => option?.name || ""}
+            renderInput={(params) => (
+              <TextField {...params} placeholder="Chọn môn học" size="small" />
+            )}
           />
         </div>
         <TextField
