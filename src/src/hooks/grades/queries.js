@@ -98,9 +98,9 @@ export const useGetAllGrades = (year, semester, userId) =>
     },
     enabled: true
   });
-export const useGetAllYears = () =>
+export const useGetAllYears = (yearInfo) =>
   useQuery({
-    queryKey: ["years"],
+    queryKey: ["years", yearInfo],
     queryFn: async () => {
       try {
         return years;
@@ -113,9 +113,9 @@ export const useGetAllYears = () =>
     },
     enabled: true
   });
-export const getAllSemesterOfYear = () =>
+export const getAllSemesterOfYear = (semesterInfo) =>
   useQuery({
-    queryKey: ["years/semester"],
+    queryKey: ["years/semester", semesterInfo],
     queryFn: async () => {
       try {
         return semesters;

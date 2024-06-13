@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import {
   Autocomplete,
   Button,
@@ -28,29 +28,42 @@ const gradeExample = {
   verified: false
 };
 
-// const getDefaultYear = () => {
-//   const currentYear = new Date().getFullYear();
-//   const previousYear = currentYear - 1;
-//   const yearRange = `${previousYear} - ${currentYear}`;
-//   return yearRange;
-// };
+const initState = {
+  year: null,
+  yearInfo: "",
+  semester: null,
+  semesterInfo: ""
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "SET_YEAR":
+      return { ...state, year: action.payload };
+    case "SET_YEAR_INFO":
+      return { ...state, yearInfo: action.payload };
+    case "SET_SEMESTER":
+      return { ...state, semester: action.payload };
+    case "SET_SEMESTER_INFO":
+      return { ...state, semesterInfo: action.payload };
+    default:
+      return state;
+  }
+}
 function GradeBoard(props) {
   const { isEditable } = props;
-  const [year, setYear] = useState(null);
-  console.log(year);
-  const [semester, setSemester] = useState(null);
+  const [state, dispatch] = useReducer(reducer, initState);
+  const { year, yearInfo, semester, semesterInfo } = state;
   const myInfo = useMyInfo();
   const {
     data: years,
     isLoading: isLoadingDefaultYear,
     isSuccess: loadYearSuccess
-  } = useGetAllYears();
-  const { data: semesters } = getAllSemesterOfYear();
+  } = useGetAllYears(yearInfo);
+  const { data: semesters } = getAllSemesterOfYear(semesterInfo);
   const { data: grades } = useGetAllGrades(year, semester, myInfo.id);
   const createGradeMutator = useCreateGradeMutation(year, semester);
   const updateGradeMutator = useUpdateGradeMutation(year, semester);
   const deleteGradeMutator = useDeleteGradeMutation(year, semester);
-  const disableYearAndSemester = [...(grades ?? [])].find((grade) => !grade.id);
 
   const theme = createTheme({
     components: {
@@ -91,7 +104,8 @@ function GradeBoard(props) {
   };
   useEffect(() => {
     if (loadYearSuccess) {
-      setYear(years[0]);
+      dispatch({ type: "SET_YEAR", payload: years[0] });
+      // setYear(years[0]);
     }
   }, [loadYearSuccess]);
   return (
@@ -110,11 +124,11 @@ function GradeBoard(props) {
             noOptionsText="Trống"
             value={year}
             onChange={(e, newValue) => {
-              console.log("newValue");
-              console.log(newValue);
-              setYear(newValue);
+              dispatch({ type: "SET_YEAR", payload: newValue });
             }}
-            disabled={disableYearAndSemester}
+            onInputChange={(event, value) => {
+              dispatch({ type: "SET_YEAR_INFO", payload: value });
+            }}
             sx={{
               width: "100%",
               pl: "0!important",
@@ -137,9 +151,11 @@ function GradeBoard(props) {
           <Autocomplete
             noOptionsText="Trống"
             value={semester}
-            disabled={disableYearAndSemester}
             onChange={(e, newValue) => {
-              setSemester(newValue);
+              dispatch({ type: "SET_SEMESTER", payload: newValue });
+            }}
+            onInputChange={(event, value) => {
+              dispatch({ type: "SET_SEMESTER_INFO", payload: value });
             }}
             sx={{
               width: "100%",
