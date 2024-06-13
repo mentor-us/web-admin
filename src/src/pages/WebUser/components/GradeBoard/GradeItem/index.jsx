@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { Autocomplete, IconButton, TextField } from "@mui/material";
@@ -6,51 +6,75 @@ import PropTypes from "prop-types";
 
 import { getAllCourse } from "hooks/grades/queries";
 
+const initState = {
+  score: null,
+  course: null,
+  courseInfo: "",
+  verified: null,
+  disableSubmit: false,
+  isSubmiting: false
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "SET_SCORE":
+      return { ...state, score: action.payload };
+    case "SET_COURSE":
+      return { ...state, course: action.payload };
+    case "SET_COURSE_INFO":
+      return { ...state, courseInfo: action.payload };
+    case "SET_VERIFIED":
+      return { ...state, verified: action.payload };
+    case "SET_DISABLE_SUBMIT":
+      return { ...state, disableSubmit: action.payload };
+    case "SET_IS_SUBMITING":
+      return { ...state, isSubmiting: action.payload };
+    default:
+      return state;
+  }
+}
 function GradeItem(props) {
   const { item, isEditable, onDeleteGrade, isCreateable, onSubmitGrade } = props;
-  const { data: courses } = getAllCourse();
-  const [score, setScore] = useState(item.score ?? "");
-  const [course, setCourse] = useState(item?.course ?? "");
-  const [verified, setVerified] = useState(item.verified ?? false);
-  const [disableSubmit, setDisableSubmit] = useState(false);
-  const [isSubmiting, setIsSubmiting] = useState(false);
+  const [state, dispatch] = useReducer(reducer, initState);
+  const { score, course, courseInfo, verified, disableSubmit, isSubmiting } = state;
+  const { data: courses } = getAllCourse(courseInfo);
+
   const handleScoreChange = (event) => {
     if (!isEditable) return;
     const { value } = event.target;
     const numValue = Number(value);
 
     if (numValue >= 0 && numValue <= 10) {
-      setScore(value);
+      dispatch({ type: "SET_SCORE", payload: value });
     }
   };
-  // const handleNameChange = (event) => {
-  //   if (!isEditable) return;
-  //   setGradeName(event.target.value);
-  // };
-
   const handleDeleteGrade = () => {
     onDeleteGrade(item);
   };
   const handleSubmitGrade = () => {
-    setDisableSubmit(true);
-    setIsSubmiting(true);
+    dispatch({ type: "SET_DISABLE_SUBMIT", payload: true });
+    dispatch({ type: "SET_IS_SUBMITING", payload: true });
   };
   useEffect(() => {
     if (isSubmiting) {
       onSubmitGrade({ ...item, score: +score, course, verified });
-      setIsSubmiting(false);
+      dispatch({ type: "SET_IS_SUBMITING", payload: false });
     }
   }, [isSubmiting]);
   useEffect(() => {
-    // eslint-disable-next-line eqeqeq
-    if (item?.course?.id != course?.id || item.score != score) {
-      setVerified(false);
-      setDisableSubmit(false);
+    if (item?.course?.id !== course?.id || item.score !== score) {
+      dispatch({ type: "SET_VERIFIED", payload: false });
+      dispatch({ type: "SET_DISABLE_SUBMIT", payload: false });
     } else {
-      setVerified(item.verified);
-      setDisableSubmit(true);
+      dispatch({ type: "SET_VERIFIED", payload: item.verified });
+      dispatch({ type: "SET_DISABLE_SUBMIT", payload: true });
     }
   }, [course, score]);
+  useEffect(() => {
+    dispatch({ type: "SET_SCORE", payload: item.score });
+    dispatch({ type: "SET_COURSE", payload: item.course });
+    dispatch({ type: "SET_VERIFIED", payload: item.verified });
+  }, [item]);
   return (
     <div className="grade flex flex-row items-center gap-x-2 w-full">
       <div className="flex flex-row gap-x-3 items-center w-4/6">
@@ -58,10 +82,14 @@ function GradeItem(props) {
           <Autocomplete
             noOptionsText="Không có thông tin môn học"
             value={course}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
             required={isEditable}
             disabled={!isEditable}
             onChange={(e, newValue) => {
-              setCourse(newValue);
+              dispatch({ type: "SET_COURSE", payload: newValue });
+            }}
+            onInputChange={(event, value) => {
+              dispatch({ type: "SET_COURSE_INFO", payload: value });
             }}
             sx={{
               width: "100%",

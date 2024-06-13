@@ -132,6 +132,8 @@ export const getAllCourse = (name) =>
     queryKey: ["course", name],
     queryFn: async () => {
       try {
+        console.log("getAllCourse");
+        console.log(name);
         return courses;
         // const res = await YearApi.getAllSemesterOfYear(year?.id);
         // return res.data;
