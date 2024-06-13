@@ -9,6 +9,7 @@ import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined
 import SettingsIcon from "@mui/icons-material/Settings";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import {
+  Box,
   Button,
   IconButton,
   ListItemIcon,
@@ -25,15 +26,17 @@ import useMyInfo from "hooks/useMyInfo";
 import { ROLE, ROUTE_URL } from "utils/constants";
 
 import { images } from "assets/images";
+import useListGroupStore from "hooks/client/useListGroupStore";
+import { getImageUrlWithKey } from "utils";
 import ListGroup from "../ListGroup";
 
 export default function SideBar() {
+  const { clearSelectedGroupId } = useListGroupStore();
   const [openProfile, setOpenProfile] = React.useState(false);
   const myInfo = useMyInfo();
   const dispatch = useDispatch();
   const handleProfileOpen = () => {
     setOpenProfile(true);
-    // console.log("message sender: ", message?.sender);
   };
   const handleProfileClose = () => {
     setOpenProfile(false);
@@ -57,6 +60,7 @@ export default function SideBar() {
   };
 
   const onLogoutClick = () => {
+    clearSelectedGroupId();
     handleLogout();
     handleSettingClose();
   };
@@ -71,16 +75,11 @@ export default function SideBar() {
               className={({ isActive }) =>
                 `w-full h-full flex justify-center items-center ${isActive ? "bg-sky-600" : ""}`
               }
+              onClick={clearSelectedGroupId}
             >
-              {({ isActive }) => (
-                <IconButton color="white" aria-label="Setting">
-                  {isActive ? (
-                    <img alt="admin-icon" src={images.AdminManagementIcon} width={32} height={32} />
-                  ) : (
-                    <img alt="admin-icon" src={images.AdminManagementIcon} width={32} height={32} />
-                  )}
-                </IconButton>
-              )}
+              <IconButton color="white" aria-label="Setting">
+                <img alt="admin-icon" src={images.AdminTopIcon} width={32} height={32} />
+              </IconButton>
             </NavLink>
           </div>
         </Tooltip>
@@ -90,7 +89,7 @@ export default function SideBar() {
         <Tooltip title={myInfo.name} placement="right">
           <Button onClick={handleProfileOpen}>
             <MDAvatar
-              src={myInfo.imageUrl}
+              src={getImageUrlWithKey(myInfo.imageUrl)}
               alt="detail-image"
               shadow="md"
               size="md"
@@ -114,7 +113,10 @@ export default function SideBar() {
       </div>
       <div className="">
         <Tooltip title="Mở lịch" placement="right">
-          <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600">
+          <Box
+            className="flex justify-center items-center h-16 text-white hover:bg-sky-600"
+            onClick={() => clearSelectedGroupId()}
+          >
             <NavLink
               to="calendar"
               className={({ isActive }) =>
@@ -131,14 +133,16 @@ export default function SideBar() {
                 </IconButton>
               )}
             </NavLink>
-          </div>
+          </Box>
         </Tooltip>
         <Tooltip title="Đăng xuất" placement="right">
-          <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600 hover:cursor-pointer">
+          <Box
+            className="flex justify-center items-center h-16 text-white hover:bg-sky-600 hover:cursor-pointer"
+            onClick={onLogoutClick}
+          >
             <IconButton
               color="white"
-              aria-label="Setting"
-              onClick={handleSettingClick}
+              aria-label="Logout"
               size="small"
               aria-controls={open ? "account-menu" : undefined}
               aria-haspopup="true"
@@ -146,7 +150,7 @@ export default function SideBar() {
             >
               <Logout fontSize="small" />
             </IconButton>
-          </div>
+          </Box>
         </Tooltip>
         {/* <div className="flex justify-center items-center h-16 text-white hover:bg-sky-600 hover:cursor-pointer">
           <Tooltip title="Cài đặt" placement="right">
@@ -202,7 +206,7 @@ export default function SideBar() {
           transformOrigin={{ horizontal: "right", vertical: "bottom" }}
           anchorOrigin={{ horizontal: "right", vertical: "top" }}
         >
-          <MenuItem onClick={onLogoutClick}>
+          <MenuItem>
             <ListItemIcon>
               <Logout color="error" fontSize="small" />
             </ListItemIcon>

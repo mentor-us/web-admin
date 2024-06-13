@@ -5,7 +5,9 @@ import { useParams } from "react-router-dom";
 import {
   Autocomplete,
   Avatar,
+  Box,
   Button,
+  Chip,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -15,7 +17,9 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  TextField
+  TextField,
+  Tooltip,
+  Typography
 } from "@mui/material";
 import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -23,6 +27,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 import dayjs from "dayjs";
+import { getImageUrlWithKey } from "utils";
 import MeetingApi from "api/MeetingApi";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
@@ -47,7 +52,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
     meetingId ? "Chi tiết lịch hẹn " : "Lịch hẹn  mới"
   );
   const [isEditable, setIsEditable] = useState(!meetingId);
-  const titlebtnDialog = isEditable ? "Lưu lịch hẹn " : "";
+  const titlebtnDialog = meetingDetail ? "Lưu lịch hẹn " : "Tạo lịch hẹn";
 
   const {
     control,
@@ -106,6 +111,9 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
             queryClient.invalidateQueries({
               queryKey: GetAllChatMessageInfinityKey(channelId)
             });
+            queryClient.invalidateQueries({
+              queryKey: ["events"]
+            });
             queryClient.refetchQueries({
               queryKey: GetAllMeetingInChannelKey(channelId)
             });
@@ -114,9 +122,11 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
           .catch(reject);
       }),
       {
-        loading: "Đang tạo lịch hẹn",
-        success: "Tạo lịch hẹn thành công",
-        error: "Tạo lịch hẹn thất bại"
+        loading: `Đang ${meetingDetail ? "lưu" : "tạo"} lịch hẹn...`,
+        success: () => {
+          return `${meetingDetail ? "Lưu" : "Tạo"} lịch hẹn thành công`;
+        },
+        error: `${meetingDetail ? "Lưu" : "Tạo"} lịch hẹn thất bại`
       }
     );
 
@@ -199,7 +209,10 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
           handleSubmit(onSubmit)();
         }}
       >
-        <DialogTitle alignSelf="center">{titleDialog}</DialogTitle>
+        <DialogTitle alignSelf="center" className="m-0 !pb-2">
+          {titleDialog}
+        </DialogTitle>
+
         <DialogContent className="!py-4">
           <Controller
             getGroupDetailColumnHeadersMentorSelector
@@ -227,7 +240,16 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
             control={control}
             rules={{ required: false }}
             render={({ field }) => {
-              return <TextField className="!mb-6" label="Mô tả" fullWidth {...field} />;
+              return (
+                <TextField
+                  multiline
+                  maxRows={4}
+                  className="!mb-6"
+                  label="Mô tả"
+                  fullWidth
+                  {...field}
+                />
+              );
             }}
           />
 
@@ -241,11 +263,11 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                   required: "Vui lòng nhập giờ bắt đầu",
                   validate: {
                     gtnow: (v) => {
-                      if (!v || dayjs().isBefore(v)) {
+                      if (!v || dayjs().isSameOrBefore(v)) {
                         return true;
                       }
 
-                      return "Thời điểm bắt đầu phải lớn hơn thời điểm hiện tại";
+                      return "Giờ bắt đầu phải lớn hơn giờ hiện tại";
                     }
                   }
                 }}
@@ -255,8 +277,6 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                       className="!mb-6"
                       fullWidth
                       label="Từ *"
-                      minTime={dayjs()}
-                      disablePast
                       slotProps={{
                         textField: {
                           fullWidth: true,
@@ -280,19 +300,19 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                 rules={{
                   required: "Vui lòng nhập giờ kết thúc",
                   validate: {
-                    gtnow: (v) => {
-                      if (!v || dayjs().isBefore(v)) {
-                        return true;
-                      }
-
-                      return "Thời điểm kết thúc phải luôn lớn hơn thời điểm hiện tại";
-                    },
                     gtstart: (v) => {
-                      if (!v || getValues("timeStart").isBefore(v)) {
+                      if (!v || watch("timeStart").isBefore(v)) {
                         return true;
                       }
 
                       return "Giờ kết thúc phải luôn lớn hơn giờ bắt đầu";
+                    },
+                    gtnow: (v) => {
+                      if (!v || dayjs().isSameOrBefore(v)) {
+                        return true;
+                      }
+
+                      return "Giờ kết thúc phải luôn lớn hơn giờ hiện tại";
                     }
                   }
                 }}
@@ -302,8 +322,6 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                       className="!mb-6"
                       fullWidth
                       label="Đến *"
-                      minTime={getValues("timeStart")?.add(1, "m")}
-                      disablePast
                       slotProps={{
                         textField: {
                           fullWidth: true,
@@ -328,7 +346,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                   required: "Vui lòng nhập ngày hẹn",
                   validate: {
                     gtnow: (v) => {
-                      if (!v || dayjs().isBefore(v) || dayjs(v).isSame(dayjs(), "day")) {
+                      if (!v || dayjs().isSameOrBefore(v, "date")) {
                         return true;
                       }
                       return "Ngày hẹn phải lớn hơn hoặc bằng ngày hiện tại";
@@ -384,67 +402,92 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
             )}
           />
 
-          <Controller
-            name="attendees"
-            disabled={!isEditable}
-            control={control}
-            rules={{
-              required: "Vui lòng chọn người tham gia lịch hẹn"
-            }}
-            onChange={([, data]) => data}
-            render={({ field: { onChange, ...props } }) => {
-              return (
-                <Autocomplete
-                  className="!mt-2"
-                  label="Người tham dự *"
-                  loading={isLoadingMembers}
-                  limitTags={3}
-                  multiple
-                  width={350}
-                  filterSelectedOptions
-                  options={channelMembers ?? []}
-                  noOptionsText="Không có thành viên nào"
-                  getOptionLabel={(member) => member.name ?? ""}
-                  renderOption={(optProps, member, state, ownerState) => {
-                    return (
-                      <ListItem {...optProps} ownerState={ownerState}>
-                        <ListItemAvatar>
-                          <Avatar src={member.imageUrl} className="!w-8 !h-8" />
-                        </ListItemAvatar>
-                        <ListItemText>{member.name}</ListItemText>
-                      </ListItem>
-                    );
-                  }}
-                  renderInput={(params) => (
-                    <TextField
+          <Grid container spacing={2} justifyContent="space-between">
+            <Grid item xs>
+              <Controller
+                name="attendees"
+                disabled={!isEditable}
+                control={control}
+                rules={{
+                  required: "Vui lòng chọn người tham gia lịch hẹn"
+                }}
+                onChange={([, data]) => data}
+                render={({ field: { onChange, ...props } }) => {
+                  return (
+                    <Autocomplete
+                      className="!mt-2"
                       label="Người tham dự *"
-                      error={!!errors?.attendees}
-                      helperText={errors?.attendees?.message}
-                      InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                          <>
-                            {isLoadingMembers ? (
-                              <CircularProgress color="inherit" size={20} />
-                            ) : null}
-                            {params.InputProps.endAdornment}
-                          </>
-                        )
+                      loading={isLoadingMembers}
+                      limitTags={3}
+                      multiple
+                      width={350}
+                      filterSelectedOptions
+                      options={channelMembers ?? []}
+                      noOptionsText="Không có thành viên nào"
+                      getOptionLabel={(member) => member.name ?? ""}
+                      renderOption={(optProps, member, state, ownerState) => {
+                        return (
+                          <ListItem {...optProps} ownerState={ownerState}>
+                            <ListItemAvatar>
+                              <Avatar
+                                src={getImageUrlWithKey(member.imageUrl)}
+                                className="!w-8 !h-8"
+                              />
+                            </ListItemAvatar>
+                            <ListItemText>{member.name}</ListItemText>
+                          </ListItem>
+                        );
                       }}
-                      {...params}
+                      renderInput={(params) => (
+                        <TextField
+                          label="Người tham dự *"
+                          error={!!errors?.attendees}
+                          helperText={errors?.attendees?.message}
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <>
+                                {isLoadingMembers ? (
+                                  <CircularProgress color="inherit" size={20} />
+                                ) : null}
+                                {params.InputProps.endAdornment}
+                              </>
+                            )
+                          }}
+                          {...params}
+                        />
+                      )}
+                      isOptionEqualToValue={(option, value) => option.id === value.id}
+                      clearText="Xóa hết"
+                      closeText="Đóng"
+                      onChange={(e, data) => {
+                        onChange(data);
+                      }}
+                      {...props}
                     />
-                  )}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
-                  clearText="Xóa hết"
-                  closeText="Đóng"
-                  onChange={(e, data) => {
-                    onChange(data);
-                  }}
-                  {...props}
-                />
-              );
-            }}
-          />
+                  );
+                }}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              {meetingDetail && (
+                <Box className="ml-2">
+                  <Typography className="!text-sm !mb-1">Người tổ chức</Typography>
+                  <Tooltip title={meetingDetail?.organizer?.name}>
+                    <Chip
+                      avatar={
+                        <Avatar
+                          alt={meetingDetail?.organizer?.name}
+                          src={getImageUrlWithKey(meetingDetail?.organizer?.imageUrl)}
+                        />
+                      }
+                      label={meetingDetail?.organizer?.name}
+                    />
+                  </Tooltip>
+                </Box>
+              )}
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={onCancel}>Hủy</Button>
@@ -455,10 +498,14 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
   );
 }
 
+BookMeetingDialog.defaultProps = {
+  meetingId: ""
+};
+
 BookMeetingDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  meetingId: PropTypes.string.isRequired
+  meetingId: PropTypes.string
 };
 
 export default BookMeetingDialog;

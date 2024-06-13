@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import PropTypes from "prop-types";
 
+import { getImageUrlWithKey } from "utils";
+
 import MDAvatar from "components/MDComponents/MDAvatar";
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
@@ -11,7 +13,7 @@ function ProfilesList({ title, profiles, shadow }) {
   const renderProfiles = profiles.map(({ image, name, description, action }) => (
     <MDBox key={name} component="li" display="flex" alignItems="center" py={1} mb={1}>
       <MDBox mr={2}>
-        <MDAvatar src={image} alt="something here" shadow="md" />
+        <MDAvatar src={getImageUrlWithKey(image)} alt="something here" shadow="md" />
       </MDBox>
       <MDBox display="flex" flexDirection="column" alignItems="flex-start" justifyContent="center">
         <MDTypography variant="button" fontWeight="medium">

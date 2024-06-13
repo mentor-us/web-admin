@@ -145,6 +145,14 @@ export const MESSAGE_TYPE = {
   MEETING: "MEETING",
   TASK: "TASK"
 };
+export const MESSAGE_CONTENT = {
+  TEXT: "tin nhắn",
+  FILE: "file",
+  IMAGE: "hình ảnh",
+  VOTE: "bình chọn",
+  MEETING: "lịch hẹn",
+  TASK: "công việc"
+};
 
 export const CHANNEL_PERMISSION = {
   SEND_FILES: "SEND_FILES",
@@ -282,7 +290,8 @@ export const Color = {
 export const ACTION_IMAGE = {
   SEND_IMAGE: "SEND_IMAGE",
   UPLOAD_IMAGE: "UPLOAD_IMAGE",
-  UPDATE_AVATAR: "UPDATE_AVATAR"
+  UPDATE_AVATAR_GROUP: "UPDATE_AVATAR_GROUP",
+  UPDATE_AVATAR_USER: "UPDATE_AVATAR_USER"
 };
 export const AVATAR_SIZE = 90;
 export const WALLPAPER_HEIGHT = 200;

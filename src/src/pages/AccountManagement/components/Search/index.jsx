@@ -26,7 +26,7 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert } from "components/SweetAlert";
 import useMyInfo from "hooks/useMyInfo";
 // import { getEmailDomainsValidSelector } from "features/configuration/selector";
-import { accountStatusList, roleAccountList } from "utils/constants";
+import { accountStatusList, ROLE, roleAccountList } from "utils/constants";
 
 function SearchBox() {
   /// --------------------- Khai báo Biến, State -------------
@@ -40,13 +40,12 @@ function SearchBox() {
   const [status, setStatus] = useState(null);
   // const emailDomainsValid = useSelector(getEmailDomainsValidSelector);
   const itemsPerPage = useSelector(getAccountItemsPerPageSelector);
-  const currentAccount = useMyInfo();
-  const roleList =
-    currentAccount.role === "SUPER_ADMIN"
-      ? roleAccountList?.map((option) => option.role)
-      : roleAccountList
-          ?.filter((item) => item.textValue !== "SUPER_ADMIN")
-          .map((option) => option.role);
+  const myInfo = useMyInfo();
+  const roleList = myInfo.roles.includes(ROLE.SUPER_ADMIN)
+    ? roleAccountList?.map((option) => option.role)
+    : roleAccountList
+        ?.filter((item) => item.textValue !== ROLE.SUPER_ADMIN)
+        .map((option) => option.role);
 
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------

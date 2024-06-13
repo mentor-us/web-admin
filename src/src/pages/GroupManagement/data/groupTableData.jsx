@@ -27,7 +27,6 @@ export default function groupTableData(
       ? allCategories?.find((item) => item.id === id)?.name
       : "";
   };
-
   let columns = [
     {
       Header: "STT",

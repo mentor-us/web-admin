@@ -9,7 +9,6 @@ import PropTypes from "prop-types";
 import { getImageUrlWithKey } from "utils";
 import FileApi from "api/FileApi";
 
-import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
 import { useGetAllHomeGroupInfinity } from "hooks/groups/queries";
 
 function GroupItem({ group, handleListItemClick, selectedGroupId }) {

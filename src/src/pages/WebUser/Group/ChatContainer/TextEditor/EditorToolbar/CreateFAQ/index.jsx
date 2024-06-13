@@ -22,6 +22,7 @@ import PropTypes from "prop-types";
 
 import { useGetGroupMembers } from "hooks/channels/queries";
 import { useCreateFaqMutation, useUpdateFaqMutation } from "hooks/chats/mutation";
+import { GetAllFaqInGroupKey } from "hooks/faqs/keys";
 import { useGetFaq } from "hooks/faqs/queries";
 import { useGetGroupDetail, useGetWorkSpace } from "hooks/groups/queries";
 import { GetAllMeetingInChannelKey } from "hooks/meeting/keys";
@@ -89,7 +90,7 @@ function CreateFAQ({ open, handleClose, faqId = null }) {
         createFaqMutationAsync(adapterData(data))
           .then(() => {
             queryClient.refetchQueries({
-              queryKey: GetAllMeetingInChannelKey(groupId)
+              queryKey: GetAllFaqInGroupKey(groupId)
             });
             resolve();
           })

@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { AspectRatio } from "@mui/icons-material";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
@@ -19,11 +21,20 @@ import ListItemText from "@mui/material/ListItemText";
 import { logout } from "features/myInfo/slice";
 import PropTypes from "prop-types";
 
+import { getImageUrlWithKey } from "utils";
 import wallpaper from "assets/images/default-wallpaper.jpg";
 
+import ImageIconButton from "pages/WebUser/Group/ChatContainer/TextEditor/EditorToolbar/ImageIconButton";
 import { useCreateChannelMutation } from "hooks/channels/mutation";
+import { useUpdateAvatarMutation } from "hooks/profile/mutation";
 import useMyInfo from "hooks/useMyInfo";
-import { AVATAR_SIZE, ROUTE_URL, WALLPAPER_HEIGHT, WALLPAPER_WIDTH } from "utils/constants";
+import {
+  ACTION_IMAGE,
+  AVATAR_SIZE,
+  ROUTE_URL,
+  WALLPAPER_HEIGHT,
+  WALLPAPER_WIDTH
+} from "utils/constants";
 
 import UpdateProfileDialog from "./UpdateProfileDialog";
 
@@ -34,10 +45,16 @@ function ProfileDialog(props) {
   const dispatch = useDispatch();
   const { groupId } = useParams();
 
+  const { mutateAsync: updateAvatarMutation, isPending } = useUpdateAvatarMutation();
+
   const myInfo = useMyInfo();
   const navigate = useNavigate();
 
+  const imageIconButtonRef = useRef(null);
+
   const isEditable = myInfo.id === user.id;
+
+  console.log(user.imageUrl);
 
   const handleUpdateProfileOpen = () => {
     setOpenUpdateProfile(true);
@@ -50,6 +67,12 @@ function ProfileDialog(props) {
     localStorage.removeItem("access_token");
     dispatch(logout());
     navigate(ROUTE_URL.SIGN_IN, { replace: true });
+  };
+
+  const handleUpdateAvatar = () => {
+    if (imageIconButtonRef.current) {
+      imageIconButtonRef.current.click();
+    }
   };
 
   const openChat = async () => {
@@ -69,6 +92,25 @@ function ProfileDialog(props) {
   };
 
   const userDate = new Date(Date.parse(user.birthDate)).toLocaleDateString("vi-VN");
+  // const onImageChange = (event) => {
+  //   if (event.target.files && event.target.files[0]) {
+  //     const imageUrl = URL.createObjectURL(event.target.files[0]);
+  //     toast.promise(
+  //       new Promise((resolve, reject) => {
+  //         updateAvatarMutation({ imageUrl })
+  //           .then(() => {
+  //             resolve();
+  //           })
+  //           .catch(reject);
+  //       }),
+  //       {
+  //         loading: "Đang cập nhật...",
+  //         success: "Cập nhật Avatar thành công",
+  //         error: "Có lỗi xảy ra, vui lòng thử lại"
+  //       }
+  //     );
+  //   }
+  // };
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle className="w-full !py-2" alignSelf="flex-start">
@@ -93,23 +135,34 @@ function ProfileDialog(props) {
                 borderRadius: 0,
                 marginBottom: 7
               }}
-              image={user.wallpaper ? user.wallpaper : wallpaper}
+              image={user.wallpaper ? getImageUrlWithKey(user.wallpaper) : wallpaper}
             />
           </div>
           <div className="grid justify-items-center absolute w-full">
+            <div className="hidden">
+              <ImageIconButton
+                ref={imageIconButtonRef}
+                channelId={groupId}
+                type={ACTION_IMAGE.UPDATE_AVATAR_USER}
+              />
+            </div>
             <Avatar
+              sizes={100}
               sx={{
                 height: AVATAR_SIZE,
                 width: AVATAR_SIZE,
                 top: WALLPAPER_HEIGHT - AVATAR_SIZE / 2,
                 border: "2px solid white"
               }}
-              slotProps={{ img: { referrerPolicy: "no-referrer" } }}
-              src={
-                user
-                  ? user.imageUrl
-                  : "https://img.freepik.com/free-photo/ultra-detailed-nebula-abstract-wallpaper-10_1562-745.jpg"
-              }
+              src={getImageUrlWithKey(
+                user?.imageUrl ??
+                  "https://img.freepik.com/free-photo/ultra-detailed-nebula-abstract-wallpaper-10_1562-745.jpg"
+              )}
+              slotProps={{
+                img: {
+                  referrerPolicy: "no-referrer"
+                }
+              }}
             />
             {isEditable && (
               <Avatar
@@ -117,8 +170,14 @@ function ProfileDialog(props) {
                   height: 30,
                   width: 30,
                   top: WALLPAPER_HEIGHT - AVATAR_SIZE / 2 - 30,
-                  left: AVATAR_SIZE / 2 - 15
+                  left: AVATAR_SIZE / 2 - 15,
+                  "&:hover": {
+                    background: "#b0b5b4",
+                    cursor: "pointer"
+                  }
                 }}
+                onClick={handleUpdateAvatar}
+                // component="label"
               >
                 <CameraAltOutlinedIcon />
               </Avatar>
@@ -168,7 +227,7 @@ function ProfileDialog(props) {
                   }
                   secondary={
                     <Typography variant="h7" color={user.name ? "black" : "grey"}>
-                      {user.name ? user.name : "Chưa cập nhật"}
+                      {user.name ?? "Chưa cập nhật"}
                     </Typography>
                   }
                 />
@@ -187,7 +246,7 @@ function ProfileDialog(props) {
                   }
                   secondary={
                     <Typography variant="h7" color={user.email ? "black" : "grey"}>
-                      {user.email ? user.email : "Chưa cập nhật"}
+                      {user.email ?? "Chưa cập nhật"}
                     </Typography>
                   }
                 />
@@ -207,7 +266,7 @@ function ProfileDialog(props) {
                     }
                     secondary={
                       <Typography variant="h7" color={user.additionalEmails[0] ? "black" : "grey"}>
-                        {user.additionalEmails[0] ? user.emadditionalEmails[0] : "Chưa cập nhật"}
+                        {user.personalEmail ?? "Chưa cập nhật"}
                       </Typography>
                     }
                   />
@@ -247,7 +306,7 @@ function ProfileDialog(props) {
                   }
                   secondary={
                     <Typography variant="h7" color={user.phone ? "black" : "grey"}>
-                      {user.phone ? user.phone : "Chưa cập nhật"}
+                      {user.phone ?? "Chưa cập nhật"}
                     </Typography>
                   }
                 />

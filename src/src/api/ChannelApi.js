@@ -24,6 +24,30 @@ const ChannelApi = {
   deleteChannel(channelId) {
     const URL = `/api/channels/${channelId}`;
     return AxiosClient.delete(URL);
+  },
+  async searchForward(query = "") {
+    const URL = `/api/groups/forward`;
+    const response = await AxiosClient.get(URL, {
+      params: {
+        name: query
+      }
+    });
+    return response;
+  },
+  async forward(messageId, channelIds) {
+    // const URL = `/api/groups/own`;
+    const URL = `/api/messages/forward`;
+    try {
+      const response = await AxiosClient.post(URL, {
+        messageId,
+        channelIds
+      });
+      return response.data;
+    } catch (err) {
+      const error = err;
+      console.log(error);
+      return [];
+    }
   }
 };
 export default ChannelApi;

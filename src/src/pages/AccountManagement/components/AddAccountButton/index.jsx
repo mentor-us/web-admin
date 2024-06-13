@@ -37,7 +37,7 @@ function AddAccountButton() {
     myInfo.roles && myInfo.roles.includes(ROLE.SUPER_ADMIN)
       ? roleAccountList?.map((option) => option.role)
       : roleAccountList
-          ?.filter((item) => item.textValue !== "SUPER_ADMIN")
+          ?.filter((item) => item.textValue !== ROLE.SUPER_ADMIN)
           .map((option) => option.role);
 
   const [name, setName] = useState("");

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/no-this-in-sfc */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
@@ -20,7 +21,6 @@ import ListItemText from "@mui/material/ListItemText";
 
 import { getImageUrlWithKey } from "utils";
 
-import AsyncMDAvatar from "pages/WebUser/components/AsyncMDAvatar";
 import GroupInfoItem from "pages/WebUser/Group/GroupInfo/GroupFunction";
 import GroupItemDetail from "pages/WebUser/Group/GroupInfo/GroupItemDetail";
 import { useGetGroupDetail, useGetWorkSpace } from "hooks/groups/queries";
@@ -174,10 +174,22 @@ export default function GroupInfo() {
           <Tooltip title={headerInfo}>
             <span className="line-clamp-1 max-w-[74%]">{headerInfo}</span>
           </Tooltip>
+          {showTypeScreen === GROUP_FUNCTION.FAQ && groupDetail?.role === USER_ROLE.MENTOR && (
+            <IconButton
+              className="!absolute !right-0 hover:!bg-slate-300 rounded-full"
+              size="small"
+              onClick={(e) => {
+                clickedAddFunction(showTypeScreen);
+              }}
+            >
+              <AddIcon />
+            </IconButton>
+          )}
           {showTypeScreen !== "" &&
           showTypeScreen !== GROUP_FUNCTION.MEMBER &&
           showTypeScreen !== GROUP_FUNCTION.IMAGE &&
-          showTypeScreen !== GROUP_FUNCTION.FILE ? (
+          showTypeScreen !== GROUP_FUNCTION.FILE &&
+          showTypeScreen !== GROUP_FUNCTION.FAQ ? (
             <IconButton
               className="!absolute !right-0 hover:!bg-slate-300 rounded-full"
               size="small"
@@ -213,7 +225,7 @@ export default function GroupInfo() {
                 <ImageIconButton
                   ref={imageIconButtonRef}
                   channelId={groupId}
-                  type={ACTION_IMAGE.UPDATE_AVATAR}
+                  type={ACTION_IMAGE.UPDATE_AVATAR_GROUP}
                 />
               </div>
               <div className="!relative">

@@ -46,7 +46,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
   const roleList = myInfo.roles.includes(ROLE.SUPER_ADMIN)
     ? roleAccountList?.map((option) => option.role)
     : roleAccountList
-        ?.filter((item) => item.textValue !== "SUPER_ADMIN")
+        ?.filter((item) => item.textValue !== ROLE.SUPER_ADMIN)
         .map((option) => option.role);
   const [birthDate, setBirthDate] = useState(dayjs(data.birthDate));
   const [status, setStatus] = useState(data.status);
@@ -118,7 +118,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
   };
 
   const isFailCase = () => {
-    if (personalEmail.length > 0 && !isEmailValid(personalEmail)) {
+    if (personalEmail && personalEmail.length > 0 && !isEmailValid(personalEmail)) {
       ErrorAlert("Email cá nhân không hợp lệ!");
       return true;
     }
@@ -136,7 +136,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
 
     const isValidName = name && name.length > 0;
 
-    const isValidEmail = personalEmail === "" || isEmailValid(personalEmail);
+    const isValidEmail = personalEmail === "" || !personalEmail || isEmailValid(personalEmail);
 
     const isValidPhoneNumber = phone === "" || phone.length === 10;
 
