@@ -37,7 +37,7 @@ function GradeItem(props) {
   const { item, isEditable, onDeleteGrade, isCreateable, onSubmitGrade } = props;
   const [state, dispatch] = useReducer(reducer, initState);
   const { score, course, courseInfo, verified, disableSubmit, isSubmiting } = state;
-  const { data: courses } = getAllCourse(courseInfo);
+  const { data: courses } = getAllCourse(course?.name === courseInfo ? "" : courseInfo);
 
   const handleScoreChange = (event) => {
     if (!isEditable) return;
