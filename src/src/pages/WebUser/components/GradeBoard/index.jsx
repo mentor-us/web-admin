@@ -102,7 +102,7 @@ function GradeBoard(props) {
     }
   };
   useEffect(() => {
-    if (loadYearSuccess) {
+    if (!year && loadYearSuccess) {
       dispatch({ type: "SET_YEAR", payload: years[0] });
     }
   }, [loadYearSuccess]);

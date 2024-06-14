@@ -76,8 +76,8 @@ function GradeItem(props) {
     dispatch({ type: "SET_VERIFIED", payload: item.verified });
   }, [item]);
   return (
-    <div className="grade flex flex-row items-center gap-x-2 w-full">
-      <div className="flex flex-row gap-x-3 items-center w-4/6">
+    <div className="grade flex flex-row items-center gap-x-2 w-full justify-between">
+      <div className="flex flex-row gap-x-3 items-center grow">
         <div className="w-full">
           <Autocomplete
             noOptionsText="Không có thông tin môn học"

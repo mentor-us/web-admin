@@ -81,7 +81,7 @@ export const useGetAllGrades = (year, semester, userId) =>
     queryKey: ["grades", year?.id, semester?.id],
     queryFn: async () => {
       try {
-        console.log(year?.id, semester?.id, userId);
+        // console.log(year?.id, semester?.id, userId);
         return gradesList;
         // const dataReq = {
         //   parmas: {
@@ -103,8 +103,10 @@ export const useGetAllYears = (yearInfo) =>
     queryKey: ["years", yearInfo],
     queryFn: async () => {
       try {
+        const res = await YearApi.getAllYears();
+        console.log("useGetAllYears");
+        console.log(res.data);
         return years;
-        // const res = await YearApi.getAllYears();
         // return res.data;
         // eslint-disable-next-line no-unreachable
       } catch (error) {
