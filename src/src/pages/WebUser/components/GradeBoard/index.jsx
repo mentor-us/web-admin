@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import {
   Autocomplete,
-  Button,
   createTheme,
   Skeleton,
   TextField,
@@ -21,12 +20,12 @@ import useMyInfo from "hooks/useMyInfo";
 import GradeItem from "./GradeItem";
 import "./index.css";
 
-const gradeExample = {
-  id: null,
-  name: null,
-  score: 0,
-  verified: false
-};
+// const gradeExample = {
+//   id: null,
+//   name: null,
+//   score: 0,
+//   verified: false
+// };
 
 const initState = {
   year: null,
@@ -86,9 +85,6 @@ function GradeBoard(props) {
       }
     }
   });
-  const handleAddGrade = () => {
-    createGradeMutator.mutate({ ...gradeExample, year, semester });
-  };
   const handleDeleteGrade = (item) => {
     deleteGradeMutator.mutate(item.id);
   };
@@ -187,24 +183,10 @@ function GradeBoard(props) {
                   onDeleteGrade={handleDeleteGrade}
                   item={{ ...grade, index: idx }}
                   isEditable={isEditable}
-                  isCreateable={!!(semester && year)}
                 />
               );
             })}
         </div>
-        {isEditable && (
-          <div className="flex flex-row justify-end">
-            <Button
-              className="mt-4 align-right"
-              // variant="contained"
-              color="success"
-              disabled={!semester || !year}
-              onClick={handleAddGrade}
-            >
-              Thêm điểm
-            </Button>
-          </div>
-        )}
       </div>
     </ThemeProvider>
   );

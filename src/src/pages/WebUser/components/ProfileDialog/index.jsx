@@ -114,7 +114,7 @@ function ProfileDialog(props) {
   //   }
   // };
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle className="w-full !py-2" alignSelf="flex-start">
         <Stack className="w-full" direction="row" justifyContent="space-between">
           <span className="!p-2">Thông tin tài khoản</span>
