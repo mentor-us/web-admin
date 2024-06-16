@@ -2,6 +2,9 @@
 /* eslint-disable no-shadow */
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 import {
   Avatar,
   Button,
@@ -16,7 +19,12 @@ import {
 import Autocomplete from "@mui/material/Autocomplete";
 import PropTypes from "prop-types";
 
-function NoteForm({ note, onSave, onCancel }) {
+import { useCreateNoteMutation } from "hooks/notes/mutation";
+import { useGetMentees } from "hooks/profile/queries";
+
+function NoteForm({ onCancel }) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const { mutateAsync: createNote } = useCreateNoteMutation();
   const {
     control,
     handleSubmit,
@@ -30,29 +38,54 @@ function NoteForm({ note, onSave, onCancel }) {
     }
   });
 
-  useEffect(() => {
-    if (note) {
-      reset({
-        title: note.title,
-        description: note.content,
-        attendees: [] // assuming note doesn't have attendees initially
-      });
-    } else {
-      reset({
-        title: "",
-        description: "",
-        attendees: []
-      });
-    }
-  }, [note, reset]);
+  const { data: members, isLoading: isLoadingMembers } = useGetMentees({
+    page: 0,
+    pageSize: 100,
+    query: searchQuery // Pass searchQuery to hook
+  });
 
-  const handleSave = (data) => {
-    onSave({ ...note, ...data });
+  // Handler for search input change
+  const handleSearchChange = (event) => {
+    setSearchQuery(event?.target.value);
+  };
+  const prepareData = (data) => {
+    const userIds = data.attendees.map((attendee) => attendee.id);
+    return {
+      title: data.title,
+      content: data.description,
+      userIds
+    };
+  };
+  const onSubmit = (data) => {
+    toast.promise(
+      new Promise((resolve, reject) => {
+        createNote(prepareData(data))
+          .then((res) => {
+            resolve(res);
+          })
+          .catch((err) => {
+            console.error(err);
+            reject(err);
+          });
+      }),
+      {
+        loading: `Đang luu ghi chú...`,
+        success: `Ghi chú đã được tạo`,
+        error: `Đã xảy ra lỗi khi tạo ghi chú`
+      }
+    );
+
+    onCancel();
   };
 
   return (
-    <form onSubmit={handleSubmit(handleSave)}>
-      <Stack spacing={2}>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        handleSubmit(onSubmit)();
+      }}
+    >
+      <Stack spacing={2} className="mt-2">
         <Controller
           name="title"
           control={control}
@@ -61,21 +94,14 @@ function NoteForm({ note, onSave, onCancel }) {
           }}
           render={({ field }) => (
             <TextField
+              className="pt-2 mt-2"
               label="Tiêu đề *"
               fullWidth
               error={!!errors?.title}
               helperText={errors?.title?.message}
-              // disabled={!isEditable}
               {...field}
             />
           )}
-        />
-
-        <Controller
-          name="description"
-          control={control}
-          rules={{ required: false }}
-          render={({ field }) => <TextField label="Mô tả" fullWidth {...field} />}
         />
         <Controller
           name="attendees"
@@ -86,16 +112,15 @@ function NoteForm({ note, onSave, onCancel }) {
           render={({ field: { onChange, value, ...props } }) => (
             <Autocomplete
               multiple
-              options={[
-                { id: 1, name: "John Doe" },
-                { id: 2, name: "Jane Doe" }
-              ]}
-              getOptionLabel={(member) => member?.name ?? ""}
+              options={members?.data ?? []}
+              getOptionLabel={(member) => (member?.name && member?.email) || ""}
               filterSelectedOptions
               value={value}
               onChange={(event, newValue) => onChange(newValue)}
-              // loading={isLoadingMembers}
+              inputValue={searchQuery} // Controlled input value for search
+              onInputChange={handleSearchChange} // Handle input change for search
               noOptionsText="Không có thành viên nào"
+              onClose={() => setSearchQuery("")}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -106,7 +131,7 @@ function NoteForm({ note, onSave, onCancel }) {
                     ...params.InputProps,
                     endAdornment: (
                       <>
-                        {/* {isLoadingMembers ? <CircularProgress color="inherit" size={20} /> : null} */}
+                        {isLoadingMembers ? <CircularProgress color="inherit" size={20} /> : null}
                         {params.InputProps.endAdornment}
                       </>
                     )
@@ -126,6 +151,40 @@ function NoteForm({ note, onSave, onCancel }) {
             />
           )}
         />
+        <Controller
+          name="description"
+          control={control}
+          rules={{
+            required: "Vui lòng nhập nội dung ghi chú"
+          }}
+          render={({ field }) => (
+            <div className="mt-4">
+              <CKEditor
+                className="w-full rounded-md border border-gray-300"
+                editor={ClassicEditor}
+                data={field.value}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  field.onChange(data);
+                }}
+                config={{
+                  placeholder: "Nhập nội dung ghi chú",
+                  toolbar: [
+                    "heading",
+                    "|",
+                    "bold",
+                    "italic",
+                    "link",
+                    "blockQuote",
+                    "|",
+                    "undo",
+                    "redo"
+                  ]
+                }}
+              />
+            </div>
+          )}
+        />
       </Stack>
       <DialogActions>
         <Button onClick={onCancel}>Hủy</Button>
@@ -136,9 +195,7 @@ function NoteForm({ note, onSave, onCancel }) {
 }
 
 NoteForm.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types, react/require-default-props
-  note: PropTypes.object,
-  onSave: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types, react/require-default-props,
   onCancel: PropTypes.func.isRequired
 };
 

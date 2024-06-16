@@ -156,6 +156,10 @@ const updateAvatar = async (req) => {
   return response;
 };
 const getMe = () => UserApi.getMe();
+const getMentees = async (req) => {
+  const response = await UserApi.getMentees(req);
+  return response;
+};
 
 const accountServices = {
   getAllAccount,
@@ -179,7 +183,8 @@ const accountServices = {
   exportAccountSearch,
   updateProfile,
   updateAvatar,
-  getMe
+  getMe,
+  getMentees
 };
 
 export default ErrorWrapper(accountServices);

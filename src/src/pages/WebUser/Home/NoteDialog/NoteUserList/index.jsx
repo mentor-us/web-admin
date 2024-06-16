@@ -1,18 +1,23 @@
 /* eslint-disable no-unused-vars */
+import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SearchIcon from "@mui/icons-material/Search";
 import { Avatar, IconButton, InputBase, Paper, Stack, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
-function NoteUserList({ notes, onDetail, onDelete }) {
+import { useGetUserNotes } from "hooks/notes/queries";
+
+function NoteUserList({ onDetail, onDelete }) {
+  const [searchQuery, setSearchQuery] = useState("");
   const handleSearchChange = (e) => {
     e.preventDefault();
-    console.log(e.target.value);
+    setSearchQuery(e?.target?.value);
   };
+  const { data: notes } = useGetUserNotes({ page: 0, pageSize: 10, query: searchQuery });
 
   return (
-    <Stack className="w-full rounded-lg" direction="column" spacing={1}>
+    <Stack className="w-full rounded-lg" direction="column" spacing={1} sx={{ minHeight: "300px" }}>
       <Paper
         component="form"
         sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400 }}
@@ -27,21 +32,19 @@ function NoteUserList({ notes, onDetail, onDelete }) {
           onChange={handleSearchChange}
         />
       </Paper>
-      {notes.map((note) => (
+      {notes?.map((note) => (
         <Stack
-          key={note.user.id}
+          key={note?.id}
           className="w-full p-2 hover:bg-gray-100 cursor-pointer"
           direction="row"
           justifyContent="space-between"
           alignItems="center"
         >
           <Stack direction="row" spacing={2} onClick={() => onDetail(note.user.id)}>
-            <Avatar src={note.user.imageUrl} />
+            <Avatar src={note?.imageUrl} />
             <Stack direction="column">
-              <Typography>{note.user.name}</Typography>
-              <Typography variant="caption">
-                Có {note.user.totalNotes} ghi chú về người này
-              </Typography>
+              <Typography>{note?.name}</Typography>
+              <Typography variant="caption">Có {note?.totalNotes} ghi chú về người này</Typography>
             </Stack>
           </Stack>
           {/* <Stack direction="row" spacing={1}>
@@ -54,13 +57,13 @@ function NoteUserList({ notes, onDetail, onDelete }) {
           </Stack> */}
         </Stack>
       ))}
+      {!notes?.length && <Typography>Không có ghi chú nào</Typography>}
     </Stack>
   );
 }
 
 NoteUserList.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  notes: PropTypes.array.isRequired,
   onDetail: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired
 };
