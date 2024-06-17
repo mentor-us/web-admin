@@ -5,17 +5,54 @@ const useSubjectManagementStore = create((set) => ({
     { text: "Mã môn", textValue: "code", isShow: true },
     { text: "Tên môn", textValue: "name", isShow: true }
   ],
-
+  currentPageSearch: 0,
+  itemsPerPage: 10,
+  isSelectAll: false,
+  couseData: [],
+  setCourseData: (courses) => {
+    set((state) => {
+      if (courses) {
+        const temp = [...state.couseData];
+        courses.map((course) => {
+          const c = temp.find((tempCourse) => tempCourse.code === course.code);
+          return {
+            ...course,
+            isChecked: c?.isChecked ?? false
+          };
+        });
+      }
+      return { ...state, couseData: courses };
+    });
+  },
+  setIsSelectAll: () => {
+    set((state) => {
+      return { ...state, isSelectAll: !state.isSelectAll };
+    });
+  },
+  setIsChecked: (item) => {
+    set((state) => {
+      console.log("setIsChecked");
+      const temp = [...state.couseData];
+      console.log(temp);
+      if (item) {
+        const course = temp.find((tempCourse) => tempCourse.code === item.code);
+        course.isChecked = item?.isChecked ?? false;
+        console.log(temp);
+      }
+      const hasNonSelectItem = temp.find((tempCourse) => !tempCourse.isChecked);
+      return { ...state, couseData: temp, isSelectAll: !hasNonSelectItem };
+    });
+  },
+  setItemsPerPage: (number) => {
+    set((state) => {
+      return { ...state, currentPageSearch: number };
+    });
+  },
   setColumnHeadersx: (updatedColumn) => {
     set((state) => {
-      console.log("setColumnHeaders1");
-      console.log(updatedColumn);
-      console.log(state.columnHeaders);
-
       const indexCol = state.columnHeaders.findIndex((col) => {
         return col.textValue === updatedColumn.textValue;
       });
-      console.log(indexCol);
 
       // If the column is found, update it
       if (indexCol !== -1) {

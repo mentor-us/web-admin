@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import { Card, Grid, Icon } from "@mui/material";
 import {
   // getAllCategoriesSearchSelector,
-  getCategoriesSelectAllSelector,
-  getCategoryCurrentPageSearchSelector,
-  getCategoryItemsPerPageSelector,
+  // getCategoriesSelectAllSelector,
+  // getCategoryCurrentPageSearchSelector,
+  // getCategoryItemsPerPageSelector,
   // getCategorySearchRequestSelector,
   // getCategorySelectAllSearchSelector,
   getCategoryTotalItemsSearchSelector,
@@ -41,21 +41,18 @@ function SubjectManagement() {
 
   // const dispatch = useDispatch();
   // const allCategories = useSelector(allCategoriesSelector);
-  const isSelectAll = useSelector(getCategoriesSelectAllSelector);
+  // const isSelectAll = useSelector(getCategoriesSelectAllSelector);
   const { data: courses } = getAllCourse("");
   // const searchCategories = useSelector(getAllCategoriesSearchSelector);
   const isSearch = useSelector(getIsSearchCategorySelector);
-  const itemsPerPage = useSelector(getCategoryItemsPerPageSelector);
   // const isSelectAllSearch = useSelector(getCategorySelectAllSearchSelector);
-  const currentPageSearch = useSelector(getCategoryCurrentPageSearchSelector);
   const totalPagesSearch = useSelector(getCategoryTotalPagesSearchSelector);
   const totalItemsSearch = useSelector(getCategoryTotalItemsSearchSelector);
   // const searchRequest = useSelector(getCategorySearchRequestSelector);
-  const { columnHeaders } = useSubjectManagementStore();
-  console.log("columnHeaders");
-  console.log(columnHeaders);
+  const { couseData, columnHeaders, currentPageSearch, itemsPerPage, isSelectAll, setCourseData } =
+    useSubjectManagementStore();
   const tableData = subjectTableData(
-    courses,
+    couseData,
     isSelectAll,
     currentPageSearch,
     itemsPerPage,
@@ -83,7 +80,9 @@ function SubjectManagement() {
       // dispatch(searchCategory({ ...searchRequest, ...pageChangeInfo }));
     }
   }, [totalItemsSearch]);
-
+  useEffect(() => {
+    setCourseData(courses ?? []);
+  }, [courses]);
   // eslint-disable-next-line no-unused-vars
   const handleChangeItemsPerPage = async (value) => {
     try {

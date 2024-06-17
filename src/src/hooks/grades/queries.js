@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
+import CourseApi from "api/CourseApi";
 import GradeApi from "api/GradeApi";
 import YearApi from "api/YearApi";
 
@@ -103,9 +104,13 @@ export const useGetAllYears = (yearInfo) =>
     queryKey: ["years", yearInfo],
     queryFn: async () => {
       try {
+        // const params = {
+        //   yearInfo
+        // };
         const res = await YearApi.getAllYears();
-        console.log("useGetAllYears");
-        console.log(res.data);
+        // console.log("useGetAllYears");
+        // console.log(res.data);
+        // [...res.data].filter((year) => year.name.toString().includes(yearInfo));
         return years;
         // return res.data;
         // eslint-disable-next-line no-unreachable
@@ -134,9 +139,9 @@ export const getAllCourse = (name) =>
     queryKey: ["course", name],
     queryFn: async () => {
       try {
-        return courses;
-        // const res = await YearApi.getAllSemesterOfYear(year?.id);
-        // return res.data;
+        // return courses;
+        const res = await CourseApi.getAllCourses();
+        return res.data;
       } catch (error) {
         return courses;
       }

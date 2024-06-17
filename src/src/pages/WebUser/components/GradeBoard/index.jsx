@@ -57,7 +57,7 @@ function GradeBoard(props) {
     data: years,
     isLoading: isLoadingDefaultYear,
     isSuccess: loadYearSuccess
-  } = useGetAllYears(yearInfo);
+  } = useGetAllYears(yearInfo.trim());
   const { data: semesters } = getAllSemesterOfYear(semesterInfo);
   const { data: grades } = useGetAllGrades(year, semester, myInfo.id);
   const createGradeMutator = useCreateGradeMutation(year, semester);

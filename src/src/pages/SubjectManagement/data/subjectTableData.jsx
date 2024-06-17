@@ -1,14 +1,15 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/function-component-definition */
 
-import {
-  categoryCheckboxAllChange,
-  categoryCheckboxSingleChange
-} from "features/groupsCategory/slice";
+// import {
+//   // categoryCheckboxAllChange,
+//   categoryCheckboxSingleChange
+// } from "features/groupsCategory/slice";
 
 import { compareVietnameseWord } from "utils";
 
 import CustomCheckbox from "components/Checkbox";
+import useSubjectManagementStore from "hooks/client/useSubjectManagementStore";
 
 import MenuOption from "../components/MenuOption";
 
@@ -20,6 +21,7 @@ export default function subjectTableData(
   isSearch,
   columnHeaders
 ) {
+  const { setIsSelectAll, setIsChecked } = useSubjectManagementStore();
   let columns = [
     {
       Header: "STT",
@@ -53,7 +55,7 @@ export default function subjectTableData(
           data={isSelectAll}
           key="category-management"
           type="all"
-          action={categoryCheckboxAllChange}
+          action={setIsSelectAll}
         />
       ),
       accessor: "is-checked",
@@ -83,21 +85,20 @@ export default function subjectTableData(
   const rows = !data
     ? []
     : data.map((item, index) => {
-        console.log("item");
-        console.log(item);
-        const numberOrder = isSearch ? itemsPerPage * (currentPage - 1) + index + 1 : index + 1;
-
+        const numberOrder = index + 1;
+        const isChecked = isSelectAll ? true : item.isChecked ?? false;
+        // item.isChecked = isChecked;
         return {
           no: numberOrder,
           name: item.name,
           code: item.name,
           "is-checked": (
             <CustomCheckbox
-              key={item.id}
-              data={item}
-              type="single"
-              prop="isChecked"
-              action={categoryCheckboxSingleChange}
+              key={item.code}
+              data={isChecked}
+              type={false}
+              // prop="isChecked"
+              action={(checked) => setIsChecked({ ...item, isChecked: checked })}
             />
           ),
           action: <MenuOption data={item} />
