@@ -86,7 +86,7 @@ export default function subjectTableData(
     ? []
     : data.map((item, index) => {
         const numberOrder = index + 1;
-        const isChecked = isSelectAll ? true : item.isChecked ?? false;
+        // const isChecked = isSelectAll ? true : item.isChecked ?? false;
         // item.isChecked = isChecked;
         return {
           no: numberOrder,
@@ -95,7 +95,7 @@ export default function subjectTableData(
           "is-checked": (
             <CustomCheckbox
               key={item.code}
-              data={isChecked}
+              data={item.isChecked ?? false}
               type={false}
               // prop="isChecked"
               action={(checked) => setIsChecked({ ...item, isChecked: checked })}

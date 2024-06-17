@@ -26,7 +26,10 @@ const useSubjectManagementStore = create((set) => ({
   },
   setIsSelectAll: () => {
     set((state) => {
-      return { ...state, isSelectAll: !state.isSelectAll };
+      const temp = [...state.couseData].map((course) => {
+        return { ...course, isChecked: !state.isSelectAll };
+      });
+      return { ...state, isSelectAll: !state.isSelectAll, couseData: temp };
     });
   },
   setIsChecked: (item) => {
