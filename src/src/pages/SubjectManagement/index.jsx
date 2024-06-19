@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Card, Grid, Icon } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   // getAllCategoriesSearchSelector,
   // getCategoriesSelectAllSelector,
@@ -8,8 +9,8 @@ import {
   // getCategoryItemsPerPageSelector,
   // getCategorySearchRequestSelector,
   // getCategorySelectAllSearchSelector,
-  getCategoryTotalItemsSearchSelector,
-  getCategoryTotalPagesSearchSelector,
+  // getCategoryTotalItemsSearchSelector,
+  // getCategoryTotalPagesSearchSelector,
   getIsSearchCategorySelector
 } from "features/groupsCategory/selector";
 
@@ -27,7 +28,7 @@ import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 import SelectAllFeature from "components/SelectAllFeature";
 import { ErrorAlert } from "components/SweetAlert";
-import DataTable from "components/Tables/DataTable";
+// import DataTable from "components/Tables/DataTable";
 import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
 import useSubjectManagementStore from "hooks/client/useSubjectManagementStore";
 import { getAllCourse } from "hooks/grades/queries";
@@ -38,19 +39,25 @@ import subjectTableData from "./data/subjectTableData";
 
 function SubjectManagement() {
   /// --------------------- Khai báo Biến, State -------------
-
-  // const dispatch = useDispatch();
-  // const allCategories = useSelector(allCategoriesSelector);
-  // const isSelectAll = useSelector(getCategoriesSelectAllSelector);
-  const { data: courses } = getAllCourse("");
-  // const searchCategories = useSelector(getAllCategoriesSearchSelector);
+  const queryClient = useQueryClient();
   const isSearch = useSelector(getIsSearchCategorySelector);
-  // const isSelectAllSearch = useSelector(getCategorySelectAllSearchSelector);
-  const totalPagesSearch = useSelector(getCategoryTotalPagesSearchSelector);
-  const totalItemsSearch = useSelector(getCategoryTotalItemsSearchSelector);
-  // const searchRequest = useSelector(getCategorySearchRequestSelector);
-  const { couseData, columnHeaders, currentPageSearch, itemsPerPage, isSelectAll, setCourseData } =
-    useSubjectManagementStore();
+  const {
+    couseData,
+    columnHeaders,
+    currentPageSearch,
+    itemsPerPage,
+    isSelectAll,
+    setCourseData,
+    setItemsPerPage
+  } = useSubjectManagementStore();
+
+  const { data: courses } = getAllCourse({
+    name: "",
+    pageSize: itemsPerPage
+  });
+  console.log("courses");
+  console.log(courses);
+
   const tableData = subjectTableData(
     couseData,
     isSelectAll,
@@ -71,30 +78,23 @@ function SubjectManagement() {
   //   };
   // }, [dispatch]);
 
+  // useEffect(() => {
+  //   if (isSearch) {
+  //     // const pageChangeInfo = {
+  //     //   page: 0,
+  //     //   size: itemsPerPage
+  //     // };
+  //     // dispatch(searchCategory({ ...searchRequest, ...pageChangeInfo }));
+  //   }
+  // }, [totalItemsSearch]);
   useEffect(() => {
-    if (isSearch) {
-      // const pageChangeInfo = {
-      //   page: 0,
-      //   size: itemsPerPage
-      // };
-      // dispatch(searchCategory({ ...searchRequest, ...pageChangeInfo }));
-    }
-  }, [totalItemsSearch]);
-  useEffect(() => {
-    setCourseData(courses ?? []);
+    setCourseData(courses?.data ?? []);
+    setItemsPerPage(courses?.pageSize ?? 25);
   }, [courses]);
   // eslint-disable-next-line no-unused-vars
   const handleChangeItemsPerPage = async (value) => {
     try {
-      // const pageChangeInfo = {
-      //   page: 0,
-      //   size: value
-      // };
-      // dispatch(categoryItemsPerPageChange(value));
-      if (isSearch) {
-        // dispatch(searchByButton(false));
-        // await dispatch(searchCategory({ ...searchRequest, ...pageChangeInfo })).unwrap();
-      }
+      setItemsPerPage(value);
     } catch (error) {
       ErrorAlert(error.message);
     }
@@ -119,35 +119,30 @@ function SubjectManagement() {
       ErrorAlert(error.message);
     }
   };
-
+  useEffect(() => {
+    queryClient.refetchQueries({
+      queryKey: "courses"
+    });
+    console.log("itemsPerPage");
+    console.log(itemsPerPage);
+  }, [itemsPerPage]);
   // eslint-disable-next-line no-unused-vars
   const renderTable = () => {
-    if (isSearch) {
-      return (
-        <DataTableCustom
-          table={tableData}
-          isSorted
-          noEndBorder={false}
-          customPaginationInfo={{
-            currentPage: currentPageSearch,
-            totalPages: totalPagesSearch,
-            totalItems: totalItemsSearch,
-            itemsPerPage,
-            handleChangeItemsPerPage,
-            handleChangePage
-          }}
-          headerFilterType="subject"
-        />
-      );
-    }
-
+    console.log("renderTable");
+    console.log(courses);
     return (
-      <DataTable
+      <DataTableCustom
         table={tableData}
         isSorted
-        entriesPerPage
-        showTotalEntries={false}
         noEndBorder={false}
+        customPaginationInfo={{
+          currentPage: courses?.page ?? 0,
+          totalPages: courses?.totalPages ?? 0,
+          totalItems: courses?.totalCounts ?? 0,
+          itemsPerPage,
+          handleChangeItemsPerPage,
+          handleChangePage
+        }}
         headerFilterType="subject"
       />
     );
@@ -194,7 +189,7 @@ function SubjectManagement() {
                 </MDBox>
                 <Grid container>
                   <Grid item xs={12}>
-                    {renderTable()}
+                    {courses && renderTable()}
                   </Grid>
                 </Grid>
               </MDBox>

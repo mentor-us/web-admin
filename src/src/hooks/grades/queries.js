@@ -134,14 +134,19 @@ export const getAllSemesterOfYear = (semesterInfo) =>
     },
     enabled: true
   });
-export const getAllCourse = (name) =>
+export const getAllCourse = (query) =>
   useQuery({
-    queryKey: ["course", name],
+    queryKey: ["courses"],
     queryFn: async () => {
       try {
         // return courses;
-        const res = await CourseApi.getAllCourses();
-        return res.data;
+        const params = {
+          page: 0,
+          pageSize: 10
+        };
+        console.log({ ...params, ...query });
+        const res = await CourseApi.getAllCourses({ ...params, ...query });
+        return res;
       } catch (error) {
         return courses;
       }

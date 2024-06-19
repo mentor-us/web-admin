@@ -34,21 +34,19 @@ const useSubjectManagementStore = create((set) => ({
   },
   setIsChecked: (item) => {
     set((state) => {
-      console.log("setIsChecked");
       const temp = [...state.couseData];
-      console.log(temp);
       if (item) {
         const course = temp.find((tempCourse) => tempCourse.code === item.code);
         course.isChecked = item?.isChecked ?? false;
-        console.log(temp);
       }
       const hasNonSelectItem = temp.find((tempCourse) => !tempCourse.isChecked);
       return { ...state, couseData: temp, isSelectAll: !hasNonSelectItem };
     });
   },
   setItemsPerPage: (number) => {
+    console.log("setItemsPerPage");
     set((state) => {
-      return { ...state, currentPageSearch: number };
+      return { ...state, itemsPerPage: number };
     });
   },
   setColumnHeadersx: (updatedColumn) => {
@@ -61,7 +59,6 @@ const useSubjectManagementStore = create((set) => ({
       if (indexCol !== -1) {
         const updatedColumnHeaders = [...state.columnHeaders];
         updatedColumnHeaders[indexCol] = { ...updatedColumn, isShow: false };
-        console.log(updatedColumnHeaders);
 
         return {
           ...state,
