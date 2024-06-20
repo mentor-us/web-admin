@@ -1,11 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/function-component-definition */
 
-// import {
-//   // categoryCheckboxAllChange,
-//   categoryCheckboxSingleChange
-// } from "features/groupsCategory/slice";
-
 import { compareVietnameseWord } from "utils";
 
 // import CustomCheckbox from "components/Checkbox";

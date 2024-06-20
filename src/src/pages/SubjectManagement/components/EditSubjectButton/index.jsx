@@ -40,7 +40,7 @@ function EditSubjectButton({ data, setState }) {
     });
   };
 
-  const updateCategory = async (req) => {
+  const updateSubject = async (req) => {
     setLoading(dispatchContext, true);
 
     try {
@@ -58,11 +58,11 @@ function EditSubjectButton({ data, setState }) {
   };
 
   const isOneReqDataHasValue = () => {
-    return name.length > 0;
+    return name.length > 0 || code.length > 0;
   };
 
   const isRequireDataDifferentFromDefault = () => {
-    return name !== defaultValue.name;
+    return name !== defaultValue.name || code !== defaultValue.code;
   };
 
   const isLostAllData = () => {
@@ -104,7 +104,8 @@ function EditSubjectButton({ data, setState }) {
   const handleSubmit = () => {
     if (firstLoad.name && name.length === 0) {
       setFirstLoad({
-        name: false
+        name: false,
+        code: false
       });
       return;
     }
@@ -113,7 +114,7 @@ function EditSubjectButton({ data, setState }) {
       name: name.toString().trim(),
       code: code.toString().trim()
     };
-    updateCategory(req);
+    updateSubject(req);
   };
 
   return (

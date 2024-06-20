@@ -42,23 +42,12 @@ function SubjectManagement() {
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm --------------------
 
-  /// --------------------------------------------------------
-  /// --------------------- Các hàm event ---------------------
-
-  // useEffect(() => {
-  //   if (isSearch) {
-  //     // const pageChangeInfo = {
-  //     //   page: 0,
-  //     //   size: itemsPerPage
-  //     // };
-  //     // dispatch(searchCategory({ ...searchRequest, ...pageChangeInfo }));
-  //   }
-  // }, [totalItemsSearch]);
   useEffect(() => {
     setCourseData(courses?.data ?? []);
     setState("currentPageSearch", courses?.page ?? 0);
     setState("itemsPerPage", courses?.pageSize ?? 10);
   }, [courses]);
+
   // eslint-disable-next-line no-unused-vars
   const handleChangeItemsPerPage = async (value) => {
     try {
