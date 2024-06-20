@@ -17,9 +17,11 @@ import {
   TextField
 } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
+import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 import { useCreateNoteMutation } from "hooks/notes/mutation";
+import { useGetUserNotesKey } from "hooks/profile/key";
 import { useGetMentees } from "hooks/profile/queries";
 
 function NoteForm({ onCancel }) {
@@ -37,6 +39,7 @@ function NoteForm({ onCancel }) {
       attendees: []
     }
   });
+  const queryClient = useQueryClient();
 
   const { data: members, isLoading: isLoadingMembers } = useGetMentees({
     page: 0,
@@ -61,6 +64,9 @@ function NoteForm({ onCancel }) {
       new Promise((resolve, reject) => {
         createNote(prepareData(data))
           .then((res) => {
+            queryClient.refetchQueries({
+              queryKey: useGetUserNotesKey()
+            });
             resolve(res);
           })
           .catch((err) => {

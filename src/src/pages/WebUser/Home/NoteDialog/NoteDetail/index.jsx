@@ -1,11 +1,14 @@
 /* eslint-disable no-unused-vars */
 import { useEffect } from "react";
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
+import { ShareOutlined } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
-import { Avatar, Button } from "@mui/material";
+import { Avatar, Button, IconButton } from "@mui/material";
 import PropTypes from "prop-types";
 
-import { getImageUrlWithKey } from "utils";
+import { formatDate, getImageUrlWithKey } from "utils";
+
+import { useGetUserNoteByUserId } from "hooks/notes/queries";
 
 import "react-vertical-timeline-component/style.min.css";
 
@@ -25,70 +28,8 @@ const user2 = {
   totalNotes: 8
 };
 
-const notes = [
-  {
-    id: "note-001",
-    title: "Meeting Notes",
-    content: "Discuss project roadmap and milestones.",
-    creator: user1,
-    owner: user1,
-    createdDate: new Date("2023-06-01T10:00:00Z"),
-    updatedDate: new Date("2023-06-02T10:00:00Z"),
-    updatedBy: user1,
-    isEditable: true
-  },
-  {
-    id: "note-002",
-    title: "Shopping List",
-    content: "Milk, Eggs, Bread, Butter",
-    creator: user2,
-    owner: user2,
-    createdDate: new Date("2023-06-05T15:00:00Z"),
-    updatedDate: new Date("2023-06-06T15:00:00Z"),
-    updatedBy: user2,
-    isEditable: true
-  },
-  {
-    id: "note-003",
-    title: "Project Ideas",
-    content: "1. Mobile App\n2. E-commerce Website\n3. Machine Learning Model",
-    creator: user1,
-    owner: user1,
-    createdDate: new Date("2023-06-10T09:00:00Z"),
-    updatedDate: new Date("2023-06-11T09:00:00Z"),
-    updatedBy: user1,
-    isEditable: true
-  },
-  {
-    id: "note-004",
-    title: "Workout Plan",
-    content: "Monday: Chest\nTuesday: Back\nWednesday: Legs\nThursday: Arms\nFriday: Shoulders",
-    creator: user2,
-    owner: user2,
-    createdDate: new Date("2023-06-15T12:00:00Z"),
-    updatedDate: new Date("2023-06-16T12:00:00Z"),
-    updatedBy: user2,
-    isEditable: true
-  },
-  {
-    id: "note-005",
-    title: "Books to Read",
-    content: "1. The Great Gatsby\n2. To Kill a Mockingbird\n3. 1984\n4. Moby Dick",
-    creator: user1,
-    owner: user1,
-    createdDate: new Date("2023-06-20T18:00:00Z"),
-    updatedDate: new Date("2023-06-21T18:00:00Z"),
-    updatedBy: user1,
-    isEditable: true
-  }
-];
-
-function NoteDetail({ noteUserId, onCancel }) {
-  useEffect(() => {
-    if (noteUserId) {
-      console.log(noteUserId);
-    }
-  }, [noteUserId]);
+function NoteDetail({ noteUserId }) {
+  const { data: notes, isLoading, isSuccess } = useGetUserNoteByUserId(noteUserId);
 
   const timelineElementStyle = {
     background: "#e3e3e3",
@@ -105,38 +46,61 @@ function NoteDetail({ noteUserId, onCancel }) {
   };
 
   return (
-    <div>
-      <VerticalTimeline lineColor="#e3e3e3" layout="1-column-left">
-        {notes.map((note) => (
-          <VerticalTimelineElement
-            key={note.id}
-            className="vertical-timeline-element--work cursor-pointer"
-            contentStyle={timelineElementStyle}
-            contentArrowStyle={{ borderRight: "7px solid #e3e3e3" }}
-            iconStyle={iconStyle}
-            date={note.updatedDate.toLocaleDateString()}
-            icon={
-              <Avatar
-                className="!rounded-lg"
-                src={getImageUrlWithKey(note.creator.imageUrl)}
-                sx={{ width: "50px", height: "50px", border: "6px solid #e3e3e3" }}
+    <div className="min-h-60">
+      {notes?.data.length > 0 && (
+        <VerticalTimeline lineColor="#e3e3e3" layout="1-column-left">
+          {notes?.data?.map((note) => (
+            <VerticalTimelineElement
+              key={note.id}
+              className="vertical-timeline-element--work cursor-pointer"
+              contentStyle={timelineElementStyle}
+              contentArrowStyle={{ borderRight: "7px solid #e3e3e3" }}
+              iconStyle={iconStyle}
+              date={formatDate(note.updatedDate)}
+              icon={
+                <Avatar
+                  className="!rounded-lg"
+                  src={getImageUrlWithKey(note.creator.imageUrl)}
+                  sx={{ width: "50px", height: "50px", border: "6px solid #e3e3e3" }}
+                />
+              } // Reduced icon size
+            >
+              <h3 className="text-lg">{note.title}</h3>
+              <h4 className="text-base text-zinc-800">{note.creator.name}</h4>
+              <div
+                className="text-sm text-zinc-600"
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: note.content }}
               />
-            } // Reduced icon size
-          >
-            <h3 className="text-lg">{note.title}</h3>
-            <h4 className="text-base text-zinc-800">{note.creator.name}</h4>
-            <p className="text-sm text-zinc-600">{note.content}</p>
-          </VerticalTimelineElement>
-        ))}
-      </VerticalTimeline>
+              <div className="absolute bottom-0 right-0">
+                <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+                  <ShareOutlined />
+                </IconButton>
+                <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+                  <ShareOutlined />
+                </IconButton>
+              </div>
+            </VerticalTimelineElement>
+          ))}
+        </VerticalTimeline>
+      )}
+      {!isSuccess && (
+        <div className="flex flex-col items-center justify-center h-full">
+          <p className="text-lg text-zinc-800">Không tồn tại dữ liệu</p>
+        </div>
+      )}
+      {notes?.data.length === 0 && (
+        <div className="flex flex-col items-center justify-center h-full">
+          <p className="text-lg text-zinc-800">Không tồn tại dữ liệu</p>
+        </div>
+      )}
     </div>
   );
 }
 
 NoteDetail.propTypes = {
   // eslint-disable-next-line react/require-default-props
-  noteUserId: PropTypes.string,
-  onCancel: PropTypes.func.isRequired
+  noteUserId: PropTypes.string
 };
 
 export default NoteDetail;

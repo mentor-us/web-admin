@@ -10,3 +10,9 @@ export const useGetUserNotes = (req) => {
     queryFn: () => NoteService.getUserNotes(req)
   });
 };
+export const useGetUserNoteByUserId = (id) => {
+  return useQuery({
+    queryKey: ["getUserNoteByUserId", id],
+    queryFn: () => NoteService.getUserNoteByUserId(id)
+  });
+};

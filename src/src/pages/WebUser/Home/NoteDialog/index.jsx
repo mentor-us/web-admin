@@ -119,7 +119,7 @@ function NoteDialog({ open, onClose }) {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle className="w-full !py-2" alignSelf="flex-start">
         <Stack className="w-full" direction="row" justifyContent="space-between">
           <span className="!p-2">{renderTitle()}</span>

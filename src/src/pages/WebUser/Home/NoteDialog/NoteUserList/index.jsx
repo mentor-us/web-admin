@@ -17,47 +17,54 @@ function NoteUserList({ onDetail, onDelete }) {
   const { data: notes } = useGetUserNotes({ page: 0, pageSize: 10, query: searchQuery });
 
   return (
-    <Stack className="w-full rounded-lg" direction="column" spacing={1} sx={{ minHeight: "300px" }}>
+    <Stack className="w-full rounded-lg" direction="column" spacing={1}>
       <Paper
         component="form"
-        sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400 }}
+        sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: "100%" }}
       >
         <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
           <SearchIcon />
         </IconButton>
         <InputBase
           sx={{ ml: 1, flex: 1 }}
+          className="w-full"
           placeholder="Tìm kiếm bằng tên hoặc email"
           inputProps={{ "aria-label": "Tìm kiếm bằng tên hoặc email" }}
           onChange={handleSearchChange}
         />
       </Paper>
-      {notes?.map((note) => (
-        <Stack
-          key={note?.id}
-          className="w-full p-2 hover:bg-gray-100 cursor-pointer"
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Stack direction="row" spacing={2} onClick={() => onDetail(note.user.id)}>
-            <Avatar src={note?.imageUrl} />
-            <Stack direction="column">
-              <Typography>{note?.name}</Typography>
-              <Typography variant="caption">Có {note?.totalNotes} ghi chú về người này</Typography>
+      <Stack sx={{ minHeight: "300px" }}>
+        {notes?.data?.map((note) => (
+          <Stack
+            key={note?.id}
+            className="w-full p-2 hover:bg-gray-100 cursor-pointer"
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Stack direction="row" spacing={2} onClick={() => onDetail(note.id)}>
+              <Avatar src={note?.imageUrl} />
+              <Stack direction="column">
+                <Typography>{note?.name}</Typography>
+                <Typography variant="caption">
+                  Có {note?.totalNotes} ghi chú về người này
+                </Typography>
+              </Stack>
             </Stack>
+            {/* <Stack direction="row" spacing={1}>
+              <IconButton onClick={() => onDetail(note.user)}>
+                <EditIcon />
+              </IconButton>
+              <IconButton onClick={() => onDelete(note.user.id)}>
+                <DeleteIcon />
+              </IconButton>
+            </Stack> */}
           </Stack>
-          {/* <Stack direction="row" spacing={1}>
-            <IconButton onClick={() => onDetail(note.user)}>
-              <EditIcon />
-            </IconButton>
-            <IconButton onClick={() => onDelete(note.user.id)}>
-              <DeleteIcon />
-            </IconButton>
-          </Stack> */}
-        </Stack>
-      ))}
-      {!notes?.length && <Typography>Không có ghi chú nào</Typography>}
+        ))}
+      </Stack>
+      {!notes?.data?.length && (
+        <Typography className="w-full text-center">Không có ghi chú nào</Typography>
+      )}
     </Stack>
   );
 }
