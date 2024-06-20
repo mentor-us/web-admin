@@ -9,6 +9,11 @@ const useSubjectManagementStore = create((set) => ({
   itemsPerPage: 10,
   isSelectAll: false,
   couseData: [],
+  setState: (keyState, value) => {
+    set((state) => {
+      return { ...state, [keyState]: value };
+    });
+  },
   setCourseData: (courses) => {
     set((state) => {
       if (courses) {

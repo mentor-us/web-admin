@@ -48,15 +48,15 @@ function SubjectManagement() {
     itemsPerPage,
     isSelectAll,
     setCourseData,
-    setItemsPerPage
+    setItemsPerPage,
+    setState
   } = useSubjectManagementStore();
 
   const { data: courses } = getAllCourse({
     name: "",
-    pageSize: itemsPerPage
+    pageSize: itemsPerPage,
+    page: currentPageSearch
   });
-  console.log("courses");
-  console.log(courses);
 
   const tableData = subjectTableData(
     couseData,
@@ -73,12 +73,6 @@ function SubjectManagement() {
   /// --------------------- Các hàm event ---------------------
 
   // useEffect(() => {
-  //   return () => {
-  //     // dispatch(resetState());
-  //   };
-  // }, [dispatch]);
-
-  // useEffect(() => {
   //   if (isSearch) {
   //     // const pageChangeInfo = {
   //     //   page: 0,
@@ -89,7 +83,8 @@ function SubjectManagement() {
   // }, [totalItemsSearch]);
   useEffect(() => {
     setCourseData(courses?.data ?? []);
-    setItemsPerPage(courses?.pageSize ?? 25);
+    setState("currentPageSearch", courses?.page ?? 0);
+    setState("itemsPerPage", courses?.pageSize ?? 10);
   }, [courses]);
   // eslint-disable-next-line no-unused-vars
   const handleChangeItemsPerPage = async (value) => {
@@ -103,40 +98,26 @@ function SubjectManagement() {
   // eslint-disable-next-line no-unused-vars
   const handleChangePage = async (value) => {
     try {
-      // const pageChangeInfo = {
-      //   page: value,
-      //   size: itemsPerPage
-      // };
-
-      if (isSearch) {
-        // dispatch(updateSelectAll({ type: 2, value: false }));
-        // dispatch(searchByButton(false));
-        // await dispatch(searchCategory({ ...searchRequest, ...pageChangeInfo })).unwrap();
-      } else {
-        // dispatch(updateSelectAll({ type: 1, value: false }));
-      }
+      setState("currentPageSearch", value);
     } catch (error) {
       ErrorAlert(error.message);
     }
   };
   useEffect(() => {
+    setState("isSelectAll", false);
     queryClient.refetchQueries({
-      queryKey: "courses"
+      queryKey: ["courses"]
     });
-    console.log("itemsPerPage");
-    console.log(itemsPerPage);
-  }, [itemsPerPage]);
+  }, [itemsPerPage, currentPageSearch]);
   // eslint-disable-next-line no-unused-vars
   const renderTable = () => {
-    console.log("renderTable");
-    console.log(courses);
     return (
       <DataTableCustom
         table={tableData}
         isSorted
         noEndBorder={false}
         customPaginationInfo={{
-          currentPage: courses?.page ?? 0,
+          currentPage: currentPageSearch + 1,
           totalPages: courses?.totalPages ?? 0,
           totalItems: courses?.totalCounts ?? 0,
           itemsPerPage,
