@@ -1,26 +1,7 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { Card, Grid, Icon } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  // getAllCategoriesSearchSelector,
-  // getCategoriesSelectAllSelector,
-  // getCategoryCurrentPageSearchSelector,
-  // getCategoryItemsPerPageSelector,
-  // getCategorySearchRequestSelector,
-  // getCategorySelectAllSearchSelector,
-  // getCategoryTotalItemsSearchSelector,
-  // getCategoryTotalPagesSearchSelector,
-  getIsSearchCategorySelector
-} from "features/groupsCategory/selector";
 
-// import {
-//   categoryItemsPerPageChange,
-//   resetState,
-//   searchByButton,
-//   searchCategory,
-//   updateSelectAll
-// } from "features/groupsCategory/slice";
 import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import MDBox from "components/MDComponents/MDBox";
@@ -33,39 +14,31 @@ import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
 import useSubjectManagementStore from "hooks/client/useSubjectManagementStore";
 import { getAllCourse } from "hooks/grades/queries";
 
-import AddCategoryButton from "./components/AddCategoryButton";
+import AddCategoryButton from "./components/AddSubjectButton";
 import SearchBox from "./components/Search";
 import subjectTableData from "./data/subjectTableData";
 
 function SubjectManagement() {
   /// --------------------- Khai báo Biến, State -------------
   const queryClient = useQueryClient();
-  const isSearch = useSelector(getIsSearchCategorySelector);
   const {
+    query,
     couseData,
     columnHeaders,
     currentPageSearch,
     itemsPerPage,
-    isSelectAll,
     setCourseData,
-    setItemsPerPage,
+    isSubmitSearch,
     setState
   } = useSubjectManagementStore();
 
   const { data: courses } = getAllCourse({
-    name: "",
+    query,
     pageSize: itemsPerPage,
     page: currentPageSearch
   });
 
-  const tableData = subjectTableData(
-    couseData,
-    isSelectAll,
-    currentPageSearch,
-    itemsPerPage,
-    isSearch,
-    columnHeaders
-  );
+  const tableData = subjectTableData(couseData, columnHeaders);
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm --------------------
 
@@ -89,7 +62,9 @@ function SubjectManagement() {
   // eslint-disable-next-line no-unused-vars
   const handleChangeItemsPerPage = async (value) => {
     try {
-      setItemsPerPage(value);
+      setState("itemsPerPage", value);
+      setState("currentPageSearch", 0);
+      setState("isSubmitSearch", true);
     } catch (error) {
       ErrorAlert(error.message);
     }
@@ -99,16 +74,20 @@ function SubjectManagement() {
   const handleChangePage = async (value) => {
     try {
       setState("currentPageSearch", value);
+      setState("isSubmitSearch", true);
     } catch (error) {
       ErrorAlert(error.message);
     }
   };
   useEffect(() => {
-    setState("isSelectAll", false);
-    queryClient.refetchQueries({
-      queryKey: ["courses"]
-    });
-  }, [itemsPerPage, currentPageSearch]);
+    if (isSubmitSearch) {
+      setState("isSelectAll", false);
+      setState("isSubmitSearch", false);
+      queryClient.refetchQueries({
+        queryKey: ["courses"]
+      });
+    }
+  }, [isSubmitSearch]);
   // eslint-disable-next-line no-unused-vars
   const renderTable = () => {
     return (

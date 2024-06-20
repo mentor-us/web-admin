@@ -1,59 +1,53 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
-import { getCategoryPermissionsSelector } from "features/groupsCategory/selector";
-import { addNewCategory } from "features/groupsCategory/slice";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
-import { getImageUrlWithKey } from "utils";
 
-import AutoCompleteCheckbox from "components/AutoComplete/AutoCompleteCheckbox";
-import MDAvatar from "components/MDComponents/MDAvatar";
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-import { imageIconList } from "utils/constants";
+import useSubjectManagementStore from "hooks/client/useSubjectManagementStore";
+import { useCreateCourseMutation } from "hooks/courses/mutation";
 
-import IconSelectButton from "../IconSelectButton";
-
-function AddCategoryButton() {
+function AddSubjectButton() {
   /// --------------------- Khai báo Biến, State -------------
-  const dispatch = useDispatch();
   const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [iconURL, setIconURL] = useState(getImageUrlWithKey(imageIconList[0].src));
-  const [selectedPermissions, setSelectedPermission] = useState([]);
+  const [code, setCode] = useState("");
+  const { setState } = useSubjectManagementStore();
   const [firstLoad, setFirstLoad] = useState({
-    name: true
+    name: true,
+    code: true
   });
-  const initPermissions = useSelector(getCategoryPermissionsSelector);
+  const createCourseMutator = useCreateCourseMutation();
 
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------
 
   const resetAllData = () => {
     setName("");
-    setDescription("");
-    setIconURL(imageIconList[0].src);
-    setSelectedPermission([]);
+    setCode("");
     setFirstLoad({
-      name: true
+      name: true,
+      code: true
     });
   };
 
-  const addCategory = async (req) => {
+  // eslint-disable-next-line no-unused-vars
+  const addSubject = async (course) => {
     setLoading(dispatchContext, true);
 
     try {
-      await dispatch(addNewCategory(req)).unwrap();
-      SuccessAlert("Thêm loại nhóm thành công");
+      // await dispatch(addNewSubject(req)).unwrap();
+      await createCourseMutator.mutateAsync(course);
+      SuccessAlert("Thêm môn học thành công");
       setOpen(false);
       resetAllData();
+      setState("currentPageSearch", 0);
     } catch (error) {
       if (error?.message !== "401") {
         ErrorAlert(error?.message);
@@ -97,39 +91,27 @@ function AddCategoryButton() {
       name: false
     });
   };
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
+  const handleCodeChange = (e) => {
+    setCode(e.target.value);
+    setFirstLoad({
+      ...firstLoad,
+      code: false
+    });
   };
-
-  // const handleIconChange = (event) => {
-  //   setIcon(event.target.files[0]);
-
-  //   const reader = new FileReader();
-  //   reader.onloadend = () => {
-  //     setIconURL(reader.result);
-  //   };
-  //   reader.readAsDataURL(event.target.files[0]);
-
-  //   setFirstLoad({
-  //     ...firstLoad,
-  //     icon: false
-  //   });
-  // };
 
   const handleSubmit = async () => {
     if (firstLoad.name || !isAllReqDataHasValue()) {
       setFirstLoad({
-        name: false
+        name: false,
+        code: false
       });
       return;
     }
     const req = {
       name: name.toString().trim(),
-      description: description.toString().trim(),
-      iconUrl: iconURL,
-      permissions: selectedPermissions.map((item) => item.name)
+      code: code.toString().trim()
     };
-    addCategory(req);
+    addSubject(req);
   };
   return (
     <>
@@ -150,7 +132,7 @@ function AddCategoryButton() {
         <Fade in={open}>
           <Box className="group-modal__container">
             <Typography variant="h5" component="h2" textAlign="center" fontSize="25">
-              Thêm mới loại nhóm
+              Thêm mới môn học
             </Typography>
             <Divider />
             <MDBox mt={3} mb={2}>
@@ -161,19 +143,19 @@ function AddCategoryButton() {
                   color="dark"
                   sx={{ mr: 2, width: "30%" }}
                 >
-                  Tên loại nhóm <span style={{ color: "red" }}>(*)</span>
+                  Mã môn học <span style={{ color: "red" }}>(*)</span>
                 </MDTypography>
                 <MDInput
-                  placeholder="Nhập tên loại nhóm"
+                  placeholder="Nhập mã môn học"
                   type="text"
                   size="small"
                   sx={{ width: "70%" }}
-                  value={name}
+                  value={code}
                   inputProps={{ maxLength: 100 }}
-                  onChange={handleNameChange}
-                  error={!firstLoad.name && name.length === 0}
+                  onChange={handleCodeChange}
+                  error={!firstLoad.code && code.length === 0}
                   helperText={
-                    !firstLoad.name && name.length === 0 ? "Tên loại nhóm không được rỗng" : ""
+                    !firstLoad.code && code.length === 0 ? "Mã môn học không được rỗng" : ""
                   }
                 />
               </MDBox>
@@ -184,59 +166,22 @@ function AddCategoryButton() {
                   color="dark"
                   sx={{ mr: 2, width: "30%" }}
                 >
-                  Mô tả
+                  Tên môn học <span style={{ color: "red" }}>(*)</span>
                 </MDTypography>
                 <MDInput
-                  placeholder="Nhập mô tả cho loại nhóm"
-                  multiline
+                  placeholder="Nhập tên môn học"
                   type="text"
                   size="small"
                   sx={{ width: "70%" }}
-                  inputProps={{ maxLength: 200 }}
-                  value={description}
-                  onChange={handleDescriptionChange}
+                  value={name}
+                  inputProps={{ maxLength: 100 }}
+                  onChange={handleNameChange}
+                  error={!firstLoad.name && name.length === 0}
+                  helperText={
+                    !firstLoad.name && name.length === 0 ? "Tên môn học không được rỗng" : ""
+                  }
                 />
               </MDBox>
-              <MDBox className="relationship__searchBox-item" mb={2}>
-                <MDTypography
-                  variant="body2"
-                  fontWeight="regular"
-                  color="dark"
-                  sx={{ mr: 2, width: "30%" }}
-                >
-                  Biểu tượng <span style={{ color: "red" }}>(*)</span>
-                </MDTypography>
-                <MDAvatar
-                  src={iconURL}
-                  alt="category-image"
-                  shadow="sm"
-                  size="lg"
-                  sx={{
-                    alignSelf: "center",
-                    mr: 1
-                  }}
-                />
-                <IconSelectButton setState={setIconURL} />
-              </MDBox>
-              {initPermissions.length > 0 && (
-                <MDBox className="relationship__searchBox-item" mb={2}>
-                  <MDTypography
-                    variant="body2"
-                    fontWeight="regular"
-                    color="dark"
-                    sx={{ mr: 2, width: "30%" }}
-                  >
-                    Quyền ứng dụng
-                  </MDTypography>
-                  <AutoCompleteCheckbox
-                    placeholder="Chọn các quyền ứng dụng"
-                    options={initPermissions}
-                    sx={{ width: "70%" }}
-                    value={selectedPermissions}
-                    onChange={setSelectedPermission}
-                  />
-                </MDBox>
-              )}
             </MDBox>
             <MDBox display="flex" flexDirection="row" justifyContent="center" mt={4}>
               <MDButton onClick={handleSubmit} variant="contained" color="info" sx={{ mx: 1 }}>
@@ -259,4 +204,4 @@ function AddCategoryButton() {
   );
 }
 
-export default AddCategoryButton;
+export default AddSubjectButton;

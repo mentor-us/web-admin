@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 
 import MDBox from "components/MDComponents/MDBox";
 
-import DeleteCategoryButton from "../DeleteCategoryButton";
-import EditCategoryButton from "../EditCategoryButton";
+import DeleteSubjectButton from "../DeleteSubjectButton";
+import EditSubjectButton from "../EditSubjectButton";
 
 function MenuOption({ data }) {
   const [menu, setMenu] = useState(null);
@@ -40,10 +40,10 @@ function MenuOption({ data }) {
       }}
     >
       <MenuItem onClick={handleEdit} sx={{ minWidth: "unset" }}>
-        <EditCategoryButton data={data} setState={setMenu} />
+        <EditSubjectButton data={data} setState={setMenu} />
       </MenuItem>
       <MenuItem onClick={handleDelete} sx={{ minWidth: "unset" }}>
-        <DeleteCategoryButton data={data} setState={setMenu} />
+        <DeleteSubjectButton data={data} setState={setMenu} />
       </MenuItem>
     </Menu>
   );

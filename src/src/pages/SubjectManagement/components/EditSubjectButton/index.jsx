@@ -1,53 +1,40 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
-import { getCategoryPermissionsSelector } from "features/groupsCategory/selector";
-import { editCategory } from "features/groupsCategory/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
-import { getImageUrlWithKey } from "utils";
 
-import AutoCompleteCheckbox from "components/AutoComplete/AutoCompleteCheckbox";
-import MDAvatar from "components/MDComponents/MDAvatar";
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
+import { useUpdateCourseMutation } from "hooks/courses/mutation";
 
-import IconSelectButton from "../IconSelectButton";
-
-function EditCategoryButton({ data, setState }) {
+function EditSubjectButton({ data, setState }) {
   /// --------------------- Khai báo Biến, State -------------
 
-  const dispatch = useDispatch();
   const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
-  const currentPermissions = useSelector(getCategoryPermissionsSelector);
   const defaultValue = {
     name: data.name,
-    description: data.description,
-    iconURL: getImageUrlWithKey(data.iconUrl),
-    permissions: currentPermissions.filter((item) => data.permissions.includes(item.name))
+    code: data.code
   };
   const [name, setName] = useState(defaultValue.name);
-  const [description, setDescription] = useState(defaultValue.description);
-  const [iconURL, setIconURL] = useState(getImageUrlWithKey(data.iconUrl));
-  const [permission, setPermission] = useState(defaultValue.permissions);
+  const [code, setCode] = useState(defaultValue.code);
   const [firstLoad, setFirstLoad] = useState({
-    name: true
+    name: true,
+    code: true
   });
+  const updateCourseMutator = useUpdateCourseMutation();
 
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------
 
   const resetAllData = () => {
     setName(data.name);
-    setDescription(data.description);
-    setIconURL(getImageUrlWithKey(data.iconUrl));
-    setPermission(currentPermissions.filter((item) => data.permissions.includes(item.name)));
+    setCode(data.code);
     setFirstLoad({
       name: true
     });
@@ -57,8 +44,8 @@ function EditCategoryButton({ data, setState }) {
     setLoading(dispatchContext, true);
 
     try {
-      await dispatch(editCategory({ id: data.id, req })).unwrap();
-      SuccessAlert("Chỉnh sửa loại nhóm thành công");
+      await updateCourseMutator.mutateAsync({ id: data.id, ...req });
+      SuccessAlert("Chỉnh sửa môn học thành công");
       setState(null);
       setOpen(false);
     } catch (error) {
@@ -75,19 +62,8 @@ function EditCategoryButton({ data, setState }) {
   };
 
   const isRequireDataDifferentFromDefault = () => {
-    return name !== defaultValue.name || iconURL !== defaultValue.iconURL;
+    return name !== defaultValue.name;
   };
-
-  // const isReqDataEqualToDefault = () => {
-  //   return iconEditable
-  //     ? name === defaultValue.name &&
-  //         iconURL === defaultValue.iconURL &&
-  //         description === defaultValue.description &&
-  //         permission === defaultValue.permissions
-  //     : name === defaultValue.name &&
-  //         description === defaultValue.description &&
-  //         permission === defaultValue.permissions;
-  // };
 
   const isLostAllData = () => {
     if (isOneReqDataHasValue() && isRequireDataDifferentFromDefault()) {
@@ -117,8 +93,12 @@ function EditCategoryButton({ data, setState }) {
       name: false
     });
   };
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
+  const handleCodeChange = (e) => {
+    setCode(e.target.value);
+    setFirstLoad({
+      ...firstLoad,
+      code: false
+    });
   };
 
   const handleSubmit = () => {
@@ -131,9 +111,7 @@ function EditCategoryButton({ data, setState }) {
 
     const req = {
       name: name.toString().trim(),
-      description: description.toString().trim(),
-      iconUrl: iconURL,
-      permissions: permission.map((item) => item.name)
+      code: code.toString().trim()
     };
     updateCategory(req);
   };
@@ -159,7 +137,7 @@ function EditCategoryButton({ data, setState }) {
         <Fade in={open}>
           <Box className="group-modal__container">
             <Typography variant="h5" component="h2" textAlign="center" fontSize="25">
-              Chỉnh sửa loại nhóm
+              Chỉnh sửa môn học
             </Typography>
             <Divider />
             <MDBox mt={3} mb={2}>
@@ -170,18 +148,19 @@ function EditCategoryButton({ data, setState }) {
                   color="dark"
                   sx={{ mr: 2, width: "30%" }}
                 >
-                  Tên loại nhóm <span style={{ color: "red" }}>(*)</span>
+                  Mã môn học <span style={{ color: "red" }}>(*)</span>
                 </MDTypography>
                 <MDInput
+                  placeholder="Nhập mã môn học"
                   type="text"
                   size="small"
                   sx={{ width: "70%" }}
                   inputProps={{ maxLength: 100 }}
-                  value={name}
-                  onChange={handleNameChange}
-                  error={!firstLoad.name && name.length === 0}
+                  value={code}
+                  onChange={handleCodeChange}
+                  error={!firstLoad.code && code.length === 0}
                   helperText={
-                    !firstLoad.name && name.length === 0 ? "Tên loại nhóm không được rỗng" : ""
+                    !firstLoad.code && code.length === 0 ? "Mã môn học không được rỗng" : ""
                   }
                 />
               </MDBox>
@@ -192,56 +171,21 @@ function EditCategoryButton({ data, setState }) {
                   color="dark"
                   sx={{ mr: 2, width: "30%" }}
                 >
-                  Mô tả
+                  Tên môn học <span style={{ color: "red" }}>(*)</span>
                 </MDTypography>
                 <MDInput
+                  placeholder="Nhập tên môn học"
                   type="text"
                   size="small"
                   sx={{ width: "70%" }}
-                  inputProps={{ maxLength: 200 }}
-                  value={description}
-                  onChange={handleDescriptionChange}
+                  inputProps={{ maxLength: 100 }}
+                  value={name}
+                  onChange={handleNameChange}
+                  error={!firstLoad.name && name.length === 0}
+                  helperText={
+                    !firstLoad.name && name.length === 0 ? "Tên môn học không được rỗng" : ""
+                  }
                 />
-              </MDBox>
-              <MDBox className="relationship__searchBox-item" mb={2}>
-                <MDTypography
-                  variant="body2"
-                  fontWeight="regular"
-                  color="dark"
-                  sx={{ mr: 2, width: "30%" }}
-                >
-                  Biểu tượng <span style={{ color: "red" }}>(*)</span>
-                </MDTypography>
-                <MDAvatar
-                  src={iconURL}
-                  alt="category-image"
-                  shadow="sm"
-                  size="lg"
-                  sx={{
-                    alignSelf: "center",
-                    mr: 1
-                  }}
-                />
-                <IconSelectButton setState={setIconURL} />
-              </MDBox>
-              <MDBox className="relationship__searchBox-item" mb={2}>
-                <MDTypography
-                  variant="body2"
-                  fontWeight="regular"
-                  color="dark"
-                  sx={{ mr: 2, width: "30%" }}
-                >
-                  Quyền ứng dụng
-                </MDTypography>
-                {currentPermissions.length > 0 && (
-                  <AutoCompleteCheckbox
-                    placeholder="Chọn các quyền ứng dụng"
-                    options={currentPermissions}
-                    sx={{ width: "70%" }}
-                    value={permission}
-                    onChange={setPermission}
-                  />
-                )}
               </MDBox>
             </MDBox>
             <MDBox display="flex" flexDirection="row" justifyContent="center" mt={4}>
@@ -265,9 +209,9 @@ function EditCategoryButton({ data, setState }) {
   );
 }
 
-EditCategoryButton.propTypes = {
+EditSubjectButton.propTypes = {
   data: PropTypes.instanceOf(Object).isRequired,
   setState: PropTypes.func.isRequired
 };
 
-export default EditCategoryButton;
+export default EditSubjectButton;

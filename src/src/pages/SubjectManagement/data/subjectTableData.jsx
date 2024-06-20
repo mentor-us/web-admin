@@ -8,20 +8,12 @@
 
 import { compareVietnameseWord } from "utils";
 
-import CustomCheckbox from "components/Checkbox";
-import useSubjectManagementStore from "hooks/client/useSubjectManagementStore";
-
+// import CustomCheckbox from "components/Checkbox";
+// import useSubjectManagementStore from "hooks/client/useSubjectManagementStore";
 import MenuOption from "../components/MenuOption";
 
-export default function subjectTableData(
-  data,
-  isSelectAll,
-  currentPage,
-  itemsPerPage,
-  isSearch,
-  columnHeaders
-) {
-  const { setIsSelectAll, setIsChecked } = useSubjectManagementStore();
+export default function subjectTableData(data, columnHeaders) {
+  // const { setIsSelectAll, setIsChecked } = useSubjectManagementStore();
   let columns = [
     {
       Header: "STT",
@@ -49,22 +41,22 @@ export default function subjectTableData(
       width: "200px",
       align: "left"
     },
-    {
-      Header: (
-        <CustomCheckbox
-          data={isSelectAll}
-          key="category-management"
-          type="all"
-          action={setIsSelectAll}
-        />
-      ),
-      accessor: "is-checked",
-      width: "5%",
-      notSorted: true,
-      type: "component",
-      isShow: true,
-      align: "center"
-    },
+    // {
+    //   Header: (
+    //     <CustomCheckbox
+    //       data={isSelectAll}
+    //       key="category-management"
+    //       type="all"
+    //       action={setIsSelectAll}
+    //     />
+    //   ),
+    //   accessor: "is-checked",
+    //   width: "5%",
+    //   notSorted: true,
+    //   type: "component",
+    //   isShow: true,
+    //   align: "center"
+    // },
     {
       Header: "",
       accessor: "action",
@@ -86,21 +78,19 @@ export default function subjectTableData(
     ? []
     : data.map((item, index) => {
         const numberOrder = index + 1;
-        // const isChecked = isSelectAll ? true : item.isChecked ?? false;
-        // item.isChecked = isChecked;
         return {
           no: numberOrder,
           name: item.name,
-          code: item.name,
-          "is-checked": (
-            <CustomCheckbox
-              key={item.code}
-              data={item.isChecked ?? false}
-              type={false}
-              // prop="isChecked"
-              action={(checked) => setIsChecked({ ...item, isChecked: checked })}
-            />
-          ),
+          code: item.code,
+          // "is-checked": (
+          //   <CustomCheckbox
+          //     key={item.code}
+          //     data={item.isChecked ?? false}
+          //     type={false}
+          //     // prop="isChecked"
+          //     action={(checked) => setIsChecked({ ...item, isChecked: checked })}
+          //   />
+          // ),
           action: <MenuOption data={item} />
         };
       });

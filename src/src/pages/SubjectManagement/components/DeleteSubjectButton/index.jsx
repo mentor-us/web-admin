@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Backdrop, Box, Divider, Fade, Icon, Modal } from "@mui/material";
 import { removeGroupWithRemovedCategory } from "features/groups/slice";
-import { deleteCategory, deleteMultipleCategories } from "features/groupsCategory/slice";
+import { deleteMultipleCategories } from "features/groupsCategory/slice";
 import PropTypes from "prop-types";
 
 import { setLoading } from "context";
@@ -13,10 +13,11 @@ import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
 import TooltipCustom from "components/Tooltip";
+import { useDeleteCourseMutation } from "hooks/courses/mutation";
 
 import DeleteOptions from "./DeleteOptions";
 
-function DeleteCategoryButton({ data, setState, typeButton, isMultiple }) {
+function DeleteSubjectButton({ data, setState, typeButton, isMultiple }) {
   const dispatch = useDispatch();
   const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
@@ -24,11 +25,12 @@ function DeleteCategoryButton({ data, setState, typeButton, isMultiple }) {
     type: "option 1",
     category: null
   });
+  const deleteCourseMutator = useDeleteCourseMutation();
 
   const isFailCase = () => {
     const { type, category } = deleteValue;
     if (type === "option 2" && category === null) {
-      ErrorAlert("Không thể xóa vì không có loại nhóm khác được chọn!");
+      ErrorAlert("Không thể xóa vì không có môn học khác được chọn!");
       return true;
     }
 
@@ -38,7 +40,7 @@ function DeleteCategoryButton({ data, setState, typeButton, isMultiple }) {
   const deleteGroupCategory = async (req) => {
     setLoading(dispatchContext, true);
     const title =
-      deleteValue.type === "option 1" ? "Xóa loại nhóm thành công" : "Chuyển loại nhóm thành công";
+      deleteValue.type === "option 1" ? "Xóa môn học thành công" : "Chuyển môn học thành công";
 
     try {
       if (isMultiple) {
@@ -47,8 +49,9 @@ function DeleteCategoryButton({ data, setState, typeButton, isMultiple }) {
         ).unwrap();
         dispatch(removeGroupWithRemovedCategory(data));
       } else {
-        await dispatch(deleteCategory({ id: data.id, req })).unwrap();
-        dispatch(removeGroupWithRemovedCategory({ id: data.id }));
+        await deleteCourseMutator.mutateAsync({ id: data.id, req });
+        // await dispatch(deleteCategory({ id: data.id, req })).unwrap();
+        // dispatch(removeGroupWithRemovedCategory({ id: data.id }));
       }
 
       setState(null);
@@ -71,7 +74,7 @@ function DeleteCategoryButton({ data, setState, typeButton, isMultiple }) {
     let title;
     let html;
     let request = {
-      newGroupCategoryId: ""
+      newCourseId: ""
     };
 
     // Kiểm tra fail case
@@ -80,20 +83,20 @@ function DeleteCategoryButton({ data, setState, typeButton, isMultiple }) {
     }
 
     if (deleteValue.type === "option 1") {
-      title = "Xóa loại nhóm?";
+      title = "Xóa môn học?";
       html = isMultiple
-        ? `Bạn chắc chắn muốn xóa các loại nhóm đã chọn?`
-        : `Bạn chắc chắn muốn xóa loại nhóm <b>${data.name}</b>?`;
+        ? `Bạn chắc chắn muốn xóa các môn học đã chọn?`
+        : `Bạn chắc chắn muốn xóa môn học <b>${data.name}</b>?`;
       request = {
-        newGroupCategoryId: ""
+        newCourseId: ""
       };
     } else {
-      title = "Chuyển loại nhóm trước khi xóa?";
+      title = "Chuyển môn học trước khi xóa?";
       html = isMultiple
-        ? `Bạn chắc chắn muốn chuyển các nhóm thuộc loại nhóm được chọn sang loại nhóm <b>${deleteValue.category.name}</b>?`
-        : `Bạn chắc chắn muốn chuyển các nhóm thuộc loại nhóm <b>${data.name}</b> sang loại nhóm <b>${deleteValue.category.name}</b>?`;
+        ? `Bạn chắc chắn muốn chuyển các nhóm thuộc môn học được chọn sang môn học <b>${deleteValue.category.name}</b>?`
+        : `Bạn chắc chắn muốn chuyển các nhóm thuộc môn học <b>${data.name}</b> sang môn học <b>${deleteValue.category.name}</b>?`;
       request = {
-        newGroupCategoryId: deleteValue.category.id
+        newCourseId: deleteValue.category.id
       };
     }
 
@@ -155,7 +158,7 @@ function DeleteCategoryButton({ data, setState, typeButton, isMultiple }) {
         <Fade in={open}>
           <Box className="group-modal__container">
             <MDTypography variant="h5" component="h2" textAlign="center" fontSize="25">
-              Xóa loại nhóm
+              Xóa môn học
             </MDTypography>
             <Divider />
             <MDBox mt={3} mb={2}>
@@ -187,16 +190,16 @@ function DeleteCategoryButton({ data, setState, typeButton, isMultiple }) {
   );
 }
 
-DeleteCategoryButton.defaultProps = {
+DeleteSubjectButton.defaultProps = {
   typeButton: "menu",
   isMultiple: false
 };
 
-DeleteCategoryButton.propTypes = {
+DeleteSubjectButton.propTypes = {
   data: PropTypes.instanceOf(Object).isRequired,
   setState: PropTypes.func.isRequired,
   typeButton: PropTypes.oneOf(["normal", "modern", "menu"]),
   isMultiple: PropTypes.bool
 };
 
-export default DeleteCategoryButton;
+export default DeleteSubjectButton;

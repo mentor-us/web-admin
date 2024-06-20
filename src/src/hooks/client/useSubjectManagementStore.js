@@ -7,7 +7,9 @@ const useSubjectManagementStore = create((set) => ({
   ],
   currentPageSearch: 0,
   itemsPerPage: 10,
+  query: "",
   isSelectAll: false,
+  isSubmitSearch: false,
   couseData: [],
   setState: (keyState, value) => {
     set((state) => {
