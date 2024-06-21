@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import { Card, Grid, Icon } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 
+import { setLoading } from "context";
+import { useMentorUs } from "hooks";
+
 import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import MDBox from "components/MDComponents/MDBox";
@@ -31,8 +34,13 @@ function SubjectManagement() {
     isSubmitSearch,
     setState
   } = useSubjectManagementStore();
+  const [, dispatchContext] = useMentorUs();
 
-  const { data: courses } = getAllCourse({
+  const {
+    data: courses,
+    isFetching: isLoadingCourse,
+    isSuccess: loadSuccessCourse
+  } = getAllCourse({
     query,
     pageSize: itemsPerPage,
     page: currentPageSearch
@@ -77,6 +85,22 @@ function SubjectManagement() {
       });
     }
   }, [isSubmitSearch]);
+
+  useEffect(() => {
+    if (isLoadingCourse) {
+      setLoading(dispatchContext, true);
+    } else if (loadSuccessCourse) {
+      setLoading(dispatchContext, false);
+    }
+  }, [isLoadingCourse, loadSuccessCourse]);
+
+  useEffect(() => {
+    setState("query", "");
+    return function () {
+      setState("query", "");
+    };
+  }, []);
+
   // eslint-disable-next-line no-unused-vars
   const renderTable = () => {
     return (
