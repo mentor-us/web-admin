@@ -77,13 +77,13 @@ const gradesList = [
 ];
 
 // eslint-disable-next-line import/prefer-default-export
-export const useGetAllGrades = (year, semester, userId) =>
+export const useGetAllGrades = (query) =>
   useQuery({
-    queryKey: ["grades", year?.id, semester?.id],
+    queryKey: ["grades"],
     queryFn: async () => {
       try {
         // console.log(year?.id, semester?.id, userId);
-        return gradesList;
+        // return gradesList;
         // const dataReq = {
         //   parmas: {
         //     yearId: year?.id,
@@ -91,8 +91,13 @@ export const useGetAllGrades = (year, semester, userId) =>
         //     userId
         //   }
         // };
-        // const res = await GradeApi.getAllGrades(dataReq);
-        // return res.data;
+        const params = {
+          page: 0,
+          pageSize: 10,
+          userId: null
+        };
+        const res = await GradeApi.getAllGrades({ ...params, ...query });
+        return res;
       } catch (error) {
         return gradesList;
       }

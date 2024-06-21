@@ -7,6 +7,7 @@ import AccountManagement from "pages/AccountManagement";
 import Auth from "pages/Auth";
 import ProtectedAuth from "pages/Auth/ProtectedAuth";
 import DeepLink from "pages/DeepLink";
+import GradeManagement from "pages/GradeManagement";
 import GroupCategory from "pages/GroupCategoryManagement";
 import GroupDetail from "pages/GroupDetail";
 import GroupManagement from "pages/GroupManagement";
@@ -32,6 +33,7 @@ const pagesMap = {
   "group-detail": "Chi tiết về nhóm",
   "group-category": "Quản lý loại nhóm",
   subject: "Quản lý môn học",
+  grade: "Quản lý điểm số",
   statistic: "Hoạt động",
   "statistic-detail": "Chi tiết hoạt động",
   "account-management": "Quản lý tài khoản",
@@ -68,6 +70,14 @@ export const privateRoutes = [
     path: "/admin/subject",
     roles: adminAccessRoles,
     element: <SubjectManagement />
+  },
+  {
+    key: "grade",
+    name: translateToVNmeseByKey("grade"),
+    icon: <Icon fontSize="small">grade</Icon>,
+    path: "/admin/grade",
+    roles: adminAccessRoles,
+    element: <GradeManagement />
   },
   {
     key: "group-detail",
@@ -259,6 +269,19 @@ const routes = [
     component: (
       <ProtectedAuth>
         <SubjectManagement />
+      </ProtectedAuth>
+    )
+  },
+  {
+    type: "collapse",
+    name: translateToVNmeseByKey("grade"),
+    key: "grade",
+    icon: <Icon fontSize="small">grade</Icon>,
+    route: "/admin/grade",
+    slideNavShow: true,
+    component: (
+      <ProtectedAuth>
+        <GradeManagement />
       </ProtectedAuth>
     )
   },

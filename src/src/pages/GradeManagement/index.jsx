@@ -14,47 +14,46 @@ import SelectAllFeature from "components/SelectAllFeature";
 import { ErrorAlert } from "components/SweetAlert";
 // import DataTable from "components/Tables/DataTable";
 import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
-import useSubjectManagementStore from "hooks/client/useSubjectManagementStore";
-import { getAllCourse } from "hooks/grades/queries";
+import useGradeManagementStore from "hooks/client/useGradeManagementStore";
+import { useGetAllGrades } from "hooks/grades/queries";
 
-import AddCategoryButton from "./components/AddSubjectButton";
+import AddCategoryButton from "./components/AddGradeButton";
 import SearchBox from "./components/Search";
-import subjectTableData from "./data/subjectTableData";
+import gradeTableData from "./data/gradeTableData";
 
-function SubjectManagement() {
+function GradeManagement() {
   /// --------------------- Khai báo Biến, State -------------
   const queryClient = useQueryClient();
   const {
     query,
-    couseData,
+    gradeData,
     columnHeaders,
     currentPageSearch,
     itemsPerPage,
-    setCourseData,
+    setGradeData,
     isSubmitSearch,
     setState
-  } = useSubjectManagementStore();
+  } = useGradeManagementStore();
   const [, dispatchContext] = useMentorUs();
 
   const {
-    data: courses,
+    data: grades,
     isFetching: isLoadingCourse,
     isSuccess: loadSuccessCourse
-  } = getAllCourse({
+  } = useGetAllGrades({
     query,
     pageSize: itemsPerPage,
     page: currentPageSearch
   });
 
-  const tableData = subjectTableData(couseData, columnHeaders);
+  const tableData = gradeTableData(gradeData, columnHeaders);
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm --------------------
-
   useEffect(() => {
-    setCourseData(courses?.data ?? []);
-    setState("currentPageSearch", courses?.page ?? 0);
-    setState("itemsPerPage", courses?.pageSize ?? 10);
-  }, [courses]);
+    setGradeData(grades?.data ?? []);
+    setState("currentPageSearch", grades?.page ?? 0);
+    setState("itemsPerPage", grades?.pageSize ?? 10);
+  }, [grades]);
 
   // eslint-disable-next-line no-unused-vars
   const handleChangeItemsPerPage = async (value) => {
@@ -81,14 +80,12 @@ function SubjectManagement() {
       setState("isSelectAll", false);
       setState("isSubmitSearch", false);
       queryClient.refetchQueries({
-        queryKey: ["courses"]
+        queryKey: ["grades"]
       });
     }
   }, [isSubmitSearch]);
 
   useEffect(() => {
-    console.log("isLoadingCourse");
-    console.log(isLoadingCourse);
     if (isLoadingCourse) {
       setLoading(dispatchContext, true);
     } else if (loadSuccessCourse) {
@@ -112,13 +109,13 @@ function SubjectManagement() {
         noEndBorder={false}
         customPaginationInfo={{
           currentPage: currentPageSearch + 1,
-          totalPages: courses?.totalPages ?? 0,
-          totalItems: courses?.totalCounts ?? 0,
+          totalPages: grades?.totalPages ?? 0,
+          totalItems: grades?.totalCounts ?? 0,
           itemsPerPage,
           handleChangeItemsPerPage,
           handleChangePage
         }}
-        headerFilterType="subject"
+        headerFilterType="grade"
       />
     );
   };
@@ -137,7 +134,7 @@ function SubjectManagement() {
                 <MDBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
                   <MDBox>
                     <MDTypography variant="h5" gutterBottom>
-                      Danh sách môn học
+                      Danh sách điểm số
                     </MDTypography>
                   </MDBox>
                   <MDBox
@@ -164,7 +161,7 @@ function SubjectManagement() {
                 </MDBox>
                 <Grid container>
                   <Grid item xs={12}>
-                    {courses && renderTable()}
+                    {grades && renderTable()}
                   </Grid>
                 </Grid>
               </MDBox>
@@ -176,4 +173,4 @@ function SubjectManagement() {
   );
 }
 
-export default SubjectManagement;
+export default GradeManagement;
