@@ -130,9 +130,10 @@ export const getAllSemesterOfYear = (semesterInfo) =>
     queryKey: ["years/semester", semesterInfo],
     queryFn: async () => {
       try {
-        return semesters;
-        // const res = await YearApi.getAllSemesterOfYear(year?.id);
-        // return res.data;
+        const res = await YearApi.getAllSemesterOfYear({
+          query: semesterInfo
+        });
+        return res.data;
       } catch (error) {
         return semesters;
       }
@@ -149,8 +150,10 @@ export const getAllCourse = (query) =>
           page: 0,
           pageSize: 10
         };
-        console.log({ ...params, ...query });
         const res = await CourseApi.getAllCourses({ ...params, ...query });
+        console.log("getAllCourse");
+        console.log(res.data);
+
         return res;
       } catch (error) {
         return courses;

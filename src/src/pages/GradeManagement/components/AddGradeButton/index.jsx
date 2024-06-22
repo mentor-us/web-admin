@@ -1,5 +1,16 @@
-import React, { useState } from "react";
-import { Backdrop, Box, Divider, Fade, Icon, Modal, Typography } from "@mui/material";
+import React, { useEffect, useReducer, useState } from "react";
+import {
+  Autocomplete,
+  Backdrop,
+  Box,
+  Divider,
+  Fade,
+  Icon,
+  Modal,
+  TextField,
+  Typography
+} from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
@@ -9,42 +20,79 @@ import MDButton from "components/MDComponents/MDButton";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
-import useSubjectManagementStore from "hooks/client/useSubjectManagementStore";
+import useGradeManagementStore from "hooks/client/useGradeManagementStore";
 import { useCreateCourseMutation } from "hooks/courses/mutation";
+import { getAllCourse, getAllSemesterOfYear, useGetAllYears } from "hooks/grades/queries";
+
+const initState = {
+  year: null,
+  yearInfo: "",
+  semester: null,
+  semesterInfo: "",
+  course: null,
+  courseName: "",
+  score: 0
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "SET_YEAR":
+      return { ...state, year: action.payload };
+    case "SET_YEAR_INFO":
+      return { ...state, yearInfo: action.payload };
+    case "SET_SEMESTER":
+      return { ...state, semester: action.payload };
+    case "SET_SEMESTER_INFO":
+      return { ...state, semesterInfo: action.payload };
+    case "SET_COURSE":
+      return { ...state, course: action.payload };
+    case "SET_COURSE_NAME":
+      return { ...state, courseName: action.payload };
+    case "SET_SCORE":
+      return { ...state, score: action.payload };
+    default:
+      return state;
+  }
+}
 
 function AddGradeButton() {
   /// --------------------- Khai báo Biến, State -------------
   const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [code, setCode] = useState("");
-  const { setState } = useSubjectManagementStore();
+  const [state, dispatch] = useReducer(reducer, initState);
+  const { year, yearInfo, semester, semesterInfo, course, courseName, score } = state;
+  const { setState } = useGradeManagementStore();
   const [firstLoad, setFirstLoad] = useState({
-    name: true,
-    code: true
+    score: true
   });
+  const queryClient = useQueryClient();
   const createCourseMutator = useCreateCourseMutation();
-
+  const { data: years } = useGetAllYears(yearInfo.trim());
+  const { data: semesters } = getAllSemesterOfYear(semesterInfo.trim());
+  const { data: courses } = getAllCourse({
+    query: courseName.trim()
+  });
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------
 
   const resetAllData = () => {
-    setName("");
-    setCode("");
+    dispatch({ type: "SET_SCORE", payload: 0 });
     setFirstLoad({
-      name: true,
-      code: true
+      score: true,
+      year: true,
+      semester: true,
+      course: true
     });
   };
 
   // eslint-disable-next-line no-unused-vars
-  const addSubject = async (course) => {
+  const addGrade = async (grade) => {
     setLoading(dispatchContext, true);
 
     try {
-      // await dispatch(addNewSubject(req)).unwrap();
-      await createCourseMutator.mutateAsync(course);
-      SuccessAlert("Thêm môn học thành công");
+      // await dispatch(addNewGrade(req)).unwrap();
+      await createCourseMutator.mutateAsync(grade);
+      SuccessAlert("Thêm điểm số thành công");
       setOpen(false);
       resetAllData();
       setState("currentPageSearch", 0);
@@ -58,11 +106,11 @@ function AddGradeButton() {
   };
 
   const isOneReqDataHasValue = () => {
-    return name.length > 0;
+    return +score < 10 && +score >= 0;
   };
 
   const isAllReqDataHasValue = () => {
-    return name.length > 0;
+    return +score < 10 && +score >= 0 && year && course && semester;
   };
 
   const isLostAllData = () => {
@@ -84,35 +132,39 @@ function AddGradeButton() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => isLostAllData();
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
+  const handleScoreChange = (e) => {
+    dispatch({ type: "SET_SCORE", payload: e.target.value });
     setFirstLoad({
       ...firstLoad,
-      name: false
-    });
-  };
-  const handleCodeChange = (e) => {
-    setCode(e.target.value);
-    setFirstLoad({
-      ...firstLoad,
-      code: false
+      score: false
     });
   };
 
   const handleSubmit = async () => {
-    if (firstLoad.name || !isAllReqDataHasValue()) {
+    if (firstLoad.score || !isAllReqDataHasValue()) {
       setFirstLoad({
-        name: false,
-        code: false
+        score: false,
+        year: false,
+        semester: false,
+        course: false
       });
       return;
     }
     const req = {
-      name: name.toString().trim(),
-      code: code.toString().trim()
+      score,
+      verified: true,
+      studentId: "string",
+      semesterId: semester?.id ?? null,
+      schoolYearId: year?.id ?? null,
+      courseId: course?.id ?? null
     };
-    addSubject(req);
+    addGrade(req);
   };
+  useEffect(() => {
+    queryClient.refetchQueries({
+      queryKey: ["courses"]
+    });
+  }, [courseName]);
   return (
     <>
       <MDButton variant="gradient" color="success" onClick={handleOpen}>
@@ -132,7 +184,7 @@ function AddGradeButton() {
         <Fade in={open}>
           <Box className="group-modal__container">
             <Typography variant="h5" component="h2" textAlign="center" fontSize="25">
-              Thêm mới môn học
+              Thêm mới điểm số
             </Typography>
             <Divider />
             <MDBox mt={3} mb={2}>
@@ -143,20 +195,44 @@ function AddGradeButton() {
                   color="dark"
                   sx={{ mr: 2, width: "30%" }}
                 >
-                  Mã môn học <span style={{ color: "red" }}>(*)</span>
+                  Năm học <span style={{ color: "red" }}>(*)</span>
                 </MDTypography>
-                <MDInput
-                  placeholder="Nhập mã môn học"
-                  type="text"
-                  size="small"
-                  sx={{ width: "70%" }}
-                  value={code}
-                  inputProps={{ maxLength: 100 }}
-                  onChange={handleCodeChange}
-                  error={!firstLoad.code && code.length === 0}
-                  helperText={
-                    !firstLoad.code && code.length === 0 ? "Mã môn học không được rỗng" : ""
-                  }
+                <Autocomplete
+                  noOptionsText="Không có thông tin năm học"
+                  value={year}
+                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  onChange={(e, newValue) => {
+                    dispatch({ type: "SET_YEAR", payload: newValue });
+                    setFirstLoad({
+                      ...firstLoad,
+                      year: false
+                    });
+                  }}
+                  onInputChange={(event, value) => {
+                    dispatch({ type: "SET_YEAR_INFO", payload: value });
+                  }}
+                  sx={{
+                    width: "70%",
+                    pl: "0!important",
+                    pt: "0!important"
+                  }}
+                  color="text"
+                  // disableClearable
+                  // eslint-disable-next-line no-shadow
+                  options={years ?? []}
+                  getOptionLabel={(option) => option?.name || ""}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      placeholder="Chọn năm"
+                      error={!firstLoad.year && !year}
+                      helperText={
+                        // eslint-disable-next-line no-nested-ternary
+                        !firstLoad.year && !year ? "Năm học không được rỗng" : ""
+                      }
+                      size="small"
+                    />
+                  )}
                 />
               </MDBox>
               <MDBox className="relationship__searchBox-item" mb={2}>
@@ -166,19 +242,106 @@ function AddGradeButton() {
                   color="dark"
                   sx={{ mr: 2, width: "30%" }}
                 >
-                  Tên môn học <span style={{ color: "red" }}>(*)</span>
+                  Học kỳ <span style={{ color: "red" }}>(*)</span>
+                </MDTypography>
+                <Autocomplete
+                  noOptionsText="Không có thông tin học kì"
+                  value={semester}
+                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  onChange={(e, newValue) => {
+                    dispatch({ type: "SET_SEMESTER", payload: newValue });
+                  }}
+                  onInputChange={(event, value) => {
+                    dispatch({ type: "SET_SEMESTER_INFO", payload: value });
+                  }}
+                  sx={{
+                    width: "70%",
+                    pl: "0!important",
+                    pt: "0!important"
+                  }}
+                  color="text"
+                  options={semesters ?? []}
+                  getOptionLabel={(option) => option?.name || ""}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!firstLoad.semester && !semester}
+                      helperText={
+                        // eslint-disable-next-line no-nested-ternary
+                        !firstLoad.semester && !semester ? "Học kì không được rỗng" : ""
+                      }
+                      placeholder="Chọn học kì"
+                      size="small"
+                    />
+                  )}
+                />
+              </MDBox>
+              <MDBox className="relationship__searchBox-item" mb={2}>
+                <MDTypography
+                  variant="body2"
+                  fontWeight="regular"
+                  color="dark"
+                  sx={{ mr: 2, width: "30%" }}
+                >
+                  Môn học <span style={{ color: "red" }}>(*)</span>
+                </MDTypography>
+                <Autocomplete
+                  noOptionsText="Không có thông tin môn học"
+                  value={course}
+                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  onChange={(e, newValue) => {
+                    dispatch({ type: "SET_COURSE", payload: newValue });
+                  }}
+                  onInputChange={(event, value) => {
+                    dispatch({ type: "SET_COURSE_NAME", payload: value });
+                  }}
+                  sx={{
+                    width: "70%",
+                    pl: "0!important",
+                    pt: "0!important"
+                  }}
+                  color="text"
+                  options={courses?.data ?? []}
+                  getOptionLabel={(option) => option?.name || ""}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!firstLoad.course && !course}
+                      helperText={
+                        // eslint-disable-next-line no-nested-ternary
+                        !firstLoad.course && !course ? "Môn học không được rỗng" : ""
+                      }
+                      placeholder="Chọn môn học"
+                      size="small"
+                    />
+                  )}
+                />
+              </MDBox>
+              <MDBox className="relationship__searchBox-item" mb={2}>
+                <MDTypography
+                  variant="body2"
+                  fontWeight="regular"
+                  color="dark"
+                  sx={{ mr: 2, width: "30%" }}
+                >
+                  Điểm số <span style={{ color: "red" }}>(*)</span>
                 </MDTypography>
                 <MDInput
-                  placeholder="Nhập tên môn học"
-                  type="text"
+                  placeholder="Nhập điểm số"
+                  type="number"
                   size="small"
                   sx={{ width: "70%" }}
-                  value={name}
+                  value={score}
                   inputProps={{ maxLength: 100 }}
-                  onChange={handleNameChange}
-                  error={!firstLoad.name && name.length === 0}
+                  onChange={handleScoreChange}
+                  error={(!firstLoad.score && score.length === 0) || +score > 10 || +score < 0}
                   helperText={
-                    !firstLoad.name && name.length === 0 ? "Tên môn học không được rỗng" : ""
+                    // eslint-disable-next-line no-nested-ternary
+                    !firstLoad.score && score.length === 0
+                      ? "Điểm số không được rỗng"
+                      : +score > 10 || +score < 0
+                      ? "Điểm số phải nằm trong khoảng 0 đến 10"
+                      : ""
                   }
                 />
               </MDBox>

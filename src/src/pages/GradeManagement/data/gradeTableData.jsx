@@ -105,8 +105,6 @@ export default function gradeTableData(data, columnHeaders) {
   const rows = !data
     ? []
     : data.map((item, index) => {
-        console.log("item");
-        console.log(item);
         const numberOrder = index + 1;
         return {
           no: numberOrder,
