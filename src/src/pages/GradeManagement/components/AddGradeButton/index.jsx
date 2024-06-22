@@ -23,6 +23,7 @@ import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "comp
 import useGradeManagementStore from "hooks/client/useGradeManagementStore";
 import { useCreateCourseMutation } from "hooks/courses/mutation";
 import { getAllCourse, getAllSemesterOfYear, useGetAllYears } from "hooks/grades/queries";
+import { useGetAllUsers } from "hooks/users/queries";
 
 const initState = {
   year: null,
@@ -31,7 +32,9 @@ const initState = {
   semesterInfo: "",
   course: null,
   courseName: "",
-  score: 0
+  score: 0,
+  student: null,
+  studentName: ""
 };
 
 function reducer(state, action) {
@@ -48,6 +51,10 @@ function reducer(state, action) {
       return { ...state, course: action.payload };
     case "SET_COURSE_NAME":
       return { ...state, courseName: action.payload };
+    case "SET_STUDENT":
+      return { ...state, student: action.payload };
+    case "SET_STUDENT_NAME":
+      return { ...state, studentName: action.payload };
     case "SET_SCORE":
       return { ...state, score: action.payload };
     default:
@@ -60,7 +67,17 @@ function AddGradeButton() {
   const [, dispatchContext] = useMentorUs();
   const [open, setOpen] = useState(false);
   const [state, dispatch] = useReducer(reducer, initState);
-  const { year, yearInfo, semester, semesterInfo, course, courseName, score } = state;
+  const {
+    year,
+    yearInfo,
+    semester,
+    semesterInfo,
+    course,
+    courseName,
+    score,
+    student,
+    studentName
+  } = state;
   const { setState } = useGradeManagementStore();
   const [firstLoad, setFirstLoad] = useState({
     score: true
@@ -72,16 +89,25 @@ function AddGradeButton() {
   const { data: courses } = getAllCourse({
     query: courseName.trim()
   });
+  const { data: students } = useGetAllUsers({
+    query: studentName.trim()
+  });
+  console.log("students");
+  console.log(students);
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------
 
   const resetAllData = () => {
     dispatch({ type: "SET_SCORE", payload: 0 });
+    dispatch({ type: "SET_COURSE", payload: null });
+    dispatch({ type: "SET_YEAR", payload: null });
+    dispatch({ type: "SET_SEMESTER", payload: null });
     setFirstLoad({
       score: true,
       year: true,
       semester: true,
-      course: true
+      course: true,
+      student: true
     });
   };
 
@@ -110,7 +136,7 @@ function AddGradeButton() {
   };
 
   const isAllReqDataHasValue = () => {
-    return +score < 10 && +score >= 0 && year && course && semester;
+    return +score < 10 && +score >= 0 && year && course && semester && student;
   };
 
   const isLostAllData = () => {
@@ -224,7 +250,7 @@ function AddGradeButton() {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      placeholder="Chọn năm"
+                      placeholder="Chọn năm học"
                       error={!firstLoad.year && !year}
                       helperText={
                         // eslint-disable-next-line no-nested-ternary
@@ -312,6 +338,47 @@ function AddGradeButton() {
                         !firstLoad.course && !course ? "Môn học không được rỗng" : ""
                       }
                       placeholder="Chọn môn học"
+                      size="small"
+                    />
+                  )}
+                />
+              </MDBox>
+              <MDBox className="relationship__searchBox-item" mb={2}>
+                <MDTypography
+                  variant="body2"
+                  fontWeight="regular"
+                  color="dark"
+                  sx={{ mr: 2, width: "30%" }}
+                >
+                  Sinh viên <span style={{ color: "red" }}>(*)</span>
+                </MDTypography>
+                <Autocomplete
+                  noOptionsText="Không có thông tin sinh viên"
+                  value={student}
+                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  onChange={(e, newValue) => {
+                    dispatch({ type: "SET_STUDENT", payload: newValue });
+                  }}
+                  onInputChange={(event, value) => {
+                    dispatch({ type: "SET_STUDENT_NAME", payload: value });
+                  }}
+                  sx={{
+                    width: "70%",
+                    pl: "0!important",
+                    pt: "0!important"
+                  }}
+                  color="text"
+                  options={students ?? []}
+                  getOptionLabel={(option) => option?.email || ""}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={!firstLoad.student && !student}
+                      helperText={
+                        // eslint-disable-next-line no-nested-ternary
+                        !firstLoad.student && !student ? "Sinh viên không được rỗng" : ""
+                      }
+                      placeholder="Chọn sinh viên"
                       size="small"
                     />
                   )}
