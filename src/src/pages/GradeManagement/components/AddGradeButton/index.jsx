@@ -21,7 +21,7 @@ import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import useGradeManagementStore from "hooks/client/useGradeManagementStore";
-import { useCreateCourseMutation } from "hooks/courses/mutation";
+import { useCreateGradeMutation } from "hooks/grades/mutation";
 import { getAllCourse, getAllSemesterOfYear, useGetAllYears } from "hooks/grades/queries";
 import { useGetAllUsers } from "hooks/users/queries";
 
@@ -83,7 +83,7 @@ function AddGradeButton() {
     score: true
   });
   const queryClient = useQueryClient();
-  const createCourseMutator = useCreateCourseMutation();
+  const createGradeMutator = useCreateGradeMutation();
   const { data: years } = useGetAllYears(yearInfo.trim());
   const { data: semesters } = getAllSemesterOfYear(semesterInfo.trim());
   const { data: courses } = getAllCourse({
@@ -92,8 +92,6 @@ function AddGradeButton() {
   const { data: students } = useGetAllUsers({
     query: studentName.trim()
   });
-  console.log("students");
-  console.log(students);
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------
 
@@ -117,7 +115,7 @@ function AddGradeButton() {
 
     try {
       // await dispatch(addNewGrade(req)).unwrap();
-      await createCourseMutator.mutateAsync(grade);
+      await createGradeMutator.mutateAsync(grade);
       SuccessAlert("Thêm điểm số thành công");
       setOpen(false);
       resetAllData();
@@ -132,11 +130,11 @@ function AddGradeButton() {
   };
 
   const isOneReqDataHasValue = () => {
-    return +score < 10 && +score >= 0;
+    return (+score <= 10 && +score >= 0) || year || course || semester || student;
   };
 
   const isAllReqDataHasValue = () => {
-    return +score < 10 && +score >= 0 && year && course && semester && student;
+    return +score <= 10 && +score >= 0 && year && course && semester && student;
   };
 
   const isLostAllData = () => {
@@ -172,17 +170,18 @@ function AddGradeButton() {
         score: false,
         year: false,
         semester: false,
-        course: false
+        course: false,
+        student: false
       });
       return;
     }
     const req = {
-      score,
+      score: +score,
       verified: true,
-      studentId: "string",
-      semesterId: semester?.id ?? null,
-      schoolYearId: year?.id ?? null,
-      courseId: course?.id ?? null
+      studentId: student?.id?.toString() ?? null,
+      semesterId: semester?.id?.toString() ?? null,
+      schoolYearId: year?.id?.toString() ?? null,
+      courseId: course?.id?.toString() ?? null
     };
     addGrade(req);
   };
@@ -276,6 +275,10 @@ function AddGradeButton() {
                   isOptionEqualToValue={(option, value) => option.id === value.id}
                   onChange={(e, newValue) => {
                     dispatch({ type: "SET_SEMESTER", payload: newValue });
+                    setFirstLoad({
+                      ...firstLoad,
+                      semester: false
+                    });
                   }}
                   onInputChange={(event, value) => {
                     dispatch({ type: "SET_SEMESTER_INFO", payload: value });
@@ -317,6 +320,10 @@ function AddGradeButton() {
                   isOptionEqualToValue={(option, value) => option.id === value.id}
                   onChange={(e, newValue) => {
                     dispatch({ type: "SET_COURSE", payload: newValue });
+                    setFirstLoad({
+                      ...firstLoad,
+                      course: false
+                    });
                   }}
                   onInputChange={(event, value) => {
                     dispatch({ type: "SET_COURSE_NAME", payload: value });
@@ -358,6 +365,10 @@ function AddGradeButton() {
                   isOptionEqualToValue={(option, value) => option.id === value.id}
                   onChange={(e, newValue) => {
                     dispatch({ type: "SET_STUDENT", payload: newValue });
+                    setFirstLoad({
+                      ...firstLoad,
+                      student: false
+                    });
                   }}
                   onInputChange={(event, value) => {
                     dispatch({ type: "SET_STUDENT_NAME", payload: value });
@@ -369,7 +380,7 @@ function AddGradeButton() {
                   }}
                   color="text"
                   options={students ?? []}
-                  getOptionLabel={(option) => option?.email || ""}
+                  getOptionLabel={(option) => option?.name || ""}
                   renderInput={(params) => (
                     <TextField
                       {...params}

@@ -2,39 +2,39 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import GradeApi from "api/GradeApi";
 
-export const useCreateGradeMutation = (year, semester) => {
+export const useCreateGradeMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["create-grade"],
     mutationFn: (grade) => GradeApi.createGrades(grade),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["grades", year, semester]
+        queryKey: ["grades"]
       });
     }
   });
 };
-export const useUpdateGradeMutation = (year, semester) => {
+export const useUpdateGradeMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["update-grade"],
     mutationFn: (grade) => GradeApi.updateGrades(grade),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["grades", year, semester]
+        queryKey: ["grades"]
       });
     }
   });
 };
 
-export const useDeleteGradeMutation = (year, semester) => {
+export const useDeleteGradeMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["delete-grade"],
-    mutationFn: (gradeId) => GradeApi.deleteGrade(gradeId),
+    mutationFn: (grade) => GradeApi.deleteGrade(grade?.id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["grades", year, semester]
+        queryKey: ["grades"]
       });
     }
   });
