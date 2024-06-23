@@ -296,3 +296,43 @@ export const ACTION_IMAGE = {
 export const AVATAR_SIZE = 90;
 export const WALLPAPER_HEIGHT = 200;
 export const WALLPAPER_WIDTH = "100%";
+export const NotePermission = [
+  //  EDIT: "Chỉnh sửa",
+  {
+    label: "Xem",
+    key: "VIEW"
+  },
+  // VIEW: "Xem"
+  {
+    label: "Chỉnh sửa",
+    key: "EDIT"
+  },
+  {
+    label: "Xóa",
+    key: "DELETE"
+  }
+];
+export const NoteShareType = [
+  {
+    label: "Công khai",
+    value: "PUBLIC"
+  },
+  {
+    label: "Mentor xem",
+    value: "MENTOR_VIEW"
+  },
+  {
+    label: "Mentor chỉnh sửa",
+    value: "MENTOR_EDIT"
+  },
+  {
+    label: "Riêng tư",
+    value: "PRIVATE"
+  }
+];
+export const NoteShareObject = {
+  PUBLIC: "Công khai",
+  MENTOR_VIEW: "Mentor xem",
+  MENTOR_EDIT: "Mentor chỉnh sửa",
+  PRIVATE: "Riêng tư"
+};

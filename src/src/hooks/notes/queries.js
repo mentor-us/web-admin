@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import NoteService from "service/noteService";
-import { useGetUserNotesKey } from "hooks/profile/key";
+import { useGetUserNotesByUserIdKey, useGetUserNotesKey } from "hooks/profile/key";
 
 // eslint-disable-next-line import/prefer-default-export
 export const useGetUserNotes = (req) => {
@@ -12,7 +12,7 @@ export const useGetUserNotes = (req) => {
 };
 export const useGetUserNoteByUserId = (id) => {
   return useQuery({
-    queryKey: ["getUserNoteByUserId", id],
+    queryKey: useGetUserNotesByUserIdKey(id),
     queryFn: () => NoteService.getUserNoteByUserId(id)
   });
 };

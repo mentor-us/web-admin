@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -16,72 +15,28 @@ import PropTypes from "prop-types";
 
 import NoteDetail from "./NoteDetail";
 import NoteForm from "./NoteForm";
+import NoteShare from "./NoteShare";
 import NoteUserList from "./NoteUserList";
 
-const fakedata = [
-  {
-    user: {
-      id: "1",
-      name: "John Doe",
-      imageUrl: "https://randomuser.me/api/portraits/men/1.jpg",
-      email: "john.doe@example.com",
-      totalNotes: 5
-    }
-  },
-  {
-    user: {
-      id: "2",
-      name: "Jane Smith",
-      imageUrl: "https://randomuser.me/api/portraits/women/2.jpg",
-      email: "jane.smith@example.com",
-      totalNotes: 12
-    }
-  },
-  {
-    user: {
-      id: "3",
-      name: "Alice Johnson",
-      imageUrl: "https://randomuser.me/api/portraits/women/3.jpg",
-      email: "alice.johnson@example.com",
-      totalNotes: 7
-    }
-  },
-  {
-    user: {
-      id: "4",
-      name: "Bob Brown",
-      imageUrl: "https://randomuser.me/api/portraits/men/4.jpg",
-      email: "bob.brown@example.com",
-      totalNotes: 3
-    }
-  },
-  {
-    user: {
-      id: "5",
-      name: "Eve Davis",
-      imageUrl: "https://randomuser.me/api/portraits/women/5.jpg",
-      email: "eve.davis@example.com",
-      totalNotes: 9
-    }
-  }
-];
-
 function NoteDialog({ open, onClose }) {
-  const [notes, setNotes] = useState(fakedata);
   const [type, setType] = useState("list");
   const [selectedUserNote, setSelectedUserNote] = useState(null);
+  const [selectedNote, setSelectedNote] = useState(null);
   const handleCreate = (note) => {
     setType("create");
   };
-  const openDetailUserNote = (noteId) => {
+  const openDetailUserNote = (userNoteId) => {
     setType("detail");
-    setSelectedUserNote(noteId);
+    setSelectedUserNote(userNoteId);
   };
-
+  const openShareNoteDialog = (noteId) => {
+    setType("share");
+    setSelectedNote(noteId);
+  };
   const renderContent = () => {
     switch (type) {
       case "list":
-        return <NoteUserList notes={notes} onDetail={openDetailUserNote} />;
+        return <NoteUserList onDetail={openDetailUserNote} />;
       case "create":
         return (
           <NoteForm
@@ -94,8 +49,18 @@ function NoteDialog({ open, onClose }) {
         return (
           <NoteDetail
             noteUserId={selectedUserNote}
+            onShareClick={openShareNoteDialog}
             onCancel={() => {
               setType("list");
+            }}
+          />
+        );
+      case "share":
+        return (
+          <NoteShare
+            noteId={selectedNote}
+            onCancel={() => {
+              setType("detail");
             }}
           />
         );
@@ -110,6 +75,8 @@ function NoteDialog({ open, onClose }) {
         return "Tạo ghi chú";
       case "detail":
         return "Chi tiết ghi chú";
+      case "share":
+        return "Chia sẻ ghi chú";
       default:
         return "Danh sách ghi chú";
     }
@@ -119,7 +86,7 @@ function NoteDialog({ open, onClose }) {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth className="min-w-60">
       <DialogTitle className="w-full !py-2" alignSelf="flex-start">
         <Stack className="w-full" direction="row" justifyContent="space-between">
           <span className="!p-2">{renderTitle()}</span>

@@ -8,16 +8,16 @@ import PropTypes from "prop-types";
 
 import { useGetUserNotes } from "hooks/notes/queries";
 
-function NoteUserList({ onDetail, onDelete }) {
+function NoteUserList({ onDetail }) {
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearchChange = (e) => {
     e.preventDefault();
     setSearchQuery(e?.target?.value);
   };
-  const { data: notes } = useGetUserNotes({ page: 0, pageSize: 10, query: searchQuery });
+  const { data: notes, isLoading } = useGetUserNotes({ page: 0, pageSize: 10, query: searchQuery });
 
   return (
-    <Stack className="w-full rounded-lg" direction="column" spacing={1}>
+    <Stack className="w-full rounded-lg" direction="column" spacing={1} sx={{ minHeight: "300px" }}>
       <Paper
         component="form"
         sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: "100%" }}
@@ -33,37 +33,38 @@ function NoteUserList({ onDetail, onDelete }) {
           onChange={handleSearchChange}
         />
       </Paper>
-      <Stack sx={{ minHeight: "300px" }}>
-        {notes?.data?.map((note) => (
-          <Stack
-            key={note?.id}
-            className="w-full p-2 hover:bg-gray-100 cursor-pointer"
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Stack direction="row" spacing={2} onClick={() => onDetail(note.id)}>
-              <Avatar src={note?.imageUrl} />
-              <Stack direction="column">
-                <Typography>{note?.name}</Typography>
-                <Typography variant="caption">
-                  Có {note?.totalNotes} ghi chú về người này
-                </Typography>
+      {notes?.data?.length > 0 && (
+        <Stack sx={{ minHeight: "300px" }}>
+          {notes?.data?.map((note) => (
+            <Stack
+              key={note?.id}
+              className="w-full p-2 hover:bg-gray-100 cursor-pointer"
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Stack direction="row" spacing={2} onClick={() => onDetail(note.id)}>
+                <Avatar src={note?.imageUrl} />
+                <Stack direction="column">
+                  <Typography>{note?.name}</Typography>
+                  <Typography variant="caption">
+                    Có {note?.totalNotes} ghi chú về người này
+                  </Typography>
+                </Stack>
               </Stack>
             </Stack>
-            {/* <Stack direction="row" spacing={1}>
-              <IconButton onClick={() => onDetail(note.user)}>
-                <EditIcon />
-              </IconButton>
-              <IconButton onClick={() => onDelete(note.user.id)}>
-                <DeleteIcon />
-              </IconButton>
-            </Stack> */}
-          </Stack>
-        ))}
-      </Stack>
-      {!notes?.data?.length && (
-        <Typography className="w-full text-center">Không có ghi chú nào</Typography>
+          ))}
+        </Stack>
+      )}
+      {!notes?.data?.length && isLoading === false && (
+        <Stack className="w-full" direction="column" justifyContent="center" alignItems="center">
+          <Typography>Không có dữ liệu</Typography>
+        </Stack>
+      )}
+      {isLoading && (
+        <Stack className="w-full" direction="column" justifyContent="center" alignItems="center">
+          <Typography>Đang tải...</Typography>
+        </Stack>
       )}
     </Stack>
   );
@@ -71,8 +72,7 @@ function NoteUserList({ onDetail, onDelete }) {
 
 NoteUserList.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  onDetail: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDetail: PropTypes.func.isRequired
 };
 
 export default NoteUserList;

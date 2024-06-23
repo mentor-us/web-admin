@@ -62,20 +62,19 @@ function NoteForm({ onCancel }) {
   const onSubmit = (data) => {
     toast.promise(
       new Promise((resolve, reject) => {
-        createNote(prepareData(data))
-          .then((res) => {
+        createNote(prepareData(data), {
+          onSuccess: () => {
             queryClient.refetchQueries({
               queryKey: useGetUserNotesKey()
             });
-            resolve(res);
-          })
-          .catch((err) => {
-            console.error(err);
-            reject(err);
-          });
+          }
+        }).catch((err) => {
+          console.error(err);
+          reject(err);
+        });
       }),
       {
-        loading: `Đang luu ghi chú...`,
+        loading: `Đang lưu ghi chú...`,
         success: `Ghi chú đã được tạo`,
         error: `Đã xảy ra lỗi khi tạo ghi chú`
       }
