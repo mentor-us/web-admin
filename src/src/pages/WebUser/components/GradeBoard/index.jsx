@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import {
   Autocomplete,
   createTheme,
@@ -7,13 +7,15 @@ import {
   ThemeProvider,
   Typography
 } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
-import {
-  useCreateGradeMutation,
-  useDeleteGradeMutation,
-  useUpdateGradeMutation
-} from "hooks/grades/mutation";
+// import {
+//   useCreateGradeMutation,
+//   useDeleteGradeMutation,
+//   useUpdateGradeMutation
+// } from "hooks/grades/mutation";
+// eslint-disable-next-line no-unused-vars
 import { getAllSemesterOfYear, useGetAllGrades, useGetAllYears } from "hooks/grades/queries";
 import useMyInfo from "hooks/useMyInfo";
 
@@ -50,6 +52,7 @@ function reducer(state, action) {
 }
 function GradeBoard(props) {
   const { isEditable } = props;
+  console.log(isEditable);
   const [state, dispatch] = useReducer(reducer, initState);
   const { year, yearInfo, semester, semesterInfo } = state;
   const myInfo = useMyInfo();
@@ -58,11 +61,21 @@ function GradeBoard(props) {
     isLoading: isLoadingDefaultYear,
     isSuccess: loadYearSuccess
   } = useGetAllYears(yearInfo.trim());
-  const { data: semesters } = getAllSemesterOfYear(semesterInfo);
-  const { data: grades } = useGetAllGrades(year, semester, myInfo.id);
-  const createGradeMutator = useCreateGradeMutation(year, semester);
-  const updateGradeMutator = useUpdateGradeMutation(year, semester);
-  const deleteGradeMutator = useDeleteGradeMutation(year, semester);
+  const { data: semesters } = getAllSemesterOfYear(semesterInfo.trim());
+  const { data: grades, isFetching: isLoadingGrade } = useGetAllGrades({
+    userId: myInfo?.id ?? null,
+    yearId: year?.id ?? null,
+    semesterId: semester?.id ?? null,
+    pageSize: 25,
+    page: 0
+  });
+  const queryClient = useQueryClient();
+
+  console.log("GradeBoard");
+  console.log(grades);
+  // const createGradeMutator = useCreateGradeMutation(year, semester);
+  // const updateGradeMutator = useUpdateGradeMutation(year, semester);
+  // const deleteGradeMutator = useDeleteGradeMutation(year, semester);
 
   const theme = createTheme({
     components: {
@@ -85,23 +98,17 @@ function GradeBoard(props) {
       }
     }
   });
-  const handleDeleteGrade = (item) => {
-    deleteGradeMutator.mutate(item.id);
-  };
-  const handelSubmitGrade = (item) => {
-    console.log("handelSubmitGrade");
-    console.log(year, semester);
-    if (item.id) {
-      updateGradeMutator.mutate(item);
-    } else {
-      createGradeMutator.mutate({ ...item, year, semester });
-    }
-  };
   useEffect(() => {
     if (!year && loadYearSuccess) {
       dispatch({ type: "SET_YEAR", payload: years[0] });
     }
   }, [loadYearSuccess]);
+
+  useEffect(() => {
+    queryClient.refetchQueries({
+      queryKey: ["grades"]
+    });
+  }, [year, semester]);
   return (
     <ThemeProvider theme={theme}>
       <div className="flex flex-col gap-y-2">
@@ -115,7 +122,9 @@ function GradeBoard(props) {
         </div>
         <div>
           <Autocomplete
-            noOptionsText="Không có thông tin năm học"
+            noOptionsText={
+              isLoadingDefaultYear ? "Đang lấy thông tin năm học" : "Không có thông tin năm học"
+            }
             value={year}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             onChange={(e, newValue) => {
@@ -134,6 +143,13 @@ function GradeBoard(props) {
             // eslint-disable-next-line no-shadow
             options={years ?? []}
             getOptionLabel={(option) => option?.name || ""}
+            renderOption={(propsEl, option) => {
+              return (
+                <li {...propsEl} key={option.id}>
+                  {option.name}
+                </li>
+              );
+            }}
             renderInput={(params) => <TextField {...params} placeholder="Chọn năm" size="small" />}
           />
         </div>
@@ -167,20 +183,18 @@ function GradeBoard(props) {
           />
         </div>
         <div className="flex flex-col gap-y-4 mt-3">
-          {isLoadingDefaultYear && (
+          {isLoadingGrade && (
             <div className="flex flex-row justify-center">
               <Skeleton variant="rectangular" width="100%" height={60} />
             </div>
           )}
-          {grades &&
-            !isLoadingDefaultYear &&
-            [...grades].map((grade, idx) => {
+          {grades?.data &&
+            !isLoadingGrade &&
+            [...grades.data].map((grade, idx) => {
               return (
                 <GradeItem
                   // eslint-disable-next-line react/no-array-index-key
                   key={`grade-item-${idx}`}
-                  onSubmitGrade={handelSubmitGrade}
-                  onDeleteGrade={handleDeleteGrade}
                   item={{ ...grade, index: idx }}
                   isEditable={isEditable}
                 />

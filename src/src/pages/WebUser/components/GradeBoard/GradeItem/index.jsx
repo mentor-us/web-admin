@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer } from "react";
 import PublicIcon from "@mui/icons-material/Public";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import SchoolIcon from "@mui/icons-material/School";
 import { IconButton, TextField } from "@mui/material";
 import PropTypes from "prop-types";
@@ -30,22 +29,14 @@ function reducer(state, action) {
   }
 }
 function GradeItem(props) {
-  const { item, isEditable, onDeleteGrade, onSubmitGrade } = props;
+  const { item, isEditable } = props;
   const [state, dispatch] = useReducer(reducer, initState);
-  const { score, course, courseName, verified, isSubmiting } = state;
+  const { score, course, courseName } = state;
 
-  const handleDeleteGrade = () => {
-    onDeleteGrade(item);
-  };
   const onClickSetModeSharing = () => {
-    dispatch({ type: "SET_IS_SUBMITING", payload: true });
+    // dispatch({ type: "SET_IS_SUBMITING", payload: true });
   };
-  useEffect(() => {
-    if (isSubmiting) {
-      onSubmitGrade({ ...item, score: +score, course, verified });
-      dispatch({ type: "SET_IS_SUBMITING", payload: false });
-    }
-  }, [isSubmiting]);
+
   useEffect(() => {
     dispatch({ type: "SET_COURSE_NAME", payload: course?.name ?? "" });
   }, [course]);
@@ -54,7 +45,7 @@ function GradeItem(props) {
     dispatch({ type: "SET_COURSE", payload: item.course });
   }, [item]);
   return (
-    <div className="grade flex flex-row items-center gap-x-4 w-full justify-between">
+    <div className="grade flex flex-row items-center gap-x-6 w-full justify-between">
       <SchoolIcon />
       <div className="flex flex-row gap-x-4 items-center grow">
         <TextField
@@ -67,30 +58,6 @@ function GradeItem(props) {
           variant="standard"
           value={courseName}
         />
-        {/* <Autocomplete
-            noOptionsText="Không có thông tin môn học"
-            value={course}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            required={isEditable}
-            disabled={!isEditable}
-            onChange={(e, newValue) => {
-              dispatch({ type: "SET_COURSE", payload: newValue });
-            }}
-            onInputChange={(event, value) => {
-              dispatch({ type: "SET_COURSE_INFO", payload: value });
-            }}
-            sx={{
-              width: "100%",
-              pl: "0!important",
-              pt: "0!important"
-            }}
-            color="text"
-            options={courses ?? []}
-            getOptionLabel={(option) => option?.name || ""}
-            renderInput={(params) => (
-              <TextField {...params} placeholder="Chọn môn học" size="small" />
-            )}
-          /> */}
         <TextField
           id="standard-number"
           type="number"
@@ -116,14 +83,6 @@ function GradeItem(props) {
           >
             <PublicIcon />
           </IconButton>
-          <IconButton
-            onClick={handleDeleteGrade}
-            color="primary"
-            size="small"
-            aria-label="add to shopping cart"
-          >
-            <RemoveCircleIcon color="error" />
-          </IconButton>
         </div>
       )}
     </div>
@@ -132,8 +91,6 @@ function GradeItem(props) {
 GradeItem.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   item: PropTypes.object.isRequired,
-  isEditable: PropTypes.bool.isRequired,
-  onDeleteGrade: PropTypes.func.isRequired,
-  onSubmitGrade: PropTypes.func.isRequired
+  isEditable: PropTypes.bool.isRequired
 };
 export default GradeItem;

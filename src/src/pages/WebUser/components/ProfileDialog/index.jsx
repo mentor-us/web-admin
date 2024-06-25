@@ -314,7 +314,7 @@ function ProfileDialog(props) {
                 />
               </ListItem>
             </List>
-            {/* <GradeBoard isEditable={isEditable} /> */}
+            <GradeBoard isEditable={isEditable} />
             {isEditable ? (
               <div className="flex justify-between items-end mt-4">
                 <Typography variant="h4" component="div">
