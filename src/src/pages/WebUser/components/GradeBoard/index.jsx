@@ -51,7 +51,7 @@ function reducer(state, action) {
   }
 }
 function GradeBoard(props) {
-  const { isEditable } = props;
+  const { isEditable, user = {} } = props;
   console.log(isEditable);
   const [state, dispatch] = useReducer(reducer, initState);
   const { year, yearInfo, semester, semesterInfo } = state;
@@ -63,7 +63,7 @@ function GradeBoard(props) {
   } = useGetAllYears(yearInfo.trim());
   const { data: semesters } = getAllSemesterOfYear(semesterInfo.trim());
   const { data: grades, isFetching: isLoadingGrade } = useGetAllGrades({
-    userId: myInfo?.id ?? null,
+    userId: isEditable ? myInfo?.id : user?.id ?? null,
     yearId: year?.id ?? null,
     semesterId: semester?.id ?? null,
     pageSize: 25,
@@ -188,6 +188,9 @@ function GradeBoard(props) {
               <Skeleton variant="rectangular" width="100%" height={60} />
             </div>
           )}
+          {grades && !isLoadingGrade && !grades.totalCounts && (
+            <div className="flex flex-row justify-center">Không có thông tin điểm số</div>
+          )}
           {grades?.data &&
             !isLoadingGrade &&
             [...grades.data].map((grade, idx) => {
@@ -207,6 +210,8 @@ function GradeBoard(props) {
 }
 GradeBoard.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  isEditable: PropTypes.bool.isRequired
+  isEditable: PropTypes.bool.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  user: PropTypes.object.isRequired
 };
 export default GradeBoard;
