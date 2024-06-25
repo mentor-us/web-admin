@@ -11,6 +11,7 @@ const useGradeManagementStore = create((set) => ({
   ],
   currentPageSearch: 0,
   itemsPerPage: 10,
+  searchParams: {},
   query: "",
   isSelectAll: false,
   isSubmitSearch: false,

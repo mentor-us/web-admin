@@ -25,13 +25,13 @@ function GradeManagement() {
   /// --------------------- Khai báo Biến, State -------------
   const queryClient = useQueryClient();
   const {
-    query,
     gradeData,
     columnHeaders,
     currentPageSearch,
     itemsPerPage,
     setGradeData,
     isSubmitSearch,
+    searchParams,
     setState
   } = useGradeManagementStore();
   const [, dispatchContext] = useMentorUs();
@@ -41,7 +41,7 @@ function GradeManagement() {
     isFetching: isLoadingCourse,
     isSuccess: loadSuccessCourse
   } = useGetAllGrades({
-    query,
+    ...searchParams,
     pageSize: itemsPerPage,
     page: currentPageSearch
   });
@@ -94,9 +94,9 @@ function GradeManagement() {
   }, [isLoadingCourse, loadSuccessCourse]);
 
   useEffect(() => {
-    setState("query", "");
+    setState("searchParams", {});
     return function () {
-      setState("query", "");
+      setState("searchParams", {});
     };
   }, []);
 

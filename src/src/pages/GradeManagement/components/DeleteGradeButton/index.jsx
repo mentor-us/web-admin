@@ -10,8 +10,6 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirm } from "components/SweetAlert";
 import { useDeleteGradeMutation } from "hooks/grades/mutation";
 
-// import DeleteOptions from "./DeleteOptions";
-
 function DeleteGradeButton({ data, setState, isMultiple }) {
   const [, dispatchContext] = useMentorUs();
   // eslint-disable-next-line no-unused-vars

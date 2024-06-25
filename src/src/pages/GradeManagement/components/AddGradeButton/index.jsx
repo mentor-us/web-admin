@@ -190,6 +190,9 @@ function AddGradeButton() {
       queryKey: ["courses"]
     });
   }, [courseName]);
+  useEffect(() => {
+    resetAllData();
+  }, []);
   return (
     <>
       <MDButton variant="gradient" color="success" onClick={handleOpen}>

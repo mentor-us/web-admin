@@ -82,15 +82,6 @@ export const useGetAllGrades = (query) =>
     queryKey: ["grades"],
     queryFn: async () => {
       try {
-        // console.log(year?.id, semester?.id, userId);
-        // return gradesList;
-        // const dataReq = {
-        //   parmas: {
-        //     yearId: year?.id,
-        //     semesterId: semester?.id,
-        //     userId
-        //   }
-        // };
         const params = {
           page: 0,
           pageSize: 10,
@@ -116,7 +107,7 @@ export const useGetAllYears = (yearInfo) =>
         // console.log("useGetAllYears");
         // console.log(res.data);
         // [...res.data].filter((year) => year.name.toString().includes(yearInfo));
-        return years;
+        return res.data;
         // return res.data;
         // eslint-disable-next-line no-unreachable
       } catch (error) {

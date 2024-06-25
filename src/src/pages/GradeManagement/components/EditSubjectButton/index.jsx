@@ -90,8 +90,6 @@ function EditSubjectButton({ data, setState }) {
     query: studentName.trim()
   });
   const updateGradeMutator = useUpdateGradeMutation();
-  console.log("student");
-  console.log(student);
   /// --------------------------------------------------------
   /// --------------------- Các hàm thêm ---------------------
 
@@ -136,9 +134,18 @@ function EditSubjectButton({ data, setState }) {
   const isAllReqDataHasValue = () => {
     return +score <= 10 && +score >= 0 && year && course && semester && student;
   };
+  const isAllReqDataHasDiffValue = () => {
+    return (
+      score !== data.score ||
+      year !== data.year ||
+      course !== data.course ||
+      semester !== data.semester ||
+      student !== data.student
+    );
+  };
 
   const isLostAllData = () => {
-    if (isOneReqDataHasValue() && isAllReqDataHasValue()) {
+    if (isOneReqDataHasValue() && isAllReqDataHasDiffValue()) {
       WarningAlertConfirmNotSavingData().then((result) => {
         if (result.isDenied) {
           setOpen(false);
