@@ -46,7 +46,7 @@ function GradeItem(props) {
   }, [item]);
   return (
     <div className="grade flex flex-row items-center gap-x-6 w-full justify-between">
-      <SchoolIcon />
+      <SchoolIcon color={score < 5 ? "error" : "info"} />
       <div className="flex flex-row gap-x-4 items-center grow">
         <TextField
           id="course-name"
@@ -55,6 +55,8 @@ function GradeItem(props) {
             shrink: true,
             readOnly: true
           }}
+          sx={{ input: { color: score < 5 ? "red" : "black" } }}
+          error={score < 5}
           variant="standard"
           value={courseName}
         />
@@ -67,8 +69,10 @@ function GradeItem(props) {
             readOnly: true
           }}
           sx={{
-            width: "20%"
+            width: "20%",
+            input: { color: score < 5 ? "red" : "black" }
           }}
+          error={score < 5}
           variant="standard"
           value={score}
         />
