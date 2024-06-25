@@ -47,7 +47,7 @@ function NoteUserList({ onDetail }) {
         />
       </Paper>
       {notes?.data?.length > 0 && (
-        <Stack sx={{ minHeight: "300px" }}>
+        <Stack sx={{ minHeight: "300px" }} maxHeight={550} className="overflow-auto">
           {notes?.data?.map((note) => (
             <Stack
               onClick={() => onDetail(note.id)}

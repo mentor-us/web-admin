@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import { Edit, ShareOutlined } from "@mui/icons-material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { Avatar, Box, CircularProgress, colors, IconButton, Tooltip } from "@mui/material";
+import { Avatar, Box, CircularProgress, colors, IconButton, Stack, Tooltip } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { confirm } from "material-ui-confirm";
 import PropTypes from "prop-types";
@@ -112,7 +112,7 @@ function NoteDetail({ noteUserId, onShareClick, onEditClick }) {
   };
 
   return (
-    <div className="min-h-60">
+    <Stack className="min-h-60 overflow-auto" maxHeight={550}>
       <VerticalTimeline lineColor="#e3e3e3" layout="1-column-left">
         {notes?.data.map((note) => (
           <VerticalTimelineElement
@@ -169,7 +169,7 @@ function NoteDetail({ noteUserId, onShareClick, onEditClick }) {
           </VerticalTimelineElement>
         ))}
       </VerticalTimeline>
-    </div>
+    </Stack>
   );
 }
 
