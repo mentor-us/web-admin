@@ -7,6 +7,8 @@ const NoteService = {
   getUserNotes: (req) => NoteApi.getNoteUserList(req),
   getUserNoteByUserId: (id) => NoteApi.getNoteUserListById(id),
   deleteNote: (id) => NoteApi.deleteNoteById(id),
-  shareNoteToUsers: (id, req) => NoteApi.shareNoteToUsers(id, req)
+  shareNoteToUsers: (req) => NoteApi.shareNoteToUsers(req),
+  getNoteById: (id) => NoteApi.getNoteById(id),
+  editNoteById: (req) => NoteApi.editNoteById(req)
 };
 export default NoteService;

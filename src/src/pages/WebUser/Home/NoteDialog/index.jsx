@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { forwardRef, useCallback, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import {
@@ -18,21 +18,41 @@ import NoteForm from "./NoteForm";
 import NoteShare from "./NoteShare";
 import NoteUserList from "./NoteUserList";
 
+// Define transition effect for dialog
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 function NoteDialog({ open, onClose }) {
   const [type, setType] = useState("list");
   const [selectedUserNote, setSelectedUserNote] = useState(null);
   const [selectedNote, setSelectedNote] = useState(null);
-  const handleCreate = (note) => {
+
+  // Handle creating a new note
+  const handleCreate = () => {
     setType("create");
+    setSelectedNote(null);
   };
-  const openDetailUserNote = (userNoteId) => {
+
+  // Open detail view for a user note
+  const openDetailUserNote = useCallback((userNoteId) => {
     setType("detail");
     setSelectedUserNote(userNoteId);
-  };
-  const openShareNoteDialog = (noteId) => {
+  }, []);
+
+  // Open share note dialog
+  const openShareNoteDialog = useCallback((noteId) => {
     setType("share");
     setSelectedNote(noteId);
-  };
+  }, []);
+
+  // Open edit note dialog
+  const openEditNoteDialog = useCallback((noteId) => {
+    setType("create");
+    setSelectedNote(noteId);
+  }, []);
+
+  // Render content based on the current dialog type
   const renderContent = () => {
     switch (type) {
       case "list":
@@ -40,9 +60,8 @@ function NoteDialog({ open, onClose }) {
       case "create":
         return (
           <NoteForm
-            onCancel={() => {
-              setType("list");
-            }}
+            noteId={selectedNote}
+            onCancel={() => setType(selectedNote ? "detail" : "list")}
           />
         );
       case "detail":
@@ -50,29 +69,21 @@ function NoteDialog({ open, onClose }) {
           <NoteDetail
             noteUserId={selectedUserNote}
             onShareClick={openShareNoteDialog}
-            onCancel={() => {
-              setType("list");
-            }}
+            onEditClick={openEditNoteDialog}
           />
         );
       case "share":
-        return (
-          <NoteShare
-            noteId={selectedNote}
-            onCancel={() => {
-              setType("detail");
-            }}
-          />
-        );
+        return <NoteShare noteId={selectedNote} onCancel={() => setType("detail")} />;
       default:
         return null;
     }
   };
 
+  // Render dialog title based on the current type
   const renderTitle = () => {
     switch (type) {
       case "create":
-        return "Tạo ghi chú";
+        return selectedNote ? "Chỉnh sửa ghi chú" : "Tạo ghi chú";
       case "detail":
         return "Chi tiết ghi chú";
       case "share":
@@ -81,29 +92,35 @@ function NoteDialog({ open, onClose }) {
         return "Danh sách ghi chú";
     }
   };
-  const onDetailBack = () => {
-    setType("list");
-  };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth className="min-w-60">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      TransitionComponent={Transition}
+      className="min-w-60"
+    >
       <DialogTitle className="w-full !py-2" alignSelf="flex-start">
         <Stack className="w-full" direction="row" justifyContent="space-between">
-          <span className="!p-2">{renderTitle()}</span>
+          <Typography variant="h6" className={`!p-2 ${type === "detail" ? "!pl-7" : ""}`}>
+            {renderTitle()}
+          </Typography>
           {type === "list" && (
             <IconButton
               className="!absolute !right-0 hover:!bg-slate-300 !mx-4 !my-2 rounded-full"
               size="small"
-              onClick={() => handleCreate()}
+              onClick={handleCreate}
             >
               <AddIcon />
             </IconButton>
           )}
           {type === "detail" && (
             <IconButton
-              className="!absolute !right-0 hover:!bg-slate-300 !mx-4 !my-2 rounded-full"
+              className="!absolute !left-0 hover:!bg-slate-300 !mx-4 !my-2 rounded-full"
               size="small"
-              onClick={() => onDetailBack()}
+              onClick={() => setType("list")}
             >
               <KeyboardArrowLeftIcon />
             </IconButton>

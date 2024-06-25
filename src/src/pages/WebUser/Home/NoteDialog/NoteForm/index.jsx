@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -17,16 +17,20 @@ import {
   TextField
 } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import debounce from "lodash/debounce";
 import PropTypes from "prop-types";
 
-import { useCreateNoteMutation } from "hooks/notes/mutation";
+import { useCreateNoteMutation, useEditNoteMutation } from "hooks/notes/mutation";
+import { useGetNoteById } from "hooks/notes/queries";
 import { useGetUserNotesKey } from "hooks/profile/key";
 import { useGetMentees } from "hooks/profile/queries";
 
-function NoteForm({ onCancel }) {
+function NoteForm({ onCancel, noteId }) {
   const [searchQuery, setSearchQuery] = useState("");
   const { mutateAsync: createNote } = useCreateNoteMutation();
+  const { mutateAsync: editNote } = useEditNoteMutation();
+  const { data: note, isLoading: isLoadingNote } = useGetNoteById(noteId);
   const {
     control,
     handleSubmit,
@@ -47,10 +51,21 @@ function NoteForm({ onCancel }) {
     query: searchQuery // Pass searchQuery to hook
   });
 
-  // Handler for search input change
-  const handleSearchChange = (event) => {
-    setSearchQuery(event?.target.value);
-  };
+  // Handler for search input change with debounce
+  const handleSearchChange = useCallback(
+    debounce((event) => {
+      setSearchQuery(event?.target.value);
+    }, 300),
+    []
+  );
+
+  useEffect(() => {
+    // Cleanup debounce on unmount
+    return () => {
+      handleSearchChange.cancel();
+    };
+  }, [handleSearchChange]);
+
   const prepareData = (data) => {
     const userIds = data.attendees.map((attendee) => attendee.id);
     return {
@@ -59,29 +74,35 @@ function NoteForm({ onCancel }) {
       userIds
     };
   };
-  const onSubmit = (data) => {
-    toast.promise(
-      new Promise((resolve, reject) => {
-        createNote(prepareData(data), {
-          onSuccess: () => {
-            queryClient.refetchQueries({
-              queryKey: useGetUserNotesKey()
-            });
-          }
-        }).catch((err) => {
-          console.error(err);
-          reject(err);
-        });
-      }),
-      {
-        loading: `Đang lưu ghi chú...`,
-        success: `Ghi chú đã được tạo`,
-        error: `Đã xảy ra lỗi khi tạo ghi chú`
-      }
-    );
 
-    onCancel();
+  const onSubmit = async (data) => {
+    const preparedData = prepareData(data);
+    try {
+      if (noteId) {
+        await editNote({ ...preparedData, id: noteId });
+        toast.success("Ghi chú đã được cập nhật");
+      } else {
+        await createNote(preparedData);
+        toast.success("Ghi chú đã được tạo");
+      }
+      queryClient.refetchQueries({ queryKey: useGetUserNotesKey() });
+      reset();
+      onCancel();
+    } catch (err) {
+      console.error(err);
+      toast.error("Đã xảy ra lỗi khi lưu ghi chú");
+    }
   };
+
+  useEffect(() => {
+    if (note) {
+      reset({
+        title: note.title,
+        description: note.content,
+        attendees: note.users
+      });
+    }
+  }, [note, reset]);
 
   return (
     <form
@@ -123,7 +144,7 @@ function NoteForm({ onCancel }) {
               value={value}
               onChange={(event, newValue) => onChange(newValue)}
               inputValue={searchQuery} // Controlled input value for search
-              onInputChange={handleSearchChange} // Handle input change for search
+              onInputChange={handleSearchChange} // Handle input change for search with debounce
               noOptionsText="Không có thành viên nào"
               onClose={() => setSearchQuery("")}
               renderInput={(params) => (
@@ -200,8 +221,9 @@ function NoteForm({ onCancel }) {
 }
 
 NoteForm.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types, react/require-default-props,
-  onCancel: PropTypes.func.isRequired
+  onCancel: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/require-default-props
+  noteId: PropTypes.string
 };
 
 export default NoteForm;

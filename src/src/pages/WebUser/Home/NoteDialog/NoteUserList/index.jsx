@@ -3,7 +3,16 @@ import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SearchIcon from "@mui/icons-material/Search";
-import { Avatar, IconButton, InputBase, Paper, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  CircularProgress,
+  IconButton,
+  InputBase,
+  Paper,
+  Stack,
+  Typography
+} from "@mui/material";
 import PropTypes from "prop-types";
 
 import { useGetUserNotes } from "hooks/notes/queries";
@@ -14,7 +23,11 @@ function NoteUserList({ onDetail }) {
     e.preventDefault();
     setSearchQuery(e?.target?.value);
   };
-  const { data: notes, isLoading } = useGetUserNotes({ page: 0, pageSize: 10, query: searchQuery });
+  const { data: notes, isLoading } = useGetUserNotes({
+    page: 0,
+    pageSize: 10,
+    search: searchQuery
+  });
 
   return (
     <Stack className="w-full rounded-lg" direction="column" spacing={1} sx={{ minHeight: "300px" }}>
@@ -37,13 +50,14 @@ function NoteUserList({ onDetail }) {
         <Stack sx={{ minHeight: "300px" }}>
           {notes?.data?.map((note) => (
             <Stack
+              onClick={() => onDetail(note.id)}
               key={note?.id}
               className="w-full p-2 hover:bg-gray-100 cursor-pointer"
               direction="row"
               justifyContent="space-between"
               alignItems="center"
             >
-              <Stack direction="row" spacing={2} onClick={() => onDetail(note.id)}>
+              <Stack direction="row" spacing={2}>
                 <Avatar src={note?.imageUrl} />
                 <Stack direction="column">
                   <Typography>{note?.name}</Typography>
@@ -62,9 +76,14 @@ function NoteUserList({ onDetail }) {
         </Stack>
       )}
       {isLoading && (
-        <Stack className="w-full" direction="column" justifyContent="center" alignItems="center">
-          <Typography>Đang tải...</Typography>
-        </Stack>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="20em" // Adjust this height based on your container
+        >
+          <CircularProgress color="info" />
+        </Box>
       )}
     </Stack>
   );

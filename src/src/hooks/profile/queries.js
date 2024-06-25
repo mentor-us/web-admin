@@ -15,3 +15,9 @@ export const useGetMentees = (req) => {
     }
   });
 };
+export const useGetAllAccount = (req) => {
+  return useQuery({
+    queryKey: ["accounts", req],
+    queryFn: () => accountServices.loadByEmail(req)
+  });
+};

@@ -8,6 +8,8 @@ const NoteApi = {
   getNoteUserList: (req) => AxiosClient.get(`${NOTE_URL}/users`, { params: req }),
   getNoteUserListById: (id) => AxiosClient.get(`${NOTE_URL}/user/${id}`),
   deleteNoteById: (id) => AxiosClient.delete(`${NOTE_URL}/${id}`),
-  shareNoteToUsers: (id, req) => AxiosClient.post(`${NOTE_URL}/${id}/share`, req)
+  shareNoteToUsers: (req) => AxiosClient.post(`${NOTE_URL}/${req.id}/share`, req),
+  getNoteById: (id) => AxiosClient.get(`${NOTE_URL}/${id}`),
+  editNoteById: (req) => AxiosClient.patch(`${NOTE_URL}/${req.id}`, req)
 };
 export default NoteApi;

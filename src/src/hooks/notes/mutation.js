@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import NoteService from "service/noteService";
 
-import { useCreateNoteKey, useDeleteNoteKey, useShareNoteKey } from "./key";
+import { useCreateNoteKey, useDeleteNoteKey, useEditNoteKey, useShareNoteKey } from "./key";
 
 // eslint-disable-next-line import/prefer-default-export
 export const useCreateNoteMutation = () => {
@@ -19,6 +19,11 @@ export const useDeleteNoteMutation = () =>
 export const useShareNoteMutation = () =>
   useMutation({
     // eslint-disable-next-line no-undef
-    mutationKey: useShareNoteKey(id),
-    mutationFn: (id, req) => NoteService.shareNoteToUsers(id, req)
+    mutationKey: useShareNoteKey,
+    mutationFn: (req) => NoteService.shareNoteToUsers(req)
+  });
+export const useEditNoteMutation = () =>
+  useMutation({
+    mutationKey: useEditNoteKey,
+    mutationFn: (req) => NoteService.editNoteById(req)
   });

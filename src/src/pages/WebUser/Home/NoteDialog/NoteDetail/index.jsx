@@ -2,9 +2,9 @@
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
-import { ShareOutlined } from "@mui/icons-material";
+import { Edit, ShareOutlined } from "@mui/icons-material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { Avatar, colors, IconButton, Tooltip } from "@mui/material";
+import { Avatar, Box, CircularProgress, colors, IconButton, Tooltip } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { confirm } from "material-ui-confirm";
 import PropTypes from "prop-types";
@@ -19,7 +19,7 @@ import useMyInfo from "hooks/useMyInfo";
 
 import "react-vertical-timeline-component/style.min.css";
 
-function NoteDetail({ noteUserId, onShareClick }) {
+function NoteDetail({ noteUserId, onShareClick, onEditClick }) {
   const myInfo = useMyInfo();
   const queryClient = useQueryClient();
   const { data: notes, isLoading, isSuccess, isError } = useGetUserNoteByUserId(noteUserId);
@@ -40,9 +40,14 @@ function NoteDetail({ noteUserId, onShareClick }) {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full">
-        <p className="text-lg text-zinc-800">Loading...</p>
-      </div>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="20em" // Adjust this height based on your container
+      >
+        <CircularProgress color="info" />
+      </Box>
     );
   }
 
@@ -61,8 +66,7 @@ function NoteDetail({ noteUserId, onShareClick }) {
       </div>
     );
   }
-
-  const onDeleteChannelClick = (id) => {
+  const onDeleteNoteClick = (id) => {
     confirm({
       title: "Xác nhận xóa ghi chú",
       description: <span className="text-base">Bạn có chắc chắn muốn xóa ghi chú này không?</span>,
@@ -136,9 +140,19 @@ function NoteDetail({ noteUserId, onShareClick }) {
               dangerouslySetInnerHTML={{ __html: note.content }}
             />
             <div className="absolute bottom-0 right-0">
+              {note?.isEditable && (
+                <IconButton
+                  type="button"
+                  sx={{ p: "10px" }}
+                  aria-label="delete"
+                  onClick={() => onEditClick(note.id)}
+                >
+                  <Edit />
+                </IconButton>
+              )}
               {note?.owner?.id === myInfo?.id && (
                 <IconButton type="button" sx={{ p: "10px" }} aria-label="share">
-                  <ShareOutlined onClick={() => onShareClick(note.id)} />
+                  <ShareOutlined color="info" onClick={() => onShareClick(note.id)} />
                 </IconButton>
               )}
               {(note?.owner?.id === myInfo?.id || note.creator.id === myInfo?.id) && (
@@ -146,7 +160,7 @@ function NoteDetail({ noteUserId, onShareClick }) {
                   type="button"
                   sx={{ p: "10px" }}
                   aria-label="delete"
-                  onClick={() => onDeleteChannelClick(note.id)}
+                  onClick={() => onDeleteNoteClick(note.id)}
                 >
                   <DeleteOutlineIcon color="error" />
                 </IconButton>
@@ -161,7 +175,8 @@ function NoteDetail({ noteUserId, onShareClick }) {
 
 NoteDetail.propTypes = {
   noteUserId: PropTypes.string.isRequired,
-  onShareClick: PropTypes.func.isRequired
+  onShareClick: PropTypes.func.isRequired,
+  onEditClick: PropTypes.func.isRequired
 };
 
 export default NoteDetail;

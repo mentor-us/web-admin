@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { Edit, PublicOutlined, VisibilityOutlined } from "@mui/icons-material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import LockIcon from "@mui/icons-material/Lock";
 import {
   Autocomplete,
   Avatar,
+  Box,
   Button,
   CircularProgress,
   DialogActions,
@@ -20,26 +22,32 @@ import {
   TextField,
   Typography
 } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
+import debounce from "lodash/debounce";
 import PropTypes from "prop-types";
 
 import { EditIcon } from "assets/svgs";
 
-import { useGetMentees } from "hooks/profile/queries";
+import { useShareNoteMutation } from "hooks/notes/mutation";
+import { useGetNoteById } from "hooks/notes/queries";
+import { useGetUserNotesKey } from "hooks/profile/key";
+import { useGetAllAccount, useGetMentees } from "hooks/profile/queries";
 import { NotePermission, NoteShareObject, NoteShareType } from "utils/constants";
 
 function NoteShare({ noteId, onCancel }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [value, setValue] = useState([]);
   const [generalPermission, setGeneralPermission] = useState(NoteShareType[0]);
-  const { data: members, isLoading: isLoadingMembers } = useGetMentees({
-    page: 0,
-    pageSize: 100,
-    query: searchQuery // Pass searchQuery to hook
-  });
-
-  const handleSearchChange = (event) => {
-    setSearchQuery(event?.target.value);
-  };
+  const { mutateAsync: shareNote } = useShareNoteMutation();
+  const { data: note, isLoading } = useGetNoteById(noteId);
+  const queryClient = useQueryClient();
+  const { data: members, isLoading: isLoadingMembers } = useGetAllAccount(searchQuery);
+  const handleSearchChange = useCallback(
+    debounce((event) => {
+      setSearchQuery(event?.target.value);
+    }, 300),
+    []
+  );
 
   const onChange = (event, newValue) => {
     const updatedValue = newValue.map((member) => ({
@@ -98,26 +106,69 @@ function NoteShare({ noteId, onCancel }) {
     }
   };
 
-  const handleSubmit = () => {
+  const prepareData = () => {
     const formattedUsers = value.map((member) => ({
       userId: member.id,
-      accessType: member.accessType.key // Use key for accessType
+      accessType: member.accessType.key
     }));
-
-    console.log({ shareType: generalPermission.value, users: formattedUsers });
-
-    // Further logic to handle submission (e.g., API call)
-    // Example:
-    // submitData({ shareType: generalPermission, users: formattedUsers });
-
-    onCancel(); // Simulate form submission by calling onCancel
+    return {
+      shareType: generalPermission.value,
+      id: noteId,
+      users: formattedUsers
+    };
   };
 
-  return (
+  const handleSubmit = () => {
+    toast.promise(
+      new Promise((resolve, reject) => {
+        shareNote(prepareData(), {
+          onSuccess: () => {
+            queryClient.refetchQueries(useGetUserNotesKey(noteId));
+            resolve();
+          },
+          onError: (err) => {
+            console.error(err);
+            reject(err);
+          }
+        });
+      }),
+      {
+        loading: `Đang chia sẻ ghi chú...`,
+        success: `Chia sẻ ghi chú thành công`,
+        error: `Chia sẻ ghi chú thất bại. Vui lòng thử lại sau!`
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (note) {
+      setValue(
+        note.userAccesses.map((user) => ({
+          id: user.user.id,
+          name: user.user.name,
+          email: user.user.email,
+          imageUrl: user.user.imageUrl,
+          accessType: NotePermission.find((item) => item.key === user.notePermission)
+        }))
+      );
+      setGeneralPermission(NoteShareType.find((item) => item.value === note.shareType));
+    }
+  }, [note]);
+
+  return isLoading ? (
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="20em" // Adjust this height based on your container
+    >
+      <CircularProgress color="info" />
+    </Box>
+  ) : (
     <Stack className="w-full rounded-lg" direction="column" spacing={1} sx={{ minHeight: "50px" }}>
       <Autocomplete
         multiple
-        options={members?.data ?? []}
+        options={members ?? []}
         getOptionLabel={(member) => (member?.name ? `${member.name} (${member.email})` : "")}
         filterSelectedOptions
         value={value}
@@ -218,13 +269,7 @@ function NoteShare({ noteId, onCancel }) {
       </Stack>
       <Stack>
         <Typography className="font-black text-black">Quyền truy cập chung</Typography>
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-start"
-          spacing={1}
-          // className="w-full"
-        >
+        <Stack direction="row" alignItems="center" justifyContent="space-start" spacing={1}>
           <Stack className="bg-zinc-200 p-3 rounded-full">{renderIcon()}</Stack>
           <Stack>
             <Select
