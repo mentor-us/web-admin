@@ -87,9 +87,6 @@ function GradeDetailAccount({ user = null }) {
   };
 
   useEffect(() => {
-    console.log("prepare trigger refetch");
-    console.log(user);
-
     if (user) {
       queryClient.refetchQueries({
         queryKey: ["grades"]
