@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from "react";
-import PublicIcon from "@mui/icons-material/Public";
+// import PublicIcon from "@mui/icons-material/Public";
 import SchoolIcon from "@mui/icons-material/School";
-import { IconButton, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import PropTypes from "prop-types";
 
 const initState = {
@@ -29,13 +29,13 @@ function reducer(state, action) {
   }
 }
 function GradeItem(props) {
-  const { item, isEditable } = props;
+  const { item } = props;
   const [state, dispatch] = useReducer(reducer, initState);
   const { score, course, courseName } = state;
 
-  const onClickSetModeSharing = () => {
-    // dispatch({ type: "SET_IS_SUBMITING", payload: true });
-  };
+  // const onClickSetModeSharing = () => {
+  //   // dispatch({ type: "SET_IS_SUBMITING", payload: true });
+  // };
 
   useEffect(() => {
     dispatch({ type: "SET_COURSE_NAME", payload: course?.name ?? "" });
@@ -55,7 +55,10 @@ function GradeItem(props) {
             shrink: true,
             readOnly: true
           }}
-          sx={{ input: { color: score < 5 ? "red" : "black" } }}
+          sx={{
+            width: "80%",
+            input: { color: score < 5 ? "red" : "black" }
+          }}
           error={score < 5}
           variant="standard"
           value={courseName}
@@ -77,24 +80,12 @@ function GradeItem(props) {
           value={score}
         />
       </div>
-      {isEditable && (
-        <div className="flex flex-row">
-          <IconButton
-            onClick={onClickSetModeSharing}
-            color="primary"
-            size="small"
-            aria-label="add to shopping cart"
-          >
-            <PublicIcon />
-          </IconButton>
-        </div>
-      )}
     </div>
   );
 }
 GradeItem.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  item: PropTypes.object.isRequired,
-  isEditable: PropTypes.bool.isRequired
+  item: PropTypes.object.isRequired
+  // isEditable: PropTypes.bool.isRequired
 };
 export default GradeItem;
