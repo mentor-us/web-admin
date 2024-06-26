@@ -82,6 +82,8 @@ export const useGetAllGrades = (query) =>
     queryKey: ["grades"],
     queryFn: async () => {
       try {
+        console.log("useGetAllGrades");
+        console.log(query);
         const params = {
           page: 0,
           pageSize: 10,
