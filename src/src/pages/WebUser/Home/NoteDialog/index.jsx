@@ -15,6 +15,7 @@ import PropTypes from "prop-types";
 
 import NoteDetail from "./NoteDetail";
 import NoteForm from "./NoteForm";
+import NoteHistory from "./NoteHistory";
 import NoteShare from "./NoteShare";
 import NoteUserList from "./NoteUserList";
 
@@ -27,6 +28,7 @@ function NoteDialog({ open, onClose }) {
   const [type, setType] = useState("list");
   const [selectedUserNote, setSelectedUserNote] = useState(null);
   const [selectedNote, setSelectedNote] = useState(null);
+  const [selectedNoteUserName, setSelectedNoteUserName] = useState(null);
 
   // Handle creating a new note
   const handleCreate = () => {
@@ -35,9 +37,10 @@ function NoteDialog({ open, onClose }) {
   };
 
   // Open detail view for a user note
-  const openDetailUserNote = useCallback((userNoteId) => {
+  const openDetailUserNote = useCallback((userNoteId, username) => {
     setType("detail");
     setSelectedUserNote(userNoteId);
+    setSelectedNoteUserName(username);
   }, []);
 
   // Open share note dialog
@@ -51,6 +54,10 @@ function NoteDialog({ open, onClose }) {
     setType("create");
     setSelectedNote(noteId);
   }, []);
+  const openHistoryNote = useCallback((noteId) => {
+    setType("history");
+    setSelectedNote(noteId);
+  });
 
   // Render content based on the current dialog type
   const renderContent = () => {
@@ -70,10 +77,14 @@ function NoteDialog({ open, onClose }) {
             noteUserId={selectedUserNote}
             onShareClick={openShareNoteDialog}
             onEditClick={openEditNoteDialog}
+            onHistoryClick={openHistoryNote}
           />
         );
       case "share":
         return <NoteShare noteId={selectedNote} onCancel={() => setType("detail")} />;
+
+      case "history":
+        return <NoteHistory noteId={selectedNote} />;
       default:
         return null;
     }
@@ -85,11 +96,13 @@ function NoteDialog({ open, onClose }) {
       case "create":
         return selectedNote ? "Chỉnh sửa ghi chú" : "Tạo ghi chú";
       case "detail":
-        return "Chi tiết ghi chú";
+        return `Ghi chú của ${selectedNoteUserName}`;
       case "share":
         return "Chia sẻ ghi chú";
+      case "history":
+        return "Lịch sử chỉnh sửa ghi chú";
       default:
-        return "Danh sách ghi chú";
+        return "Danh sách sinh viên";
     }
   };
 
@@ -102,30 +115,36 @@ function NoteDialog({ open, onClose }) {
       TransitionComponent={Transition}
       className="min-w-60"
     >
-      <DialogTitle className="w-full !py-2" alignSelf="flex-start">
-        <Stack className="w-full" direction="row" justifyContent="space-between">
-          <Typography variant="h6" className={`!p-2 ${type === "detail" ? "!pl-7" : ""}`}>
-            {renderTitle()}
-          </Typography>
-          {type === "list" && (
-            <IconButton
-              className="!absolute !right-0 hover:!bg-slate-300 !mx-4 !my-2 rounded-full"
-              size="small"
-              onClick={handleCreate}
-            >
-              <AddIcon />
-            </IconButton>
-          )}
-          {type === "detail" && (
-            <IconButton
-              className="!absolute !left-0 hover:!bg-slate-300 !mx-4 !my-2 rounded-full"
-              size="small"
-              onClick={() => setType("list")}
-            >
-              <KeyboardArrowLeftIcon />
-            </IconButton>
-          )}
-        </Stack>
+      <DialogTitle alignSelf="center">
+        {renderTitle()}
+        {type === "list" && (
+          <IconButton
+            className="!absolute !right-0 hover:!bg-slate-300 !mx-4 !my-2 rounded-full"
+            size="small"
+            onClick={handleCreate}
+          >
+            <AddIcon />
+          </IconButton>
+        )}
+        {type === "detail" && (
+          <IconButton
+            className="!absolute !left-0 hover:!bg-slate-300 !mx-4 !my-2 rounded-full"
+            size="small"
+            onClick={() => setType("list")}
+          >
+            <KeyboardArrowLeftIcon />
+          </IconButton>
+        )}
+        {type === "history" && (
+          <IconButton
+            className="!absolute !left-0 hover:!bg-slate-300 !mx-4 !my-2 rounded-full"
+            size="small"
+            onClick={() => setType("detail")}
+          >
+            <KeyboardArrowLeftIcon />
+          </IconButton>
+        )}
+        {/* </Stack> */}
       </DialogTitle>
       <DialogContent sx={{ padding: 1, margin: 1 }}>{renderContent()}</DialogContent>
     </Dialog>

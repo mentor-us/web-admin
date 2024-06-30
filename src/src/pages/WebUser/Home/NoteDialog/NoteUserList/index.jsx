@@ -50,7 +50,7 @@ function NoteUserList({ onDetail }) {
         <Stack sx={{ minHeight: "300px" }} maxHeight={550} className="overflow-auto">
           {notes?.data?.map((note) => (
             <Stack
-              onClick={() => onDetail(note.id)}
+              onClick={() => onDetail(note.id, note.name)}
               key={note?.id}
               className="w-full p-2 hover:bg-gray-100 cursor-pointer"
               direction="row"
