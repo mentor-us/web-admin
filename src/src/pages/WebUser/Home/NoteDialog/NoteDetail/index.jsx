@@ -142,7 +142,7 @@ function NoteDetail({ noteUserId, onShareClick, onEditClick, onHistoryClick }) {
               </Tooltip>
               <Box>
                 <div className="font-bold text-base">{note?.title}</div>
-                <div className="text-sm">Ngày tạo: {formatDate(note.updatedDate)}</div>
+                <div className="text-sm">Ngày cập nhật: {formatDate(note.updatedDate)}</div>
               </Box>
             </Box>
             <Typography
@@ -178,7 +178,7 @@ function NoteDetail({ noteUserId, onShareClick, onEditClick, onHistoryClick }) {
                     }
                   }}
                 >
-                  <Edit fontSize="small" sx={{ mr: 1 }} /> Edit
+                  <Edit fontSize="small" sx={{ mr: 1 }} /> Chỉnh sửa
                 </MenuItem>
                 <MenuItem
                   onClick={(event) => handleShareNote(event, note.id)}
@@ -189,7 +189,7 @@ function NoteDetail({ noteUserId, onShareClick, onEditClick, onHistoryClick }) {
                     }
                   }}
                 >
-                  <ShareOutlined fontSize="small" sx={{ mr: 1 }} /> Share
+                  <ShareOutlined fontSize="small" sx={{ mr: 1 }} /> Chia sẻ
                 </MenuItem>
                 <MenuItem
                   onClick={(event) => handleDeleteNote(event, note.id)}
@@ -200,7 +200,7 @@ function NoteDetail({ noteUserId, onShareClick, onEditClick, onHistoryClick }) {
                     }
                   }}
                 >
-                  <DeleteOutline fontSize="small" sx={{ mr: 1 }} /> Delete
+                  <DeleteOutline fontSize="small" sx={{ mr: 1 }} /> Xóa
                 </MenuItem>
               </Menu>
             </Box>
