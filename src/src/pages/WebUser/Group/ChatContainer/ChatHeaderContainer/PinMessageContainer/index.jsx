@@ -28,7 +28,10 @@ function PinMessageContainer(props) {
       {!isExpanded ? (
         <>
           <Box className="hover:cursor-pointer w-full">
-            <PinMessageItem message={channelInfo?.pinnedMessages[0]} isHiddenDeleteIcon />
+            <PinMessageItem
+              message={channelInfo?.pinnedMessages[0]}
+              isHiddenDeleteIcon={channelInfo?.pinnedMessages.length > 1}
+            />
           </Box>
           {channelInfo?.pinnedMessages.length > 1 && (
             <Box

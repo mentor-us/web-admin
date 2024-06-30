@@ -1,15 +1,9 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
 import { PropTypes } from "prop-types";
 
-// import apple from "assets/images/apple-logo.png";
-// import chplay from "assets/images/google-play.png";
-import googleplay from "assets/images/google-play-badge.png";
+import appstore from "assets/images/appstore.png";
+import googleplay from "assets/images/googleplay.png";
 import logo from "assets/images/logo_mentorus.jpg";
-import website from "assets/images/www.png";
-import { AppStoreBadge } from "assets/svgs";
-
-import MDButton from "components/MDComponents/MDButton";
 
 import "../../styles.css";
 
@@ -28,12 +22,15 @@ function Home({ isMobile, isChatpage }) {
         >
           <a
             href="https://play.google.com/store/apps/details?id=com.mentorus&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
-            style={{ width: "30%", height: "30%", marginRight: "2rem" }}
+            style={{ width: "150px", marginRight: "20px" }}
           >
             <img src={googleplay} alt="Tải nội dung trên Google Play" />
           </a>
-          <a href="https://apps.apple.com/vn/app/mentorus/id6478803453?l=vi" className="p-0">
-            <AppStoreBadge width="165px" height="60px" />
+          <a
+            href="https://apps.apple.com/vn/app/mentorus/id6478803453?l=vi"
+            style={{ width: "150px", marginRight: "20px" }}
+          >
+            <img src={appstore} alt="Tải nội dung trên Google Play" />
           </a>
         </div>
         {/* {!isMobile && !isChatpage && (
