@@ -11,7 +11,6 @@ import {
   Button,
   CircularProgress,
   DialogActions,
-  IconButton,
   ListItem,
   ListItemAvatar,
   ListItemText,
@@ -26,28 +25,27 @@ import { useQueryClient } from "@tanstack/react-query";
 import debounce from "lodash/debounce";
 import PropTypes from "prop-types";
 
-import { EditIcon } from "assets/svgs";
-
 import { useShareNoteMutation } from "hooks/notes/mutation";
 import { useGetNoteById } from "hooks/notes/queries";
 import { useGetUserNotesKey } from "hooks/profile/key";
-import { useGetAllAccount, useGetMentees } from "hooks/profile/queries";
+import { useGetAllAccount } from "hooks/profile/queries";
 import { NotePermission, NoteShareObject, NoteShareType } from "utils/constants";
 
 function NoteShare({ noteId, onCancel }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [value, setValue] = useState([]);
   const [generalPermission, setGeneralPermission] = useState(NoteShareType[0]);
+  const [inputValue, setInputValue] = useState(""); // Controlled state for inputValue
   const { mutateAsync: shareNote } = useShareNoteMutation();
-  const { data: note, isLoading } = useGetNoteById(noteId);
+  const { data: note, isLoading: isLoadingNote } = useGetNoteById(noteId);
   const queryClient = useQueryClient();
   const { data: members, isLoading: isLoadingMembers } = useGetAllAccount(searchQuery);
-  const handleSearchChange = useCallback(
-    debounce((event) => {
-      setSearchQuery(event?.target.value);
-    }, 300),
-    []
-  );
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event?.target?.value);
+  };
+
+  const formatedMembers = members?.filter((member) => member.id !== note?.owner?.id);
 
   const onChange = (event, newValue) => {
     const updatedValue = newValue.map((member) => ({
@@ -65,10 +63,8 @@ function NoteShare({ noteId, onCancel }) {
           accessType: NotePermission.find((item) => item.label === permission)
         };
       }
-
       return member;
     });
-    // remove member access type delete
     setValue(updatedValue.filter((member) => member.accessType.key !== "DELETE"));
   };
 
@@ -141,7 +137,7 @@ function NoteShare({ noteId, onCancel }) {
   };
 
   useEffect(() => {
-    if (note) {
+    if (!isLoadingNote && note) {
       setValue(
         note.userAccesses.map((user) => ({
           id: user.user.id,
@@ -153,170 +149,176 @@ function NoteShare({ noteId, onCancel }) {
       );
       setGeneralPermission(NoteShareType.find((item) => item.value === note.shareType));
     }
-  }, [note]);
+  }, [note, isLoadingNote]);
 
-  return isLoading ? (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      height="20em" // Adjust this height based on your container
-    >
-      <CircularProgress color="info" />
-    </Box>
-  ) : (
+  return (
     <Stack className="w-full rounded-lg" direction="column" spacing={1} sx={{ minHeight: "50px" }}>
-      <Autocomplete
-        multiple
-        options={members ?? []}
-        getOptionLabel={(member) => (member?.name ? `${member.name} (${member.email})` : "")}
-        filterSelectedOptions
-        value={value}
-        onChange={onChange}
-        className="pt-2"
-        inputValue={searchQuery} // Controlled input value for search
-        onInputChange={handleSearchChange} // Handle input change for search
-        noOptionsText="Không có thành viên nào"
-        onClose={() => setSearchQuery("")}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Tìm kiếm người dùng"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <>
-                  {isLoadingMembers ? <CircularProgress color="inherit" size={20} /> : null}
-                  {params.InputProps.endAdornment}
-                </>
-              )
-            }}
-          />
-        )}
-        renderOption={(props, member) => (
-          <ListItem {...props}>
-            <ListItemAvatar>
-              <Avatar src={member.imageUrl} />
-            </ListItemAvatar>
-            <ListItemText primary={member.name} />
-          </ListItem>
-        )}
-        // eslint-disable-next-line no-shadow
-        renderTags={(value, getTagProps) =>
-          value.map((option, index) => <div style={{ display: "none" }} />)
-        }
-        // eslint-disable-next-line no-shadow
-        isOptionEqualToValue={(option, value) => option.id === value.id}
-      />
-      <Stack>
-        <Typography className="font-black text-black">Những người có quyền truy cập</Typography>
-      </Stack>
-      <Stack spacing={1} maxHeight={200} className="overflow-auto">
-        {value.map((member) => (
-          <Stack
-            key={member.id}
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-            spacing={1}
-            className="w-full"
-          >
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Avatar src={member.imageUrl} />
-              <Typography>{member.name}</Typography>
-            </Stack>
-            <Select
-              variant="outlined"
-              id="demo-simple-select"
-              sx={{
-                padding: "0.5rem",
-                width: "8em!important",
-                "& div": {
-                  width: "6em!important",
-                  padding: "0!important"
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  border: "none"
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  backgroundColor: "#e6e1e1",
-                  opacity: 0.3
-                }
-              }}
-              value={member.accessType.label}
-              onChange={(e) => handlePermissionChange(member.id, e.target.value)}
-              IconComponent={ArrowDropDownIcon} // Use custom arrow icon
-              input={
-                <OutlinedInput
-                  sx={{
-                    backgroundColor: "yellow",
-                    "& div": {
-                      backgroundColor: "red"
-                    }
+      {isLoadingNote ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="20em" // Adjust this height based on your container
+        >
+          <CircularProgress color="info" />
+        </Box>
+      ) : (
+        <>
+          {formatedMembers && (
+            <Autocomplete
+              multiple
+              options={formatedMembers}
+              getOptionLabel={(member) => (member?.name ? `${member.name} (${member.email})` : "")}
+              filterSelectedOptions
+              value={value}
+              onChange={onChange}
+              inputValue={inputValue} // Use controlled inputValue
+              className="pt-2"
+              onInputChange={(event, newValue) => setInputValue(newValue)} // Update inputValue state
+              noOptionsText="Không có thành viên nào"
+              onClose={() => setInputValue("")} // Clear inputValue on close
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Tìm kiếm người dùng"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <>
+                        {isLoadingMembers ? <CircularProgress color="inherit" size={20} /> : null}
+                        {params.InputProps.endAdornment}
+                      </>
+                    )
                   }}
-                  endAdornment={<ArrowDropDownIcon />}
                 />
+              )}
+              renderOption={(props, member) => (
+                <ListItem {...props}>
+                  <ListItemAvatar>
+                    <Avatar src={member.imageUrl} />
+                  </ListItemAvatar>
+                  <ListItemText primary={member.name} />
+                </ListItem>
+              )}
+              // eslint-disable-next-line no-shadow
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => <div style={{ display: "none" }} />)
               }
-            >
-              {NotePermission.map((item) => (
-                <MenuItem key={item.key} value={item.label}>
-                  {item.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </Stack>
-        ))}
-      </Stack>
-      <Stack>
-        <Typography className="font-black text-black">Quyền truy cập chung</Typography>
-        <Stack direction="row" alignItems="center" justifyContent="space-start" spacing={1}>
-          <Stack className="bg-zinc-200 p-3 rounded-full">{renderIcon()}</Stack>
+              // eslint-disable-next-line no-shadow
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+            />
+          )}
           <Stack>
-            <Select
-              variant="outlined"
-              sx={{
-                padding: "0.5rem",
-                width: "12em!important",
-                "& div": {
-                  width: "9em!important",
-                  padding: "0!important"
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  border: "none"
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  backgroundColor: "#e6e1e1",
-                  opacity: 0.3
-                }
-              }}
-              value={generalPermission.label}
-              onChange={handleGeneralPermissionChange}
-              input={
-                <OutlinedInput
+            <Typography className="font-black text-black">Những người có quyền truy cập</Typography>
+          </Stack>
+          <Stack spacing={1} maxHeight={200} className="overflow-auto">
+            {value.map((member) => (
+              <Stack
+                key={member.id}
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                spacing={1}
+                className="w-full"
+              >
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Avatar src={member.imageUrl} />
+                  <Typography>{member.name}</Typography>
+                </Stack>
+                <Select
+                  variant="outlined"
+                  id="demo-simple-select"
                   sx={{
-                    backgroundColor: "yellow",
+                    padding: "0.5rem",
+                    width: "8em!important",
                     "& div": {
-                      backgroundColor: "red"
+                      width: "6em!important",
+                      padding: "0!important"
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      border: "none"
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      backgroundColor: "#e6e1e1",
+                      opacity: 0.3
                     }
                   }}
-                  endAdornment={<ArrowDropDownIcon />}
-                />
-              }
-            >
-              {NoteShareType.map((item) => (
-                <MenuItem key={item.value} value={item.label}>
-                  {item.label}
-                </MenuItem>
-              ))}
-            </Select>
-            <p className="text-gray-500 text-xs pl-5">{renderTextDetail()}</p>
+                  value={member.accessType.label}
+                  onChange={(e) => handlePermissionChange(member.id, e.target.value)}
+                  IconComponent={ArrowDropDownIcon} // Use custom arrow icon
+                  input={
+                    <OutlinedInput
+                      sx={{
+                        backgroundColor: "yellow",
+                        "& div": {
+                          backgroundColor: "red"
+                        }
+                      }}
+                      endAdornment={<ArrowDropDownIcon />}
+                    />
+                  }
+                >
+                  {NotePermission.map((item) => (
+                    <MenuItem key={item.key} value={item.label}>
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Stack>
+            ))}
           </Stack>
-        </Stack>
-      </Stack>
-      <DialogActions>
-        <Button onClick={onCancel}>Hủy</Button>
-        <Button onClick={handleSubmit}>Lưu</Button>
-      </DialogActions>
+          <Stack>
+            <Typography className="font-black text-black">Quyền truy cập chung</Typography>
+            <Stack direction="row" alignItems="center" justifyContent="space-start" spacing={1}>
+              <Stack className="bg-zinc-200 p-3 rounded-full">{renderIcon()}</Stack>
+              <Stack>
+                <Select
+                  variant="outlined"
+                  sx={{
+                    padding: "0.5rem",
+                    width: "12em!important",
+                    "& div": {
+                      width: "9em!important",
+                      padding: "0!important"
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      border: "none"
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      backgroundColor: "#e6e1e1",
+                      opacity: 0.3
+                    }
+                  }}
+                  value={generalPermission.label}
+                  onChange={handleGeneralPermissionChange}
+                  input={
+                    <OutlinedInput
+                      sx={{
+                        backgroundColor: "yellow",
+                        "& div": {
+                          backgroundColor: "red"
+                        }
+                      }}
+                      endAdornment={<ArrowDropDownIcon />}
+                    />
+                  }
+                >
+                  {NoteShareType.map((item) => (
+                    <MenuItem key={item.value} value={item.label}>
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <p className="text-gray-500 text-xs pl-5">{renderTextDetail()}</p>
+              </Stack>
+            </Stack>
+          </Stack>
+          <DialogActions>
+            <Button onClick={onCancel}>Hủy</Button>
+            <Button onClick={handleSubmit}>Lưu</Button>
+          </DialogActions>
+        </>
+      )}
     </Stack>
   );
 }
