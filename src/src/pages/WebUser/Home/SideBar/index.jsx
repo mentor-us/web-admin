@@ -3,7 +3,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Logout } from "@mui/icons-material";
+import { AppRegistration, AppRegistrationOutlined, Logout } from "@mui/icons-material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -29,10 +29,12 @@ import { images } from "assets/images";
 import useListGroupStore from "hooks/client/useListGroupStore";
 import { getImageUrlWithKey } from "utils";
 import ListGroup from "../ListGroup";
+import NoteDialog from "../NoteDialog";
 
 export default function SideBar() {
   const { clearSelectedGroupId } = useListGroupStore();
   const [openProfile, setOpenProfile] = React.useState(false);
+  const [openNoteDialog, setOpenNoteDialog] = React.useState(false);
   const myInfo = useMyInfo();
   const dispatch = useDispatch();
   const handleProfileOpen = () => {
@@ -40,6 +42,12 @@ export default function SideBar() {
   };
   const handleProfileClose = () => {
     setOpenProfile(false);
+  };
+  const handleNoteDialogOpen = () => {
+    setOpenNoteDialog(true);
+  };
+  const handleNoteDialogClose = () => {
+    setOpenNoteDialog(false);
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -112,6 +120,31 @@ export default function SideBar() {
         <ListGroup />
       </div>
       <div className="">
+        <Tooltip title="Ghi chú" placement="right">
+          <Box
+            className="flex justify-center items-center h-16 text-white hover:bg-sky-600"
+            onClick={() => {
+              clearSelectedGroupId();
+              handleNoteDialogOpen();
+            }}
+          >
+            <IconButton color="white" aria-label="Setting">
+              <AppRegistrationOutlined fontSize="medium" />
+            </IconButton>
+
+            {/* {  => (
+              <IconButton color="white" aria-label="Setting">
+                {isActive ? (
+                  <AppRegistration fontSize="medium" />
+                ) : (
+                  <AppRegistrationOutlined fontSize="medium" />
+                )}
+              </IconButton>
+            )} */}
+          </Box>
+        </Tooltip>
+        {openNoteDialog && <NoteDialog open={openNoteDialog} onClose={handleNoteDialogClose} />}
+
         <Tooltip title="Mở lịch" placement="right">
           <Box
             className="flex justify-center items-center h-16 text-white hover:bg-sky-600"
