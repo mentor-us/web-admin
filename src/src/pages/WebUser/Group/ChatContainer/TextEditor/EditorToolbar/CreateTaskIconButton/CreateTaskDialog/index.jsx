@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -12,9 +13,12 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
+  InputLabel,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  MenuItem,
+  Select,
   TextField
 } from "@mui/material";
 import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
@@ -32,6 +36,7 @@ import { useCreateTaskMutation, useUpdateTaskMutation } from "hooks/chats/mutati
 import { useGetDetailTasks } from "hooks/chats/queries";
 import { GetAllTaskInChannelKey } from "hooks/tasks/keys";
 import useMyInfo from "hooks/useMyInfo";
+import { TASK_STATUS } from "utils/constants";
 
 function CreateTaskDialog({ open, handleClose, taskId = null }) {
   const myInfo = useMyInfo();
@@ -63,7 +68,8 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
       description: "",
       attendees: [],
       deadline: today,
-      date: today
+      date: today,
+      status: ""
     }
   });
   const { mutateAsync: createTaskMutationAsync, isPending } = !taskId
@@ -75,7 +81,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
 
   const prepareData = (data) => {
     const { date } = data;
-
+    console.log(data);
     return {
       id: taskId ?? null,
       title: data.title,
@@ -83,7 +89,8 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
       userIds: data.attendees.map((attendee) => attendee.id),
       organizerId: myInfo.id,
       groupId: channelId,
-      deadline: data.deadline.date(date.date()).month(date.month()).year(date.year()).toJSON()
+      deadline: data.deadline.date(date.date()).month(date.month()).year(date.year()).toJSON(),
+      status: data.status.key
     };
   };
 
@@ -154,7 +161,8 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
           description: taskDetail.description || "",
           deadline: dayjs(taskDetail.deadline) || today,
           date: dayjs(taskDetail.deadline) || today,
-          attendees: channelMembers || []
+          attendees: channelMembers || [],
+          status: TASK_STATUS.find((status) => status.key === taskDetail?.status) || ""
         });
 
         getTaskAssignee(taskDetail);
@@ -302,6 +310,43 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
                     />
                   );
                 }}
+              />
+            </Grid>
+            <Grid item>
+              <Controller
+                name="status"
+                control={control}
+                render={({ field: { onChange, value, ref } }) => (
+                  <Autocomplete
+                    className="w-full"
+                    disablePortal
+                    id="combo-box-demo"
+                    options={TASK_STATUS}
+                    getOptionLabel={(option) => option.displayName}
+                    // eslint-disable-next-line no-shadow
+                    isOptionEqualToValue={(option, value) => option.key === value || option[0]}
+                    onChange={(event, newValue) => onChange(newValue)}
+                    value={value}
+                    disabled={!isEditable}
+                    renderOption={(props, option) => (
+                      <MenuItem {...props} key={option.key} value={option}>
+                        {option.displayName}
+                      </MenuItem>
+                    )}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Status"
+                        inputRef={ref}
+                        InputProps={{
+                          ...params.InputProps,
+                          sx: { height: 42 }
+                        }}
+                      />
+                    )}
+                    sx={{ width: 160 }}
+                  />
+                )}
               />
             </Grid>
           </Grid>

@@ -239,6 +239,36 @@ export const TaskStatusObject = {
     icon: ""
   }
 };
+export const TASK_STATUS = [
+  {
+    key: "TO_DO",
+    displayName: "Mới",
+    color: "#333",
+    backgroundColor: "#ebebeb",
+    icon: "progress-close"
+  },
+  {
+    key: "IN_PROGRESS",
+    displayName: "Đang thực hiện",
+    color: "#2A7BDE",
+    backgroundColor: "#2A7BDE",
+    icon: "progress-upload"
+  },
+  {
+    key: "DONE",
+    displayName: "Hoàn thành",
+    color: "#4EA05B",
+    backgroundColor: "#4EA05B",
+    icon: "progress-check"
+  },
+  {
+    key: "OVERDUE",
+    displayName: "Đã trễ hạn",
+    color: "#C01C28",
+    backgroundColor: "#C01C28",
+    icon: "progress-alert"
+  }
+];
 
 export const EMOJI_ICONS = {
   LIKE_INACTIVE: EMOJI_IMAGES.LikeEmojiInactive,
