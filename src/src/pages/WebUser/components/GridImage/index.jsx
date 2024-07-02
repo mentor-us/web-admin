@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from "react";
@@ -131,17 +132,23 @@ function GridImage({ images, galleryID, uploadFailed }) {
       lightbox = null;
     };
   }, []);
-
+  const isVideo = (url) => {
+    const videoExtensions = [".mp4", ".mkv", ".qt"];
+    return videoExtensions.some((extension) => url.toLowerCase().endsWith(extension));
+  };
   const onOpenImagePreview = (index) => {
     if (!isLoaded) {
       return;
     }
     lightBoxRef?.current.loadAndOpen(
       index ?? 0,
-      imageUrlList.map((imageUrl) => {
+      imageUrlList.map((imageUrl, idx) => {
+        const isMediaVideo = isVideo(images[idx].url);
         return {
           sourceUrl: imageUrl,
-          html: `<div class="h-full w-full flex justify-center items-center py-12"><img src=${imageUrl} class="h-full w-[80%] object-contain"/></div>`
+          html: isMediaVideo
+            ? `<div class="h-full w-full flex justify-center items-center py-12"><video src=${imageUrl} class="h-full w-[80%] object-contain" controls/></div>`
+            : `<div class="h-full w-full flex justify-center items-center py-12"><img src=${imageUrl} class="h-full w-[80%] object-contain"/></div>`
         };
       })
     );
@@ -177,6 +184,7 @@ function GridImage({ images, galleryID, uploadFailed }) {
   const renderOne = () => {
     const overlay =
       images.length > countFrom && countFrom === 1 ? renderCountOverlay(true) : renderOverlay();
+    const isMediaVideo = isVideo(images[0].url);
     return (
       <Grid container className="container">
         {images[0].isUploading ? (
@@ -186,10 +194,18 @@ function GridImage({ images, galleryID, uploadFailed }) {
             item
             xs={12}
             md={12}
-            className="border height-one background"
+            className={`border height-one background ${isMediaVideo ? "p-0" : ""}`}
             style={{ backgroundImage: `url(${imageUrlList[0]})` }}
             onClick={() => onOpenImagePreview(0)}
           >
+            {isMediaVideo ? (
+              <video src={getImageUrlWithKey(images[0]?.url)} className="!p-0" controls />
+            ) : (
+              <div
+                style={{ backgroundImage: `url(${images[0]})` }}
+                className="h-full w-full object-cover"
+              />
+            )}
             {overlay}
           </Grid>
         )}
