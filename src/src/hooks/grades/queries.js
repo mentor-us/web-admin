@@ -82,15 +82,24 @@ export const useGetAllGrades = (query) =>
     queryKey: ["grades"],
     queryFn: async () => {
       try {
-        console.log("useGetAllGrades");
-        console.log(query);
         const params = {
           page: 0,
           pageSize: 10,
           userId: null
         };
         const res = await GradeApi.getAllGrades({ ...params, ...query });
-        return res;
+
+        // eslint-disable-next-line no-inner-declarations
+        function compare(a, b) {
+          if (a.score < b.score) {
+            return -1;
+          }
+          if (a.score > b.score) {
+            return 1;
+          }
+          return 0;
+        }
+        return { ...res, data: [...res.data].sort(compare) };
       } catch (error) {
         return gradesList;
       }
@@ -144,8 +153,6 @@ export const getAllCourse = (query) =>
           pageSize: 10
         };
         const res = await CourseApi.getAllCourses({ ...params, ...query });
-        console.log("getAllCourse");
-        console.log(res.data);
 
         return res;
       } catch (error) {

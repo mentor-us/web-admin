@@ -56,8 +56,6 @@ function ProfileDialog(props) {
 
   const isEditable = myInfo.id === user.id;
 
-  console.log(user.imageUrl);
-
   const handleUpdateProfileOpen = () => {
     setOpenUpdateProfile(true);
   };

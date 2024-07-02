@@ -22,11 +22,9 @@ function SearchBox() {
   const { setState } = useSubjectManagementStore();
 
   const Search = async () => {
-    console.log("submit Search");
     setLoading(dispatchContext, true);
 
     try {
-      console.log(subjectName);
       setState("currentPageSearch", 0);
       setState("isSubmitSearch", true);
       // await dispatch(searchSubject({ ...request, ...pageChangeInfo })).unwrap();

@@ -52,7 +52,6 @@ function reducer(state, action) {
 }
 function GradeBoard(props) {
   const { isEditable, user = {} } = props;
-  console.log(isEditable);
   const [state, dispatch] = useReducer(reducer, initState);
   const { year, yearInfo, semester, semesterInfo } = state;
   const myInfo = useMyInfo();
@@ -71,8 +70,6 @@ function GradeBoard(props) {
   });
   const queryClient = useQueryClient();
 
-  console.log("GradeBoard");
-  console.log(grades);
   // const createGradeMutator = useCreateGradeMutation(year, semester);
   // const updateGradeMutator = useUpdateGradeMutation(year, semester);
   // const deleteGradeMutator = useDeleteGradeMutation(year, semester);
@@ -139,7 +136,6 @@ function GradeBoard(props) {
               pt: "0!important"
             }}
             color="text"
-            disableClearable
             // eslint-disable-next-line no-shadow
             options={years ?? []}
             getOptionLabel={(option) => option?.name || ""}

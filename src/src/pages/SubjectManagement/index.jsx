@@ -93,8 +93,6 @@ function SubjectManagement() {
   }, [isSubmitSearch]);
 
   useEffect(() => {
-    console.log("isLoadingCourse");
-    console.log(isLoadingCourse);
     if (isLoadingCourse) {
       setLoading(dispatchContext, true);
     } else if (loadSuccessCourse) {

@@ -46,7 +46,6 @@ const useGradeManagementStore = create((set) => ({
     });
   },
   setItemsPerPage: (number) => {
-    console.log("setItemsPerPage");
     set((state) => {
       return { ...state, itemsPerPage: number };
     });

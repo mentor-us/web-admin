@@ -11,9 +11,6 @@ function CustomCheckbox({ data, type, prop, action, isDisabled }) {
     if (type) {
       dispatch(action(data));
     } else {
-      console.log("handleCheckedChange");
-      console.log(action);
-      console.log(data);
       action(!data);
     }
   };
