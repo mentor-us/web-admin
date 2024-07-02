@@ -1,0 +1,7 @@
+.status.verified {
+    color: green;
+    font-weight: bold;
+}
+.status.unverified {
+    color: red;
+}
