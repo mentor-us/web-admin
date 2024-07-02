@@ -8,7 +8,18 @@ const GradeApi = {
       params
     }),
   updateGrades: (grade) => AxiosClient.patch(`${GRADE_URL}/${grade.id}`, grade),
-  deleteGrade: (gradeId) => AxiosClient.delete(`${GRADE_URL}/${gradeId}`)
+  deleteGrade: (gradeId) => AxiosClient.delete(`${GRADE_URL}/${gradeId}`),
+  importGrades(file) {
+    const data = new FormData();
+    data.append("file", file);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data"
+      }
+    };
+
+    return AxiosClient.post(`api/grades/import`, data, config);
+  }
 };
 
 export default GradeApi;

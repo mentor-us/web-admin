@@ -1,21 +1,26 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card, Grid, Icon } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
+import { addCheckedProp } from "utils";
+import GradeApi from "api/GradeApi";
+import importAccountTemplate from "templates/Import_Account.xlsx";
 
 import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
+import ModalImport from "components/Modal/ModalImport";
 import SelectAllFeature from "components/SelectAllFeature";
 import { ErrorAlert } from "components/SweetAlert";
 // import DataTable from "components/Tables/DataTable";
 import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
 import useGradeManagementStore from "hooks/client/useGradeManagementStore";
 import { useGetAllGrades } from "hooks/grades/queries";
+import { formatDateExcel } from "utils/formatDate";
 
 import AddCategoryButton from "./components/AddGradeButton";
 import SearchBox from "./components/Search";
@@ -35,6 +40,7 @@ function GradeManagement() {
     setState
   } = useGradeManagementStore();
   const [, dispatchContext] = useMentorUs();
+  const [openModal, setOpenModal] = useState(false);
 
   const {
     data: grades,
@@ -119,7 +125,10 @@ function GradeManagement() {
       />
     );
   };
-
+  const actionImport = async (file) => {
+    const response = await GradeApi.importGrades(file);
+    return addCheckedProp(response.data);
+  };
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -146,7 +155,7 @@ function GradeManagement() {
                   >
                     <SelectAllFeature type="group-category" />
                     <AddCategoryButton />
-                    <MDButton onClick={() => {}} variant="gradient" color="warning">
+                    <MDButton onClick={() => setOpenModal(true)} variant="gradient" color="warning">
                       <Icon sx={{ fontWeight: "bold" }}>file_upload</Icon>
                       <MDTypography
                         variant="body2"
@@ -169,6 +178,14 @@ function GradeManagement() {
           </Grid>
         </Grid>
       </MDBox>
+      <ModalImport
+        open={openModal}
+        closeModal={() => setOpenModal(false)}
+        title="Tải lên danh sách điểm số"
+        templateFile={importAccountTemplate}
+        templateFileName={`MentorUS_Import_danh_sách_điểm_số_${formatDateExcel()}.xlsx`}
+        importAction={(file) => actionImport(file)}
+      />
     </DashboardLayout>
   );
 }
