@@ -9,7 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import PropTypes from "prop-types";
 
 import CustomPagination from "components/CustomPagination";
-import HeaderFilter from "components/HeaderFilter";
+// import HeaderFilter from "components/HeaderFilter";
 import MDBox from "components/MDComponents/MDBox";
 import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
@@ -19,14 +19,7 @@ import DataTableBodyCell from "./DataTableBodyCell";
 import DataTableHeadCell from "./DataTableHeadCell";
 import "./style.css";
 
-function DataTableCustom({
-  table,
-  isSorted,
-  noEndBorder,
-  customPaginationInfo,
-  minWidth,
-  headerFilterType
-}) {
+function DataTableCustom({ table, isSorted, noEndBorder, customPaginationInfo, minWidth }) {
   const {
     totalPages,
     totalItems,
@@ -77,7 +70,6 @@ function DataTableCustom({
         <MDTypography variant="caption" sx={{ fontSize: "0.85rem" }}>
           Số lượng kết quả: <span style={{ fontWeight: "bold" }}>{totalItems || rows.length}</span>{" "}
         </MDTypography>
-        {headerFilterType && <HeaderFilter type={headerFilterType} />}
       </MDBox>
       <TableContainer sx={{ width: "100%", boxShadow: "none", borderRadius: "unset!important" }}>
         <Table {...getTableProps()} sx={{ minWidth, overflowX: "auto" }}>

@@ -1,0 +1,25 @@
+.delete-options__container {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    background-color: white;
+    border: 1px solid rgb(116, 161, 244);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+
+.delete-options__container:hover {
+    background-color: #f4f4f4;
+}
+
+.delete-options__form-radio-input {
+    border: 0px;
+    transform: scale(2);
+}
+
+.delete-options__form-radio-input:hover {
+    border: 1px solid rgb(116, 161, 244);
+  }

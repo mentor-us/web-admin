@@ -25,6 +25,7 @@ import { formatDate } from "utils/formatDate";
 
 import EditDeleteBackBox from "./components/EditDeleteBack";
 import ExportButton from "./components/ExportButton";
+import GradeDetailAccount from "./components/GradeDetailAccount";
 import accountDetailTableData from "./data/accountDetailTableData";
 
 function AccountDetail() {
@@ -207,6 +208,9 @@ function AccountDetail() {
                     />
                   </MDBox>
                 </Card>
+              </Grid>
+              <Grid item xs={12} lg={12}>
+                <GradeDetailAccount user={accountDetail} />
               </Grid>
             </Grid>
           </Grid>

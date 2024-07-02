@@ -40,7 +40,6 @@ function HeaderFilter({ type }) {
         );
         break;
       }
-
       case "group-detail-mentee": {
         const data = useSelector(getGroupDetailColumnHeadersMenteeSelector);
         component = (
