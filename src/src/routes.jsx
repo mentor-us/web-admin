@@ -7,6 +7,7 @@ import AccountManagement from "pages/AccountManagement";
 import Auth from "pages/Auth";
 import ProtectedAuth from "pages/Auth/ProtectedAuth";
 import DeepLink from "pages/DeepLink";
+import GradeManagement from "pages/GradeManagement";
 import GroupCategory from "pages/GroupCategoryManagement";
 import GroupDetail from "pages/GroupDetail";
 import GroupManagement from "pages/GroupManagement";
@@ -17,6 +18,7 @@ import Privacy from "pages/Privacy";
 import SignIn from "pages/SignIn";
 import Statistic from "pages/Statistic";
 import StatisticDetail from "pages/StatisticDetail";
+import SubjectManagement from "pages/SubjectManagement";
 import TermOfService from "pages/TermOfService";
 import MobileUserGuide from "pages/UserGuide/Mobile";
 import WebAdminGuideline from "pages/UserGuide/Web";
@@ -30,6 +32,8 @@ const pagesMap = {
   groups: "Quản lý nhóm",
   "group-detail": "Chi tiết về nhóm",
   "group-category": "Quản lý loại nhóm",
+  subject: "Quản lý môn học",
+  grade: "Quản lý điểm số",
   statistic: "Hoạt động",
   "statistic-detail": "Chi tiết hoạt động",
   "account-management": "Quản lý tài khoản",
@@ -58,6 +62,22 @@ export const privateRoutes = [
     path: "/admin/group-category",
     roles: adminAccessRoles,
     element: <GroupCategory />
+  },
+  {
+    key: "subject",
+    name: translateToVNmeseByKey("subject"),
+    icon: <Icon fontSize="small">subject</Icon>,
+    path: "/admin/subject",
+    roles: adminAccessRoles,
+    element: <SubjectManagement />
+  },
+  {
+    key: "grade",
+    name: translateToVNmeseByKey("grade"),
+    icon: <Icon fontSize="small">grade</Icon>,
+    path: "/admin/grade",
+    roles: adminAccessRoles,
+    element: <GradeManagement />
   },
   {
     key: "group-detail",
@@ -236,6 +256,32 @@ const routes = [
     component: (
       <ProtectedAuth>
         <GroupCategory />
+      </ProtectedAuth>
+    )
+  },
+  {
+    type: "collapse",
+    name: translateToVNmeseByKey("subject"),
+    key: "subject",
+    icon: <Icon fontSize="small">subject</Icon>,
+    route: "/admin/subject",
+    slideNavShow: true,
+    component: (
+      <ProtectedAuth>
+        <SubjectManagement />
+      </ProtectedAuth>
+    )
+  },
+  {
+    type: "collapse",
+    name: translateToVNmeseByKey("grade"),
+    key: "grade",
+    icon: <Icon fontSize="small">grade</Icon>,
+    route: "/admin/grade",
+    slideNavShow: true,
+    component: (
+      <ProtectedAuth>
+        <GradeManagement />
       </ProtectedAuth>
     )
   },

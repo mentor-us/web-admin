@@ -18,7 +18,6 @@ const TaskService = {
   },
   getAllTaskInChannel: (channelId) => TaskApi.getAllTaskInChannel(channelId),
   formatTask: (task) => {
-    console.log("task", task);
     return {
       ...task,
       deadlineTimeModel: {

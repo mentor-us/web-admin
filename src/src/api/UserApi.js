@@ -117,6 +117,15 @@ const UserApi = {
       return false;
     }
     return true;
+  },
+  getMentees(req) {
+    return AxiosClient.get(`/api/users/mentees`, {
+      params: {
+        page: req.page,
+        pageSize: req.pageSize,
+        query: req.query
+      }
+    });
   }
 };
 
