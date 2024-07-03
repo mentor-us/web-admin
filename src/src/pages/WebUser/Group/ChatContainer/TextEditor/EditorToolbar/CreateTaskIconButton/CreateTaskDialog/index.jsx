@@ -33,7 +33,14 @@ import { useGetDetailTasks } from "hooks/chats/queries";
 import { GetAllTaskInChannelKey } from "hooks/tasks/keys";
 import useMyInfo from "hooks/useMyInfo";
 
-function CreateTaskDialog({ open, handleClose, taskId = null }) {
+// eslint-disable-next-line no-unused-vars
+function CreateTaskDialog({
+  open,
+  handleClose,
+  taskId = null,
+  suggestedTask = null,
+  onClose = null
+}) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
@@ -59,11 +66,11 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      title: "",
-      description: "",
+      title: suggestedTask?.title ?? "",
+      description: suggestedTask?.description ?? "",
       attendees: [],
-      deadline: today,
-      date: today
+      deadline: suggestedTask?.deadline ? dayjs(suggestedTask.deadline) : today,
+      date: suggestedTask?.deadline ? dayjs(suggestedTask.deadline) : today
     }
   });
   const { mutateAsync: createTaskMutationAsync, isPending } = !taskId
@@ -90,6 +97,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
   const onCancel = () => {
     reset();
     handleClose();
+    if (onClose !== null) onClose();
   };
 
   const onSubmit = (data) => {
@@ -378,14 +386,17 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
 }
 
 CreateTaskDialog.defaultProps = {
-  taskId: null
+  taskId: null,
+  suggestedTask: null,
+  onClose: null
 };
 
 CreateTaskDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  taskId: PropTypes.string
+  taskId: PropTypes.string,
+  suggestedTask: PropTypes.objectOf(PropTypes.any),
+  onClose: PropTypes.func
 };
 
 export default CreateTaskDialog;
