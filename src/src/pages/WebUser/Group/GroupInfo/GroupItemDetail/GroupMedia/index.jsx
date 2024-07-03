@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-unused-vars */
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -21,6 +22,7 @@ import FileApi from "api/FileApi";
 
 import File from "pages/WebUser/components/File";
 import { useGetGroupMedia } from "hooks/channels/queries";
+import { SUPPORTED_VIDEO_EXT } from "utils/constants";
 
 const CustomBottomNavigationAction = styled(BottomNavigationAction)({
   "&.Mui-selected": {
@@ -136,17 +138,23 @@ export default function GroupMedia({ type }) {
       lightbox = null;
     };
   }, []);
-
+  const isVideo = (url) => {
+    const videoExtensions = SUPPORTED_VIDEO_EXT;
+    return videoExtensions.some((extension) => url.toLowerCase().endsWith(extension));
+  };
   const onOpenImagePreview = (index) => {
     if (!isSuccess) {
       return;
     }
     lightBoxRef?.current.loadAndOpen(
       index ?? 0,
-      images.map((image) => {
+      images.map((image, idx) => {
+        const isMediaVideo = isVideo(images[idx].url);
         return {
           sourceUrl: image.url,
-          html: `<div class="h-full w-full flex justify-center items-center py-12"><img src=${image.url} class="h-full w-[80%] object-contain"/></div>`
+          html: isMediaVideo
+            ? `<div class="h-full w-full flex justify-center items-center py-12"><video src=${image.url} class="h-full w-[80%] object-contain" controls/></div>`
+            : `<div class="h-full w-full flex justify-center items-center py-12"><img src=${image.url} class="h-full w-[80%] object-contain"/></div>`
         };
       })
     );
@@ -187,7 +195,11 @@ export default function GroupMedia({ type }) {
                   key={`${item.imageUrl}-${index}`}
                   onClick={() => onOpenImagePreview(index)}
                 >
-                  <img src={item.url} alt="hình ảnh" loading="lazy" />
+                  {isVideo(item.url) ? (
+                    <video src={getImageUrlWithKey(images[0]?.url)} className="!p-0" controls />
+                  ) : (
+                    <img src={item.url} alt="hình ảnh" loading="lazy" />
+                  )}
                 </ImageListItem>
               ))}
             </ImageList>

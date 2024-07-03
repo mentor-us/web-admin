@@ -27,9 +27,11 @@ import {
   ACTION_IMAGE,
   INIT_TOTAL_REACTION,
   LIMIT_IMAGES,
+  LIMIT_VIDEOS,
   MAX_FILE_IMAGE_SIZE,
   MESSAGE_TYPE,
-  SUPPORTED_IMAGE_EXT
+  SUPPORTED_IMAGE_EXT,
+  SUPPORTED_VIDEO_EXT
 } from "utils/constants";
 
 const ImageIconButton = forwardRef(({ channelId, type = ACTION_IMAGE.SEND_IMAGE }, ref) => {
@@ -62,6 +64,15 @@ const ImageIconButton = forwardRef(({ channelId, type = ACTION_IMAGE.SEND_IMAGE 
     },
     onFilesSuccessfullySelected: async ({ plainFiles, filesContent }) => {
       if (filesContent.length !== 0) {
+        const hasVideo = filesContent.some((file) =>
+          SUPPORTED_VIDEO_EXT.includes(`.${file.name.split(".").pop().toLowerCase()}`)
+        );
+
+        if (hasVideo && filesContent.length !== 1) {
+          toast.error(`Chỉ được gửi tối đa ${LIMIT_VIDEOS} video`);
+
+          return;
+        }
         const message = {
           id: `${uuidv4().toString()}`,
           content: "",

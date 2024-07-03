@@ -181,7 +181,7 @@ export const UPLOAD_STATUS = {
 };
 
 export const SUPPORTED_FILE_UPLOAD = [".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf"];
-
+export const SUPPORTED_VIDEO_EXT = [".mp4", ".mkv", ".qt"];
 export const MAX_FILE_IMAGE_SIZE = 5; // 5MB
 
 export const SUPPORTED_IMAGE_EXT = [
@@ -197,10 +197,12 @@ export const SUPPORTED_IMAGE_EXT = [
   ".tiff",
   ".tif",
   ".heif",
-  ".heic"
+  ".heic",
+  ".mp4"
 ];
 
 export const LIMIT_IMAGES = 5; // Max 5 image can send
+export const LIMIT_VIDEOS = 1;
 
 export const TaskStatusObject = {
   TO_DO: {
