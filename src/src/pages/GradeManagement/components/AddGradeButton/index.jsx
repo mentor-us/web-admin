@@ -80,7 +80,11 @@ function AddGradeButton() {
   } = state;
   const { setState } = useGradeManagementStore();
   const [firstLoad, setFirstLoad] = useState({
-    score: true
+    score: true,
+    year: true,
+    semester: true,
+    course: true,
+    student: true
   });
   const queryClient = useQueryClient();
   const createGradeMutator = useCreateGradeMutation();
@@ -99,6 +103,7 @@ function AddGradeButton() {
     dispatch({ type: "SET_SCORE", payload: 0 });
     dispatch({ type: "SET_COURSE", payload: null });
     dispatch({ type: "SET_YEAR", payload: null });
+    dispatch({ type: "SET_STUDENT", payload: null });
     dispatch({ type: "SET_SEMESTER", payload: null });
     setFirstLoad({
       score: true,
@@ -130,7 +135,7 @@ function AddGradeButton() {
   };
 
   const isOneReqDataHasValue = () => {
-    return (+score <= 10 && +score >= 0) || year || course || semester || student;
+    return score || year || course || semester || student;
   };
 
   const isAllReqDataHasValue = () => {

@@ -111,10 +111,10 @@ export const useGetAllYears = (yearInfo) =>
     queryKey: ["years", yearInfo],
     queryFn: async () => {
       try {
-        // const params = {
-        //   yearInfo
-        // };
-        const res = await YearApi.getAllYears();
+        const params = {
+          query: yearInfo
+        };
+        const res = await YearApi.getAllYears(params);
         // console.log("useGetAllYears");
         // console.log(res.data);
         // [...res.data].filter((year) => year.name.toString().includes(yearInfo));
