@@ -38,7 +38,14 @@ import { GetAllTaskInChannelKey } from "hooks/tasks/keys";
 import useMyInfo from "hooks/useMyInfo";
 import { TASK_STATUS } from "utils/constants";
 
-function CreateTaskDialog({ open, handleClose, taskId = null }) {
+// eslint-disable-next-line no-unused-vars
+function CreateTaskDialog({
+  open,
+  handleClose,
+  taskId = null,
+  suggestedTask = null,
+  onClose = null
+}) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
@@ -64,11 +71,11 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      title: "",
-      description: "",
+      title: suggestedTask?.title ?? "",
+      description: suggestedTask?.description ?? "",
       attendees: [],
-      deadline: today,
-      date: today,
+      deadline: suggestedTask?.deadline ? dayjs(suggestedTask.deadline) : today,
+      date: suggestedTask?.deadline ? dayjs(suggestedTask.deadline) : today,
       status: ""
     }
   });
@@ -97,6 +104,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
   const onCancel = () => {
     reset();
     handleClose();
+    if (onClose !== null) onClose();
   };
 
   const onSubmit = (data) => {
@@ -349,6 +357,43 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
                 )}
               />
             </Grid>
+            <Grid item>
+              <Controller
+                name="status"
+                control={control}
+                render={({ field: { onChange, value, ref } }) => (
+                  <Autocomplete
+                    className="w-full"
+                    disablePortal
+                    id="combo-box-demo"
+                    options={TASK_STATUS}
+                    getOptionLabel={(option) => option.displayName}
+                    // eslint-disable-next-line no-shadow
+                    isOptionEqualToValue={(option, value) => option.key === value || option[0]}
+                    onChange={(event, newValue) => onChange(newValue)}
+                    value={value}
+                    disabled={!isEditable}
+                    renderOption={(props, option) => (
+                      <MenuItem {...props} key={option.key} value={option}>
+                        {option.displayName}
+                      </MenuItem>
+                    )}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Status"
+                        inputRef={ref}
+                        InputProps={{
+                          ...params.InputProps,
+                          sx: { height: 42 }
+                        }}
+                      />
+                    )}
+                    sx={{ width: 160 }}
+                  />
+                )}
+              />
+            </Grid>
           </Grid>
 
           <Controller
@@ -423,14 +468,17 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
 }
 
 CreateTaskDialog.defaultProps = {
-  taskId: null
+  taskId: null,
+  suggestedTask: null,
+  onClose: null
 };
 
 CreateTaskDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  taskId: PropTypes.string
+  taskId: PropTypes.string,
+  suggestedTask: PropTypes.objectOf(PropTypes.any),
+  onClose: PropTypes.func
 };
 
 export default CreateTaskDialog;

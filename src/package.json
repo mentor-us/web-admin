@@ -13,6 +13,7 @@
     "@fullcalendar/interaction": "^6.1.11",
     "@fullcalendar/react": "^6.1.11",
     "@fullcalendar/timegrid": "^6.1.11",
+    "@google/generative-ai": "^0.13.0",
     "@lexical/react": "^0.14.2",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.15.14",

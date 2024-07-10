@@ -1761,6 +1761,11 @@
   dependencies:
     "@fullcalendar/daygrid" "~6.1.11"
 
+"@google/generative-ai@^0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@google/generative-ai/-/generative-ai-0.13.0.tgz#7a22e4738f31b20c67104699e2166094900fc43e"
+  integrity sha512-F3rI52SbGS8bsFu4bWFfOPdtq91RsBzeVLsbJy/kt7zCuaBr28toR/8zS12zXjj6USIJd0rGeF2HsuPONUz+6w==
+
 "@humanwhocodes/config-array@^0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.6.0.tgz#b5621fdb3b32309d2d16575456cbc277fa8f021a"

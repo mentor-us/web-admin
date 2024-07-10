@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Box, Tooltip } from "@mui/material";
+import { Box } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { useGetGroupDetail } from "hooks/groups/queries";

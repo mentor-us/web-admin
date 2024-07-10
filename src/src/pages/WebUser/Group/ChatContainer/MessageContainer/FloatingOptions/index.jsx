@@ -1,13 +1,15 @@
 /* eslint-disable react/forbid-prop-types */
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import { AutoFixHigh } from "@mui/icons-material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ReplyIcon from "@mui/icons-material/Reply";
 import { Box, IconButton, Menu, MenuItem, Stack, Tooltip } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
+import SuggestDialog from "pages/WebUser/components/SuggestDialog";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
 import { useDeleteMessageMutation } from "hooks/chats/mutation";
 import useChatStore from "hooks/client/useChatStore";
@@ -25,6 +27,8 @@ const ITEM_HEIGHT = 48;
 
 function FloatingOptions({ message, isShow }) {
   const myInfo = useMyInfo();
+  const [openSuggestDialog, setOpenSuggestDialog] = useState(false);
+
   const { channelId } = useParams();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -143,6 +147,30 @@ function FloatingOptions({ message, isShow }) {
     handleClose();
   };
 
+  const [textContent, setTextContent] = useState("");
+  const onSuggest = () => {
+    console.log("Suggest", message);
+    const content = message?.content;
+    const regex = /<span[^>]*>(.*?)<\/span>/;
+    const matchRegex = content.match(regex) ? content.match(regex)[1] : null;
+    setTextContent(matchRegex);
+    // console.log("Content", match[1]);
+    // if (textContent) {
+    //   const result = await model.generateContentStream([textContent]);
+    //   // print text as it comes in
+    //   // eslint-disable-next-line no-restricted-syntax
+    //   for await (const chunk of result.stream) {
+    //     const chunkText = chunk.text();
+    //     console.log(chunkText);
+    //   }
+    // }
+    handleClose();
+    setOpenSuggestDialog(true);
+  };
+  const handleSuggestDialogClose = () => {
+    setOpenSuggestDialog(false);
+  };
+
   return (
     <Box
       className={`bg-transparent !z-0 ${isOwner ? "mr-2" : "ml-2"} ${
@@ -182,6 +210,19 @@ function FloatingOptions({ message, isShow }) {
             className="hover:!bg-[#d5d5d5] !w-7 !h-7"
           >
             <MoreVertIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Đề xuất" placement="top">
+          <IconButton
+            aria-label="more"
+            id="long-button"
+            aria-controls={open ? "long-menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+            className="hover:!bg-[#d5d5d5] !w-7 !h-7"
+            onClick={onSuggest}
+          >
+            <AutoFixHigh />
           </IconButton>
         </Tooltip>
       </Stack>
@@ -241,6 +282,9 @@ function FloatingOptions({ message, isShow }) {
         >
           {channelDetail?.pinnedMessageIds.includes(message?.id) ? "Bỏ ghim " : "Ghim "}
         </MenuItem>
+        <MenuItem className="!font-normal !text-black" onClick={onSuggest}>
+          Gợi ý
+        </MenuItem>
       </Menu>
       {/* {openDialogForward && (
         <ForwardMessageDialog
@@ -249,6 +293,13 @@ function FloatingOptions({ message, isShow }) {
           handleClose={() => setOpenDialogForward(false)}
         />
       )} */}
+      {openSuggestDialog && (
+        <SuggestDialog
+          open={openSuggestDialog}
+          onClose={handleSuggestDialogClose}
+          content={textContent}
+        />
+      )}
     </Box>
   );
 }
