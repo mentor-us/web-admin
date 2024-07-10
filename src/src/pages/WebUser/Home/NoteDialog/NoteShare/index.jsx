@@ -313,7 +313,7 @@ function NoteShare({ noteId, onCancel }) {
               </Stack>
             </Stack>
           </Stack>
-          <DialogActions>
+          <DialogActions sx={{ padding: "4px", paddingTop: " 24px" }}>
             <Button onClick={onCancel}>Hủy</Button>
             <Button onClick={handleSubmit}>Lưu</Button>
           </DialogActions>
