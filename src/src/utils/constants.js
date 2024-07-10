@@ -262,14 +262,14 @@ export const TASK_STATUS = [
     color: "#4EA05B",
     backgroundColor: "#4EA05B",
     icon: "progress-check"
-  },
-  {
-    key: "OVERDUE",
-    displayName: "Đã trễ hạn",
-    color: "#C01C28",
-    backgroundColor: "#C01C28",
-    icon: "progress-alert"
   }
+  // {
+  //   key: "OVERDUE",
+  //   displayName: "Đã trễ hạn",
+  //   color: "#C01C28",
+  //   backgroundColor: "#C01C28",
+  //   icon: "progress-alert"
+  // }
 ];
 
 export const EMOJI_ICONS = {

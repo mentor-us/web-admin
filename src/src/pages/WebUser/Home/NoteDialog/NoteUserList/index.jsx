@@ -39,8 +39,8 @@ function NoteUserList({ onDetail }) {
           <SearchIcon />
         </IconButton>
         <InputBase
-          sx={{ ml: 1, flex: 1 }}
-          className="w-full"
+          sx={{ ml: 1, flex: 1, fontSize: "0.875rem", lineHeight: "1.25rem" }}
+          className="w-full text-sm"
           placeholder="Tìm kiếm bằng tên hoặc email"
           inputProps={{ "aria-label": "Tìm kiếm bằng tên hoặc email" }}
           onChange={handleSearchChange}
@@ -60,8 +60,10 @@ function NoteUserList({ onDetail }) {
               <Stack direction="row" spacing={2}>
                 <Avatar src={note?.imageUrl} />
                 <Stack direction="column">
-                  <Typography>{note?.name}</Typography>
-                  <Typography variant="caption">
+                  <Typography sx={{ fontSize: "0.875rem", lineHeight: "1.25rem" }}>
+                    {note?.name}
+                  </Typography>
+                  <Typography sx={{ fontSize: "0.75rem", lineHeight: "1rem" }} variant="caption">
                     Có {note?.totalNotes} ghi chú về người này
                   </Typography>
                 </Stack>
