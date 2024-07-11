@@ -39,3 +39,9 @@ export const useDeleteGradeMutation = () => {
     }
   });
 };
+export const useShareGradeMutation = () =>
+  useMutation({
+    // eslint-disable-next-line no-undef
+    mutationKey: ["share-grade"],
+    mutationFn: (req) => GradeApi.shareGrade(req)
+  });

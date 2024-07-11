@@ -368,3 +368,33 @@ export const NoteShareObject = {
   MENTOR_EDIT: "Mentor chỉnh sửa",
   PRIVATE: "Riêng tư"
 };
+export const GradePermission = [
+  //  EDIT: "Chỉnh sửa",
+  {
+    label: "Xem",
+    key: "VIEW"
+  },
+  {
+    label: "Xóa",
+    key: "DELETE"
+  }
+];
+export const GradeShareObject = {
+  PUBLIC: "Công khai",
+  MENTOR_VIEW: "Mentor xem",
+  PRIVATE: "Riêng tư"
+};
+export const GradeShareType = [
+  {
+    label: "Công khai",
+    value: "PUBLIC"
+  },
+  {
+    label: "Mentor xem",
+    value: "MENTOR_VIEW"
+  },
+  {
+    label: "Riêng tư",
+    value: "PRIVATE"
+  }
+];
