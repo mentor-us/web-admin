@@ -40,8 +40,6 @@ function NoteShare({ noteId, onCancel }) {
   const { data: note, isLoading: isLoadingNote } = useGetNoteById(noteId);
   const queryClient = useQueryClient();
   const { data: members, isLoading: isLoadingMembers } = useGetAllAccount(searchQuery);
-  console.log("value1111");
-  console.log(value);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event?.target?.value);

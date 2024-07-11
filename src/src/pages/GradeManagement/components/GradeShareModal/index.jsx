@@ -112,8 +112,6 @@ function GradeShareModal({ user, onCancel }) {
   const handleSubmit = () => {
     toast.promise(
       new Promise((resolve, reject) => {
-        console.log("prepareData");
-        console.log(prepareData());
         shareGrade(prepareData(), {
           onSuccess: () => {
             // queryClient.refetchQueries(useGetUserNotesKey(noteId));
