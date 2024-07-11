@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import MDBox from "components/MDComponents/MDBox";
 
 import DeleteGradeButton from "../DeleteGradeButton";
-import EditSubjectButton from "../EditSubjectButton";
+import EditGradeButton from "../EditGradeButton";
 
 function MenuOption({ data }) {
   const [menu, setMenu] = useState(null);
@@ -40,7 +40,7 @@ function MenuOption({ data }) {
       }}
     >
       <MenuItem onClick={handleEdit} sx={{ minWidth: "unset" }}>
-        <EditSubjectButton data={data} setState={setMenu} />
+        <EditGradeButton data={data} setState={setMenu} />
       </MenuItem>
       <MenuItem onClick={handleDelete} sx={{ minWidth: "unset" }}>
         <DeleteGradeButton data={data} setState={setMenu} />

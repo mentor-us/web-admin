@@ -112,7 +112,8 @@ export const useGetAllYears = (yearInfo) =>
     queryFn: async () => {
       try {
         const params = {
-          query: yearInfo
+          query: yearInfo,
+          pageSize: 99
         };
         const res = await YearApi.getAllYears(params);
         // console.log("useGetAllYears");
@@ -133,7 +134,8 @@ export const getAllSemesterOfYear = (semesterInfo) =>
     queryFn: async () => {
       try {
         const res = await YearApi.getAllSemesterOfYear({
-          query: semesterInfo
+          query: semesterInfo,
+          pageSize: 99
         });
         return res.data;
       } catch (error) {
@@ -150,7 +152,7 @@ export const getAllCourse = (query) =>
         // return courses;
         const params = {
           page: 0,
-          pageSize: 10
+          pageSize: 99
         };
         const res = await CourseApi.getAllCourses({ ...params, ...query });
 

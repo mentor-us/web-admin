@@ -269,37 +269,37 @@ function NoteShare({ noteId, onCancel }) {
           </Stack>
           <Stack>
             <Typography className="font-black text-black">Quyền truy cập chung</Typography>
-            <Stack direction="row" alignItems="center" justifyContent="space-start" spacing={1}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-start"
+              spacing={1}
+              className="hover:bg-slate-200 p-1"
+            >
               <Stack className="bg-zinc-200 p-3 rounded-full">{renderIcon()}</Stack>
               <Stack>
                 <Select
+                  className="hover:cursor-pointer"
                   variant="outlined"
                   sx={{
-                    padding: "0.5rem",
-                    width: "12em!important",
-                    "& div": {
-                      width: "9em!important",
-                      padding: "0!important"
-                    },
+                    padding: "0.375rem 0rem",
+                    width: "fit-content",
                     "& .MuiOutlinedInput-notchedOutline": {
                       border: "none"
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      backgroundColor: "#e6e1e1",
-                      opacity: 0.3
                     }
                   }}
                   value={generalPermission.label}
                   onChange={handleGeneralPermissionChange}
                   input={
                     <OutlinedInput
+                      className="hover:bg-slate-300"
                       sx={{
                         backgroundColor: "yellow",
                         "& div": {
                           backgroundColor: "red"
                         }
                       }}
-                      endAdornment={<ArrowDropDownIcon />}
+                      endAdornment={<ArrowDropDownIcon style={{ marginRight: "12px" }} />}
                     />
                   }
                 >
@@ -309,12 +309,12 @@ function NoteShare({ noteId, onCancel }) {
                     </MenuItem>
                   ))}
                 </Select>
-                <p className="text-gray-500 text-xs pl-5">{renderTextDetail()}</p>
+                <p className="text-gray-500 text-xs pl-3 pb-1">{renderTextDetail()}</p>
               </Stack>
             </Stack>
           </Stack>
           <DialogActions sx={{ padding: "4px", paddingTop: " 24px" }}>
-            <Button onClick={onCancel}>Hủy</Button>
+            <Button onClick={onCancel}>Hủy1</Button>
             <Button onClick={handleSubmit}>Lưu</Button>
           </DialogActions>
         </>
