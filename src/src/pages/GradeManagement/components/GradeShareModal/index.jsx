@@ -51,9 +51,8 @@ const exampleListUser = [
     },
     email: "20127665@student.hcmus.edu.vn",
     id: "b7a6a7de-ffbf-438f-a784-129c6cbf0fb3",
-    imageUrl:
-      "https://lh3.googleusercontent.com/a/ACg8ocJKO74-RTPo1PyvdwZtEJzfxdEVWpx9Tj_ZUoC7ha9zJ_DN-8Pw=s96-c",
-    name: "20127665 - Dương Quang Vinh"
+    imageUrl: null,
+    name: "20127638 - Vo Minh Thong"
   }
 ];
 // eslint-disable-next-line no-unused-vars
