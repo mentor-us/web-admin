@@ -3,17 +3,22 @@ import toast from "react-hot-toast";
 import { Edit, PublicOutlined, VisibilityOutlined } from "@mui/icons-material";
 import LockIcon from "@mui/icons-material/Lock";
 import {
+  Autocomplete,
   Avatar,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
   MenuItem,
   OutlinedInput,
   Select,
   Slide,
   Stack,
+  TextField,
   Typography
 } from "@mui/material";
 import { ArrowDropDownIcon } from "@mui/x-date-pickers";
@@ -21,6 +26,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 import { useShareGradeMutation } from "hooks/grades/mutation";
+import { useGetAllUsers } from "hooks/users/queries";
 import { NotePermission, NoteShareObject, NoteShareType } from "utils/constants";
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -52,24 +58,17 @@ const exampleListUser = [
 ];
 // eslint-disable-next-line no-unused-vars
 function GradeShareModal({ user, onCancel }) {
-  const { mutateAsync: shareNote } = useShareGradeMutation();
+  const { mutateAsync: shareGrade } = useShareGradeMutation();
   // eslint-disable-next-line no-unused-vars
   const queryClient = useQueryClient();
   const [listUser, setListUser] = useState(exampleListUser);
-  console.error("listUser");
-  console.error(listUser);
-  const prepareData = () => {
-    return [];
-    // const formattedUsers = value.map((member) => ({
-    //   userId: member.id,
-    //   accessType: member.accessType.key
-    // }));
-    // return {
-    //   shareType: generalPermission.value,
-    //   id: noteId,
-    //   users: formattedUsers
-    // };
-  };
+  const { data: accounts } = useGetAllUsers({});
+  // eslint-disable-next-line no-unused-vars
+  const formatedMembers = accounts?.filter(
+    (member) => member.id !== user?.id && !listUser.some((userTemp) => userTemp.id === member.id)
+  );
+  const [inputValue, setInputValue] = useState(""); // Controlled state for inputValue
+
   const [generalPermission, setGeneralPermission] = useState(NoteShareType[0]);
   const renderIcon = () => {
     switch (generalPermission.label) {
@@ -99,10 +98,23 @@ function GradeShareModal({ user, onCancel }) {
         return "Chỉ những người có quyền mới có thể xem hoặc chỉnh sửa";
     }
   };
+  const prepareData = () => {
+    const formattedUsers = listUser.map((member) => ({
+      userId: member.id,
+      accessType: member.accessType.key
+    }));
+    return {
+      shareType: generalPermission.value,
+      userId: user?.id ?? null,
+      userAccessIds: formattedUsers
+    };
+  };
   const handleSubmit = () => {
     toast.promise(
       new Promise((resolve, reject) => {
-        shareNote(prepareData(), {
+        console.log("prepareData");
+        console.log(prepareData());
+        shareGrade(prepareData(), {
           onSuccess: () => {
             // queryClient.refetchQueries(useGetUserNotesKey(noteId));
             resolve();
@@ -114,9 +126,9 @@ function GradeShareModal({ user, onCancel }) {
         });
       }),
       {
-        loading: `Đang chia sẻ ghi chú...`,
-        success: `Chia sẻ ghi chú thành công`,
-        error: `Chia sẻ ghi chú thất bại. Vui lòng thử lại sau!`
+        loading: `Đang chia sẻ bảng điểm...`,
+        success: `Chia sẻ bảng điểm thành công`,
+        error: `Chia sẻ bảng điểm thất bại. Vui lòng thử lại sau!`
       }
     );
   };
@@ -134,6 +146,17 @@ function GradeShareModal({ user, onCancel }) {
       return member;
     });
     setListUser(updatedValue.filter((member) => member.accessType.key !== "DELETE"));
+  };
+  const onChange = (event, newMember) => {
+    const updatedValue = [
+      {
+        accessType: newMember.accessType || NotePermission.find((item) => item.key === "VIEW"),
+        ...newMember
+      },
+      ...listUser
+    ];
+    setListUser(updatedValue);
+    setInputValue("");
   };
   return (
     <Dialog
@@ -153,12 +176,57 @@ function GradeShareModal({ user, onCancel }) {
           sx={{ minHeight: "50px" }}
         >
           <Stack>
+            {formatedMembers && (
+              <Autocomplete
+                options={formatedMembers}
+                getOptionLabel={(member) =>
+                  member?.name ? `${member.name} (${member.email})` : ""
+                }
+                value={null}
+                inputValue={inputValue}
+                onInputChange={(event, newValue) => setInputValue(newValue)} // Update inputValue state
+                filterSelectedOptions
+                onChange={onChange}
+                className="mt-2"
+                noOptionsText="Không có thành viên nào"
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    // label="Tìm kiếm và chọn người dùng"
+                    placeholder="Tìm kiếm và chọn người dùng"
+                  />
+                )}
+                renderOption={(props, member) => (
+                  <ListItem {...props}>
+                    <ListItemAvatar>
+                      <Avatar src={member.imageUrl} />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primaryTypographyProps={{
+                        sx: {
+                          fontSize: "0.875rem"
+                        }
+                      }}
+                      primary={member.name}
+                    />
+                  </ListItem>
+                )}
+                // // eslint-disable-next-line no-shadow
+                // renderTags={(value, getTagProps) =>
+                //   value.map((option, index) => <div style={{ display: "none" }} />)
+                // }
+                // eslint-disable-next-line no-shadow
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+              />
+            )}
+          </Stack>
+          <Stack>
             <Stack>
               <Typography className="font-black text-black" fontSize="1rem">
                 Những người có quyền truy cập
               </Typography>
             </Stack>
-            <Stack spacing={1} maxHeight={200} className="overflow-auto mt-2">
+            <Stack spacing={1} maxHeight={184} className="overflow-auto mt-2">
               {listUser.map((member) => (
                 <Stack
                   key={member.id}
@@ -210,6 +278,8 @@ function GradeShareModal({ user, onCancel }) {
                 </Stack>
               ))}
             </Stack>
+          </Stack>
+          <Stack>
             <Typography className="font-black text-black" fontSize="1rem">
               Quyền truy cập chung
             </Typography>
