@@ -92,9 +92,9 @@ function NoteShare({ noteId, onCancel }) {
       case NoteShareObject.PUBLIC:
         return "Bất kỳ ai có kết nối Internet và có đường liên kết này đều có thể chỉnh sửa";
       case NoteShareObject.MENTOR_VIEW:
-        return "Chỉ mentor có thể xem";
+        return "Chỉ những người mentor có thể xem";
       case NoteShareObject.MENTOR_EDIT:
-        return "Chỉ mentor có thể chỉnh sửa";
+        return "Chỉ những người mentor có thể chỉnh sửa";
       case NoteShareObject.PRIVATE:
         return "Chỉ những người có quyền mới có thể xem hoặc chỉnh sửa";
       default:
@@ -209,9 +209,11 @@ function NoteShare({ noteId, onCancel }) {
             />
           )}
           <Stack>
-            <Typography className="font-black text-black">Những người có quyền truy cập</Typography>
+            <Typography className="font-black text-black" fontSize="1rem">
+              Những người có quyền truy cập
+            </Typography>
           </Stack>
-          <Stack spacing={1} maxHeight={200} className="overflow-auto">
+          <Stack spacing={1} maxHeight={200} className="overflow-auto mt-2">
             {value.map((member) => (
               <Stack
                 key={member.id}
@@ -219,28 +221,23 @@ function NoteShare({ noteId, onCancel }) {
                 alignItems="center"
                 justifyContent="space-between"
                 spacing={1}
-                className="w-full"
+                className="w-full hover:bg-slate-200 pt-2 pb-2 pl-1 pr-1"
               >
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <Avatar src={member.imageUrl} />
-                  <Typography>{member.name}</Typography>
+                  <Typography className="pl-3" fontSize="0.875rem">
+                    {member.name}
+                  </Typography>
                 </Stack>
                 <Select
+                  className="hover:cursor-pointer"
                   variant="outlined"
                   id="demo-simple-select"
                   sx={{
                     padding: "0.5rem",
                     width: "8em!important",
-                    "& div": {
-                      width: "6em!important",
-                      padding: "0!important"
-                    },
                     "& .MuiOutlinedInput-notchedOutline": {
                       border: "none"
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      backgroundColor: "#e6e1e1",
-                      opacity: 0.3
                     }
                   }}
                   value={member.accessType.label}
@@ -248,6 +245,7 @@ function NoteShare({ noteId, onCancel }) {
                   IconComponent={ArrowDropDownIcon} // Use custom arrow icon
                   input={
                     <OutlinedInput
+                      className="hover:bg-slate-300"
                       sx={{
                         backgroundColor: "yellow",
                         "& div": {
@@ -268,7 +266,9 @@ function NoteShare({ noteId, onCancel }) {
             ))}
           </Stack>
           <Stack>
-            <Typography className="font-black text-black">Quyền truy cập chung</Typography>
+            <Typography className="font-black text-black" fontSize="1rem">
+              Quyền truy cập chung
+            </Typography>
             <Stack
               direction="row"
               alignItems="center"
