@@ -167,6 +167,7 @@ function NoteShare({ noteId, onCancel }) {
           {formatedMembers && (
             <Autocomplete
               multiple
+              open
               options={formatedMembers}
               getOptionLabel={(member) => (member?.name ? `${member.name} (${member.email})` : "")}
               filterSelectedOptions
@@ -197,7 +198,14 @@ function NoteShare({ noteId, onCancel }) {
                   <ListItemAvatar>
                     <Avatar src={member.imageUrl} />
                   </ListItemAvatar>
-                  <ListItemText primary={member.name} />
+                  <ListItemText
+                    primaryTypographyProps={{
+                      sx: {
+                        fontSize: "0.875rem"
+                      }
+                    }}
+                    primary={member.name}
+                  />
                 </ListItem>
               )}
               // eslint-disable-next-line no-shadow
