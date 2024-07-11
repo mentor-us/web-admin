@@ -169,7 +169,9 @@ function GradeShareModal({ user, onCancel }) {
           accessType: GradePermission[0]
         }))
       );
-      setGeneralPermission(GradeShareType.find((item) => item.value === shareGradeInfo.shareType));
+      setGeneralPermission(
+        GradeShareType.find((item) => item.value === shareGradeInfo?.shareType) ?? GradeShareType[2]
+      );
     }
   }, [shareGradeInfo, isLoadingShareInfo]);
   return (
@@ -252,6 +254,15 @@ function GradeShareModal({ user, onCancel }) {
                   </Typography>
                 </Stack>
                 <Stack spacing={1} maxHeight={184} className="overflow-auto mt-2">
+                  {!listUser && (
+                    <Typography
+                      className="font-black text-gray"
+                      textAlign="center"
+                      fontSize="0.875rem"
+                    >
+                      Không có người có quyền truy cập
+                    </Typography>
+                  )}
                   {listUser.map((member) => (
                     <Stack
                       key={member.id}

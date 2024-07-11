@@ -77,7 +77,7 @@ const gradesList = [
 ];
 const shareGradeInfo = {
   userId: "b7a6a7de-ffbf-438f-a784-129c6cbf0fb3",
-  shareType: "PRIVATE",
+  shareType: "PUBLIC",
   userAccesses: [
     {
       accessType: {
