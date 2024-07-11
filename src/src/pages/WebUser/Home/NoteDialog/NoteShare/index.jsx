@@ -167,7 +167,6 @@ function NoteShare({ noteId, onCancel }) {
           {formatedMembers && (
             <Autocomplete
               multiple
-              open
               options={formatedMembers}
               getOptionLabel={(member) => (member?.name ? `${member.name} (${member.email})` : "")}
               filterSelectedOptions

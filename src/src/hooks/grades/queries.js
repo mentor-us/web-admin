@@ -75,7 +75,23 @@ const gradesList = [
     Semester: semesters[2]
   }
 ];
-
+const shareGradeInfo = {
+  userId: "b7a6a7de-ffbf-438f-a784-129c6cbf0fb3",
+  shareType: "PRIVATE",
+  userAccesses: [
+    {
+      accessType: {
+        label: "Xem",
+        key: "VIEW"
+      },
+      email: "20127665@student.hcmus.edu.vn",
+      id: "1b1d91e6-5994-4961-ac7b-a044bee73712",
+      imageUrl:
+        "https://lh3.googleusercontent.com/a/ACg8ocJKO74-RTPo1PyvdwZtEJzfxdEVWpx9Tj_ZUoC7ha9zJ_DN-8Pw=s96-c",
+      name: "20127665 - Dương Quang Vinh"
+    }
+  ]
+};
 // eslint-disable-next-line import/prefer-default-export
 export const useGetAllGrades = (query) =>
   useQuery({
@@ -159,6 +175,21 @@ export const getAllCourse = (query) =>
         return res;
       } catch (error) {
         return courses;
+      }
+    },
+    enabled: true
+  });
+export const useGetShareGradeInfo = (user) =>
+  useQuery({
+    queryKey: ["share-grade-info"],
+    queryFn: async () => {
+      try {
+        const res = await GradeApi.getShareGradeInfo({
+          userId: user?.id
+        });
+        return res;
+      } catch (error) {
+        return shareGradeInfo;
       }
     },
     enabled: true

@@ -1,11 +1,13 @@
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { PublicOutlined, VisibilityOutlined } from "@mui/icons-material";
 import LockIcon from "@mui/icons-material/Lock";
 import {
   Autocomplete,
   Avatar,
+  Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -26,6 +28,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 import { useShareGradeMutation } from "hooks/grades/mutation";
+import { useGetShareGradeInfo } from "hooks/grades/queries";
 import { useGetAllUsers } from "hooks/users/queries";
 import { GradePermission, GradeShareObject, GradeShareType } from "utils/constants";
 
@@ -62,6 +65,7 @@ function GradeShareModal({ user, onCancel }) {
   const queryClient = useQueryClient();
   const [listUser, setListUser] = useState(exampleListUser);
   const { data: accounts } = useGetAllUsers({});
+  const { data: shareGradeInfo, isFetching: isLoadingShareInfo } = useGetShareGradeInfo(user);
   // eslint-disable-next-line no-unused-vars
   const formatedMembers = accounts?.filter(
     (member) => member.id !== user?.id && !listUser.some((userTemp) => userTemp.id === member.id)
@@ -95,10 +99,7 @@ function GradeShareModal({ user, onCancel }) {
     }
   };
   const prepareData = () => {
-    const formattedUsers = listUser.map((member) => ({
-      userId: member.id,
-      accessType: member.accessType.key
-    }));
+    const formattedUsers = listUser.map((member) => member.id);
     return {
       shareType: generalPermission.value,
       userId: user?.id ?? null,
@@ -111,11 +112,12 @@ function GradeShareModal({ user, onCancel }) {
         setDisableSubmit(true);
         shareGrade(prepareData(), {
           onSuccess: () => {
-            // queryClient.refetchQueries(useGetUserNotesKey(noteId));
+            queryClient.refetchQueries(["share-grade-info"]);
             setDisableSubmit(false);
             resolve();
           },
           onError: (err) => {
+            queryClient.refetchQueries(["share-grade-info"]);
             setDisableSubmit(false);
             console.error(err);
             reject(err);
@@ -155,6 +157,21 @@ function GradeShareModal({ user, onCancel }) {
     setListUser(updatedValue);
     setInputValue("");
   };
+
+  useEffect(() => {
+    if (!isLoadingShareInfo && shareGradeInfo) {
+      setListUser(
+        shareGradeInfo.userAccesses.map((userAcc) => ({
+          id: userAcc.id,
+          name: userAcc.name,
+          email: userAcc.email,
+          imageUrl: userAcc.imageUrl,
+          accessType: GradePermission[0]
+        }))
+      );
+      setGeneralPermission(GradeShareType.find((item) => item.value === shareGradeInfo.shareType));
+    }
+  }, [shareGradeInfo, isLoadingShareInfo]);
   return (
     <Dialog
       open
@@ -172,158 +189,171 @@ function GradeShareModal({ user, onCancel }) {
           spacing={1}
           sx={{ minHeight: "50px" }}
         >
-          <Stack>
-            {formatedMembers && (
-              <Autocomplete
-                options={formatedMembers}
-                getOptionLabel={(member) =>
-                  member?.name ? `${member.name} (${member.email})` : ""
-                }
-                value={null}
-                inputValue={inputValue}
-                onInputChange={(event, newValue) => setInputValue(newValue)} // Update inputValue state
-                filterSelectedOptions
-                onChange={onChange}
-                className="mt-2"
-                noOptionsText="Không có thành viên nào"
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    // label="Tìm kiếm và chọn người dùng"
-                    placeholder="Tìm kiếm và chọn người dùng"
+          {isLoadingShareInfo ? (
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              height="20em" // Adjust this height based on your container
+            >
+              <CircularProgress color="info" />
+            </Box>
+          ) : (
+            <>
+              <Stack>
+                {formatedMembers && (
+                  <Autocomplete
+                    options={formatedMembers}
+                    getOptionLabel={(member) =>
+                      member?.name ? `${member.name} (${member.email})` : ""
+                    }
+                    value={null}
+                    inputValue={inputValue}
+                    onInputChange={(event, newValue) => setInputValue(newValue)} // Update inputValue state
+                    filterSelectedOptions
+                    onChange={onChange}
+                    className="mt-2"
+                    noOptionsText="Không có thành viên nào"
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        // label="Tìm kiếm và chọn người dùng"
+                        placeholder="Tìm kiếm và chọn người dùng"
+                      />
+                    )}
+                    renderOption={(props, member) => (
+                      <ListItem {...props}>
+                        <ListItemAvatar>
+                          <Avatar src={member.imageUrl} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primaryTypographyProps={{
+                            sx: {
+                              fontSize: "0.875rem"
+                            }
+                          }}
+                          primary={member.name}
+                        />
+                      </ListItem>
+                    )}
+                    // // eslint-disable-next-line no-shadow
+                    // renderTags={(value, getTagProps) =>
+                    //   value.map((option, index) => <div style={{ display: "none" }} />)
+                    // }
+                    // eslint-disable-next-line no-shadow
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
                   />
                 )}
-                renderOption={(props, member) => (
-                  <ListItem {...props}>
-                    <ListItemAvatar>
-                      <Avatar src={member.imageUrl} />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primaryTypographyProps={{
-                        sx: {
-                          fontSize: "0.875rem"
-                        }
-                      }}
-                      primary={member.name}
-                    />
-                  </ListItem>
-                )}
-                // // eslint-disable-next-line no-shadow
-                // renderTags={(value, getTagProps) =>
-                //   value.map((option, index) => <div style={{ display: "none" }} />)
-                // }
-                // eslint-disable-next-line no-shadow
-                isOptionEqualToValue={(option, value) => option.id === value.id}
-              />
-            )}
-          </Stack>
-          <Stack>
-            <Stack>
-              <Typography className="font-black text-black" fontSize="1rem">
-                Những người có quyền truy cập
-              </Typography>
-            </Stack>
-            <Stack spacing={1} maxHeight={184} className="overflow-auto mt-2">
-              {listUser.map((member) => (
-                <Stack
-                  key={member.id}
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  spacing={1}
-                  className="w-full hover:bg-slate-200 pt-2 pb-2 pl-1 pr-1"
-                >
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Avatar src={member.imageUrl} />
-                    <Typography className="pl-3" fontSize="0.875rem">
-                      {member.name}
-                    </Typography>
-                  </Stack>
-                  <Select
-                    className="hover:cursor-pointer"
-                    variant="outlined"
-                    id="demo-simple-select"
-                    sx={{
-                      padding: "0.5rem",
-                      width: "8em!important",
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        border: "none"
-                      }
-                    }}
-                    value={member.accessType.label}
-                    onChange={(e) => handlePermissionChange(member.id, e.target.value)}
-                    IconComponent={ArrowDropDownIcon} // Use custom arrow icon
-                    input={
-                      <OutlinedInput
-                        className="hover:bg-slate-300"
+              </Stack>
+              <Stack>
+                <Stack>
+                  <Typography className="font-black text-black" fontSize="1rem">
+                    Những người có quyền truy cập
+                  </Typography>
+                </Stack>
+                <Stack spacing={1} maxHeight={184} className="overflow-auto mt-2">
+                  {listUser.map((member) => (
+                    <Stack
+                      key={member.id}
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      spacing={1}
+                      className="w-full hover:bg-slate-200 pt-2 pb-2 pl-1 pr-1"
+                    >
+                      <Stack direction="row" alignItems="center" spacing={1}>
+                        <Avatar src={member.imageUrl} />
+                        <Typography className="pl-3" fontSize="0.875rem">
+                          {member.name}
+                        </Typography>
+                      </Stack>
+                      <Select
+                        className="hover:cursor-pointer"
+                        variant="outlined"
+                        id="demo-simple-select"
                         sx={{
-                          backgroundColor: "yellow",
-                          "& div": {
-                            backgroundColor: "red"
+                          padding: "0.5rem",
+                          width: "8em!important",
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            border: "none"
                           }
                         }}
-                        endAdornment={<ArrowDropDownIcon />}
-                      />
-                    }
-                  >
-                    {GradePermission.map((item) => (
-                      <MenuItem key={item.key} value={item.label}>
-                        {item.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                        value={member.accessType.label}
+                        onChange={(e) => handlePermissionChange(member.id, e.target.value)}
+                        IconComponent={ArrowDropDownIcon} // Use custom arrow icon
+                        input={
+                          <OutlinedInput
+                            className="hover:bg-slate-300"
+                            sx={{
+                              backgroundColor: "yellow",
+                              "& div": {
+                                backgroundColor: "red"
+                              }
+                            }}
+                            endAdornment={<ArrowDropDownIcon />}
+                          />
+                        }
+                      >
+                        {GradePermission.map((item) => (
+                          <MenuItem key={item.key} value={item.label}>
+                            {item.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </Stack>
+                  ))}
                 </Stack>
-              ))}
-            </Stack>
-          </Stack>
-          <Stack>
-            <Typography className="font-black text-black" fontSize="1rem">
-              Quyền truy cập chung
-            </Typography>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-start"
-              spacing={1}
-              className="hover:bg-slate-200 p-1"
-            >
-              <Stack className="bg-zinc-200 p-3 rounded-full">{renderIcon()}</Stack>
+              </Stack>
               <Stack>
-                <Select
-                  className="hover:cursor-pointer"
-                  variant="outlined"
-                  sx={{
-                    padding: "0.375rem 0rem",
-                    width: "fit-content",
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      border: "none"
-                    }
-                  }}
-                  value={generalPermission.label}
-                  onChange={handleGeneralPermissionChange}
-                  input={
-                    <OutlinedInput
-                      className="hover:bg-slate-300"
+                <Typography className="font-black text-black" fontSize="1rem">
+                  Quyền truy cập chung
+                </Typography>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-start"
+                  spacing={1}
+                  className="hover:bg-slate-200 p-1"
+                >
+                  <Stack className="bg-zinc-200 p-3 rounded-full">{renderIcon()}</Stack>
+                  <Stack>
+                    <Select
+                      className="hover:cursor-pointer"
+                      variant="outlined"
                       sx={{
-                        backgroundColor: "yellow",
-                        "& div": {
-                          backgroundColor: "red"
+                        padding: "0.375rem 0rem",
+                        width: "fit-content",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          border: "none"
                         }
                       }}
-                      endAdornment={<ArrowDropDownIcon style={{ marginRight: "12px" }} />}
-                    />
-                  }
-                >
-                  {GradeShareType.map((item) => (
-                    <MenuItem key={item.value} value={item.label}>
-                      {item.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <p className="text-gray-500 text-xs pl-3 pb-1 ">{renderTextDetail()}</p>
+                      value={generalPermission.label}
+                      onChange={handleGeneralPermissionChange}
+                      input={
+                        <OutlinedInput
+                          className="hover:bg-slate-300"
+                          sx={{
+                            backgroundColor: "yellow",
+                            "& div": {
+                              backgroundColor: "red"
+                            }
+                          }}
+                          endAdornment={<ArrowDropDownIcon style={{ marginRight: "12px" }} />}
+                        />
+                      }
+                    >
+                      {GradeShareType.map((item) => (
+                        <MenuItem key={item.value} value={item.label}>
+                          {item.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <p className="text-gray-500 text-xs pl-3 pb-1 ">{renderTextDetail()}</p>
+                  </Stack>
+                </Stack>
               </Stack>
-            </Stack>
-          </Stack>
+            </>
+          )}
         </Stack>
       </DialogContent>
       <DialogActions>
