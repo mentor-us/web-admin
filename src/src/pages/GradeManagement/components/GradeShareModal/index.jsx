@@ -1,6 +1,6 @@
 import React, { forwardRef, useState } from "react";
 import toast from "react-hot-toast";
-import { Edit, PublicOutlined, VisibilityOutlined } from "@mui/icons-material";
+import { PublicOutlined, VisibilityOutlined } from "@mui/icons-material";
 import LockIcon from "@mui/icons-material/Lock";
 import {
   Autocomplete,
@@ -27,7 +27,7 @@ import PropTypes from "prop-types";
 
 import { useShareGradeMutation } from "hooks/grades/mutation";
 import { useGetAllUsers } from "hooks/users/queries";
-import { NotePermission, NoteShareObject, NoteShareType } from "utils/constants";
+import { GradePermission, GradeShareObject, GradeShareType } from "utils/constants";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -35,8 +35,8 @@ const Transition = forwardRef(function Transition(props, ref) {
 const exampleListUser = [
   {
     accessType: {
-      label: "Chỉnh sửa",
-      key: "EDIT"
+      label: "Xem",
+      key: "VIEW"
     },
     email: "20127665@student.hcmus.edu.vn",
     id: "b7a6a7de-ffbf-438f-a784-129c6cbf0fb2",
@@ -46,8 +46,8 @@ const exampleListUser = [
   },
   {
     accessType: {
-      label: "Chỉnh sửa",
-      key: "EDIT"
+      label: "Xem",
+      key: "VIEW"
     },
     email: "20127665@student.hcmus.edu.vn",
     id: "b7a6a7de-ffbf-438f-a784-129c6cbf0fb3",
@@ -68,17 +68,16 @@ function GradeShareModal({ user, onCancel }) {
     (member) => member.id !== user?.id && !listUser.some((userTemp) => userTemp.id === member.id)
   );
   const [inputValue, setInputValue] = useState(""); // Controlled state for inputValue
+  const [disableSubmit, setDisableSubmit] = useState(false); // Controlled state for inputValue
 
-  const [generalPermission, setGeneralPermission] = useState(NoteShareType[0]);
+  const [generalPermission, setGeneralPermission] = useState(GradeShareType[0]);
   const renderIcon = () => {
     switch (generalPermission.label) {
-      case NoteShareObject.PUBLIC:
+      case GradeShareObject.PUBLIC:
         return <PublicOutlined />;
-      case NoteShareObject.MENTOR_VIEW:
+      case GradeShareObject.MENTOR_VIEW:
         return <VisibilityOutlined />;
-      case NoteShareObject.MENTOR_EDIT:
-        return <Edit />;
-      case NoteShareObject.PRIVATE:
+      case GradeShareObject.PRIVATE:
         return <LockIcon />;
       default:
         return <LockIcon />;
@@ -86,13 +85,11 @@ function GradeShareModal({ user, onCancel }) {
   };
   const renderTextDetail = () => {
     switch (generalPermission.label) {
-      case NoteShareObject.PUBLIC:
+      case GradeShareObject.PUBLIC:
         return "Bất kỳ ai có kết nối Internet và có đường liên kết này đều có thể chỉnh sửa";
-      case NoteShareObject.MENTOR_VIEW:
+      case GradeShareObject.MENTOR_VIEW:
         return "Chỉ những người mentor có thể xem";
-      case NoteShareObject.MENTOR_EDIT:
-        return "Chỉ những người mentor có thể chỉnh sửa";
-      case NoteShareObject.PRIVATE:
+      case GradeShareObject.PRIVATE:
         return "Chỉ những người có quyền mới có thể xem hoặc chỉnh sửa";
       default:
         return "Chỉ những người có quyền mới có thể xem hoặc chỉnh sửa";
@@ -112,12 +109,15 @@ function GradeShareModal({ user, onCancel }) {
   const handleSubmit = () => {
     toast.promise(
       new Promise((resolve, reject) => {
+        setDisableSubmit(true);
         shareGrade(prepareData(), {
           onSuccess: () => {
             // queryClient.refetchQueries(useGetUserNotesKey(noteId));
+            setDisableSubmit(false);
             resolve();
           },
           onError: (err) => {
+            setDisableSubmit(false);
             console.error(err);
             reject(err);
           }
@@ -131,14 +131,14 @@ function GradeShareModal({ user, onCancel }) {
     );
   };
   const handleGeneralPermissionChange = (event) => {
-    setGeneralPermission(NoteShareType.find((item) => item.label === event.target.value));
+    setGeneralPermission(GradeShareType.find((item) => item.label === event.target.value));
   };
   const handlePermissionChange = (userId, permission) => {
     const updatedValue = listUser.map((member) => {
       if (member.id === userId) {
         return {
           ...member,
-          accessType: NotePermission.find((item) => item.label === permission)
+          accessType: GradePermission.find((item) => item.label === permission)
         };
       }
       return member;
@@ -148,7 +148,7 @@ function GradeShareModal({ user, onCancel }) {
   const onChange = (event, newMember) => {
     const updatedValue = [
       {
-        accessType: newMember.accessType || NotePermission.find((item) => item.key === "VIEW"),
+        accessType: newMember.accessType || GradePermission.find((item) => item.key === "VIEW"),
         ...newMember
       },
       ...listUser
@@ -267,7 +267,7 @@ function GradeShareModal({ user, onCancel }) {
                       />
                     }
                   >
-                    {NotePermission.map((item) => (
+                    {GradePermission.map((item) => (
                       <MenuItem key={item.key} value={item.label}>
                         {item.label}
                       </MenuItem>
@@ -315,7 +315,7 @@ function GradeShareModal({ user, onCancel }) {
                     />
                   }
                 >
-                  {NoteShareType.map((item) => (
+                  {GradeShareType.map((item) => (
                     <MenuItem key={item.value} value={item.label}>
                       {item.label}
                     </MenuItem>
@@ -329,7 +329,9 @@ function GradeShareModal({ user, onCancel }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onCancel}>Hủy</Button>
-        <Button onClick={handleSubmit}>Lưu</Button>
+        <Button disabled={disableSubmit} onClick={handleSubmit}>
+          Lưu
+        </Button>
       </DialogActions>
     </Dialog>
   );
