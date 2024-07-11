@@ -1,8 +1,9 @@
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Edit, PublicOutlined, VisibilityOutlined } from "@mui/icons-material";
 import LockIcon from "@mui/icons-material/Lock";
 import {
+  Avatar,
   Button,
   Dialog,
   DialogActions,
@@ -20,17 +21,43 @@ import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 import { useShareGradeMutation } from "hooks/grades/mutation";
-import { NoteShareObject, NoteShareType } from "utils/constants";
+import { NotePermission, NoteShareObject, NoteShareType } from "utils/constants";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
+const exampleListUser = [
+  {
+    accessType: {
+      label: "Chỉnh sửa",
+      key: "EDIT"
+    },
+    email: "20127665@student.hcmus.edu.vn",
+    id: "b7a6a7de-ffbf-438f-a784-129c6cbf0fb2",
+    imageUrl:
+      "https://lh3.googleusercontent.com/a/ACg8ocJKO74-RTPo1PyvdwZtEJzfxdEVWpx9Tj_ZUoC7ha9zJ_DN-8Pw=s96-c",
+    name: "20127665 - Dương Quang Vinh"
+  },
+  {
+    accessType: {
+      label: "Chỉnh sửa",
+      key: "EDIT"
+    },
+    email: "20127665@student.hcmus.edu.vn",
+    id: "b7a6a7de-ffbf-438f-a784-129c6cbf0fb3",
+    imageUrl:
+      "https://lh3.googleusercontent.com/a/ACg8ocJKO74-RTPo1PyvdwZtEJzfxdEVWpx9Tj_ZUoC7ha9zJ_DN-8Pw=s96-c",
+    name: "20127665 - Dương Quang Vinh"
+  }
+];
 // eslint-disable-next-line no-unused-vars
 function GradeShareModal({ user, onCancel }) {
   const { mutateAsync: shareNote } = useShareGradeMutation();
   // eslint-disable-next-line no-unused-vars
   const queryClient = useQueryClient();
+  const [listUser, setListUser] = useState(exampleListUser);
+  console.error("listUser");
+  console.error(listUser);
   const prepareData = () => {
     return [];
     // const formattedUsers = value.map((member) => ({
@@ -96,7 +123,18 @@ function GradeShareModal({ user, onCancel }) {
   const handleGeneralPermissionChange = (event) => {
     setGeneralPermission(NoteShareType.find((item) => item.label === event.target.value));
   };
-  useEffect(() => {}, []);
+  const handlePermissionChange = (userId, permission) => {
+    const updatedValue = listUser.map((member) => {
+      if (member.id === userId) {
+        return {
+          ...member,
+          accessType: NotePermission.find((item) => item.label === permission)
+        };
+      }
+      return member;
+    });
+    setListUser(updatedValue.filter((member) => member.accessType.key !== "DELETE"));
+  };
   return (
     <Dialog
       open
@@ -106,7 +144,7 @@ function GradeShareModal({ user, onCancel }) {
       TransitionComponent={Transition}
       className="min-w-60"
     >
-      <DialogTitle alignSelf="center">Chia sẻ ghi chú</DialogTitle>
+      <DialogTitle alignSelf="center">Chia sẻ bảng điểm</DialogTitle>
       <DialogContent>
         <Stack
           className="w-full rounded-lg"
@@ -115,6 +153,63 @@ function GradeShareModal({ user, onCancel }) {
           sx={{ minHeight: "50px" }}
         >
           <Stack>
+            <Stack>
+              <Typography className="font-black text-black" fontSize="1rem">
+                Những người có quyền truy cập
+              </Typography>
+            </Stack>
+            <Stack spacing={1} maxHeight={200} className="overflow-auto mt-2">
+              {listUser.map((member) => (
+                <Stack
+                  key={member.id}
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  spacing={1}
+                  className="w-full hover:bg-slate-200 pt-2 pb-2 pl-1 pr-1"
+                >
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Avatar src={member.imageUrl} />
+                    <Typography className="pl-3" fontSize="0.875rem">
+                      {member.name}
+                    </Typography>
+                  </Stack>
+                  <Select
+                    className="hover:cursor-pointer"
+                    variant="outlined"
+                    id="demo-simple-select"
+                    sx={{
+                      padding: "0.5rem",
+                      width: "8em!important",
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none"
+                      }
+                    }}
+                    value={member.accessType.label}
+                    onChange={(e) => handlePermissionChange(member.id, e.target.value)}
+                    IconComponent={ArrowDropDownIcon} // Use custom arrow icon
+                    input={
+                      <OutlinedInput
+                        className="hover:bg-slate-300"
+                        sx={{
+                          backgroundColor: "yellow",
+                          "& div": {
+                            backgroundColor: "red"
+                          }
+                        }}
+                        endAdornment={<ArrowDropDownIcon />}
+                      />
+                    }
+                  >
+                    {NotePermission.map((item) => (
+                      <MenuItem key={item.key} value={item.label}>
+                        {item.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Stack>
+              ))}
+            </Stack>
             <Typography className="font-black text-black" fontSize="1rem">
               Quyền truy cập chung
             </Typography>

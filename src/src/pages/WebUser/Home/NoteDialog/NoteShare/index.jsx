@@ -40,6 +40,8 @@ function NoteShare({ noteId, onCancel }) {
   const { data: note, isLoading: isLoadingNote } = useGetNoteById(noteId);
   const queryClient = useQueryClient();
   const { data: members, isLoading: isLoadingMembers } = useGetAllAccount(searchQuery);
+  console.log("value1111");
+  console.log(value);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event?.target?.value);
@@ -314,7 +316,7 @@ function NoteShare({ noteId, onCancel }) {
             </Stack>
           </Stack>
           <DialogActions sx={{ padding: "4px", paddingTop: " 24px" }}>
-            <Button onClick={onCancel}>Hủy1</Button>
+            <Button onClick={onCancel}>Hủy</Button>
             <Button onClick={handleSubmit}>Lưu</Button>
           </DialogActions>
         </>

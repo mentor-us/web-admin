@@ -24,8 +24,6 @@ function GradeDetailAccount({ user = null }) {
     return <></>;
   }
   const [openShareModal, setShareModal] = useState();
-  console.log("openShareModal");
-  console.log(openShareModal);
   const { columnHeaders, currentPageSearch, itemsPerPage, isSubmitSearch, searchParams, setState } =
     useGradeDetailAccountStore();
   const queryClient = useQueryClient();
@@ -134,7 +132,7 @@ function GradeDetailAccount({ user = null }) {
       <MDBox p={3} pb={0}>
         {user && grades && renderTable()}
       </MDBox>
-      {openShareModal && <GradeShareModal />}
+      {openShareModal && <GradeShareModal user={user} onCancel={() => setShareModal(false)} />}
     </Card>
   );
 }
