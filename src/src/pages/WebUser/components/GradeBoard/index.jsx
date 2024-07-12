@@ -170,7 +170,7 @@ function GradeBoard(props) {
         </div>
         <div className="form-group">
           <Typography variant="strong" component="div">
-            Học kỳ1:
+            Học kỳ:
           </Typography>
         </div>
         <div>
