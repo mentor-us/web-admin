@@ -1,7 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 import io from "socket.io-client";
 
-const URL = process.env.NODE_ENV === "production" ? undefined : "https://mentor.somesandwich.rocks";
+import { SOCKET_URL } from "config";
+
+const URL = SOCKET_URL;
 
 const socket = io(URL, {
   autoConnect: false,

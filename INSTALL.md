@@ -13,6 +13,7 @@
 - Install dependencies: `yarn install`
 - Configure vars in `.env` file
   - `REACT_APP_BACKEND_URL = 'http://localhost:8080/'` - Url to BE Server on local
+  - `REACT_APP_SOCKET_URL = 'http://localhost:8085/'`  - Url to Socket on local
   - `REACT_APP_ITEMS_PER_PAGE = 10`
 - Run the project: `yarn start`
 - Open the project in browser: http://localhost:3000

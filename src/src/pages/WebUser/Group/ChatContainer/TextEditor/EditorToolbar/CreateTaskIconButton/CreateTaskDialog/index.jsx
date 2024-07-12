@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -12,9 +13,12 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
+  InputLabel,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  MenuItem,
+  Select,
   TextField
 } from "@mui/material";
 import { DatePicker, LocalizationProvider, MobileTimePicker } from "@mui/x-date-pickers";
@@ -28,12 +32,24 @@ import TaskApi from "api/TaskApi";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
-import { useCreateTaskMutation, useUpdateTaskMutation } from "hooks/chats/mutation";
+import {
+  useChangeStatusTaskMutation,
+  useCreateTaskMutation,
+  useUpdateTaskMutation
+} from "hooks/chats/mutation";
 import { useGetDetailTasks } from "hooks/chats/queries";
 import { GetAllTaskInChannelKey } from "hooks/tasks/keys";
 import useMyInfo from "hooks/useMyInfo";
+import { TASK_STATUS } from "utils/constants";
 
-function CreateTaskDialog({ open, handleClose, taskId = null }) {
+// eslint-disable-next-line no-unused-vars
+function CreateTaskDialog({
+  open,
+  handleClose,
+  taskId = null,
+  suggestedTask = null,
+  onClose = null
+}) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
@@ -41,6 +57,7 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
     (members) => members ?? []
   );
   const { data: taskDetail } = useGetDetailTasks(taskId);
+  const [canChangeStatus, setCanChangeStatus] = useState(false);
 
   const [titleDialog, setTitleDialog] = useState(taskId ? "Chi tiết công việc" : "Công việc mới");
   const [isEditable, setIsEditable] = useState(!taskId);
@@ -59,23 +76,24 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      title: "",
-      description: "",
+      title: suggestedTask?.title ?? "",
+      description: suggestedTask?.description ?? "",
       attendees: [],
-      deadline: today,
-      date: today
+      deadline: suggestedTask?.deadline ? dayjs(suggestedTask.deadline) : today,
+      date: suggestedTask?.deadline ? dayjs(suggestedTask.deadline) : today,
+      status: ""
     }
   });
   const { mutateAsync: createTaskMutationAsync, isPending } = !taskId
     ? useCreateTaskMutation()
     : useUpdateTaskMutation(taskId);
+  const { mutateAsync: changeStatusTaskMutation } = useChangeStatusTaskMutation(taskId);
   useEffect(() => {
     setValue("attendees", channelMembers ?? []);
   }, [channelMembers]);
 
   const prepareData = (data) => {
     const { date } = data;
-
     return {
       id: taskId ?? null,
       title: data.title,
@@ -83,13 +101,15 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
       userIds: data.attendees.map((attendee) => attendee.id),
       organizerId: myInfo.id,
       groupId: channelId,
-      deadline: data.deadline.date(date.date()).month(date.month()).year(date.year()).toJSON()
+      deadline: data.deadline.date(date.date()).month(date.month()).year(date.year()).toJSON(),
+      status: data.status.key
     };
   };
 
   const onCancel = () => {
     reset();
     handleClose();
+    if (onClose !== null) onClose();
   };
 
   const onSubmit = (data) => {
@@ -119,6 +139,31 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
 
     onCancel();
   };
+  const handleChangeStatus = (newValue) => {
+    toast.promise(
+      new Promise((resolve, reject) => {
+        changeStatusTaskMutation({ id: taskId, status: newValue.key })
+          .then(() => {
+            queryClient.invalidateQueries({
+              queryKey: GetAllChatMessageInfinityKey(channelId)
+            });
+            queryClient.invalidateQueries({
+              queryKey: ["events"]
+            });
+            queryClient.refetchQueries({
+              queryKey: GetAllTaskInChannelKey(channelId)
+            });
+            resolve();
+          })
+          .catch(reject);
+      }),
+      {
+        loading: "Đang cập nhật trạng thái...",
+        success: "Cập nhật trạng thái thành công",
+        error: "Cập nhật trạng thái thất bại"
+      }
+    );
+  };
 
   const watchDateField = watch("date");
   useEffect(() => {
@@ -138,13 +183,21 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
       // eslint-disable-next-line no-shadow
       const getTaskAssignee = async (taskDetail) => {
         const res = await TaskApi.getTaskAssignees(taskDetail.id);
-        // if (res.data) {
         setValue("attendees", res.data || []);
-        // }
+
+        if (res.data) {
+          res.data.some((item) => {
+            if (item.id === myInfo.id) {
+              setCanChangeStatus(true);
+              return true;
+            }
+            return false;
+          });
+        }
       };
       if (taskDetail) {
         // taskData.role === "MENTOR" || taskData.assigner.id == currentUser.id
-        if (taskDetail.role === "MENTOR" || taskDetail?.assigner?.id === myInfo.id) {
+        if (taskDetail?.assigner?.id === myInfo.id) {
           setTitleDialog("Cập nhật công việc");
           setIsEditable(true);
         }
@@ -154,7 +207,8 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
           description: taskDetail.description || "",
           deadline: dayjs(taskDetail.deadline) || today,
           date: dayjs(taskDetail.deadline) || today,
-          attendees: channelMembers || []
+          attendees: channelMembers || [],
+          status: TASK_STATUS.find((status) => status.key === taskDetail?.status) || ""
         });
 
         getTaskAssignee(taskDetail);
@@ -304,6 +358,61 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
                 }}
               />
             </Grid>
+            {canChangeStatus && (
+              <Grid item>
+                <Controller
+                  name="status"
+                  control={control}
+                  render={({ field: { onChange, value, ref } }) => (
+                    <Autocomplete
+                      className="w-full"
+                      disablePortal
+                      id="combo-box-demo"
+                      options={TASK_STATUS}
+                      getOptionLabel={(option) => option.displayName}
+                      // eslint-disable-next-line no-shadow
+                      isOptionEqualToValue={(option, value) => option.key === value || option[0]}
+                      onChange={(event, newValue) => {
+                        onChange(newValue);
+                        handleChangeStatus(newValue);
+                      }}
+                      value={value}
+                      disabled={!canChangeStatus}
+                      componentsProps={{
+                        clearIndicator: { style: { display: "none" } } // Hide the clear indicator button
+                      }}
+                      place
+                      renderOption={(props, option) => (
+                        <MenuItem {...props} key={option.key} value={option}>
+                          {option.displayName}
+                        </MenuItem>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Status"
+                          inputRef={ref}
+                          InputProps={{
+                            ...params.InputProps,
+                            sx: {
+                              height: 44,
+                              alignItems: "center",
+                              ".MuiAutocomplete-input": {
+                                padding: "2px 8px !important" // Adjust padding here
+                              }
+                            },
+                            // Remove clear button
+                            // eslint-disable-next-line react/jsx-no-useless-fragment
+                            endAdornment: <>{params.InputProps.endAdornment}</>
+                          }}
+                        />
+                      )}
+                      sx={{ width: 220 }}
+                    />
+                  )}
+                />
+              </Grid>
+            )}
           </Grid>
 
           <Controller
@@ -378,14 +487,17 @@ function CreateTaskDialog({ open, handleClose, taskId = null }) {
 }
 
 CreateTaskDialog.defaultProps = {
-  taskId: null
+  taskId: null,
+  suggestedTask: null,
+  onClose: null
 };
 
 CreateTaskDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  taskId: PropTypes.string
+  taskId: PropTypes.string,
+  suggestedTask: PropTypes.objectOf(PropTypes.any),
+  onClose: PropTypes.func
 };
 
 export default CreateTaskDialog;

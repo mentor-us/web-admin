@@ -1,0 +1,5 @@
+/* .ck-editor__editable_inline { padding: 0 30px !important; } */
+
+.ck .ck-editor__editable_inline ul {
+    margin-left: 20px !important;
+}

@@ -1,8 +1,10 @@
 {
   "name": "mentor-web",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "private": true,
   "dependencies": {
+    "@ckeditor/ckeditor5-build-multi-root": "^41.4.2",
+    "@ckeditor/ckeditor5-react": "^7.0.0",
     "@emotion/cache": "^11.10.5",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
@@ -11,6 +13,7 @@
     "@fullcalendar/interaction": "^6.1.11",
     "@fullcalendar/react": "^6.1.11",
     "@fullcalendar/timegrid": "^6.1.11",
+    "@google/generative-ai": "^0.13.0",
     "@lexical/react": "^0.14.2",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.15.14",
@@ -45,6 +48,7 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.5.0",
     "react-table": "^7.8.0",
+    "react-vertical-timeline-component": "^3.6.0",
     "sass": "^1.74.1",
     "socket.io-client": "2.1.1",
     "sweetalert2": "^11.7.1",

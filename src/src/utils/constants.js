@@ -181,7 +181,7 @@ export const UPLOAD_STATUS = {
 };
 
 export const SUPPORTED_FILE_UPLOAD = [".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf"];
-
+export const SUPPORTED_VIDEO_EXT = [".mp4", ".mkv", ".qt"];
 export const MAX_FILE_IMAGE_SIZE = 5; // 5MB
 
 export const SUPPORTED_IMAGE_EXT = [
@@ -197,10 +197,12 @@ export const SUPPORTED_IMAGE_EXT = [
   ".tiff",
   ".tif",
   ".heif",
-  ".heic"
+  ".heic",
+  ".mp4"
 ];
 
 export const LIMIT_IMAGES = 5; // Max 5 image can send
+export const LIMIT_VIDEOS = 1;
 
 export const TaskStatusObject = {
   TO_DO: {
@@ -239,6 +241,36 @@ export const TaskStatusObject = {
     icon: ""
   }
 };
+export const TASK_STATUS = [
+  {
+    key: "TO_DO",
+    displayName: "Mới",
+    color: "#333",
+    backgroundColor: "#ebebeb",
+    icon: "progress-close"
+  },
+  {
+    key: "IN_PROGRESS",
+    displayName: "Đang thực hiện",
+    color: "#2A7BDE",
+    backgroundColor: "#2A7BDE",
+    icon: "progress-upload"
+  },
+  {
+    key: "DONE",
+    displayName: "Hoàn thành",
+    color: "#4EA05B",
+    backgroundColor: "#4EA05B",
+    icon: "progress-check"
+  }
+  // {
+  //   key: "OVERDUE",
+  //   displayName: "Đã trễ hạn",
+  //   color: "#C01C28",
+  //   backgroundColor: "#C01C28",
+  //   icon: "progress-alert"
+  // }
+];
 
 export const EMOJI_ICONS = {
   LIKE_INACTIVE: EMOJI_IMAGES.LikeEmojiInactive,
@@ -296,3 +328,73 @@ export const ACTION_IMAGE = {
 export const AVATAR_SIZE = 90;
 export const WALLPAPER_HEIGHT = 200;
 export const WALLPAPER_WIDTH = "100%";
+export const NotePermission = [
+  //  EDIT: "Chỉnh sửa",
+  {
+    label: "Xem",
+    key: "VIEW"
+  },
+  // VIEW: "Xem"
+  {
+    label: "Chỉnh sửa",
+    key: "EDIT"
+  },
+  {
+    label: "Xóa",
+    key: "DELETE"
+  }
+];
+export const NoteShareType = [
+  {
+    label: "Công khai",
+    value: "PUBLIC"
+  },
+  {
+    label: "Mentor xem",
+    value: "MENTOR_VIEW"
+  },
+  {
+    label: "Mentor chỉnh sửa",
+    value: "MENTOR_EDIT"
+  },
+  {
+    label: "Riêng tư",
+    value: "PRIVATE"
+  }
+];
+export const NoteShareObject = {
+  PUBLIC: "Công khai",
+  MENTOR_VIEW: "Mentor xem",
+  MENTOR_EDIT: "Mentor chỉnh sửa",
+  PRIVATE: "Riêng tư"
+};
+export const GradePermission = [
+  //  EDIT: "Chỉnh sửa",
+  {
+    label: "Xem",
+    key: "VIEW"
+  },
+  {
+    label: "Xóa",
+    key: "DELETE"
+  }
+];
+export const GradeShareObject = {
+  PUBLIC: "Công khai",
+  MENTOR: "Mentor",
+  PRIVATE: "Riêng tư"
+};
+export const GradeShareType = [
+  {
+    label: "Công khai",
+    value: "PUBLIC"
+  },
+  {
+    label: "Mentor",
+    value: "MENTOR"
+  },
+  {
+    label: "Riêng tư",
+    value: "PRIVATE"
+  }
+];

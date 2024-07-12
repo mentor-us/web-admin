@@ -1,7 +1,7 @@
 import React from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { Avatar, Checkbox, Typography } from "@mui/material";
+import { Avatar, Checkbox, Tooltip, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { getImageUrlWithKey } from "utils";
@@ -47,8 +47,8 @@ function ChannelCheckBox({ channel, listChannelForward, toggleChoseChannel }) {
           alignItems: "center"
         }}
       >
-        <Typography fontSize="medium" align="bottom" className="truncate max-w-24">
-          {channel?.group?.name ?? ""}
+        <Typography fontSize="medium" align="bottom" className="truncate max-w-32">
+          <Tooltip title={channel?.group?.name ?? ""}>{channel?.group?.name ?? ""}</Tooltip>
         </Typography>
       </div>
     </div>
