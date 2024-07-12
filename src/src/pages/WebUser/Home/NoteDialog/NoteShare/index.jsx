@@ -45,14 +45,26 @@ function NoteShare({ noteId, onCancel }) {
     setSearchQuery(event?.target?.value);
   };
 
-  const formatedMembers = members?.filter((member) => member.id !== note?.owner?.id);
-
+  // const formatedMembers = members?.filter((member) => member.id !== note?.owner?.id);
+  const formatedMembers = members?.filter(
+    (member) =>
+      member.id !== note?.owner?.id && !value.some((userTemp) => userTemp.id === member.id)
+  );
   const onChange = (event, newValue) => {
-    const updatedValue = newValue.map((member) => ({
-      ...member,
-      accessType: member.accessType || NotePermission.find((item) => item.key === "VIEW")
-    }));
+    // const updatedValue = newValue.map((member) => ({
+    //   ...member,
+    //   accessType: member.accessType || NotePermission.find((item) => item.key === "VIEW")
+    // }));
+    // setValue(updatedValue);
+    const updatedValue = [
+      {
+        accessType: newValue.accessType || NotePermission.find((item) => item.key === "VIEW"),
+        ...newValue
+      },
+      ...value
+    ];
     setValue(updatedValue);
+    setInputValue("");
   };
 
   const handlePermissionChange = (userId, permission) => {
@@ -166,11 +178,10 @@ function NoteShare({ noteId, onCancel }) {
         <>
           {formatedMembers && (
             <Autocomplete
-              multiple
               options={formatedMembers}
               getOptionLabel={(member) => (member?.name ? `${member.name} (${member.email})` : "")}
               filterSelectedOptions
-              value={value}
+              value={null}
               onChange={onChange}
               inputValue={inputValue} // Use controlled inputValue
               className="pt-2"
