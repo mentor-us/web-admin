@@ -170,15 +170,15 @@ function GradeBoard(props) {
         </div>
         <div className="form-group">
           <Typography variant="strong" component="div">
-            Học kỳ:
+            Học kỳ1:
           </Typography>
         </div>
         <div>
           <TextField
             placeholder="Nhập học kỳ"
-            variant="standard"
+            variant="outlined"
             type="number"
-            size="medium"
+            size="small"
             // type="number"
             value={year ? semester : ""}
             InputLabelProps={{
