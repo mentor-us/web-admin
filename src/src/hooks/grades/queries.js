@@ -189,7 +189,7 @@ export const useGetShareGradeInfo = (user) =>
         });
         return res;
       } catch (error) {
-        return shareGradeInfo;
+        return {};
       }
     },
     enabled: true

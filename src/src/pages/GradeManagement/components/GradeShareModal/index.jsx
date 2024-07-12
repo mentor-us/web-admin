@@ -78,7 +78,7 @@ function GradeShareModal({ user, onCancel }) {
     switch (generalPermission.label) {
       case GradeShareObject.PUBLIC:
         return <PublicOutlined />;
-      case GradeShareObject.MENTOR_VIEW:
+      case GradeShareObject.MENTOR:
         return <VisibilityOutlined />;
       case GradeShareObject.PRIVATE:
         return <LockIcon />;
@@ -90,7 +90,7 @@ function GradeShareModal({ user, onCancel }) {
     switch (generalPermission.label) {
       case GradeShareObject.PUBLIC:
         return "Bất kỳ ai có kết nối Internet và có đường liên kết này đều có thể chỉnh sửa";
-      case GradeShareObject.MENTOR_VIEW:
+      case GradeShareObject.MENTOR:
         return "Chỉ những người mentor có thể xem";
       case GradeShareObject.PRIVATE:
         return "Chỉ những người có quyền mới có thể xem hoặc chỉnh sửa";
@@ -157,17 +157,16 @@ function GradeShareModal({ user, onCancel }) {
     setListUser(updatedValue);
     setInputValue("");
   };
-
   useEffect(() => {
     if (!isLoadingShareInfo && shareGradeInfo) {
       setListUser(
-        shareGradeInfo.userAccesses.map((userAcc) => ({
+        shareGradeInfo?.userAccesses.map((userAcc) => ({
           id: userAcc.id,
           name: userAcc.name,
           email: userAcc.email,
           imageUrl: userAcc.imageUrl,
           accessType: GradePermission[0]
-        }))
+        })) ?? []
       );
       setGeneralPermission(
         GradeShareType.find((item) => item.value === shareGradeInfo?.shareType) ?? GradeShareType[2]
@@ -254,7 +253,7 @@ function GradeShareModal({ user, onCancel }) {
                   </Typography>
                 </Stack>
                 <Stack spacing={1} maxHeight={184} className="overflow-auto mt-2">
-                  {!listUser && (
+                  {(!listUser || !listUser?.length) && (
                     <Typography
                       className="font-black text-gray"
                       textAlign="center"

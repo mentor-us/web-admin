@@ -381,7 +381,7 @@ export const GradePermission = [
 ];
 export const GradeShareObject = {
   PUBLIC: "Công khai",
-  MENTOR_VIEW: "Mentor xem",
+  MENTOR: "Mentor",
   PRIVATE: "Riêng tư"
 };
 export const GradeShareType = [
@@ -390,8 +390,8 @@ export const GradeShareType = [
     value: "PUBLIC"
   },
   {
-    label: "Mentor xem",
-    value: "MENTOR_VIEW"
+    label: "Mentor",
+    value: "MENTOR"
   },
   {
     label: "Riêng tư",
