@@ -38,7 +38,7 @@ function GradeItem(props) {
   // };
 
   useEffect(() => {
-    dispatch({ type: "SET_COURSE_NAME", payload: course?.name ?? "" });
+    dispatch({ type: "SET_COURSE_NAME", payload: courseName ?? "" });
   }, [course]);
   useEffect(() => {
     dispatch({ type: "SET_SCORE", payload: item.score });
