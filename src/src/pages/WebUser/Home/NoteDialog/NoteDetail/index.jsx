@@ -148,7 +148,7 @@ function NoteDetail({ noteUserId, onShareClick, onEditClick, onHistoryClick }) {
             <Typography
               variant="body2"
               className="text-zinc-600"
-              sx={{ flexGrow: 1, mx: 2, ml: 1, mt: 1 }}
+              sx={{ flexGrow: 1, mx: 2, ml: 1, mt: 1, fontSize: "0.875rem" }}
               dangerouslySetInnerHTML={{ __html: note.content }}
             />
             <Box display="flex" alignItems="center" className="absolute top-2 right-2">
