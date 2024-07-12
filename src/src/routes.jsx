@@ -18,7 +18,7 @@ import Privacy from "pages/Privacy";
 import SignIn from "pages/SignIn";
 import Statistic from "pages/Statistic";
 import StatisticDetail from "pages/StatisticDetail";
-import SubjectManagement from "pages/SubjectManagement";
+// import SubjectManagement from "pages/SubjectManagement";
 import TermOfService from "pages/TermOfService";
 import MobileUserGuide from "pages/UserGuide/Mobile";
 import WebAdminGuideline from "pages/UserGuide/Web";
@@ -32,7 +32,7 @@ const pagesMap = {
   groups: "Quản lý nhóm",
   "group-detail": "Chi tiết về nhóm",
   "group-category": "Quản lý loại nhóm",
-  subject: "Quản lý môn học",
+  // subject: "Quản lý môn học",
   grade: "Quản lý điểm số",
   statistic: "Hoạt động",
   "statistic-detail": "Chi tiết hoạt động",
@@ -63,14 +63,14 @@ export const privateRoutes = [
     roles: adminAccessRoles,
     element: <GroupCategory />
   },
-  {
-    key: "subject",
-    name: translateToVNmeseByKey("subject"),
-    icon: <Icon fontSize="small">subject</Icon>,
-    path: "/admin/subject",
-    roles: adminAccessRoles,
-    element: <SubjectManagement />
-  },
+  // {
+  //   key: "subject",
+  //   name: translateToVNmeseByKey("subject"),
+  //   icon: <Icon fontSize="small">subject</Icon>,
+  //   path: "/admin/subject",
+  //   roles: adminAccessRoles,
+  //   element: <SubjectManagement />
+  // },
   {
     key: "grade",
     name: translateToVNmeseByKey("grade"),
@@ -259,19 +259,19 @@ const routes = [
       </ProtectedAuth>
     )
   },
-  {
-    type: "collapse",
-    name: translateToVNmeseByKey("subject"),
-    key: "subject",
-    icon: <Icon fontSize="small">subject</Icon>,
-    route: "/admin/subject",
-    slideNavShow: true,
-    component: (
-      <ProtectedAuth>
-        <SubjectManagement />
-      </ProtectedAuth>
-    )
-  },
+  // {
+  //   type: "collapse",
+  //   name: translateToVNmeseByKey("subject"),
+  //   key: "subject",
+  //   icon: <Icon fontSize="small">subject</Icon>,
+  //   route: "/admin/subject",
+  //   slideNavShow: true,
+  //   component: (
+  //     <ProtectedAuth>
+  //       <SubjectManagement />
+  //     </ProtectedAuth>
+  //   )
+  // },
   {
     type: "collapse",
     name: translateToVNmeseByKey("grade"),
