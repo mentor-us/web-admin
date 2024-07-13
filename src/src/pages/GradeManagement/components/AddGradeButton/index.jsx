@@ -140,7 +140,7 @@ function AddGradeButton() {
   };
 
   const isOneReqDataHasValue = () => {
-    return score || year || course || courseCode || semester || student;
+    return score || year || course || courseCode || semester !== 1 || student;
   };
 
   const isAllReqDataHasValue = () => {
@@ -150,6 +150,7 @@ function AddGradeButton() {
   const isLostAllData = () => {
     console.log("Hoc ki");
     console.log(score, year, course, courseCode, semester, student);
+    console.log(isOneReqDataHasValue());
     if (isOneReqDataHasValue()) {
       WarningAlertConfirmNotSavingData().then((result) => {
         if (result.isDenied) {

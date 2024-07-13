@@ -115,7 +115,18 @@ export const useGetAllGrades = (query) =>
           }
           return 0;
         }
-        return { ...res, data: [...res.data].sort(compare) };
+        const formatData = [...res.data].map((grade) => {
+          return {
+            ...grade,
+            year: grade?.year?.name,
+            semester: grade?.semester?.name,
+            courseName: grade?.course?.name,
+            courseCode: grade?.course?.code
+          };
+        });
+        console.log("formatData");
+        console.log(formatData);
+        return { ...res, data: formatData };
       } catch (error) {
         return gradesList;
       }
