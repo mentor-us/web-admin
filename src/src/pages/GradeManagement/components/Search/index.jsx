@@ -17,7 +17,7 @@ import MDButton from "components/MDComponents/MDButton";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert } from "components/SweetAlert";
 import useGradeManagementStore from "hooks/client/useGradeManagementStore";
-import { getAllCourse, getAllSemesterOfYear, useGetAllYears } from "hooks/grades/queries";
+import { getAllSemesterOfYear, useGetAllYears } from "hooks/grades/queries";
 import { useGetAllUsers } from "hooks/users/queries";
 
 const initState = {
@@ -61,14 +61,13 @@ function SearchBox() {
 
   const [, dispatchContext] = useMentorUs();
   const [state, dispatch] = useReducer(reducer, initState);
-  const { year, yearInfo, semester, semesterInfo, course, courseName, student, studentName } =
-    state;
+  const { year, yearInfo, semester, semesterInfo, student, studentName } = state;
 
   const { data: years } = useGetAllYears(yearInfo.trim());
   const { data: semesters } = getAllSemesterOfYear(semesterInfo.trim());
-  const { data: courses } = getAllCourse({
-    query: courseName.trim()
-  });
+  // const { data: courses } = getAllCourse({
+  //   query: courseName.trim()
+  // });
   const { data: students } = useGetAllUsers({
     query: studentName.trim()
   });
@@ -81,9 +80,8 @@ function SearchBox() {
 
     const params = {
       userId: student?.id ?? null,
-      courseId: course?.id ?? null,
-      semesterId: semester?.id ?? null,
-      yearId: year?.id ?? null
+      semester: semester?.id ?? null,
+      year: year ?? null
     };
 
     try {
@@ -135,7 +133,7 @@ function SearchBox() {
                 <Autocomplete
                   noOptionsText="Không có thông tin năm học"
                   value={year}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  // isOptionEqualToValue={(option, value) => option.id === value.id}
                   onChange={(e, newValue) => {
                     dispatch({ type: "SET_YEAR", payload: newValue });
                   }}
@@ -151,7 +149,7 @@ function SearchBox() {
                   // disableClearable
                   // eslint-disable-next-line no-shadow
                   options={years ?? []}
-                  getOptionLabel={(option) => option?.name || ""}
+                  getOptionLabel={(option) => option || ""}
                   renderInput={(params) => (
                     <TextField {...params} placeholder="Chọn năm học" size="small" />
                   )}
@@ -171,7 +169,6 @@ function SearchBox() {
                 <Autocomplete
                   noOptionsText="Không có thông tin học kì"
                   value={semester}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
                   onChange={(e, newValue) => {
                     dispatch({ type: "SET_SEMESTER", payload: newValue });
                   }}
@@ -185,14 +182,14 @@ function SearchBox() {
                   }}
                   color="text"
                   options={semesters ?? []}
-                  getOptionLabel={(option) => option?.name || ""}
+                  getOptionLabel={(option) => option || ""}
                   renderInput={(params) => (
                     <TextField {...params} placeholder="Chọn học kì" size="small" />
                   )}
                 />
               </MDBox>
             </Grid>
-            <Grid item xs={12} md={6} lg={6}>
+            {/* <Grid item xs={12} md={6} lg={6}>
               <MDBox className="relationship__searchBox-item">
                 <MDTypography
                   variant="body2"
@@ -225,7 +222,7 @@ function SearchBox() {
                   )}
                 />
               </MDBox>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} md={6} lg={6}>
               <MDBox className="relationship__searchBox-item">
                 <MDTypography
