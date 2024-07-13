@@ -192,7 +192,7 @@ function AddGradeButton() {
       score: +score,
       studentId: student?.id?.toString() ?? null,
       semester: +semester,
-      schoolYear: year?.toString() ?? null,
+      year: year?.toString() ?? null,
       courseName: course?.toString() ?? null,
       courseCode: courseCode?.toString() ?? null
     };
