@@ -144,7 +144,15 @@ function AddGradeButton() {
   };
 
   const isAllReqDataHasValue = () => {
-    return +score <= 10 && +score >= 0 && year && course && semester && student && courseCode;
+    return (
+      +score <= 10 &&
+      +score >= 0 &&
+      year?.trim() &&
+      course?.trim() &&
+      semester &&
+      student &&
+      courseCode?.trim()
+    );
   };
 
   const isLostAllData = () => {
@@ -192,9 +200,9 @@ function AddGradeButton() {
       score: +score,
       studentId: student?.id?.toString() ?? null,
       semester: +semester,
-      year: year?.toString() ?? null,
-      courseName: course?.toString() ?? null,
-      courseCode: courseCode?.toString() ?? null
+      year: year?.toString()?.trim() ?? null,
+      courseName: course?.toString()?.trim() ?? null,
+      courseCode: courseCode?.toString()?.trim() ?? null
     };
     addGrade(req);
   };
@@ -251,10 +259,10 @@ function AddGradeButton() {
                       year: false
                     });
                   }}
-                  error={!firstLoad.year && !year}
+                  error={!firstLoad.year && (!year || !year.trim())}
                   helperText={
                     // eslint-disable-next-line no-nested-ternary
-                    !firstLoad.year && !year ? "Năm học không được rỗng" : ""
+                    !firstLoad.year && (!year || !year.trim()) ? "Năm học không được rỗng" : ""
                   }
                 />
               </MDBox>
@@ -314,10 +322,12 @@ function AddGradeButton() {
                       course: false
                     });
                   }}
-                  error={!firstLoad.course && !course}
+                  error={!firstLoad.course && (!course || !course?.trim())}
                   helperText={
                     // eslint-disable-next-line no-nested-ternary
-                    !firstLoad.course && !course ? "Môn học không được rỗng" : ""
+                    !firstLoad.course && (!course || !course?.trim())
+                      ? "Môn học không được rỗng"
+                      : ""
                   }
                 />
               </MDBox>
@@ -343,10 +353,12 @@ function AddGradeButton() {
                       courseCode: false
                     });
                   }}
-                  error={!firstLoad.courseCode && !courseCode}
+                  error={!firstLoad.courseCode && (!courseCode || !courseCode.trim())}
                   helperText={
                     // eslint-disable-next-line no-nested-ternary
-                    !firstLoad.courseCode && !courseCode ? "Môn học không được rỗng" : ""
+                    !firstLoad.courseCode && (!courseCode || !courseCode.trim())
+                      ? "Môn học không được rỗng"
+                      : ""
                   }
                 />
               </MDBox>

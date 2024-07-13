@@ -86,8 +86,6 @@ function EditSubjectButton({ data, setState }) {
     name: true,
     code: true
   });
-  console.log("data");
-  console.log(data);
   // const { data: years } = useGetAllYears(yearInfo.trim());
   // const { data: semesters } = getAllSemesterOfYear(semesterInfo.trim());
   // const { data: courses } = getAllCourse({
@@ -140,7 +138,15 @@ function EditSubjectButton({ data, setState }) {
   };
 
   const isAllReqDataHasValue = () => {
-    return +score <= 10 && +score >= 0 && year && course && semester && student && courseCode;
+    return (
+      +score <= 10 &&
+      +score >= 0 &&
+      year?.trim() &&
+      course?.trim() &&
+      semester &&
+      student &&
+      courseCode?.trim()
+    );
   };
   const isAllReqDataHasDiffValue = () => {
     return (
@@ -200,10 +206,10 @@ function EditSubjectButton({ data, setState }) {
       score: +score,
       verified: true,
       studentId: student?.id?.toString() ?? null,
-      semester: semester?.toString() ?? null,
-      year: year?.toString() ?? null,
-      courseName: course?.toString() ?? null,
-      courseCode: courseCode?.toString() ?? null
+      semester: +semester ?? null,
+      year: year?.toString()?.trim() ?? null,
+      courseName: course?.toString()?.trim() ?? null,
+      courseCode: courseCode?.toString()?.trim() ?? null
     };
     updateGrade(req);
   };
@@ -257,10 +263,10 @@ function EditSubjectButton({ data, setState }) {
                       year: false
                     });
                   }}
-                  error={!firstLoad.year && !year}
+                  error={!firstLoad.year && (!year || !year.trim())}
                   helperText={
                     // eslint-disable-next-line no-nested-ternary
-                    !firstLoad.year && !year ? "Năm học không được rỗng" : ""
+                    !firstLoad.year && (!year || !year.trim()) ? "Năm học không được rỗng" : ""
                   }
                 />
               </MDBox>
@@ -320,10 +326,12 @@ function EditSubjectButton({ data, setState }) {
                       course: false
                     });
                   }}
-                  error={!firstLoad.course && !course}
+                  error={!firstLoad.course && (!course || !course?.trim())}
                   helperText={
                     // eslint-disable-next-line no-nested-ternary
-                    !firstLoad.course && !course ? "Môn học không được rỗng" : ""
+                    !firstLoad.course && (!course || !course?.trim())
+                      ? "Môn học không được rỗng"
+                      : ""
                   }
                 />
               </MDBox>
@@ -349,10 +357,12 @@ function EditSubjectButton({ data, setState }) {
                       courseCode: false
                     });
                   }}
-                  error={!firstLoad.courseCode && !courseCode}
+                  error={!firstLoad.courseCode && (!courseCode || !courseCode.trim())}
                   helperText={
                     // eslint-disable-next-line no-nested-ternary
-                    !firstLoad.courseCode && !courseCode ? "Môn học không được rỗng" : ""
+                    !firstLoad.courseCode && (!courseCode || !courseCode.trim())
+                      ? "Môn học không được rỗng"
+                      : ""
                   }
                 />
               </MDBox>
