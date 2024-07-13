@@ -60,18 +60,18 @@ function GradeBoard(props) {
   const { isEditable, user = {} } = props;
   const [state, dispatch] = useReducer(reducer, initState);
   const [debounceSemester, setDebounceSemester] = useState("");
-  const { year, yearInfo, semester } = state;
+  const { year, yearInfo, semester, semesterInfo } = state;
   const myInfo = useMyInfo();
   const {
     data: years,
     isLoading: isLoadingDefaultYear,
     isSuccess: loadYearSuccess
   } = useGetAllYears(yearInfo.trim());
-  // const { data: semesters } = getAllSemesterOfYear(semesterInfo.trim());
+  const { data: semesters } = getAllSemesterOfYear(semesterInfo.trim());
   const { data: grades, isFetching: isLoadingGrade } = useGetAllGrades({
     userId: isEditable ? myInfo?.id : user?.id ?? null,
     year: year ?? null,
-    semester: debounceSemester ?? null,
+    semester: semester ?? null,
     pageSize: 25,
     page: 0
   });
@@ -86,9 +86,9 @@ function GradeBoard(props) {
     }, 500),
     []
   );
-  useEffect(() => {
-    debouncedSetSemester(semester);
-  }, [semester]);
+  // useEffect(() => {
+  //   debouncedSetSemester(semester);
+  // }, [semester]);
   const theme = createTheme({
     components: {
       MuiAutocomplete: {
@@ -120,7 +120,7 @@ function GradeBoard(props) {
     queryClient.refetchQueries({
       queryKey: ["grades"]
     });
-  }, [year, debounceSemester]);
+  }, [year, semester]);
   return (
     <ThemeProvider theme={theme}>
       <div className="flex flex-col gap-y-2">
@@ -166,7 +166,7 @@ function GradeBoard(props) {
           </Typography>
         </div>
         <div>
-          <TextField
+          {/* <TextField
             placeholder="Nhập học kỳ"
             variant="outlined"
             type="number"
@@ -189,11 +189,10 @@ function GradeBoard(props) {
             //   // eslint-disable-next-line no-nested-ternary
             //   !isNumber(semester) ? "Học kỳ phải là số" : ""
             // }
-          />
-          {/* <Autocomplete
+          /> */}
+          <Autocomplete
             noOptionsText="Không có thông tin học kì"
             value={semester}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
             onChange={(e, newValue) => {
               dispatch({ type: "SET_SEMESTER", payload: newValue });
             }}
@@ -207,11 +206,11 @@ function GradeBoard(props) {
             }}
             color="text"
             options={semesters ?? []}
-            getOptionLabel={(option) => option?.name || ""}
+            getOptionLabel={(option) => option || ""}
             renderInput={(params) => (
               <TextField {...params} placeholder="Chọn học kì" size="small" />
             )}
-          /> */}
+          />
         </div>
         <div className="flex flex-col gap-y-4 mt-3">
           {isLoadingGrade && (

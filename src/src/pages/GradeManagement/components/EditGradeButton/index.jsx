@@ -201,7 +201,7 @@ function EditSubjectButton({ data, setState }) {
       verified: true,
       studentId: student?.id?.toString() ?? null,
       semester: semester?.toString() ?? null,
-      schoolYear: year?.toString() ?? null,
+      year: year?.toString() ?? null,
       courseName: course?.toString() ?? null,
       courseCode: courseCode?.toString() ?? null
     };
