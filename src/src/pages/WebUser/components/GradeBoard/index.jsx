@@ -70,7 +70,7 @@ function GradeBoard(props) {
   // const { data: semesters } = getAllSemesterOfYear(semesterInfo.trim());
   const { data: grades, isFetching: isLoadingGrade } = useGetAllGrades({
     userId: isEditable ? myInfo?.id : user?.id ?? null,
-    year: year?.name ?? null,
+    year: year ?? null,
     semester: debounceSemester ?? null,
     pageSize: 25,
     page: 0
@@ -138,7 +138,6 @@ function GradeBoard(props) {
               isLoadingDefaultYear ? "Đang lấy thông tin năm học" : "Không có thông tin năm học"
             }
             value={year}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
             onChange={(e, newValue) => {
               if (!newValue) {
                 dispatch({ type: "SET_SEMESTER", payload: "" });
@@ -157,14 +156,7 @@ function GradeBoard(props) {
             color="text"
             // eslint-disable-next-line no-shadow
             options={years ?? []}
-            getOptionLabel={(option) => option?.name || ""}
-            renderOption={(propsEl, option) => {
-              return (
-                <li {...propsEl} key={option.id}>
-                  {option.name}
-                </li>
-              );
-            }}
+            getOptionLabel={(option) => option || ""}
             renderInput={(params) => <TextField {...params} placeholder="Chọn năm" size="small" />}
           />
         </div>
