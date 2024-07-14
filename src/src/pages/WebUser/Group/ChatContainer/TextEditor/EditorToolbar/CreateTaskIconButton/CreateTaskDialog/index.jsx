@@ -88,7 +88,6 @@ function CreateTaskDialog({
 
   const prepareData = (data) => {
     const { date } = data;
-    console.log(data);
     return {
       id: taskId ?? null,
       title: data.title,
@@ -200,7 +199,6 @@ function CreateTaskDialog({
         <DialogTitle alignSelf="center">{titleDialog}</DialogTitle>
         <DialogContent className="!py-4">
           <Controller
-            getGroupDetailColumnHeadersMentorSelector
             name="title"
             control={control}
             disabled={!isEditable}

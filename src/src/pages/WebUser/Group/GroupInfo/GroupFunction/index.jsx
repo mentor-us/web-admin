@@ -83,7 +83,7 @@ function GroupFunction({ type, permission, selectedType }) {
               <ListItemText
                 disableTypography
                 className="text-base line-clamp-1"
-                primary="Danh sách công việc"
+                primary="Công việc"
               />
             </ListItemButton>
           )}

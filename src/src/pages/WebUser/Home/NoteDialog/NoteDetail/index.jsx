@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { DeleteOutline, Edit, MoreVert, ShareOutlined } from "@mui/icons-material";
 import {
@@ -52,10 +52,10 @@ function NoteDetail({ noteUserId, onShareClick, onEditClick, onHistoryClick }) {
   const handleDeleteNote = (event, id) => {
     event.stopPropagation();
     confirm({
-      title: "Confirm Delete",
-      description: "Are you sure you want to delete this note?",
-      confirmationText: "Delete",
-      cancellationText: "Cancel"
+      title: "Xác nhận xoá",
+      description: "Bạn có chắc muốn xoá ghi chú này ko?",
+      confirmationText: "Xoá",
+      cancellationText: "Huỷ"
     }).then(() => {
       toast.promise(
         deleteNoteMutateAsync(id).then(() => {
@@ -64,9 +64,9 @@ function NoteDetail({ noteUserId, onShareClick, onEditClick, onHistoryClick }) {
           });
         }),
         {
-          loading: "Deleting note...",
-          success: "Note deleted successfully",
-          error: "Failed to delete note"
+          loading: "Đang xoá...",
+          success: "Xoá thành công",
+          error: "Có lỗi xảy ra trong lúc xoá"
         }
       );
       handleCloseMenu(event);
@@ -98,15 +98,18 @@ function NoteDetail({ noteUserId, onShareClick, onEditClick, onHistoryClick }) {
   if (isError) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="20em">
-        <Typography color="error">Error loading data</Typography>
+        <Typography color="error">
+          Có lỗi xảy ra.
+          <br /> Vui lòng thử lại sau
+        </Typography>
       </Box>
     );
   }
 
-  if (!isSuccess || !notes?.data?.length) {
+  if (!isSuccess || !notes?.data || notes?.data.length === 0) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="20em">
-        <Typography>No notes available</Typography>
+        <Typography>Không có ghi chú nào</Typography>
       </Box>
     );
   }
