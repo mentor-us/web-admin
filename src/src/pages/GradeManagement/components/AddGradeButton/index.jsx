@@ -14,6 +14,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { setLoading } from "context";
 import { useMentorUs } from "hooks";
+import { isNumber } from "utils";
 
 import MDBox from "components/MDComponents/MDBox";
 import MDButton from "components/MDComponents/MDButton";
@@ -22,16 +23,16 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import useGradeManagementStore from "hooks/client/useGradeManagementStore";
 import { useCreateGradeMutation } from "hooks/grades/mutation";
-import { getAllCourse, getAllSemesterOfYear, useGetAllYears } from "hooks/grades/queries";
+// import { useGetAllYears } from "hooks/grades/queries";
 import { useGetAllUsers } from "hooks/users/queries";
 
 const initState = {
   year: null,
   yearInfo: "",
-  semester: null,
+  semester: 1,
   semesterInfo: "",
   course: null,
-  courseName: "",
+  courseCode: "",
   score: 0,
   student: null,
   studentName: ""
@@ -49,8 +50,8 @@ function reducer(state, action) {
       return { ...state, semesterInfo: action.payload };
     case "SET_COURSE":
       return { ...state, course: action.payload };
-    case "SET_COURSE_NAME":
-      return { ...state, courseName: action.payload };
+    case "SET_COURSE_CODE":
+      return { ...state, courseCode: action.payload };
     case "SET_STUDENT":
       return { ...state, student: action.payload };
     case "SET_STUDENT_NAME":
@@ -69,10 +70,11 @@ function AddGradeButton() {
   const [state, dispatch] = useReducer(reducer, initState);
   const {
     year,
-    yearInfo,
+    // yearInfo,
     semester,
-    semesterInfo,
+    // semesterInfo,
     course,
+    courseCode,
     courseName,
     score,
     student,
@@ -84,15 +86,16 @@ function AddGradeButton() {
     year: true,
     semester: true,
     course: true,
+    courseCode: true,
     student: true
   });
   const queryClient = useQueryClient();
   const createGradeMutator = useCreateGradeMutation();
-  const { data: years } = useGetAllYears(yearInfo.trim());
-  const { data: semesters } = getAllSemesterOfYear(semesterInfo.trim());
-  const { data: courses } = getAllCourse({
-    query: courseName.trim()
-  });
+  // const { data: years } = useGetAllYears(yearInfo.trim());
+  // const { data: semesters } = getAllSemesterOfYear(semesterInfo.trim());
+  // const { data: courses } = getAllCourse({
+  //   query: courseName.trim()
+  // });
   const { data: students } = useGetAllUsers({
     query: studentName.trim()
   });
@@ -102,14 +105,16 @@ function AddGradeButton() {
   const resetAllData = () => {
     dispatch({ type: "SET_SCORE", payload: 0 });
     dispatch({ type: "SET_COURSE", payload: null });
+    dispatch({ type: "SET_COURSE_CODE", payload: null });
     dispatch({ type: "SET_YEAR", payload: null });
     dispatch({ type: "SET_STUDENT", payload: null });
-    dispatch({ type: "SET_SEMESTER", payload: null });
+    dispatch({ type: "SET_SEMESTER", payload: 1 });
     setFirstLoad({
       score: true,
       year: true,
       semester: true,
       course: true,
+      courseCode: true,
       student: true
     });
   };
@@ -135,14 +140,25 @@ function AddGradeButton() {
   };
 
   const isOneReqDataHasValue = () => {
-    return score || year || course || semester || student;
+    return score || year || course || courseCode || semester !== 1 || student;
   };
 
   const isAllReqDataHasValue = () => {
-    return +score <= 10 && +score >= 0 && year && course && semester && student;
+    return (
+      +score <= 10 &&
+      +score >= 0 &&
+      year?.trim() &&
+      course?.trim() &&
+      semester &&
+      student &&
+      courseCode?.trim()
+    );
   };
 
   const isLostAllData = () => {
+    console.log("Hoc ki");
+    console.log(score, year, course, courseCode, semester, student);
+    console.log(isOneReqDataHasValue());
     if (isOneReqDataHasValue()) {
       WarningAlertConfirmNotSavingData().then((result) => {
         if (result.isDenied) {
@@ -182,11 +198,11 @@ function AddGradeButton() {
     }
     const req = {
       score: +score,
-      verified: true,
       studentId: student?.id?.toString() ?? null,
-      semesterId: semester?.id?.toString() ?? null,
-      schoolYearId: year?.id?.toString() ?? null,
-      courseId: course?.id?.toString() ?? null
+      semester: +semester,
+      year: year?.toString()?.trim() ?? null,
+      courseName: course?.toString()?.trim() ?? null,
+      courseCode: courseCode?.toString()?.trim() ?? null
     };
     addGrade(req);
   };
@@ -230,42 +246,24 @@ function AddGradeButton() {
                 >
                   Năm học <span style={{ color: "red" }}>(*)</span>
                 </MDTypography>
-                <Autocomplete
-                  noOptionsText="Không có thông tin năm học"
+                <MDInput
+                  placeholder="Nhập năm học"
+                  size="small"
+                  sx={{ width: "70%" }}
                   value={year}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
-                  onChange={(e, newValue) => {
-                    dispatch({ type: "SET_YEAR", payload: newValue });
+                  inputProps={{ maxLength: 100 }}
+                  onChange={(e) => {
+                    dispatch({ type: "SET_YEAR", payload: e.target.value });
                     setFirstLoad({
                       ...firstLoad,
                       year: false
                     });
                   }}
-                  onInputChange={(event, value) => {
-                    dispatch({ type: "SET_YEAR_INFO", payload: value });
-                  }}
-                  sx={{
-                    width: "70%",
-                    pl: "0!important",
-                    pt: "0!important"
-                  }}
-                  color="text"
-                  // disableClearable
-                  // eslint-disable-next-line no-shadow
-                  options={years ?? []}
-                  getOptionLabel={(option) => option?.name || ""}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      placeholder="Chọn năm học"
-                      error={!firstLoad.year && !year}
-                      helperText={
-                        // eslint-disable-next-line no-nested-ternary
-                        !firstLoad.year && !year ? "Năm học không được rỗng" : ""
-                      }
-                      size="small"
-                    />
-                  )}
+                  error={!firstLoad.year && (!year || !year.trim())}
+                  helperText={
+                    // eslint-disable-next-line no-nested-ternary
+                    !firstLoad.year && (!year || !year.trim()) ? "Năm học không được rỗng" : ""
+                  }
                 />
               </MDBox>
               <MDBox className="relationship__searchBox-item" mb={2}>
@@ -277,40 +275,29 @@ function AddGradeButton() {
                 >
                   Học kỳ <span style={{ color: "red" }}>(*)</span>
                 </MDTypography>
-                <Autocomplete
-                  noOptionsText="Không có thông tin học kì"
+                <MDInput
+                  placeholder="Nhập học kỳ"
+                  size="small"
+                  // type="number"
+                  sx={{ width: "70%" }}
                   value={semester}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
-                  onChange={(e, newValue) => {
-                    dispatch({ type: "SET_SEMESTER", payload: newValue });
+                  inputProps={{ maxLength: 100 }}
+                  onChange={(e) => {
+                    dispatch({ type: "SET_SEMESTER", payload: e.target.value });
                     setFirstLoad({
                       ...firstLoad,
                       semester: false
                     });
                   }}
-                  onInputChange={(event, value) => {
-                    dispatch({ type: "SET_SEMESTER_INFO", payload: value });
-                  }}
-                  sx={{
-                    width: "70%",
-                    pl: "0!important",
-                    pt: "0!important"
-                  }}
-                  color="text"
-                  options={semesters ?? []}
-                  getOptionLabel={(option) => option?.name || ""}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      error={!firstLoad.semester && !semester}
-                      helperText={
-                        // eslint-disable-next-line no-nested-ternary
-                        !firstLoad.semester && !semester ? "Học kì không được rỗng" : ""
-                      }
-                      placeholder="Chọn học kì"
-                      size="small"
-                    />
-                  )}
+                  error={(!firstLoad.semester && !semester) || (semester && !isNumber(semester))}
+                  helperText={
+                    // eslint-disable-next-line no-nested-ternary
+                    !firstLoad.semester && !semester
+                      ? "Học kỳ không được rỗng"
+                      : !isNumber(semester)
+                      ? "Học kỳ phải là số"
+                      : ""
+                  }
                 />
               </MDBox>
               <MDBox className="relationship__searchBox-item" mb={2}>
@@ -320,42 +307,59 @@ function AddGradeButton() {
                   color="dark"
                   sx={{ mr: 2, width: "30%" }}
                 >
-                  Môn học <span style={{ color: "red" }}>(*)</span>
+                  Tên môn học <span style={{ color: "red" }}>(*)</span>
                 </MDTypography>
-                <Autocomplete
-                  noOptionsText="Không có thông tin môn học"
+                <MDInput
+                  placeholder="Nhập tên môn học"
+                  size="small"
+                  sx={{ width: "70%" }}
                   value={course}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
-                  onChange={(e, newValue) => {
-                    dispatch({ type: "SET_COURSE", payload: newValue });
+                  inputProps={{ maxLength: 100 }}
+                  onChange={(e) => {
+                    dispatch({ type: "SET_COURSE", payload: e.target.value });
                     setFirstLoad({
                       ...firstLoad,
                       course: false
                     });
                   }}
-                  onInputChange={(event, value) => {
-                    dispatch({ type: "SET_COURSE_NAME", payload: value });
+                  error={!firstLoad.course && (!course || !course?.trim())}
+                  helperText={
+                    // eslint-disable-next-line no-nested-ternary
+                    !firstLoad.course && (!course || !course?.trim())
+                      ? "Môn học không được rỗng"
+                      : ""
+                  }
+                />
+              </MDBox>
+              <MDBox className="relationship__searchBox-item" mb={2}>
+                <MDTypography
+                  variant="body2"
+                  fontWeight="regular"
+                  color="dark"
+                  sx={{ mr: 2, width: "30%" }}
+                >
+                  Mã môn học <span style={{ color: "red" }}>(*)</span>
+                </MDTypography>
+                <MDInput
+                  placeholder="Nhập mã môn học"
+                  size="small"
+                  sx={{ width: "70%" }}
+                  value={courseCode}
+                  inputProps={{ maxLength: 100 }}
+                  onChange={(e) => {
+                    dispatch({ type: "SET_COURSE_CODE", payload: e.target.value });
+                    setFirstLoad({
+                      ...firstLoad,
+                      courseCode: false
+                    });
                   }}
-                  sx={{
-                    width: "70%",
-                    pl: "0!important",
-                    pt: "0!important"
-                  }}
-                  color="text"
-                  options={courses?.data ?? []}
-                  getOptionLabel={(option) => option?.name || ""}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      error={!firstLoad.course && !course}
-                      helperText={
-                        // eslint-disable-next-line no-nested-ternary
-                        !firstLoad.course && !course ? "Môn học không được rỗng" : ""
-                      }
-                      placeholder="Chọn môn học"
-                      size="small"
-                    />
-                  )}
+                  error={!firstLoad.courseCode && (!courseCode || !courseCode.trim())}
+                  helperText={
+                    // eslint-disable-next-line no-nested-ternary
+                    !firstLoad.courseCode && (!courseCode || !courseCode.trim())
+                      ? "Môn học không được rỗng"
+                      : ""
+                  }
                 />
               </MDBox>
               <MDBox className="relationship__searchBox-item" mb={2}>

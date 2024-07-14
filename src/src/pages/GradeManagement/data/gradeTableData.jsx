@@ -108,10 +108,10 @@ export default function gradeTableData(data, columnHeaders) {
         const numberOrder = index + 1;
         return {
           no: numberOrder,
-          yearName: item?.year?.name ?? "",
-          semesterName: item?.semester?.name ?? "",
-          courseCode: item?.course?.code ?? "",
-          courseName: item?.course?.name ?? "",
+          yearName: item?.year ?? "",
+          semesterName: item?.semester ?? "",
+          courseCode: item?.courseCode ?? "",
+          courseName: item?.courseName ?? "",
           studentName: item?.student?.name ?? "",
           score: item?.score ?? "",
           // "is-checked": (
