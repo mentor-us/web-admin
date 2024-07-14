@@ -735,7 +735,7 @@ function SuggestDialog(props) {
     });
   };
 
-  const renderActions = useCallback(() => {
+  const renderActions = () => {
     switch (contentType) {
       case ContentType.INITIAL:
         return (
@@ -794,7 +794,7 @@ function SuggestDialog(props) {
       default:
         return null;
     }
-  }, [contentType, isLoading]);
+  };
 
   return (
     <Dialog open={open} maxWidth="md" fullWidth>
