@@ -23,6 +23,7 @@ import { getImageUrlWithKey } from "utils";
 
 import GroupInfoItem from "pages/WebUser/Group/GroupInfo/GroupFunction";
 import GroupItemDetail from "pages/WebUser/Group/GroupInfo/GroupItemDetail";
+import TooltipCustom from "components/Tooltip";
 import { useGetGroupDetail, useGetWorkSpace } from "hooks/groups/queries";
 import {
   ACTION_IMAGE,
@@ -152,7 +153,7 @@ export default function GroupInfo() {
 
   return (
     <div className="flex flex-col w-80 h-full bg-white border-r-[2px]">
-      <Box className="min-h-16 h-16 p-4 bg-white">
+      <Box className="min-h-16 h-16 py-5 px-4">
         <Box
           display="flex"
           justifyContent="center"
@@ -171,9 +172,9 @@ export default function GroupInfo() {
               <ArrowBackIcon fontSize="inherit" />
             </IconButton>
           ) : null}
-          <Tooltip title={headerInfo}>
+          <TooltipCustom title={headerInfo}>
             <span className="line-clamp-1 max-w-[74%]">{headerInfo}</span>
-          </Tooltip>
+          </TooltipCustom>
           {showTypeScreen === GROUP_FUNCTION.FAQ && groupDetail?.role === USER_ROLE.MENTOR && (
             <IconButton
               className="!absolute !right-0 hover:!bg-slate-300 rounded-full"

@@ -93,7 +93,13 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ConfirmProvider>
+      <ConfirmProvider
+        defaultOptions={{
+          title: "Bạn có chắc chắn không?",
+          confirmationText: "Xác nhận",
+          cancellationText: "Hủy"
+        }}
+      >
         <Routes>
           {publicRoutesRender(publicRoutes)}
           {privateRoutesRender(privateRoutes)}
