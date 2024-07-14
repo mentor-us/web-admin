@@ -45,14 +45,26 @@ function NoteShare({ noteId, onCancel }) {
     setSearchQuery(event?.target?.value);
   };
 
-  const formatedMembers = members?.filter((member) => member.id !== note?.owner?.id);
-
+  // const formatedMembers = members?.filter((member) => member.id !== note?.owner?.id);
+  const formatedMembers = members?.filter(
+    (member) =>
+      member.id !== note?.owner?.id && !value.some((userTemp) => userTemp.id === member.id)
+  );
   const onChange = (event, newValue) => {
-    const updatedValue = newValue.map((member) => ({
-      ...member,
-      accessType: member.accessType || NotePermission.find((item) => item.key === "VIEW")
-    }));
+    // const updatedValue = newValue.map((member) => ({
+    //   ...member,
+    //   accessType: member.accessType || NotePermission.find((item) => item.key === "VIEW")
+    // }));
+    // setValue(updatedValue);
+    const updatedValue = [
+      {
+        accessType: newValue.accessType || NotePermission.find((item) => item.key === "VIEW"),
+        ...newValue
+      },
+      ...value
+    ];
     setValue(updatedValue);
+    setInputValue("");
   };
 
   const handlePermissionChange = (userId, permission) => {
@@ -92,9 +104,9 @@ function NoteShare({ noteId, onCancel }) {
       case NoteShareObject.PUBLIC:
         return "Bất kỳ ai có kết nối Internet và có đường liên kết này đều có thể chỉnh sửa";
       case NoteShareObject.MENTOR_VIEW:
-        return "Chỉ mentor có thể xem";
+        return "Chỉ những người mentor có thể xem";
       case NoteShareObject.MENTOR_EDIT:
-        return "Chỉ mentor có thể chỉnh sửa";
+        return "Chỉ những người mentor có thể chỉnh sửa";
       case NoteShareObject.PRIVATE:
         return "Chỉ những người có quyền mới có thể xem hoặc chỉnh sửa";
       default:
@@ -166,11 +178,10 @@ function NoteShare({ noteId, onCancel }) {
         <>
           {formatedMembers && (
             <Autocomplete
-              multiple
               options={formatedMembers}
               getOptionLabel={(member) => (member?.name ? `${member.name} (${member.email})` : "")}
               filterSelectedOptions
-              value={value}
+              value={null}
               onChange={onChange}
               inputValue={inputValue} // Use controlled inputValue
               className="pt-2"
@@ -197,7 +208,14 @@ function NoteShare({ noteId, onCancel }) {
                   <ListItemAvatar>
                     <Avatar src={member.imageUrl} />
                   </ListItemAvatar>
-                  <ListItemText primary={member.name} />
+                  <ListItemText
+                    primaryTypographyProps={{
+                      sx: {
+                        fontSize: "0.875rem"
+                      }
+                    }}
+                    primary={member.name}
+                  />
                 </ListItem>
               )}
               // eslint-disable-next-line no-shadow
@@ -209,9 +227,11 @@ function NoteShare({ noteId, onCancel }) {
             />
           )}
           <Stack>
-            <Typography className="font-black text-black">Những người có quyền truy cập</Typography>
+            <Typography className="font-black text-black" fontSize="1rem">
+              Những người có quyền truy cập
+            </Typography>
           </Stack>
-          <Stack spacing={1} maxHeight={200} className="overflow-auto">
+          <Stack spacing={1} maxHeight={200} className="overflow-auto mt-2">
             {value.map((member) => (
               <Stack
                 key={member.id}
@@ -219,28 +239,23 @@ function NoteShare({ noteId, onCancel }) {
                 alignItems="center"
                 justifyContent="space-between"
                 spacing={1}
-                className="w-full"
+                className="w-full hover:bg-slate-200 pt-2 pb-2 pl-1 pr-1"
               >
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <Avatar src={member.imageUrl} />
-                  <Typography>{member.name}</Typography>
+                  <Typography className="pl-3" fontSize="0.875rem">
+                    {member.name}
+                  </Typography>
                 </Stack>
                 <Select
+                  className="hover:cursor-pointer"
                   variant="outlined"
                   id="demo-simple-select"
                   sx={{
                     padding: "0.5rem",
                     width: "8em!important",
-                    "& div": {
-                      width: "6em!important",
-                      padding: "0!important"
-                    },
                     "& .MuiOutlinedInput-notchedOutline": {
                       border: "none"
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      backgroundColor: "#e6e1e1",
-                      opacity: 0.3
                     }
                   }}
                   value={member.accessType.label}
@@ -248,6 +263,7 @@ function NoteShare({ noteId, onCancel }) {
                   IconComponent={ArrowDropDownIcon} // Use custom arrow icon
                   input={
                     <OutlinedInput
+                      className="hover:bg-slate-300"
                       sx={{
                         backgroundColor: "yellow",
                         "& div": {
@@ -268,38 +284,40 @@ function NoteShare({ noteId, onCancel }) {
             ))}
           </Stack>
           <Stack>
-            <Typography className="font-black text-black">Quyền truy cập chung</Typography>
-            <Stack direction="row" alignItems="center" justifyContent="space-start" spacing={1}>
+            <Typography className="font-black text-black" fontSize="1rem">
+              Quyền truy cập chung
+            </Typography>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-start"
+              spacing={1}
+              className="hover:bg-slate-200 p-1"
+            >
               <Stack className="bg-zinc-200 p-3 rounded-full">{renderIcon()}</Stack>
               <Stack>
                 <Select
+                  className="hover:cursor-pointer"
                   variant="outlined"
                   sx={{
-                    padding: "0.5rem",
-                    width: "12em!important",
-                    "& div": {
-                      width: "9em!important",
-                      padding: "0!important"
-                    },
+                    padding: "0.375rem 0rem",
+                    width: "fit-content",
                     "& .MuiOutlinedInput-notchedOutline": {
                       border: "none"
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      backgroundColor: "#e6e1e1",
-                      opacity: 0.3
                     }
                   }}
                   value={generalPermission.label}
                   onChange={handleGeneralPermissionChange}
                   input={
                     <OutlinedInput
+                      className="hover:bg-slate-300"
                       sx={{
                         backgroundColor: "yellow",
                         "& div": {
                           backgroundColor: "red"
                         }
                       }}
-                      endAdornment={<ArrowDropDownIcon />}
+                      endAdornment={<ArrowDropDownIcon style={{ marginRight: "12px" }} />}
                     />
                   }
                 >
@@ -309,11 +327,11 @@ function NoteShare({ noteId, onCancel }) {
                     </MenuItem>
                   ))}
                 </Select>
-                <p className="text-gray-500 text-xs pl-5">{renderTextDetail()}</p>
+                <p className="text-gray-500 text-xs pl-3 pb-1">{renderTextDetail()}</p>
               </Stack>
             </Stack>
           </Stack>
-          <DialogActions>
+          <DialogActions sx={{ padding: "4px", paddingTop: " 24px" }}>
             <Button onClick={onCancel}>Hủy</Button>
             <Button onClick={handleSubmit}>Lưu</Button>
           </DialogActions>

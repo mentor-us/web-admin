@@ -84,3 +84,8 @@ export const useUpdateFaqMutation = () =>
     mutationKey: CreateFaqMutationKey,
     mutationFn: (task) => FaqService.updateFaq(task)
   });
+export const useChangeStatusTaskMutation = () =>
+  useMutation({
+    mutationKey: "change-status-task",
+    mutationFn: (task) => TaskService.changeStatusTask(task)
+  });

@@ -19,7 +19,9 @@ const GradeApi = {
     };
 
     return AxiosClient.post(`api/grades/import`, data, config);
-  }
+  },
+  shareGrade: (req) => AxiosClient.post(`${GRADE_URL}/share`, req),
+  getShareGradeInfo: (req) => AxiosClient.get(`${GRADE_URL}/share/${req.userId}`, req)
 };
 
 export default GradeApi;

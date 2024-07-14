@@ -75,7 +75,23 @@ const gradesList = [
     Semester: semesters[2]
   }
 ];
-
+const shareGradeInfo = {
+  userId: "b7a6a7de-ffbf-438f-a784-129c6cbf0fb3",
+  shareType: "PUBLIC",
+  userAccesses: [
+    {
+      accessType: {
+        label: "Xem",
+        key: "VIEW"
+      },
+      email: "20127665@student.hcmus.edu.vn",
+      id: "1b1d91e6-5994-4961-ac7b-a044bee73712",
+      imageUrl:
+        "https://lh3.googleusercontent.com/a/ACg8ocJKO74-RTPo1PyvdwZtEJzfxdEVWpx9Tj_ZUoC7ha9zJ_DN-8Pw=s96-c",
+      name: "20127665 - Dương Quang Vinh"
+    }
+  ]
+};
 // eslint-disable-next-line import/prefer-default-export
 export const useGetAllGrades = (query) =>
   useQuery({
@@ -99,7 +115,16 @@ export const useGetAllGrades = (query) =>
           }
           return 0;
         }
-        return { ...res, data: [...res.data].sort(compare) };
+        // const formatData = [...res.data].map((grade) => {
+        //   return {
+        //     ...grade,
+        //     year: grade?.year?.name,
+        //     semester: grade?.semester?.name,
+        //     courseName: grade?.course?.name,
+        //     courseCode: grade?.course?.code
+        //   };
+        // });
+        return { ...res };
       } catch (error) {
         return gradesList;
       }
@@ -112,13 +137,26 @@ export const useGetAllYears = (yearInfo) =>
     queryFn: async () => {
       try {
         const params = {
-          query: yearInfo
+          pageSize: 999
         };
-        const res = await YearApi.getAllYears(params);
-        // console.log("useGetAllYears");
-        // console.log(res.data);
-        // [...res.data].filter((year) => year.name.toString().includes(yearInfo));
-        return res.data;
+        // const res = await YearApi.getAllYears(params);
+        const gradeRes = await GradeApi.getAllGrades({ ...params });
+        // const formatData = [...gradeRes.data].map((grade) => {
+        //   return {
+        //     ...grade,
+        //     year: grade?.year?.name,
+        //     semester: grade?.semester?.name,
+        //     courseName: grade?.course?.name,
+        //     courseCode: grade?.course?.code
+        //   };
+        // });
+        const yearFormat = [...gradeRes.data].map((grade) => {
+          return grade.year;
+        });
+        const uniqueYear = yearFormat.filter(
+          (value, index, array) => array.indexOf(value) === index
+        );
+        return uniqueYear;
         // return res.data;
         // eslint-disable-next-line no-unreachable
       } catch (error) {
@@ -132,10 +170,27 @@ export const getAllSemesterOfYear = (semesterInfo) =>
     queryKey: ["years/semester", semesterInfo],
     queryFn: async () => {
       try {
-        const res = await YearApi.getAllSemesterOfYear({
-          query: semesterInfo
+        const params = {
+          pageSize: 999
+        };
+        // const res = await YearApi.getAllYears(params);
+        const gradeRes = await GradeApi.getAllGrades({ ...params });
+        // const formatData = [...gradeRes.data].map((grade) => {
+        //   return {
+        //     ...grade,
+        //     year: grade?.year?.name,
+        //     semester: grade?.semester?.name,
+        //     courseName: grade?.course?.name,
+        //     courseCode: grade?.course?.code
+        //   };
+        // });
+        const semesterFormat = [...gradeRes.data].map((grade) => {
+          return grade.semester;
         });
-        return res.data;
+        const uniqueSemester = semesterFormat.filter(
+          (value, index, array) => value && array.indexOf(value) === index
+        );
+        return uniqueSemester;
       } catch (error) {
         return semesters;
       }
@@ -150,13 +205,28 @@ export const getAllCourse = (query) =>
         // return courses;
         const params = {
           page: 0,
-          pageSize: 10
+          pageSize: 99
         };
         const res = await CourseApi.getAllCourses({ ...params, ...query });
 
         return res;
       } catch (error) {
         return courses;
+      }
+    },
+    enabled: true
+  });
+export const useGetShareGradeInfo = (user) =>
+  useQuery({
+    queryKey: ["share-grade-info"],
+    queryFn: async () => {
+      try {
+        const res = await GradeApi.getShareGradeInfo({
+          userId: user?.id
+        });
+        return res;
+      } catch (error) {
+        return {};
       }
     },
     enabled: true

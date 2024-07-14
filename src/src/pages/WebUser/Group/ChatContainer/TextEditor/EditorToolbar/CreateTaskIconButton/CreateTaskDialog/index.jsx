@@ -32,7 +32,11 @@ import TaskApi from "api/TaskApi";
 
 import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
-import { useCreateTaskMutation, useUpdateTaskMutation } from "hooks/chats/mutation";
+import {
+  useChangeStatusTaskMutation,
+  useCreateTaskMutation,
+  useUpdateTaskMutation
+} from "hooks/chats/mutation";
 import { useGetDetailTasks } from "hooks/chats/queries";
 import { GetAllTaskInChannelKey } from "hooks/tasks/keys";
 import useMyInfo from "hooks/useMyInfo";
@@ -53,6 +57,7 @@ function CreateTaskDialog({
     (members) => members ?? []
   );
   const { data: taskDetail } = useGetDetailTasks(taskId);
+  const [canChangeStatus, setCanChangeStatus] = useState(false);
 
   const [titleDialog, setTitleDialog] = useState(taskId ? "Chi tiết công việc" : "Công việc mới");
   const [isEditable, setIsEditable] = useState(!taskId);
@@ -82,6 +87,7 @@ function CreateTaskDialog({
   const { mutateAsync: createTaskMutationAsync, isPending } = !taskId
     ? useCreateTaskMutation()
     : useUpdateTaskMutation(taskId);
+  const { mutateAsync: changeStatusTaskMutation } = useChangeStatusTaskMutation(taskId);
   useEffect(() => {
     setValue("attendees", channelMembers ?? []);
   }, [channelMembers]);
@@ -133,6 +139,31 @@ function CreateTaskDialog({
 
     onCancel();
   };
+  const handleChangeStatus = (newValue) => {
+    toast.promise(
+      new Promise((resolve, reject) => {
+        changeStatusTaskMutation({ id: taskId, status: newValue.key })
+          .then(() => {
+            queryClient.invalidateQueries({
+              queryKey: GetAllChatMessageInfinityKey(channelId)
+            });
+            queryClient.invalidateQueries({
+              queryKey: ["events"]
+            });
+            queryClient.refetchQueries({
+              queryKey: GetAllTaskInChannelKey(channelId)
+            });
+            resolve();
+          })
+          .catch(reject);
+      }),
+      {
+        loading: "Đang cập nhật trạng thái...",
+        success: "Cập nhật trạng thái thành công",
+        error: "Cập nhật trạng thái thất bại"
+      }
+    );
+  };
 
   const watchDateField = watch("date");
   useEffect(() => {
@@ -152,13 +183,21 @@ function CreateTaskDialog({
       // eslint-disable-next-line no-shadow
       const getTaskAssignee = async (taskDetail) => {
         const res = await TaskApi.getTaskAssignees(taskDetail.id);
-        // if (res.data) {
         setValue("attendees", res.data || []);
-        // }
+
+        if (res.data) {
+          res.data.some((item) => {
+            if (item.id === myInfo.id) {
+              setCanChangeStatus(true);
+              return true;
+            }
+            return false;
+          });
+        }
       };
       if (taskDetail) {
         // taskData.role === "MENTOR" || taskData.assigner.id == currentUser.id
-        if (taskDetail.role === "MENTOR" || taskDetail?.assigner?.id === myInfo.id) {
+        if (taskDetail?.assigner?.id === myInfo.id) {
           setTitleDialog("Cập nhật công việc");
           setIsEditable(true);
         }
@@ -318,80 +357,61 @@ function CreateTaskDialog({
                 }}
               />
             </Grid>
-            <Grid item>
-              <Controller
-                name="status"
-                control={control}
-                render={({ field: { onChange, value, ref } }) => (
-                  <Autocomplete
-                    className="w-full"
-                    disablePortal
-                    id="combo-box-demo"
-                    options={TASK_STATUS}
-                    getOptionLabel={(option) => option.displayName}
-                    // eslint-disable-next-line no-shadow
-                    isOptionEqualToValue={(option, value) => option.key === value || option[0]}
-                    onChange={(event, newValue) => onChange(newValue)}
-                    value={value}
-                    disabled={!isEditable}
-                    renderOption={(props, option) => (
-                      <MenuItem {...props} key={option.key} value={option}>
-                        {option.displayName}
-                      </MenuItem>
-                    )}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Status"
-                        inputRef={ref}
-                        InputProps={{
-                          ...params.InputProps,
-                          sx: { height: 42 }
-                        }}
-                      />
-                    )}
-                    sx={{ width: 160 }}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item>
-              <Controller
-                name="status"
-                control={control}
-                render={({ field: { onChange, value, ref } }) => (
-                  <Autocomplete
-                    className="w-full"
-                    disablePortal
-                    id="combo-box-demo"
-                    options={TASK_STATUS}
-                    getOptionLabel={(option) => option.displayName}
-                    // eslint-disable-next-line no-shadow
-                    isOptionEqualToValue={(option, value) => option.key === value || option[0]}
-                    onChange={(event, newValue) => onChange(newValue)}
-                    value={value}
-                    disabled={!isEditable}
-                    renderOption={(props, option) => (
-                      <MenuItem {...props} key={option.key} value={option}>
-                        {option.displayName}
-                      </MenuItem>
-                    )}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Status"
-                        inputRef={ref}
-                        InputProps={{
-                          ...params.InputProps,
-                          sx: { height: 42 }
-                        }}
-                      />
-                    )}
-                    sx={{ width: 160 }}
-                  />
-                )}
-              />
-            </Grid>
+            {canChangeStatus && (
+              <Grid item>
+                <Controller
+                  name="status"
+                  control={control}
+                  render={({ field: { onChange, value, ref } }) => (
+                    <Autocomplete
+                      className="w-full"
+                      disablePortal
+                      id="combo-box-demo"
+                      options={TASK_STATUS}
+                      getOptionLabel={(option) => option.displayName}
+                      // eslint-disable-next-line no-shadow
+                      isOptionEqualToValue={(option, value) => option.key === value || option[0]}
+                      onChange={(event, newValue) => {
+                        onChange(newValue);
+                        handleChangeStatus(newValue);
+                      }}
+                      value={value}
+                      disabled={!canChangeStatus}
+                      componentsProps={{
+                        clearIndicator: { style: { display: "none" } } // Hide the clear indicator button
+                      }}
+                      place
+                      renderOption={(props, option) => (
+                        <MenuItem {...props} key={option.key} value={option}>
+                          {option.displayName}
+                        </MenuItem>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Status"
+                          inputRef={ref}
+                          InputProps={{
+                            ...params.InputProps,
+                            sx: {
+                              height: 44,
+                              alignItems: "center",
+                              ".MuiAutocomplete-input": {
+                                padding: "2px 8px !important" // Adjust padding here
+                              }
+                            },
+                            // Remove clear button
+                            // eslint-disable-next-line react/jsx-no-useless-fragment
+                            endAdornment: <>{params.InputProps.endAdornment}</>
+                          }}
+                        />
+                      )}
+                      sx={{ width: 220 }}
+                    />
+                  )}
+                />
+              </Grid>
+            )}
           </Grid>
 
           <Controller

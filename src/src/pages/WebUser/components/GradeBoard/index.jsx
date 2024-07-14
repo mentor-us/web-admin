@@ -1,4 +1,5 @@
-import { useEffect, useReducer } from "react";
+/* eslint-disable no-unused-vars */
+import { useCallback, useEffect, useReducer, useState } from "react";
 import {
   Autocomplete,
   createTheme,
@@ -10,6 +11,11 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
+import { debounce } from "lodash";
+// eslint-disable-next-line no-unused-vars
+import { isNumber } from "utils";
+
+import MDInput from "components/MDComponents/MDInput";
 // import {
 //   useCreateGradeMutation,
 //   useDeleteGradeMutation,
@@ -53,6 +59,7 @@ function reducer(state, action) {
 function GradeBoard(props) {
   const { isEditable, user = {} } = props;
   const [state, dispatch] = useReducer(reducer, initState);
+  const [debounceSemester, setDebounceSemester] = useState("");
   const { year, yearInfo, semester, semesterInfo } = state;
   const myInfo = useMyInfo();
   const {
@@ -63,8 +70,8 @@ function GradeBoard(props) {
   const { data: semesters } = getAllSemesterOfYear(semesterInfo.trim());
   const { data: grades, isFetching: isLoadingGrade } = useGetAllGrades({
     userId: isEditable ? myInfo?.id : user?.id ?? null,
-    yearId: year?.id ?? null,
-    semesterId: semester?.id ?? null,
+    year: year ?? null,
+    semester: semester ?? null,
     pageSize: 25,
     page: 0
   });
@@ -73,7 +80,15 @@ function GradeBoard(props) {
   // const createGradeMutator = useCreateGradeMutation(year, semester);
   // const updateGradeMutator = useUpdateGradeMutation(year, semester);
   // const deleteGradeMutator = useDeleteGradeMutation(year, semester);
-
+  const debouncedSetSemester = useCallback(
+    debounce((newValue) => {
+      setDebounceSemester(newValue);
+    }, 500),
+    []
+  );
+  // useEffect(() => {
+  //   debouncedSetSemester(semester);
+  // }, [semester]);
   const theme = createTheme({
     components: {
       MuiAutocomplete: {
@@ -123,8 +138,11 @@ function GradeBoard(props) {
               isLoadingDefaultYear ? "Đang lấy thông tin năm học" : "Không có thông tin năm học"
             }
             value={year}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
             onChange={(e, newValue) => {
+              if (!newValue) {
+                dispatch({ type: "SET_SEMESTER", payload: "" });
+                // debouncedSetSemester("");
+              }
               dispatch({ type: "SET_YEAR", payload: newValue });
             }}
             onInputChange={(event, value) => {
@@ -138,14 +156,7 @@ function GradeBoard(props) {
             color="text"
             // eslint-disable-next-line no-shadow
             options={years ?? []}
-            getOptionLabel={(option) => option?.name || ""}
-            renderOption={(propsEl, option) => {
-              return (
-                <li {...propsEl} key={option.id}>
-                  {option.name}
-                </li>
-              );
-            }}
+            getOptionLabel={(option) => option || ""}
             renderInput={(params) => <TextField {...params} placeholder="Chọn năm" size="small" />}
           />
         </div>
@@ -155,10 +166,33 @@ function GradeBoard(props) {
           </Typography>
         </div>
         <div>
+          {/* <TextField
+            placeholder="Nhập học kỳ"
+            variant="outlined"
+            type="number"
+            size="small"
+            // type="number"
+            value={year ? semester : ""}
+            InputLabelProps={{
+              shrink: true
+            }}
+            disabled={!year}
+            sx={{
+              width: "100%"
+            }}
+            onChange={(e) => {
+              // debouncedSetSemester(e.target.value);
+              dispatch({ type: "SET_SEMESTER", payload: e.target.value });
+            }}
+            error={semester && !isNumber(semester)}
+            // helperText={
+            //   // eslint-disable-next-line no-nested-ternary
+            //   !isNumber(semester) ? "Học kỳ phải là số" : ""
+            // }
+          /> */}
           <Autocomplete
             noOptionsText="Không có thông tin học kì"
             value={semester}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
             onChange={(e, newValue) => {
               dispatch({ type: "SET_SEMESTER", payload: newValue });
             }}
@@ -172,7 +206,7 @@ function GradeBoard(props) {
             }}
             color="text"
             options={semesters ?? []}
-            getOptionLabel={(option) => option?.name || ""}
+            getOptionLabel={(option) => option || ""}
             renderInput={(params) => (
               <TextField {...params} placeholder="Chọn học kì" size="small" />
             )}

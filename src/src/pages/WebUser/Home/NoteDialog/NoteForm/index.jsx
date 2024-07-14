@@ -26,6 +26,8 @@ import { useGetNoteById } from "hooks/notes/queries";
 import { useGetUserNotesKey } from "hooks/profile/key";
 import { useGetMentees } from "hooks/profile/queries";
 
+import "./index.css";
+
 function NoteForm({ onCancel, noteId }) {
   const [searchQuery, setSearchQuery] = useState("");
   const { mutateAsync: createNote } = useCreateNoteMutation();
@@ -169,7 +171,7 @@ function NoteForm({ onCancel, noteId }) {
                   <ListItemAvatar>
                     <Avatar src={member.imageUrl} />
                   </ListItemAvatar>
-                  <ListItemText primary={member.name} />
+                  <ListItemText className="text-base" primary={member.name} />
                 </ListItem>
               )}
               isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -186,7 +188,7 @@ function NoteForm({ onCancel, noteId }) {
           render={({ field }) => (
             <div className="mt-4">
               <CKEditor
-                className="w-full rounded-md border border-gray-300"
+                className="rounded-md border border-gray-300 editor__editable_inline"
                 editor={ClassicEditor}
                 data={field.value}
                 onChange={(event, editor) => {
@@ -201,7 +203,7 @@ function NoteForm({ onCancel, noteId }) {
                     "bold",
                     "italic",
                     "link",
-                    "blockQuote",
+                    "bulletedList",
                     "|",
                     "undo",
                     "redo"
@@ -212,7 +214,7 @@ function NoteForm({ onCancel, noteId }) {
           )}
         />
       </Stack>
-      <DialogActions>
+      <DialogActions sx={{ padding: "4px", paddingTop: " 24px" }}>
         <Button onClick={onCancel}>Hủy</Button>
         <Button type="submit">Lưu</Button>
       </DialogActions>

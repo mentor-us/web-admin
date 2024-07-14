@@ -182,7 +182,7 @@ export const UPLOAD_STATUS = {
 
 export const SUPPORTED_FILE_UPLOAD = [".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf"];
 export const SUPPORTED_VIDEO_EXT = [".mp4", ".mkv", ".qt"];
-export const MAX_FILE_IMAGE_SIZE = 5; // 5MB
+export const MAX_FILE_IMAGE_SIZE = 100; // 5MB
 
 export const SUPPORTED_IMAGE_EXT = [
   ".jpg",
@@ -262,14 +262,14 @@ export const TASK_STATUS = [
     color: "#4EA05B",
     backgroundColor: "#4EA05B",
     icon: "progress-check"
-  },
-  {
-    key: "OVERDUE",
-    displayName: "Đã trễ hạn",
-    color: "#C01C28",
-    backgroundColor: "#C01C28",
-    icon: "progress-alert"
   }
+  // {
+  //   key: "OVERDUE",
+  //   displayName: "Đã trễ hạn",
+  //   color: "#C01C28",
+  //   backgroundColor: "#C01C28",
+  //   icon: "progress-alert"
+  // }
 ];
 
 export const EMOJI_ICONS = {
@@ -368,3 +368,33 @@ export const NoteShareObject = {
   MENTOR_EDIT: "Mentor chỉnh sửa",
   PRIVATE: "Riêng tư"
 };
+export const GradePermission = [
+  //  EDIT: "Chỉnh sửa",
+  {
+    label: "Xem",
+    key: "VIEW"
+  },
+  {
+    label: "Xóa",
+    key: "DELETE"
+  }
+];
+export const GradeShareObject = {
+  PUBLIC: "Công khai",
+  MENTOR: "Mentor",
+  PRIVATE: "Riêng tư"
+};
+export const GradeShareType = [
+  {
+    label: "Công khai",
+    value: "PUBLIC"
+  },
+  {
+    label: "Mentor",
+    value: "MENTOR"
+  },
+  {
+    label: "Riêng tư",
+    value: "PRIVATE"
+  }
+];

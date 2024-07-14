@@ -31,18 +31,20 @@ function reducer(state, action) {
 function GradeItem(props) {
   const { item } = props;
   const [state, dispatch] = useReducer(reducer, initState);
-  const { score, course, courseName } = state;
-
+  const { score, courseName } = state;
+  console.log("item");
+  console.log(item);
   // const onClickSetModeSharing = () => {
   //   // dispatch({ type: "SET_IS_SUBMITING", payload: true });
   // };
 
-  useEffect(() => {
-    dispatch({ type: "SET_COURSE_NAME", payload: course?.name ?? "" });
-  }, [course]);
+  // useEffect(() => {
+  //   dispatch({ type: "SET_COURSE_NAME", payload: courseName ?? "" });
+  // }, [course]);
   useEffect(() => {
     dispatch({ type: "SET_SCORE", payload: item.score });
-    dispatch({ type: "SET_COURSE", payload: item.course });
+    dispatch({ type: "SET_COURSE_NAME", payload: item.courseName ?? "" });
+    // dispatch({ type: "SET_COURSE", payload: item.course });
   }, [item]);
   return (
     <div className="grade flex flex-row items-center gap-x-6 w-full justify-between">

@@ -16,6 +16,7 @@ import { useDeleteNoteMutation } from "hooks/notes/mutation";
 import { useGetNoteById } from "hooks/notes/queries";
 import useMyInfo from "hooks/useMyInfo";
 
+import "./index.css";
 import "react-vertical-timeline-component/style.min.css";
 
 function NoteHistory({ noteId }) {
@@ -39,14 +40,14 @@ function NoteHistory({ noteId }) {
   };
 
   const titleStyle = {
-    fontSize: "1.2rem",
+    fontSize: "1rem",
     fontWeight: "bold",
     color: "#333",
     margin: "0 0 5px 0"
   };
 
   const contentStyle = {
-    fontSize: "1rem",
+    fontSize: "0.875rem !important",
     color: "#666",
     margin: "0 0 5px 0"
   };
@@ -115,7 +116,7 @@ function NoteHistory({ noteId }) {
                 {note.title}
               </h3>
               <div
-                className="text-base"
+                className="text-base note-content-history"
                 style={contentStyle}
                 dangerouslySetInnerHTML={{ __html: note.content }}
               />

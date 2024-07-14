@@ -26,7 +26,8 @@ const TaskService = {
         displayName: getTime(task?.deadline)
       }
     };
-  }
+  },
+  changeStatusTask: (task) => TaskApi.changeStatusTask(task)
 };
 
 export default TaskService;
