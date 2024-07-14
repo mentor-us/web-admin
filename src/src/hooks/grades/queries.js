@@ -115,16 +115,16 @@ export const useGetAllGrades = (query) =>
           }
           return 0;
         }
-        const formatData = [...res.data].map((grade) => {
-          return {
-            ...grade,
-            year: grade?.year?.name,
-            semester: grade?.semester?.name,
-            courseName: grade?.course?.name,
-            courseCode: grade?.course?.code
-          };
-        });
-        return { ...res, data: formatData };
+        // const formatData = [...res.data].map((grade) => {
+        //   return {
+        //     ...grade,
+        //     year: grade?.year?.name,
+        //     semester: grade?.semester?.name,
+        //     courseName: grade?.course?.name,
+        //     courseCode: grade?.course?.code
+        //   };
+        // });
+        return { ...res };
       } catch (error) {
         return gradesList;
       }
@@ -141,16 +141,16 @@ export const useGetAllYears = (yearInfo) =>
         };
         // const res = await YearApi.getAllYears(params);
         const gradeRes = await GradeApi.getAllGrades({ ...params });
-        const formatData = [...gradeRes.data].map((grade) => {
-          return {
-            ...grade,
-            year: grade?.year?.name,
-            semester: grade?.semester?.name,
-            courseName: grade?.course?.name,
-            courseCode: grade?.course?.code
-          };
-        });
-        const yearFormat = formatData.map((grade) => {
+        // const formatData = [...gradeRes.data].map((grade) => {
+        //   return {
+        //     ...grade,
+        //     year: grade?.year?.name,
+        //     semester: grade?.semester?.name,
+        //     courseName: grade?.course?.name,
+        //     courseCode: grade?.course?.code
+        //   };
+        // });
+        const yearFormat = [...gradeRes.data].map((grade) => {
           return grade.year;
         });
         const uniqueYear = yearFormat.filter(
@@ -175,20 +175,20 @@ export const getAllSemesterOfYear = (semesterInfo) =>
         };
         // const res = await YearApi.getAllYears(params);
         const gradeRes = await GradeApi.getAllGrades({ ...params });
-        const formatData = [...gradeRes.data].map((grade) => {
-          return {
-            ...grade,
-            year: grade?.year?.name,
-            semester: grade?.semester?.name,
-            courseName: grade?.course?.name,
-            courseCode: grade?.course?.code
-          };
-        });
-        const semesterFormat = formatData.map((grade) => {
+        // const formatData = [...gradeRes.data].map((grade) => {
+        //   return {
+        //     ...grade,
+        //     year: grade?.year?.name,
+        //     semester: grade?.semester?.name,
+        //     courseName: grade?.course?.name,
+        //     courseCode: grade?.course?.code
+        //   };
+        // });
+        const semesterFormat = [...gradeRes.data].map((grade) => {
           return grade.semester;
         });
         const uniqueSemester = semesterFormat.filter(
-          (value, index, array) => array.indexOf(value) === index
+          (value, index, array) => value && array.indexOf(value) === index
         );
         return uniqueSemester;
       } catch (error) {

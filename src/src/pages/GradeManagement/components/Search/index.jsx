@@ -80,7 +80,7 @@ function SearchBox() {
 
     const params = {
       userId: student?.id ?? null,
-      semester: semester?.id ?? null,
+      semester: semester ?? null,
       year: year ?? null
     };
 
