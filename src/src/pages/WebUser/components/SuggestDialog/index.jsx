@@ -1,10 +1,12 @@
-/* eslint-disable import/order */
-/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-unused-vars */
-// eslint-disable-next-line simple-import-sort/imports
-import { useCallback, useEffect, useState } from "react";
+/* eslint-disable no-restricted-syntax */
+import { useCallback, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import {
   Avatar,
   AvatarGroup,
@@ -17,36 +19,36 @@ import {
   IconButton,
   List,
   ListItem,
+  Stack,
   Typography
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useQueryClient } from "@tanstack/react-query";
+import utc from "dayjs/plugin/utc";
+import { useConfirm } from "material-ui-confirm";
 import PropTypes from "prop-types";
 
-import dayjs from "dayjs";
-import { useGetChannelMembers } from "hooks/channels/queries";
-import { AI_API_KEY } from "config";
-import DOMPurify from "dompurify";
-import MDTypography from "components/MDComponents/MDTypography";
-import { capitalizeFirstLetter, convertToPlain, getImageUrlWithKey, getTimeMeeting } from "utils";
-import MDBox from "components/MDComponents/MDBox";
-import { useFieldArray, useForm } from "react-hook-form";
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import utc from "dayjs/plugin/utc";
 import "dayjs/locale/vi";
+import { AI_API_KEY } from "config";
+import dayjs from "dayjs";
+import DOMPurify from "dompurify";
+import { capitalizeFirstLetter, getImageUrlWithKey } from "utils";
+import MeetingApi from "api/MeetingApi";
+import TaskApi from "api/TaskApi";
+
+import MDBox from "components/MDComponents/MDBox";
+import MDTypography from "components/MDComponents/MDTypography";
 import TooltipCustom from "components/Tooltip";
-import { Color, MEETING_REPEATED_TYPE } from "utils/constants";
-import toast from "react-hot-toast";
-import MeetingForm from "./MeetingForm";
-import TaskForm from "./TaskForm/index";
-import { useConfirm } from "material-ui-confirm";
-import useMyInfo from "hooks/useMyInfo";
-import { useQueryClient } from "@tanstack/react-query";
-import { GetAllTaskInChannelKey } from "hooks/tasks/keys";
+import { useGetChannelMembers } from "hooks/channels/queries";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
 import { GetAllMeetingInChannelKey } from "hooks/meeting/keys";
-import TaskApi from "api/TaskApi";
-import MeetingApi from "api/MeetingApi";
+import { GetAllTaskInChannelKey } from "hooks/tasks/keys";
+import useMyInfo from "hooks/useMyInfo";
+import { Color, MEETING_REPEATED_TYPE } from "utils/constants";
+
+import TaskForm from "./TaskForm/index";
+import MeetingForm from "./MeetingForm";
 
 dayjs.extend(utc);
 
@@ -60,9 +62,9 @@ const ContentType = {
 const genAI = new GoogleGenerativeAI(AI_API_KEY);
 const model = genAI.getGenerativeModel({
   model: "gemini-1.5-flash",
-  systemInstruction: `Imagine you are an AI assistant, and you are helping summarize many tasks based on the sentence or HTML you are given. The task should include a title, a description, the deadline (you can calculate based on current date ${dayjs().format(
-    "L LT"
-  )}),
+  systemInstruction: `Imagine you are an AI assistant, and you are helping summarize many tasks based on the sentence or HTML you are given. The task should include a title, a description, the deadline (you can calculate based on current date ${dayjs()
+    .utc()
+    .format("L LT")}),
    and the people(the subject of the sentence) who are assigned for the task. 
    Task object is like {"title": ExampleAbove, "description": ExampleAbove, "userIds": [ExampleName], "deadline": time and date ISO format}.
    Meeting object is like {"title": ExampleAbove, "description": ExampleAbove, "place": where the meeting should take, "attendees": [ExampleName], "timeStart": the start hour of the meeting in date with 24h format time and date ISO format, "timeEnd": the end hour of the meeting in date with 24h format time and date ISO format, "day": the day where the meeting occur time and date ISO format }. Output the vietnamese text only.`,
@@ -119,7 +121,7 @@ function SuggestDialog(props) {
     }
   });
 
-  useFieldArray({
+  const { remove: removeMeeting } = useFieldArray({
     control,
     name: "meetings",
     rules: {
@@ -142,7 +144,7 @@ function SuggestDialog(props) {
     }
   });
 
-  useFieldArray({
+  const { remove: removeTask } = useFieldArray({
     control,
     name: "tasks",
     rules: {
@@ -395,15 +397,52 @@ function SuggestDialog(props) {
                             borderColor: isHasError ? "red" : null
                           }}
                         >
-                          <Typography
-                            variant="body2"
-                            fontWeight="bold"
-                            color="dark"
-                            sx={{ fontSize: "0.875rem" }}
-                          >
-                            {field?.title}
-                          </Typography>
-
+                          <Stack direction="row" justifyContent="flex-start" alignItems="center">
+                            <Typography
+                              variant="body2"
+                              fontWeight="bold"
+                              color="dark"
+                              sx={{ fontSize: "0.875rem", flex: 1 }}
+                            >
+                              {field?.title}
+                            </Typography>
+                            <IconButton
+                              sx={{
+                                width: "24px",
+                                height: "24px"
+                              }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                confirm({
+                                  title: "Xác nhận xóa lịch hẹn?",
+                                  description: "Lịch hẹn sẽ bị xóa khỏi danh sách.",
+                                  confirmationButtonProps: {
+                                    sx: {
+                                      backgroundColor: Color.error,
+                                      borderRadius: "5px",
+                                      color: "red",
+                                      "&:hover": {
+                                        backgroundColor: Color.error,
+                                        color: "red"
+                                      }
+                                    }
+                                  },
+                                  confirmationText: "Xác nhận xóa",
+                                  cancellationText: "Hủy"
+                                }).then(() => {
+                                  removeMeeting(index);
+                                });
+                              }}
+                            >
+                              <DeleteRoundedIcon
+                                sx={{
+                                  width: "20px",
+                                  height: "20px",
+                                  color: "red"
+                                }}
+                              />
+                            </IconButton>
+                          </Stack>
                           <Typography
                             variant="body2"
                             fontWeight="regular"
@@ -523,14 +562,53 @@ function SuggestDialog(props) {
                             borderColor: isHasError ? "red" : null
                           }}
                         >
-                          <Typography
-                            variant="body2"
-                            fontWeight="bold"
-                            color="dark"
-                            sx={{ fontSize: "0.875rem" }}
-                          >
-                            {field.title}
-                          </Typography>
+                          <Stack direction="row" justifyContent="flex-start" alignItems="center">
+                            <Typography
+                              variant="body2"
+                              fontWeight="bold"
+                              color="dark"
+                              sx={{ fontSize: "0.875rem", flex: 1 }}
+                            >
+                              {field.title}
+                            </Typography>
+                            <IconButton
+                              sx={{
+                                width: "24px",
+                                height: "24px"
+                              }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+
+                                confirm({
+                                  title: "Xác nhận xóa công việc?",
+                                  description: "Công việc sẽ bị xóa khỏi danh sách.",
+                                  confirmationButtonProps: {
+                                    sx: {
+                                      backgroundColor: Color.error,
+                                      borderRadius: "5px",
+                                      color: "red",
+                                      "&:hover": {
+                                        backgroundColor: Color.error,
+                                        color: "red"
+                                      }
+                                    }
+                                  },
+                                  confirmationText: "Xác nhận xóa",
+                                  cancellationText: "Hủy"
+                                }).then(() => {
+                                  removeTask(index);
+                                });
+                              }}
+                            >
+                              <DeleteRoundedIcon
+                                sx={{
+                                  width: "20px",
+                                  height: "20px",
+                                  color: "red"
+                                }}
+                              />
+                            </IconButton>
+                          </Stack>
                           {field?.deadline && (
                             <Typography
                               variant="body2"
@@ -671,8 +749,8 @@ function SuggestDialog(props) {
       }),
       {
         loading: "Đang tạo...",
-        success: async () => {
-          await Promise.allSettled([
+        success: () => {
+          Promise.allSettled([
             queryClient.invalidateQueries({
               queryKey: GetAllChatMessageInfinityKey(channelId)
             }),
