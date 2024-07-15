@@ -238,7 +238,6 @@ function CreateTaskDialog({
         <DialogTitle alignSelf="center">{titleDialog}</DialogTitle>
         <DialogContent className="!py-4">
           <Controller
-            getGroupDetailColumnHeadersMentorSelector
             name="title"
             control={control}
             disabled={!isEditable}

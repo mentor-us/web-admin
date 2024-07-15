@@ -17,6 +17,10 @@ export function convertToPlain(html) {
   return tempDivElement.textContent || tempDivElement.innerText || "";
 }
 
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export function getImageUrlWithKey(key) {
   if (!key) {
     return "";
@@ -220,3 +224,8 @@ export const compareNumber = (rowA, rowB, id, desc) => {
   if (num1 > num2) return 1;
   return 0;
 };
+
+export function isNumber(n) {
+  // eslint-disable-next-line no-restricted-globals
+  return !isNaN(parseFloat(n)) && !isNaN(n - 0);
+}

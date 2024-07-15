@@ -70,9 +70,10 @@ function DeleteGradeButton({ data, setState, isMultiple }) {
       html = isMultiple
         ? `Bạn chắc chắn muốn xóa các điểm số đã chọn?`
         : `Bạn chắc chắn muốn xóa điểm số <b>${[
-            data.year.name,
-            data.semester.name,
-            data.course.name,
+            data.year,
+            data.semester,
+            data.courseCode,
+            data.courseName,
             data.student.name,
             data.score
           ].join(" - ")}</b>?`;

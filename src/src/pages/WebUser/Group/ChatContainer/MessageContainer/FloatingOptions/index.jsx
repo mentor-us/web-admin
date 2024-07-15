@@ -147,26 +147,11 @@ function FloatingOptions({ message, isShow }) {
     handleClose();
   };
 
-  const [textContent, setTextContent] = useState("");
   const onSuggest = () => {
-    console.log("Suggest", message);
-    const content = message?.content;
-    const regex = /<span[^>]*>(.*?)<\/span>/;
-    const matchRegex = content.match(regex) ? content.match(regex)[1] : null;
-    setTextContent(matchRegex);
-    // console.log("Content", match[1]);
-    // if (textContent) {
-    //   const result = await model.generateContentStream([textContent]);
-    //   // print text as it comes in
-    //   // eslint-disable-next-line no-restricted-syntax
-    //   for await (const chunk of result.stream) {
-    //     const chunkText = chunk.text();
-    //     console.log(chunkText);
-    //   }
-    // }
     handleClose();
     setOpenSuggestDialog(true);
   };
+
   const handleSuggestDialogClose = () => {
     setOpenSuggestDialog(false);
   };
@@ -212,19 +197,26 @@ function FloatingOptions({ message, isShow }) {
             <MoreVertIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Đề xuất" placement="top">
-          <IconButton
-            aria-label="more"
-            id="long-button"
-            aria-controls={open ? "long-menu" : undefined}
-            aria-expanded={open ? "true" : undefined}
-            aria-haspopup="true"
-            className="hover:!bg-[#d5d5d5] !w-7 !h-7"
-            onClick={onSuggest}
-          >
-            <AutoFixHigh />
-          </IconButton>
-        </Tooltip>
+        {message?.type === MESSAGE_TYPE.TEXT && (
+          <Tooltip title="Đề xuất" placement="top">
+            <IconButton
+              aria-label="more"
+              id="long-button"
+              aria-controls={open ? "long-menu" : undefined}
+              aria-expanded={open ? "true" : undefined}
+              aria-haspopup="true"
+              className="hover:!bg-[#d5d5d5] !w-7 !h-7"
+              onClick={onSuggest}
+            >
+              <AutoFixHigh
+                sx={{
+                  width: "20px",
+                  height: "20px"
+                }}
+              />
+            </IconButton>
+          </Tooltip>
+        )}
       </Stack>
       <Menu
         id="long-menu"
@@ -263,14 +255,6 @@ function FloatingOptions({ message, isShow }) {
             Chỉnh sửa
           </MenuItem>
         )}
-        {/* <MenuItem
-          className="!font-normal !text-black"
-          onClick={() => {
-            handleClose();
-          }}
-        >
-          Chuyển tiếp
-        </MenuItem> */}
         <MenuItem className="!font-normal !text-black" onClick={onForwardMessage}>
           Chuyển tiếp
         </MenuItem>
@@ -282,22 +266,12 @@ function FloatingOptions({ message, isShow }) {
         >
           {channelDetail?.pinnedMessageIds.includes(message?.id) ? "Bỏ ghim " : "Ghim "}
         </MenuItem>
-        <MenuItem className="!font-normal !text-black" onClick={onSuggest}>
-          Gợi ý
-        </MenuItem>
       </Menu>
-      {/* {openDialogForward && (
-        <ForwardMessageDialog
-          open={openDialogForward}
-          message={message}
-          handleClose={() => setOpenDialogForward(false)}
-        />
-      )} */}
       {openSuggestDialog && (
         <SuggestDialog
           open={openSuggestDialog}
           onClose={handleSuggestDialogClose}
-          content={textContent}
+          content={message?.content}
         />
       )}
     </Box>

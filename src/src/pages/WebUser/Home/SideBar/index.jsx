@@ -85,9 +85,11 @@ export default function SideBar() {
               }
               onClick={clearSelectedGroupId}
             >
-              <IconButton color="white" aria-label="Setting">
-                <img alt="admin-icon" src={images.AdminTopIcon} width={32} height={32} />
-              </IconButton>
+              <Box className="bg-neutral-50 rounded-[5px]">
+                <IconButton color="white" aria-label="Setting">
+                  <img alt="admin-icon" src={images.AdminTopIcon} width={32} height={32} />
+                </IconButton>
+              </Box>
             </NavLink>
           </div>
         </Tooltip>
