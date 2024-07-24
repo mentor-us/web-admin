@@ -89,13 +89,13 @@ function GradeShareModal({ user, onCancel }) {
   const renderTextDetail = () => {
     switch (generalPermission.label) {
       case GradeShareObject.PUBLIC:
-        return "Bất kỳ ai có kết nối Internet và có đường liên kết này đều có thể chỉnh sửa";
+        return "Bất kì ai cũng có thể xem";
       case GradeShareObject.MENTOR:
         return "Chỉ những người mentor có thể xem";
       case GradeShareObject.PRIVATE:
-        return "Chỉ những người có quyền mới có thể xem hoặc chỉnh sửa";
+        return "Chỉ những người có quyền mới có thể xem";
       default:
-        return "Chỉ những người có quyền mới có thể xem hoặc chỉnh sửa";
+        return "Chỉ những người có quyền mới có thể xem";
     }
   };
   const prepareData = () => {

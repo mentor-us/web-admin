@@ -102,15 +102,15 @@ function NoteShare({ noteId, onCancel }) {
   const renderTextDetail = () => {
     switch (generalPermission.label) {
       case NoteShareObject.PUBLIC:
-        return "Bất kỳ ai có kết nối Internet và có đường liên kết này đều có thể chỉnh sửa";
+        return "Bất kì ai cũng có thể xem nhưng không có quyền được sửa";
       case NoteShareObject.MENTOR_VIEW:
-        return "Chỉ những người mentor có thể xem";
+        return "Chỉ những người mentor được xem";
       case NoteShareObject.MENTOR_EDIT:
-        return "Chỉ những người mentor có thể chỉnh sửa";
+        return "Chỉ những người mentor được chỉnh sửa";
       case NoteShareObject.PRIVATE:
-        return "Chỉ những người có quyền mới có thể xem hoặc chỉnh sửa";
+        return "Chỉ những người có quyền mới được xem hoặc chỉnh sửa";
       default:
-        return "Chỉ những người có quyền mới có thể xem hoặc chỉnh sửa";
+        return "Chỉ những người có quyền mới được xem hoặc chỉnh sửa";
     }
   };
 
