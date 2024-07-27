@@ -15,7 +15,7 @@ export const useUpdateProfileMutation = () => {
     mutationFn: (req) => AccountService.updateProfile(req),
     onSuccess: () => {
       queryClient.refetchQueries({
-        queryKey: GetChannelMembersKey(params?.channelId || params["*"].split("/")[1])
+        queryKey: GetChannelMembersKey(params?.channelId || params["*"]?.split("/")[1])
       });
       queryClient.refetchQueries({
         queryKey: GetWorkspaceQueryKey(params?.groupId)
