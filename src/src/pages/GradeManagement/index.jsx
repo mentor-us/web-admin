@@ -125,7 +125,6 @@ function GradeManagement() {
   };
 
   const actionImport = async (file) => {
-    console.log(selectImportUserId);
     const response = await GradeApi.importGrades(file, selectImportUserId);
     return addCheckedProp(response.data);
   };
