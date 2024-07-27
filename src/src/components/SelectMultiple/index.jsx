@@ -42,7 +42,7 @@ const StyledMenu = styled((props) => (
   }
 }));
 
-function SelectMultiple({ label, icon, value, setValue }) {
+function SelectMultiple({ label, icon, value, setValue, isDisableRedux }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -93,6 +93,7 @@ function SelectMultiple({ label, icon, value, setValue }) {
                 prop="isShow"
                 action={setValue}
                 isDisabled={item.isShow && value.filter((item1) => item1.isShow).length <= 2}
+                isDisableRedux={isDisableRedux}
               />
               <MDTypography variant="button" sx={{ mx: 1, fontWeight: "400" }}>
                 {item.text}
@@ -107,14 +108,16 @@ function SelectMultiple({ label, icon, value, setValue }) {
 
 SelectMultiple.defaultProps = {
   label: " ",
-  icon: "view_week"
+  icon: "view_week",
+  isDisableRedux: false
 };
 
 SelectMultiple.propTypes = {
   label: PropTypes.string,
   icon: PropTypes.string,
   value: PropTypes.instanceOf(Array).isRequired,
-  setValue: PropTypes.func.isRequired
+  setValue: PropTypes.func.isRequired,
+  isDisableRedux: PropTypes.bool
 };
 
 export default SelectMultiple;

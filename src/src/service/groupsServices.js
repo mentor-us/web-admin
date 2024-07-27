@@ -13,11 +13,11 @@ const getGroup = (id) => GroupApi.findById(id);
 const searchGroup = async (req) => {
   const response = await GroupApi.search(req);
 
-  if (response.returnCode !== 200) {
-    throw new ServerError(response.returnCode);
+  if (response?.returnCode !== 200) {
+    throw new ServerError(response?.returnCode);
   }
 
-  return response.data;
+  return response?.data;
 };
 
 const addNewGroup = async (req) => {

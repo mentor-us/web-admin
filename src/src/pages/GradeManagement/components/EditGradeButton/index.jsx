@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import {
   Autocomplete,
   Backdrop,
@@ -22,7 +22,6 @@ import MDInput from "components/MDComponents/MDInput";
 import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import { useUpdateGradeMutation } from "hooks/grades/mutation";
-// import { getAllCourse, getAllSemesterOfYear, useGetAllYears } from "hooks/grades/queries";
 import { useGetAllUsers } from "hooks/users/queries";
 
 const initState = {
@@ -34,6 +33,7 @@ const initState = {
   courseName: "",
   courseCode: "",
   score: 0,
+  value: "",
   student: null,
   studentName: ""
 };
@@ -60,10 +60,15 @@ function reducer(state, action) {
       return { ...state, studentName: action.payload };
     case "SET_SCORE":
       return { ...state, score: action.payload };
+    case "SET_VALUE":
+      return { ...state, value: action.payload };
     default:
       return state;
   }
 }
+
+const AcceptValue = ["A", "B", "C", "D", "A+", "B-", "C+", "D-", "A-", "B+", "C-", "D+"];
+
 function EditSubjectButton({ data, setState }) {
   /// --------------------- Khai báo Biến, State -------------
 
@@ -80,17 +85,13 @@ function EditSubjectButton({ data, setState }) {
     courseCode,
     score,
     student,
-    studentName
+    studentName,
+    value: scoreValue
   } = state;
   const [firstLoad, setFirstLoad] = useState({
     name: true,
     code: true
   });
-  // const { data: years } = useGetAllYears(yearInfo.trim());
-  // const { data: semesters } = getAllSemesterOfYear(semesterInfo.trim());
-  // const { data: courses } = getAllCourse({
-  //   query: courseName.trim()
-  // });
   const { data: students } = useGetAllUsers({
     query: studentName.trim()
   });
@@ -99,19 +100,21 @@ function EditSubjectButton({ data, setState }) {
   /// --------------------- Các hàm thêm ---------------------
 
   const resetAllData = () => {
-    dispatch({ type: "SET_SCORE", payload: data.score });
-    dispatch({ type: "SET_COURSE", payload: data.courseName });
-    dispatch({ type: "SET_COURSE_CODE", payload: data.courseCode });
-    dispatch({ type: "SET_YEAR", payload: data.year });
-    dispatch({ type: "SET_STUDENT", payload: data.student });
-    dispatch({ type: "SET_SEMESTER", payload: data.semester });
+    dispatch({ type: "SET_SCORE", payload: data?.score });
+    dispatch({ type: "SET_COURSE", payload: data?.courseName });
+    dispatch({ type: "SET_COURSE_CODE", payload: data?.courseCode });
+    dispatch({ type: "SET_YEAR", payload: data?.year });
+    dispatch({ type: "SET_STUDENT", payload: data?.student });
+    dispatch({ type: "SET_SEMESTER", payload: data?.semester });
+    dispatch({ type: "SET_VALUE", payload: data?.value });
 
     setFirstLoad({
       score: true,
       year: true,
       semester: true,
       course: true,
-      student: true
+      student: true,
+      value: true
     });
   };
 
@@ -121,9 +124,8 @@ function EditSubjectButton({ data, setState }) {
     try {
       await updateGradeMutator.mutateAsync({ id: data.id, ...req });
       SuccessAlert("Chỉnh sửa môn học thành công");
-      setState(null);
       setOpen(false);
-      setState("currentPageSearch", 0);
+      setState(null);
     } catch (error) {
       if (error?.message !== "401") {
         ErrorAlert(error?.message);
@@ -160,17 +162,17 @@ function EditSubjectButton({ data, setState }) {
   };
 
   const isLostAllData = () => {
-    console.log(+score <= 10 && +score >= 0, year, course, semester, student, courseCode);
-    console.log(+score <= 10 && +score >= 0, year, course, semester, student, courseCode);
     if (isOneReqDataHasValue() && isAllReqDataHasDiffValue()) {
       WarningAlertConfirmNotSavingData().then((result) => {
         if (result.isDenied) {
           setOpen(false);
           resetAllData();
+          setState(null);
         }
       });
     } else {
       setOpen(false);
+      setState(null);
       resetAllData();
     }
   };
@@ -191,13 +193,14 @@ function EditSubjectButton({ data, setState }) {
   };
 
   const handleSubmit = () => {
-    if (firstLoad.score || !isAllReqDataHasValue()) {
+    if ((!firstLoad.score && score === "") || !isAllReqDataHasValue()) {
       setFirstLoad({
         score: false,
         year: false,
         semester: false,
         course: false,
-        student: false
+        student: false,
+        value: false
       });
       return;
     }
@@ -209,13 +212,16 @@ function EditSubjectButton({ data, setState }) {
       semester: +semester ?? null,
       year: year?.toString()?.trim() ?? null,
       courseName: course?.toString()?.trim() ?? null,
-      courseCode: courseCode?.toString()?.trim() ?? null
+      courseCode: courseCode?.toString()?.trim() ?? null,
+      value: scoreValue?.toString()?.trim() ?? null
     };
     updateGrade(req);
   };
+
   useEffect(() => {
     resetAllData();
   }, []);
+
   return (
     <>
       <MDBox display="flex" flexDirection="row" onClick={handleOpen} sx={{ width: "100%" }}>
@@ -409,6 +415,48 @@ function EditSubjectButton({ data, setState }) {
                       size="small"
                     />
                   )}
+                />
+              </MDBox>
+              <MDBox className="relationship__searchBox-item" mb={2}>
+                <MDTypography
+                  variant="body2"
+                  fontWeight="regular"
+                  color="dark"
+                  sx={{ mr: 2, width: "30%" }}
+                >
+                  Điểm chữ
+                </MDTypography>
+                <MDInput
+                  placeholder="Nhập điểm chữ"
+                  size="small"
+                  sx={{ width: "70%" }}
+                  value={scoreValue}
+                  inputProps={{ maxLength: 2 }}
+                  onChange={(e) => {
+                    dispatch({
+                      type: "SET_VALUE",
+                      payload: e.target.value ? e.target.value.toUpperCase() : ""
+                    });
+                    setFirstLoad({
+                      ...firstLoad,
+                      value: false
+                    });
+                  }}
+                  error={
+                    !firstLoad.value &&
+                    scoreValue !== "" &&
+                    scoreValue &&
+                    !AcceptValue.includes(scoreValue?.trim())
+                  }
+                  helperText={
+                    // eslint-disable-next-line no-nested-ternary
+                    !firstLoad.value &&
+                    scoreValue !== "" &&
+                    scoreValue &&
+                    !AcceptValue.includes(scoreValue?.trim())
+                      ? "Điểm chữ phải là A, B, C, D hoặc A+, B-"
+                      : ""
+                  }
                 />
               </MDBox>
               <MDBox className="relationship__searchBox-item" mb={2}>

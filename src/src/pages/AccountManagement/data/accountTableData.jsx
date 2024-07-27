@@ -21,6 +21,22 @@ export default function accountTableData(
 ) {
   let columns = [
     {
+      Header: (
+        <CustomCheckbox
+          data={isSelectAll}
+          key="account-management"
+          type="all"
+          action={accountCheckboxAllChange}
+        />
+      ),
+      accessor: "is-checked",
+      width: "1%",
+      type: "component",
+      notSorted: true,
+      isShow: true,
+      align: "center"
+    },
+    {
       Header: "STT",
       accessor: "no",
       width: "20px",
@@ -61,22 +77,6 @@ export default function accountTableData(
       align: "left"
     },
     {
-      Header: (
-        <CustomCheckbox
-          data={isSelectAll}
-          key="account-management"
-          type="all"
-          action={accountCheckboxAllChange}
-        />
-      ),
-      accessor: "is-checked",
-      width: "5%",
-      type: "component",
-      notSorted: true,
-      isShow: true,
-      align: "center"
-    },
-    {
       Header: "",
       accessor: "action",
       width: "5%",
@@ -107,13 +107,6 @@ export default function accountTableData(
           const numberOrder = itemsPerPage * (currentPage - 1) + index + 1; // sau này update theo totalPage
 
           return {
-            no: numberOrder,
-            href: `/admin/account-management/account-detail/${item.id}`,
-            email: item.email,
-            name: item.name,
-            role,
-            status: statusInfo.label,
-            statusColor: statusInfo.color,
             "is-checked": (
               <CustomCheckbox
                 key={item.id}
@@ -123,6 +116,14 @@ export default function accountTableData(
                 action={accountCheckboxSingleChange}
               />
             ),
+            no: numberOrder,
+            href: `/admin/account-management/account-detail/${item.id}`,
+            email: item.email,
+            name: item.name,
+            role,
+            status: statusInfo.label,
+            statusColor: statusInfo.color,
+
             action: <EditDelete data={item} />
           };
         });
