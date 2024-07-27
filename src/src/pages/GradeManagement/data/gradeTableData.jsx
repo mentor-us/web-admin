@@ -33,7 +33,7 @@ export default function gradeTableData(data, columnHeaders) {
       notSorted: true,
       type: "normal",
       width: "50px",
-      align: "left"
+      align: "center"
     },
     {
       Header: "Mã môn",
@@ -62,12 +62,20 @@ export default function gradeTableData(data, columnHeaders) {
       align: "left"
     },
     {
-      Header: "Điểm",
+      Header: "Điểm chữ",
+      accessor: "value",
+      notSorted: true,
+      type: "normal",
+      width: "50px",
+      align: "left"
+    },
+    {
+      Header: "Điểm số",
       accessor: "score",
       notSorted: true,
       type: "normal",
       width: "100px",
-      align: "left"
+      align: "right"
     },
     // {
     //   Header: (
@@ -114,6 +122,7 @@ export default function gradeTableData(data, columnHeaders) {
           courseName: item?.courseName ?? "",
           studentName: item?.student?.name ?? "",
           score: item?.score ?? "",
+          value: item?.value ?? "",
           // "is-checked": (
           //   <CustomCheckbox
           //     key={item.code}

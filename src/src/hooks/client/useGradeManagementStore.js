@@ -7,7 +7,8 @@ const useGradeManagementStore = create((set) => ({
     { text: "Mã môn", textValue: "courseCode", isShow: true },
     { text: "Tên môn", textValue: "courseName", isShow: true },
     { text: "Tên sinh viên", textValue: "studentName", isShow: true },
-    { text: "Điểm", textValue: "score", isShow: true }
+    { text: "Điểm chữ", textValue: "value", isShow: true },
+    { text: "Điểm số", textValue: "score", isShow: true }
   ],
   currentPageSearch: 0,
   itemsPerPage: 10,
