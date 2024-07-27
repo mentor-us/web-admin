@@ -15,7 +15,8 @@ export const useGetAuditLog = (params) =>
       };
       return auditLogService.getAuditLog({ ...defaultParams, ...params });
     },
-    enabled: true
+    enabled: true,
+    retry: 0
   });
 
 export const useGetAuditLogById = (id, select) =>

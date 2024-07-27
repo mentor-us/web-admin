@@ -37,7 +37,6 @@ function AuditLog() {
     columnHeaders,
     currentPageSearch,
     itemsPerPage,
-    setGradeData,
     isSubmitSearch,
     searchParams,
     setState
@@ -45,9 +44,10 @@ function AuditLog() {
   const {
     data: auditLog,
     isLoading,
-    isSuccess
+    isSuccess,
+    isError
   } = useGetAuditLog({
-    ...searchParams,
+    ...(isSubmitSearch ? searchParams : {}),
     page: currentPageSearch,
     pageSize: itemsPerPage
   });
@@ -55,7 +55,7 @@ function AuditLog() {
   useEffect(() => {
     if (isLoading) {
       setLoading(dispatchContext, true);
-    } else if (isSuccess) {
+    } else if (isSuccess || isError) {
       setLoading(dispatchContext, false);
     }
   }, [isLoading, isSuccess]);
@@ -68,7 +68,6 @@ function AuditLog() {
     try {
       setState("itemsPerPage", value);
       setState("currentPageSearch", 0);
-      // setState("isSubmitSearch", true);
     } catch (error) {
       ErrorAlert(error.message);
     }
@@ -77,7 +76,6 @@ function AuditLog() {
   const handleChangePage = async (value) => {
     try {
       setState("currentPageSearch", value);
-      setState("isSubmitSearch", true);
     } catch (error) {
       ErrorAlert(error.message);
     }
@@ -150,7 +148,7 @@ function AuditLog() {
                 </MDBox>
                 <Grid container>
                   <Grid item xs={12}>
-                    {auditLog && renderTable()}
+                    {dataTransform && renderTable()}
                   </Grid>
                 </Grid>
               </MDBox>
