@@ -28,117 +28,91 @@ import { updateStatisticDetailColumnHeaders } from "features/statisticDetail/sli
 import { PropTypes } from "prop-types";
 
 import SelectMultiple from "components/SelectMultiple";
+import useAuditLogStore from "hooks/client/useAuditLogStore.ts";
+
+const useHeaderFilter = (type) => {
+  const headerFilter = { value: undefined, setValue: undefined, isDisableRedux: false };
+
+  switch (type) {
+    case "groups": {
+      const data = useSelector(getGroupColumnHeadersSelector);
+      headerFilter.value = data;
+      headerFilter.setValue = updateGroupColumnHeaders;
+      break;
+    }
+    case "group-detail-mentee": {
+      const data = useSelector(getGroupDetailColumnHeadersMenteeSelector);
+      headerFilter.value = data;
+      headerFilter.setValue = updateGroupDetailColumnHeadersMentee;
+      break;
+    }
+    case "group-detail-mentor": {
+      const data = useSelector(getGroupDetailColumnHeadersMentorSelector);
+      headerFilter.value = data;
+      headerFilter.setValue = updateGroupDetailColumnHeadersMentor;
+      break;
+    }
+    case "group-category": {
+      const data = useSelector(getCategoryColumnHeadersSelector);
+      headerFilter.value = data;
+      headerFilter.setValue = updateCategoryColumnHeaders;
+      break;
+    }
+    case "account-management": {
+      const data = useSelector(getAccountColumnHeadersSelector);
+      headerFilter.value = data;
+      headerFilter.setValue = updateAccountColumnHeaders;
+      break;
+    }
+    case "account-detail-mentee": {
+      const data = useSelector(getAccountDetailColumnHeadersMenteeSelector);
+      headerFilter.value = data;
+      headerFilter.setValue = updateAccountDetailColumnHeadersMentee;
+      break;
+    }
+    case "account-detail-mentor": {
+      const data = useSelector(getAccountDetailColumnHeadersMentorSelector);
+      headerFilter.value = data;
+      headerFilter.setValue = updateAccountDetailColumnHeadersMentor;
+      break;
+    }
+    case "statistic": {
+      const data = useSelector(getStatisticColumnHeadersSelector);
+      headerFilter.value = data;
+      headerFilter.setValue = updateStatisticColumnHeaders;
+      break;
+    }
+    case "statistic-detail": {
+      const data = useSelector(getStatisticDetailColumnHeadersSelector);
+      data.value = data;
+      data.setValue = updateStatisticDetailColumnHeaders;
+      break;
+    }
+    case "audit-log": {
+      const { columnHeaders, setColumnColumnHeader } = useAuditLogStore();
+      headerFilter.value = columnHeaders;
+      headerFilter.setValue = setColumnColumnHeader;
+      headerFilter.isDisableRedux = true;
+      break;
+    }
+    default:
+      break;
+  }
+
+  return headerFilter;
+};
 
 function HeaderFilter({ type }) {
-  const renderComponent = () => {
-    let component = <div />;
-    switch (type) {
-      case "groups": {
-        const data = useSelector(getGroupColumnHeadersSelector);
-        component = (
-          <SelectMultiple label="Cột hiển thị" value={data} setValue={updateGroupColumnHeaders} />
-        );
-        break;
-      }
-      case "group-detail-mentee": {
-        const data = useSelector(getGroupDetailColumnHeadersMenteeSelector);
-        component = (
-          <SelectMultiple
-            label="Cột hiển thị"
-            value={data}
-            setValue={updateGroupDetailColumnHeadersMentee}
-          />
-        );
-        break;
-      }
+  const { value, setValue, isDisableRedux } = useHeaderFilter(type);
 
-      case "group-detail-mentor": {
-        const data = useSelector(getGroupDetailColumnHeadersMentorSelector);
-        component = (
-          <SelectMultiple
-            label="Cột hiển thị"
-            value={data}
-            setValue={updateGroupDetailColumnHeadersMentor}
-          />
-        );
-        break;
-      }
-
-      case "group-category": {
-        const data = useSelector(getCategoryColumnHeadersSelector);
-        component = (
-          <SelectMultiple
-            label="Cột hiển thị"
-            value={data}
-            setValue={updateCategoryColumnHeaders}
-          />
-        );
-        break;
-      }
-
-      case "account-management": {
-        const data = useSelector(getAccountColumnHeadersSelector);
-        component = (
-          <SelectMultiple label="Cột hiển thị" value={data} setValue={updateAccountColumnHeaders} />
-        );
-        break;
-      }
-
-      case "account-detail-mentee": {
-        const data = useSelector(getAccountDetailColumnHeadersMenteeSelector);
-        component = (
-          <SelectMultiple
-            label="Cột hiển thị"
-            value={data}
-            setValue={updateAccountDetailColumnHeadersMentee}
-          />
-        );
-        break;
-      }
-
-      case "account-detail-mentor": {
-        const data = useSelector(getAccountDetailColumnHeadersMentorSelector);
-        component = (
-          <SelectMultiple
-            label="Cột hiển thị"
-            value={data}
-            setValue={updateAccountDetailColumnHeadersMentor}
-          />
-        );
-        break;
-      }
-
-      case "statistic": {
-        const data = useSelector(getStatisticColumnHeadersSelector);
-        component = (
-          <SelectMultiple
-            label="Cột hiển thị"
-            value={data}
-            setValue={updateStatisticColumnHeaders}
-          />
-        );
-        break;
-      }
-
-      case "statistic-detail": {
-        const data = useSelector(getStatisticDetailColumnHeadersSelector);
-        component = (
-          <SelectMultiple
-            label="Cột hiển thị"
-            value={data}
-            setValue={updateStatisticDetailColumnHeaders}
-          />
-        );
-        break;
-      }
-
-      default:
-        break;
-    }
-    return component;
-  };
-
-  return renderComponent();
+  return setValue ? (
+    <SelectMultiple
+      label="Cột hiển thị"
+      value={value}
+      setValue={setValue}
+      isDisableRedux={isDisableRedux}
+    />
+  ) : null;
 }
 
 HeaderFilter.propTypes = {

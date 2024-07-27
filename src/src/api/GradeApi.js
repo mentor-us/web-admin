@@ -9,7 +9,7 @@ const GradeApi = {
     }),
   updateGrades: (grade) => AxiosClient.patch(`${GRADE_URL}/${grade.id}`, grade),
   deleteGrade: (gradeId) => AxiosClient.delete(`${GRADE_URL}/${gradeId}`),
-  importGrades(file) {
+  importGrades(file, userId) {
     const data = new FormData();
     data.append("file", file);
     const config = {
@@ -18,7 +18,7 @@ const GradeApi = {
       }
     };
 
-    return AxiosClient.post(`api/grades/import`, data, config);
+    return AxiosClient.post(`api/grades/import/${userId}`, data, config);
   },
   shareGrade: (req) => AxiosClient.post(`${GRADE_URL}/share`, req),
   getShareGradeInfo: (req) => AxiosClient.get(`${GRADE_URL}/share/${req.userId}`, req)

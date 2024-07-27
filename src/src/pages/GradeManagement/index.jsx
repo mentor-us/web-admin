@@ -6,7 +6,6 @@ import { setLoading } from "context";
 import { useMentorUs } from "hooks";
 import { addCheckedProp } from "utils";
 import GradeApi from "api/GradeApi";
-import importAccountTemplate from "templates/Import_Account.xlsx";
 
 import DashboardLayout from "layouts/DashboardLayout";
 import DashboardNavbar from "layouts/Navbars/DashboardNavbar";
@@ -16,11 +15,9 @@ import MDTypography from "components/MDComponents/MDTypography";
 import ModalImport from "components/Modal/ModalImport";
 import SelectAllFeature from "components/SelectAllFeature";
 import { ErrorAlert } from "components/SweetAlert";
-// import DataTable from "components/Tables/DataTable";
 import DataTableCustom from "components/Tables/DataTable/DataTableCustom";
 import useGradeManagementStore from "hooks/client/useGradeManagementStore";
 import { useGetAllGrades } from "hooks/grades/queries";
-import { formatDateExcel } from "utils/formatDate";
 
 import AddCategoryButton from "./components/AddGradeButton";
 import SearchBox from "./components/Search";
@@ -41,6 +38,7 @@ function GradeManagement() {
   } = useGradeManagementStore();
   const [, dispatchContext] = useMentorUs();
   const [openModal, setOpenModal] = useState(false);
+  const [selectImportUserId, setSelectImportUserId] = useState(null);
 
   const {
     data: grades,
@@ -101,7 +99,7 @@ function GradeManagement() {
 
   useEffect(() => {
     setState("searchParams", {});
-    return function () {
+    return () => {
       setState("searchParams", {});
     };
   }, []);
@@ -125,10 +123,12 @@ function GradeManagement() {
       />
     );
   };
+
   const actionImport = async (file) => {
-    const response = await GradeApi.importGrades(file);
+    const response = await GradeApi.importGrades(file, selectImportUserId);
     return addCheckedProp(response.data);
   };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -182,9 +182,10 @@ function GradeManagement() {
         open={openModal}
         closeModal={() => setOpenModal(false)}
         title="Tải lên danh sách điểm số"
-        templateFile={importAccountTemplate}
-        templateFileName={`MentorUS_Import_danh_sách_điểm_số_${formatDateExcel()}.xlsx`}
+        templateFile={null}
         importAction={(file) => actionImport(file)}
+        isSelectUser
+        onUserSelectedChange={setSelectImportUserId}
       />
     </DashboardLayout>
   );

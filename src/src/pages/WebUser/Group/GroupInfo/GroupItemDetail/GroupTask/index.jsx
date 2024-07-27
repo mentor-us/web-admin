@@ -57,7 +57,7 @@ export default function GroupTask() {
           <Skeleton variant="rounded" height={90} />
         </Stack>
       ) : (
-        <Box>
+        <Box className="px-1">
           {filteredTasks.length > 0
             ? filteredTasks.map(
                 // eslint-disable-next-line no-sequences

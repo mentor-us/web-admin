@@ -155,7 +155,10 @@ function FloatingOptions({ message, isShow }) {
   const handleSuggestDialogClose = () => {
     setOpenSuggestDialog(false);
   };
-
+  const isVideo = (mes) => {
+    const url = mes?.images[0]?.url ?? "";
+    return url.toLowerCase().endsWith(".mp4");
+  };
   return (
     <Box
       className={`bg-transparent !z-0 ${isOwner ? "mr-2" : "ml-2"} ${
@@ -255,9 +258,12 @@ function FloatingOptions({ message, isShow }) {
             Chỉnh sửa
           </MenuItem>
         )}
-        <MenuItem className="!font-normal !text-black" onClick={onForwardMessage}>
-          Chuyển tiếp
-        </MenuItem>
+        {!isVideo(message) && (
+          <MenuItem className="!font-normal !text-black" onClick={onForwardMessage}>
+            Chuyển tiếp
+          </MenuItem>
+        )}
+
         <MenuItem
           className="!font-normal !text-black"
           onClick={

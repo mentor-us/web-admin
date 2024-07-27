@@ -29,6 +29,22 @@ export default function groupTableData(
   };
   let columns = [
     {
+      Header: (
+        <CustomCheckbox
+          data={isSelectAll}
+          key="group-management"
+          type="all"
+          action={groupCheckboxAllChange}
+        />
+      ),
+      accessor: "is-checked",
+      width: "1%",
+      notSorted: true,
+      type: "component",
+      isShow: true,
+      align: "center"
+    },
+    {
       Header: "STT",
       accessor: "no",
       width: "15px",
@@ -86,22 +102,6 @@ export default function groupTableData(
       align: "center"
     },
     {
-      Header: (
-        <CustomCheckbox
-          data={isSelectAll}
-          key="group-management"
-          type="all"
-          action={groupCheckboxAllChange}
-        />
-      ),
-      accessor: "is-checked",
-      width: "5%",
-      notSorted: true,
-      type: "component",
-      isShow: true,
-      align: "center"
-    },
-    {
       Header: "",
       accessor: "action",
       notSorted: true,
@@ -126,15 +126,6 @@ export default function groupTableData(
           const status = data && groupStatusList.find((i) => i.textValue === item.status);
           const numberOrder = itemsPerPage * (currentPage - 1) + index + 1;
           return {
-            no: numberOrder,
-            href: `/admin/groups/group-detail/${item.id}`,
-            name: item.name,
-            groupCategory: groupCategoryName(item.groupCategory),
-            status: status.label,
-            statusColor: status.color,
-            timeStart: formatDate(item.timeStart),
-            timeEnd: formatDate(item.timeEnd),
-            duration: formatDateFromDuration(item.duration),
             "is-checked":
               status.textValue !== "DELETED" ? (
                 <CustomCheckbox
@@ -145,6 +136,15 @@ export default function groupTableData(
                   action={groupCheckboxSingleChange}
                 />
               ) : null,
+            no: numberOrder,
+            href: `/admin/groups/group-detail/${item.id}`,
+            name: item.name,
+            groupCategory: groupCategoryName(item.groupCategory),
+            status: status.label,
+            statusColor: status.color,
+            timeStart: formatDate(item.timeStart),
+            timeEnd: formatDate(item.timeEnd),
+            duration: formatDateFromDuration(item.duration),
             action: <MenuOption data={item} />
           };
         });

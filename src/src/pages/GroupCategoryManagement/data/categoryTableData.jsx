@@ -23,6 +23,22 @@ export default function categoryTableData(
 ) {
   let columns = [
     {
+      Header: (
+        <CustomCheckbox
+          data={isSelectAll}
+          key="category-management"
+          type="all"
+          action={categoryCheckboxAllChange}
+        />
+      ),
+      accessor: "is-checked",
+      width: "2%",
+      notSorted: true,
+      type: "component",
+      isShow: true,
+      align: "center"
+    },
+    {
       Header: "STT",
       accessor: "no",
       width: "15px",
@@ -63,22 +79,6 @@ export default function categoryTableData(
       notSorted: true,
       width: "100px",
       type: "icon",
-      align: "center"
-    },
-    {
-      Header: (
-        <CustomCheckbox
-          data={isSelectAll}
-          key="category-management"
-          type="all"
-          action={categoryCheckboxAllChange}
-        />
-      ),
-      accessor: "is-checked",
-      width: "5%",
-      notSorted: true,
-      type: "component",
-      isShow: true,
       align: "center"
     },
     {
