@@ -101,7 +101,7 @@ function GradeManagement() {
 
   useEffect(() => {
     setState("searchParams", {});
-    return function () {
+    return () => {
       setState("searchParams", {});
     };
   }, []);

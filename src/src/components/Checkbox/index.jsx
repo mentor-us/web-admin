@@ -3,13 +3,15 @@ import PropTypes from "prop-types";
 
 import "./styles.css";
 
-function CustomCheckbox({ data, type, prop, action, isDisabled }) {
+function CustomCheckbox({ data, type, prop, action, isDisabled, isDisableRedux }) {
   const dispatch = useDispatch();
   const currentChecked = type && type === "single" ? data[prop] : data;
 
   const handleCheckedChange = () => {
-    if (type) {
+    if (type && !isDisableRedux) {
       dispatch(action(data));
+    } else if (isDisableRedux) {
+      action(data);
     } else {
       action(!data);
     }
@@ -30,7 +32,8 @@ CustomCheckbox.defaultProps = {
   type: false,
   prop: "is-checked",
   action: false,
-  isDisabled: false
+  isDisabled: false,
+  isDisableRedux: false
 };
 
 CustomCheckbox.propTypes = {
@@ -38,7 +41,8 @@ CustomCheckbox.propTypes = {
   type: PropTypes.oneOfType([PropTypes.oneOf(["single", "all"]), PropTypes.bool]),
   prop: PropTypes.string,
   action: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
-  isDisabled: PropTypes.bool
+  isDisabled: PropTypes.bool,
+  isDisableRedux: PropTypes.bool
 };
 
 export default CustomCheckbox;
