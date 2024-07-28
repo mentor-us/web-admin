@@ -1,3 +1,5 @@
+/* eslint-disable no-return-assign */
+/* eslint-disable react/button-has-type */
 import React, { useContext, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -145,6 +147,7 @@ function FloatingOptions({ message, isShow }) {
     chatStore.setEditMessage(message);
   };
 
+  const [openSuggestWhisperDialog, setOpenSuggestWhisperDialog] = useState(false);
   const onReplyClick = () => {
     chatStore.setIsReplyMessage(true);
     chatStore.setReplyMessage(message);
@@ -159,6 +162,17 @@ function FloatingOptions({ message, isShow }) {
   const handleSuggestDialogClose = () => {
     setOpenSuggestDialog(false);
   };
+  const [textFromSpeech, setTextFromSpeech] = useState("");
+
+  const handleSuggestWhisper = (data) => {
+    handleClose();
+    setOpenSuggestWhisperDialog(true);
+    console.log(data);
+    setTextFromSpeech(data?.text);
+  };
+  const handleSuggestWhisperClose = () => {
+    setOpenSuggestWhisperDialog(false);
+  };
 
   const isVideo = (mes) => {
     const url = mes?.images[0]?.url ?? "";
@@ -167,6 +181,10 @@ function FloatingOptions({ message, isShow }) {
 
   const onConvertSpeechToText = async () => {
     handleClose();
+
+    const loadingToastId = toast.loading("Đang chuyển đổi giọng nói...", {
+      position: "bottom-right"
+    });
 
     try {
       const fileUrl = getImageUrlWithKey(message?.file?.url);
@@ -183,10 +201,95 @@ function FloatingOptions({ message, isShow }) {
       const data = await whisperServices.transcribeAudio(file);
       console.log("Văn bản chuyển đổi:", data.text);
 
-      toast.success("Chuyển đổi giọng nói thành văn bản thành công");
+      toast(
+        (t) => (
+          <div>
+            <p
+              style={{
+                fontSize: "16px",
+                fontWeight: "bold",
+                marginBottom: "10px",
+                color: "#333"
+              }}
+            >
+              Chuyển đổi giọng nói thành văn bản thành công
+            </p>
+            {/* <p
+              style={{
+                color: "#555",
+                marginBottom: "10px",
+                // whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "calc(100% - 40px)", // Ensures it fits within the container
+                padding: "5px 0"
+              }}
+              title={data.text} // Optional: shows full text on hover
+            >
+              {data.text}
+            </p> */}
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button
+                onClick={() => {
+                  console.log("Văn bản chuyển đổi:", data.text);
+                  toast.dismiss(t.id);
+                  handleSuggestWhisper(data);
+                }}
+                style={{
+                  padding: "10px 20px",
+                  backgroundColor: "#007bff",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  transition: "background-color 0.3s"
+                }}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = "#0056b3")}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = "#007bff")}
+              >
+                Mở file
+              </button>
+              <button
+                onClick={() => {
+                  toast.dismiss(t.id);
+                }}
+                style={{
+                  padding: "10px 20px",
+                  backgroundColor: "#ff4d4d",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  transition: "background-color 0.3s"
+                }}
+                onMouseEnter={(e) => (e.target.style.backgroundColor = "#cc0000")}
+                onMouseLeave={(e) => (e.target.style.backgroundColor = "#ff4d4d")}
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        ),
+        {
+          id: loadingToastId,
+          position: "bottom-right",
+          duration: Infinity
+        }
+      );
     } catch (error) {
       console.error("Lỗi khi chuyển đổi giọng nói thành văn bản:", error);
-      toast.error("Chuyển đổi giọng nói thành văn bản thất bại");
+      toast.error("Chuyển đổi giọng nói thành văn bản thất bại", {
+        id: loadingToastId,
+        position: "bottom-right",
+        style: {
+          minWidth: "400px",
+          borderRadius: "10px",
+          padding: "20px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
+        }
+      });
     }
   };
 
@@ -329,6 +432,13 @@ function FloatingOptions({ message, isShow }) {
           open={openSuggestDialog}
           onClose={handleSuggestDialogClose}
           content={message?.content}
+        />
+      )}
+      {openSuggestWhisperDialog && (
+        <SuggestDialog
+          open={openSuggestWhisperDialog}
+          onClose={handleSuggestWhisperClose}
+          content={textFromSpeech}
         />
       )}
     </Box>
