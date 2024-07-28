@@ -180,7 +180,16 @@ export const UPLOAD_STATUS = {
   UPLOADING: "Uploading"
 };
 
-export const SUPPORTED_FILE_UPLOAD = [".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf"];
+export const SUPPORTED_FILE_UPLOAD = [
+  ".doc",
+  ".docx",
+  ".xls",
+  ".xlsx",
+  ".ppt",
+  ".pptx",
+  ".pdf",
+  ".mp3"
+];
 export const SUPPORTED_VIDEO_EXT = [".mp4", ".mkv", ".qt"];
 export const MAX_FILE_IMAGE_SIZE = 100; // 5MB
 

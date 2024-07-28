@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import React, { useContext, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -9,7 +8,10 @@ import { Box, IconButton, Menu, MenuItem, Stack, Tooltip } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
+import { getImageUrlWithKey } from "utils";
+
 import SuggestDialog from "pages/WebUser/components/SuggestDialog";
+import whisperServices from "service/whisperServices";
 import { GetAllChatMessageInfinityKey } from "hooks/chats/keys";
 import { useDeleteMessageMutation } from "hooks/chats/mutation";
 import useChatStore from "hooks/client/useChatStore";
@@ -20,8 +22,6 @@ import useMyInfo from "hooks/useMyInfo";
 import { MESSAGE_TYPE } from "utils/constants";
 
 import { ForwardContext } from "../../ForwardContext";
-
-// import ForwardMessageDialog from "../ForwardMessageDialog";
 
 const ITEM_HEIGHT = 48;
 
@@ -46,6 +46,10 @@ function FloatingOptions({ message, isShow }) {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const isMP3 = (url) => {
+    const voiceMemoryExtensions = [".mp3"];
+    return voiceMemoryExtensions.some((extension) => url.toLowerCase().endsWith(extension));
   };
 
   const onPinMessage = () => {
@@ -155,10 +159,37 @@ function FloatingOptions({ message, isShow }) {
   const handleSuggestDialogClose = () => {
     setOpenSuggestDialog(false);
   };
+
   const isVideo = (mes) => {
     const url = mes?.images[0]?.url ?? "";
     return url.toLowerCase().endsWith(".mp4");
   };
+
+  const onConvertSpeechToText = async () => {
+    handleClose();
+
+    try {
+      const fileUrl = getImageUrlWithKey(message?.file?.url);
+
+      const response = await fetch(fileUrl);
+
+      if (!response.ok) {
+        throw new Error("Không thể tải tệp âm thanh");
+      }
+
+      const fileBlob = await response.blob();
+      const file = new File([fileBlob], "audio.mp3", { type: "audio/mpeg" });
+
+      const data = await whisperServices.transcribeAudio(file);
+      console.log("Văn bản chuyển đổi:", data.text);
+
+      toast.success("Chuyển đổi giọng nói thành văn bản thành công");
+    } catch (error) {
+      console.error("Lỗi khi chuyển đổi giọng nói thành văn bản:", error);
+      toast.error("Chuyển đổi giọng nói thành văn bản thất bại");
+    }
+  };
+
   return (
     <Box
       className={`bg-transparent !z-0 ${isOwner ? "mr-2" : "ml-2"} ${
@@ -210,6 +241,26 @@ function FloatingOptions({ message, isShow }) {
               aria-haspopup="true"
               className="hover:!bg-[#d5d5d5] !w-7 !h-7"
               onClick={onSuggest}
+            >
+              <AutoFixHigh
+                sx={{
+                  width: "20px",
+                  height: "20px"
+                }}
+              />
+            </IconButton>
+          </Tooltip>
+        )}
+        {message?.type === MESSAGE_TYPE.FILE && isMP3(message?.file.filename) && (
+          <Tooltip title="Sử dụng whisper AI" placement="top">
+            <IconButton
+              aria-label="more"
+              id="long-button"
+              aria-controls={open ? "long-menu" : undefined}
+              aria-expanded={open ? "true" : undefined}
+              aria-haspopup="true"
+              className="hover:!bg-[#d5d5d5] !w-7 !h-7"
+              onClick={onConvertSpeechToText}
             >
               <AutoFixHigh
                 sx={{
@@ -290,6 +341,7 @@ FloatingOptions.defaultProps = {
 
 FloatingOptions.propTypes = {
   isShow: PropTypes.bool,
+  // eslint-disable-next-line react/forbid-prop-types
   message: PropTypes.object.isRequired
 };
 
