@@ -3,7 +3,7 @@
 import { useCallback, useContext, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -94,17 +94,19 @@ const model = genAI.getGenerativeModel({
 });
 
 function ContextDialog() {
-  const { dialogOpen, dialogContent } = useContext(MentorUsContext);
+  const { dialogOpen, dialogContent, currentChannelId } = useContext(MentorUsContext);
   const dispatch = useContext(MentorUsDispatchContext);
 
   const handleClose = () => {
     setDialogOpen(dispatch, { open: false, content: null });
   };
   const { channelId } = useParams();
+  const realChannelId = channelId || currentChannelId;
+  console.log("realChannelId", realChannelId);
   const confirm = useConfirm();
   const myInfo = useMyInfo();
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
-    channelId || "",
+    realChannelId || "",
     (members) => members ?? []
   );
   const queryClient = useQueryClient();
@@ -710,7 +712,7 @@ function ContextDialog() {
         return {
           ...task,
           deadline: dayjs(task?.deadline).toJSON(),
-          groupId: channelId
+          groupId: realChannelId
         };
       }) || [];
 
@@ -722,7 +724,7 @@ function ContextDialog() {
           place: meeting?.place || "",
           organizerId: myInfo.id,
           repeated: MEETING_REPEATED_TYPE.EVERY_DAY,
-          groupId: channelId,
+          groupId: realChannelId,
           timeEnd: dayjs(meeting?.timeEnd)
             .utc()
             .date(dateTime.date())
@@ -757,16 +759,16 @@ function ContextDialog() {
         success: () => {
           Promise.allSettled([
             queryClient.invalidateQueries({
-              queryKey: GetAllChatMessageInfinityKey(channelId)
+              queryKey: GetAllChatMessageInfinityKey(realChannelId)
             }),
             queryClient.invalidateQueries({
               queryKey: ["events"]
             }),
             queryClient.refetchQueries({
-              queryKey: GetAllTaskInChannelKey(channelId)
+              queryKey: GetAllTaskInChannelKey(realChannelId)
             }),
             queryClient.refetchQueries({
-              queryKey: GetAllMeetingInChannelKey(channelId)
+              queryKey: GetAllMeetingInChannelKey(realChannelId)
             })
           ]);
 

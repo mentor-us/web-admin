@@ -7,15 +7,17 @@ const WhisperApi = {
     const formData = new FormData();
     formData.append("audio_file", audioFile);
 
-    return AxiosClient.post(
-      `${WHISPER_API_URL}/asr?encode=true&task=transcribe&language=vi&output=json`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
+    const searchParams = new URLSearchParams();
+    searchParams.append("encode", true);
+    searchParams.append("task", "transcribe");
+    searchParams.append("language", "vi");
+    searchParams.append("output", "json");
+
+    return AxiosClient.post(`${WHISPER_API_URL}/asr?${searchParams.toString()}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
       }
-    );
+    });
   }
 };
 

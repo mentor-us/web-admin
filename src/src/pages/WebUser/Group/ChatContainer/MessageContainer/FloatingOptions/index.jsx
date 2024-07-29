@@ -168,7 +168,8 @@ function FloatingOptions({ message, isShow }) {
     handleClose();
     setDialogOpen(dispatch, {
       open: true,
-      content: data.text
+      content: data.text,
+      currentChannelId: channelId
     });
   };
 

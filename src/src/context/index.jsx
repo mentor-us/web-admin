@@ -1,8 +1,6 @@
 import React, { createContext, useReducer } from "react";
 import PropTypes from "prop-types";
 
-import ContextDialog from "pages/WebUser/components/SuggestDialog/Context";
-
 // MentorUs React app context
 export const MentorUsContext = createContext(null);
 export const MentorUsDispatchContext = createContext(null);
@@ -26,7 +24,8 @@ const initialState = {
   darkMode: false,
   loading: false,
   dialogOpen: false,
-  dialogContent: null
+  dialogContent: null,
+  currentChannelId: null
 };
 
 // App reducer
@@ -60,7 +59,12 @@ function appReducer(state, action) {
       return { ...state, loading: action.payload };
     }
     case "DIALOG_OPEN": {
-      return { ...state, dialogOpen: action.payload.open, dialogContent: action.payload.content };
+      return {
+        ...state,
+        dialogOpen: action.payload.open,
+        dialogContent: action.payload.content,
+        currentChannelId: action.payload.currentChannelId
+      };
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
@@ -76,7 +80,6 @@ export function MentorUSAppProvider({ children }) {
     <MentorUsContext.Provider value={states}>
       <MentorUsDispatchContext.Provider value={dispatch}>
         {children}
-        <ContextDialog />
       </MentorUsDispatchContext.Provider>
     </MentorUsContext.Provider>
   );
