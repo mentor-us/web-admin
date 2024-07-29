@@ -10,6 +10,7 @@ import { Box, IconButton, Menu, MenuItem, Stack, Tooltip } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
+import { MentorUsDispatchContext, setDialogOpen } from "context";
 import { getImageUrlWithKey } from "utils";
 
 import SuggestDialog from "pages/WebUser/components/SuggestDialog";
@@ -147,12 +148,12 @@ function FloatingOptions({ message, isShow }) {
     chatStore.setEditMessage(message);
   };
 
-  const [openSuggestWhisperDialog, setOpenSuggestWhisperDialog] = useState(false);
   const onReplyClick = () => {
     chatStore.setIsReplyMessage(true);
     chatStore.setReplyMessage(message);
     handleClose();
   };
+  const dispatch = useContext(MentorUsDispatchContext);
 
   const onSuggest = () => {
     handleClose();
@@ -162,16 +163,13 @@ function FloatingOptions({ message, isShow }) {
   const handleSuggestDialogClose = () => {
     setOpenSuggestDialog(false);
   };
-  const [textFromSpeech, setTextFromSpeech] = useState("");
 
   const handleSuggestWhisper = (data) => {
     handleClose();
-    setOpenSuggestWhisperDialog(true);
-    console.log(data);
-    setTextFromSpeech(data?.text);
-  };
-  const handleSuggestWhisperClose = () => {
-    setOpenSuggestWhisperDialog(false);
+    setDialogOpen(dispatch, {
+      open: true,
+      content: data.text
+    });
   };
 
   const isVideo = (mes) => {
@@ -432,13 +430,6 @@ function FloatingOptions({ message, isShow }) {
           open={openSuggestDialog}
           onClose={handleSuggestDialogClose}
           content={message?.content}
-        />
-      )}
-      {openSuggestWhisperDialog && (
-        <SuggestDialog
-          open={openSuggestWhisperDialog}
-          onClose={handleSuggestWhisperClose}
-          content={textFromSpeech}
         />
       )}
     </Box>
