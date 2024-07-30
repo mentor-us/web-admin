@@ -84,8 +84,8 @@ const useHeaderFilter = (type) => {
     }
     case "statistic-detail": {
       const data = useSelector(getStatisticDetailColumnHeadersSelector);
-      data.value = data;
-      data.setValue = updateStatisticDetailColumnHeaders;
+      headerFilter.value = data;
+      headerFilter.setValue = updateStatisticDetailColumnHeaders;
       break;
     }
     case "audit-log": {
