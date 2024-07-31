@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { API_URL } from "config";
 
-import { groupStatusList } from "./constants";
+import { groupStatusList, SUPPORTED_VIDEO_EXT } from "./constants";
 
 export * from "./auth";
 export * from "./dateHelper";
@@ -228,4 +228,8 @@ export const compareNumber = (rowA, rowB, id, desc) => {
 export function isNumber(n) {
   // eslint-disable-next-line no-restricted-globals
   return !isNaN(parseFloat(n)) && !isNaN(n - 0);
+}
+export function isCheckVideo(url) {
+  const videoExtensions = SUPPORTED_VIDEO_EXT;
+  return videoExtensions.some((extension) => url.toLowerCase().endsWith(extension));
 }
