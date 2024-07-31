@@ -51,7 +51,7 @@ function FloatingOptions({ message, isShow }) {
     setAnchorEl(null);
   };
   const isMP3 = (url) => {
-    const voiceMemoryExtensions = [".mp3"];
+    const voiceMemoryExtensions = [".mp3", ".wav", ".m4a"];
     return voiceMemoryExtensions.some((extension) => url.toLowerCase().endsWith(extension));
   };
 
