@@ -11,7 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 import { MentorUsDispatchContext, setDialogOpen } from "context";
-import { getImageUrlWithKey } from "utils";
+import { getImageUrlWithKey, isCheckVideo } from "utils";
 
 import SuggestDialog from "pages/WebUser/components/SuggestDialog";
 import whisperServices from "service/whisperServices";
@@ -171,11 +171,6 @@ function FloatingOptions({ message, isShow }) {
       content: data.text,
       currentChannelId: channelId
     });
-  };
-
-  const isVideo = (mes) => {
-    const url = mes.type === MESSAGE_TYPE.IMAGE ? mes.images[0].url : "";
-    return url.toLowerCase().endsWith(".mp4");
   };
 
   const onConvertSpeechToText = async () => {
@@ -411,11 +406,13 @@ function FloatingOptions({ message, isShow }) {
             Chỉnh sửa
           </MenuItem>
         )}
-        {!isVideo(message) && (
-          <MenuItem className="!font-normal !text-black" onClick={onForwardMessage}>
-            Chuyển tiếp
-          </MenuItem>
-        )}
+        {Array.isArray(message.images) &&
+          message.images.length > 0 &&
+          !isCheckVideo(message.images[0].url) && (
+            <MenuItem className="!font-normal !text-black" onClick={onForwardMessage}>
+              Chuyển tiếp
+            </MenuItem>
+          )}
 
         <MenuItem
           className="!font-normal !text-black"

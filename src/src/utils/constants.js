@@ -209,7 +209,8 @@ export const SUPPORTED_IMAGE_EXT = [
   ".tif",
   ".heif",
   ".heic",
-  ".mp4"
+  ".mp4",
+  ".qt"
 ];
 
 export const LIMIT_IMAGES = 5; // Max 5 image can send
