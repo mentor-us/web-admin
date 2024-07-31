@@ -188,7 +188,9 @@ export const SUPPORTED_FILE_UPLOAD = [
   ".ppt",
   ".pptx",
   ".pdf",
-  ".mp3"
+  ".mp3",
+  ".m4a",
+  ".wav"
 ];
 export const SUPPORTED_VIDEO_EXT = [".mp4", ".mkv", ".qt"];
 export const MAX_FILE_IMAGE_SIZE = 100; // 5MB
