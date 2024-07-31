@@ -174,7 +174,7 @@ function FloatingOptions({ message, isShow }) {
   };
 
   const isVideo = (mes) => {
-    const url = mes?.images[0]?.url ?? "";
+    const url = mes.type === MESSAGE_TYPE.IMAGE ? mes.images[0].url : "";
     return url.toLowerCase().endsWith(".mp4");
   };
 
