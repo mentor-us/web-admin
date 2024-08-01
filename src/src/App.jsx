@@ -15,6 +15,7 @@ import { privateRoutes, publicRoutes } from "routes";
 import { isAuthenticated } from "utils";
 
 import ProtectedAuth from "pages/Auth/ProtectedAuth";
+import ContextDialog from "pages/WebUser/components/SuggestDialog/Context";
 
 import "./index.css";
 import "./App.css";
@@ -107,6 +108,7 @@ function App() {
           <Route path="*" element={<Navigate to="/not-found" replace />} />
         </Routes>
         <ReactQueryDevtools initialIsOpen={false} />
+        <ContextDialog />
       </ConfirmProvider>
     </QueryClientProvider>
   );

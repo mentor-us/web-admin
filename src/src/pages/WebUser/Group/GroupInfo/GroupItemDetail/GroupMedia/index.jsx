@@ -17,7 +17,7 @@ import {
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import PropTypes from "prop-types";
 
-import { getImageUrlWithKey } from "utils";
+import { getImageUrlWithKey, isCheckVideo } from "utils";
 import FileApi from "api/FileApi";
 
 import File from "pages/WebUser/components/File";
@@ -138,10 +138,6 @@ export default function GroupMedia({ type }) {
       lightbox = null;
     };
   }, []);
-  const isVideo = (url) => {
-    const videoExtensions = SUPPORTED_VIDEO_EXT;
-    return videoExtensions.some((extension) => url.toLowerCase().endsWith(extension));
-  };
   const onOpenImagePreview = (index) => {
     if (!isSuccess) {
       return;
@@ -149,7 +145,7 @@ export default function GroupMedia({ type }) {
     lightBoxRef?.current.loadAndOpen(
       index ?? 0,
       images.map((image, idx) => {
-        const isMediaVideo = isVideo(images[idx].url);
+        const isMediaVideo = isCheckVideo(images[idx].url);
         return {
           sourceUrl: image.url,
           html: isMediaVideo
@@ -195,7 +191,7 @@ export default function GroupMedia({ type }) {
                   key={`${item.imageUrl}-${index}`}
                   onClick={() => onOpenImagePreview(index)}
                 >
-                  {isVideo(item.url) ? (
+                  {isCheckVideo(item.url) ? (
                     <video src={getImageUrlWithKey(images[0]?.url)} className="!p-0" controls />
                   ) : (
                     <img src={item.url} alt="hình ảnh" loading="lazy" />

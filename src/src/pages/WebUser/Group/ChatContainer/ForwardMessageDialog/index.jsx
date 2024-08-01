@@ -89,17 +89,14 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
       setListChannelForward((pre) => [...pre, channelId]);
     }
   };
-  const isVideo = (mes) => {
-    const url = mes?.images?.[0]?.url ?? "";
-    return url.toLowerCase().endsWith(".mp4");
-  };
+
   // eslint-disable-next-line no-shadow
   const getContentFw = (msg) => {
     switch (msg.type) {
       case "TEXT":
         return msg.content;
       case "IMAGE":
-        return `Chuyển tiếp ${message.images?.length} ${isVideo(message) ? "video" : "hình ảnh"}`;
+        return `Chuyển tiếp ${message.images?.length} hình ảnh`;
       case "FILE":
         return "Chuyển tiếp 1 file";
       default:

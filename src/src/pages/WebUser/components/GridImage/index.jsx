@@ -6,7 +6,7 @@ import { Box, CircularProgress, Grid, Skeleton, Typography } from "@mui/material
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import PropTypes from "prop-types";
 
-import { getImageUrlWithKey } from "utils";
+import { getImageUrlWithKey, isCheckVideo } from "utils";
 import { NotiFailed } from "assets/svgs";
 import colors from "assets/theme/base/colors";
 import FileApi from "api/FileApi";
@@ -132,10 +132,7 @@ function GridImage({ images, galleryID, uploadFailed }) {
       lightbox = null;
     };
   }, []);
-  const isVideo = (url) => {
-    const videoExtensions = [".mp4", ".mkv", ".qt"];
-    return videoExtensions.some((extension) => url.toLowerCase().endsWith(extension));
-  };
+
   const onOpenImagePreview = (index) => {
     if (!isLoaded) {
       return;
@@ -143,7 +140,7 @@ function GridImage({ images, galleryID, uploadFailed }) {
     lightBoxRef?.current.loadAndOpen(
       index ?? 0,
       imageUrlList.map((imageUrl, idx) => {
-        const isMediaVideo = isVideo(images[idx].url);
+        const isMediaVideo = isCheckVideo(images[idx].url);
         return {
           sourceUrl: imageUrl,
           html: isMediaVideo
@@ -184,7 +181,7 @@ function GridImage({ images, galleryID, uploadFailed }) {
   const renderOne = () => {
     const overlay =
       images.length > countFrom && countFrom === 1 ? renderCountOverlay(true) : renderOverlay();
-    const isMediaVideo = isVideo(images[0].url);
+    const isMediaVideo = isCheckVideo(images[0].url);
     return (
       <Grid container className="container">
         {images[0].isUploading ? (
