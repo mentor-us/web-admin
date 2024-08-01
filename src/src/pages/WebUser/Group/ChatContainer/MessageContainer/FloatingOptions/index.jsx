@@ -156,7 +156,7 @@ function FloatingOptions({ message, isShow }) {
     setOpenSuggestDialog(false);
   };
   const isVideo = (mes) => {
-    const url = mes?.images[0]?.url ?? "";
+    const url = mes?.images?.[0]?.url ?? "";
     return url.toLowerCase().endsWith(".mp4");
   };
   return (
