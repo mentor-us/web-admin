@@ -4,6 +4,7 @@ import Icon from "@mui/material/Icon";
 // App pages
 import AccountDetail from "pages/AccountDetail";
 import AccountManagement from "pages/AccountManagement";
+import AuditLog from "pages/AuditLog";
 import Auth from "pages/Auth";
 import ProtectedAuth from "pages/Auth/ProtectedAuth";
 import DeepLink from "pages/DeepLink";
@@ -37,7 +38,8 @@ const pagesMap = {
   statistic: "Hoạt động",
   "statistic-detail": "Chi tiết hoạt động",
   "account-management": "Quản lý tài khoản",
-  "account-detail": "Chi tiết tài khoản"
+  "account-detail": "Chi tiết tài khoản",
+  "audit-log": "Nhật ký hệ thống"
 };
 
 export const translateToVNmeseByKey = (key) => {
@@ -116,6 +118,14 @@ export const privateRoutes = [
     path: "/admin/statistic/statistic-detail/:id",
     roles: adminAccessRoles,
     element: <StatisticDetail />
+  },
+  {
+    key: "audit-log",
+    name: translateToVNmeseByKey("statistic"),
+    icon: <Icon fontSize="small">query_stats</Icon>,
+    path: ROUTE_URL.AUDIT_LOG_ROOT,
+    roles: adminAccessRoles,
+    element: <AuditLog />
   },
 
   // USER ROUTE
@@ -333,6 +343,19 @@ const routes = [
     component: (
       <ProtectedAuth>
         <Statistic />
+      </ProtectedAuth>
+    )
+  },
+  {
+    type: "collapse",
+    name: translateToVNmeseByKey("audit-log"),
+    key: "audit-log",
+    icon: <Icon fontSize="small">assignment_outlined</Icon>,
+    route: "/admin/audit-log",
+    slideNavShow: true,
+    component: (
+      <ProtectedAuth>
+        <AuditLog />
       </ProtectedAuth>
     )
   },

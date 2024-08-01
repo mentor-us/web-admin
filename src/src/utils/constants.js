@@ -103,9 +103,13 @@ export const ROUTE_URL = {
 
   // Account management
   ACCOUNT_ROOT: "/admin/account-management",
+  ACCOUNT_DETAIL: "/admin/account-management/account-detail",
 
   // Statistic
   STATISTIC_ROOT: "/admin/statistic",
+
+  // Audit Log
+  AUDIT_LOG_ROOT: "/admin/audit-log",
 
   // USER_URL
   CHAT_ROOT: "/chat",

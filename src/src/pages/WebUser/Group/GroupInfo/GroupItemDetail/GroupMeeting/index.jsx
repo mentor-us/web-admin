@@ -85,7 +85,7 @@ export default function GroupMeeting() {
           <Skeleton variant="rounded" height={90} />
         </Stack>
       ) : (
-        <Box>
+        <Box className="px-1">
           {filteredMeetings.length > 0 ? (
             filteredMeetings.map((meeting) => <MeetingItem key={meeting.id} meeting={meeting} />)
           ) : (

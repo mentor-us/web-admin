@@ -35,7 +35,7 @@ function MeetingItem({ meeting }) {
         </Stack>
         <TooltipCustom title={`Thời gian diễn ra: ${formateMeeting?.time?.display}`}>
           <Box>
-            <p className="pl-2 text-gray-500 text-sm">{formateMeeting?.time?.display}</p>
+            <p className="pl-2 mt-1 text-gray-500 text-sm">{formateMeeting?.time?.display}</p>
           </Box>
         </TooltipCustom>
       </Box>

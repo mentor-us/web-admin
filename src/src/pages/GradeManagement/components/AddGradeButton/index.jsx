@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useReducer, useState } from "react";
 import {
   Autocomplete,
@@ -23,7 +24,6 @@ import MDTypography from "components/MDComponents/MDTypography";
 import { ErrorAlert, SuccessAlert, WarningAlertConfirmNotSavingData } from "components/SweetAlert";
 import useGradeManagementStore from "hooks/client/useGradeManagementStore";
 import { useCreateGradeMutation } from "hooks/grades/mutation";
-// import { useGetAllYears } from "hooks/grades/queries";
 import { useGetAllUsers } from "hooks/users/queries";
 
 const initState = {
@@ -34,6 +34,7 @@ const initState = {
   course: null,
   courseCode: "",
   score: 0,
+  value: "",
   student: null,
   studentName: ""
 };
@@ -58,10 +59,14 @@ function reducer(state, action) {
       return { ...state, studentName: action.payload };
     case "SET_SCORE":
       return { ...state, score: action.payload };
+    case "SET_VALUE":
+      return { ...state, value: action.payload };
     default:
       return state;
   }
 }
+
+const AcceptValue = ["A", "B", "C", "D", "A+", "B-", "C+", "D-", "A-", "B+", "C-", "D+"];
 
 function AddGradeButton() {
   /// --------------------- Khai báo Biến, State -------------
@@ -78,8 +83,10 @@ function AddGradeButton() {
     courseName,
     score,
     student,
-    studentName
+    studentName,
+    value: scoreValue
   } = state;
+
   const { setState } = useGradeManagementStore();
   const [firstLoad, setFirstLoad] = useState({
     score: true,
@@ -87,7 +94,8 @@ function AddGradeButton() {
     semester: true,
     course: true,
     courseCode: true,
-    student: true
+    student: true,
+    value: true
   });
   const queryClient = useQueryClient();
   const createGradeMutator = useCreateGradeMutation();
@@ -109,13 +117,15 @@ function AddGradeButton() {
     dispatch({ type: "SET_YEAR", payload: null });
     dispatch({ type: "SET_STUDENT", payload: null });
     dispatch({ type: "SET_SEMESTER", payload: 1 });
+    dispatch({ type: "SET_VALUE", payload: null });
     setFirstLoad({
       score: true,
       year: true,
       semester: true,
       course: true,
       courseCode: true,
-      student: true
+      student: true,
+      value: true
     });
   };
 
@@ -156,9 +166,6 @@ function AddGradeButton() {
   };
 
   const isLostAllData = () => {
-    console.log("Hoc ki");
-    console.log(score, year, course, courseCode, semester, student);
-    console.log(isOneReqDataHasValue());
     if (isOneReqDataHasValue()) {
       WarningAlertConfirmNotSavingData().then((result) => {
         if (result.isDenied) {
@@ -192,7 +199,8 @@ function AddGradeButton() {
         year: false,
         semester: false,
         course: false,
-        student: false
+        student: false,
+        value: false
       });
       return;
     }
@@ -202,7 +210,8 @@ function AddGradeButton() {
       semester: +semester,
       year: year?.toString()?.trim() ?? null,
       courseName: course?.toString()?.trim() ?? null,
-      courseCode: courseCode?.toString()?.trim() ?? null
+      courseCode: courseCode?.toString()?.trim() ?? null,
+      value: scoreValue?.toString()?.trim() ?? null
     };
     addGrade(req);
   };
@@ -214,6 +223,7 @@ function AddGradeButton() {
   useEffect(() => {
     resetAllData();
   }, []);
+
   return (
     <>
       <MDButton variant="gradient" color="success" onClick={handleOpen}>
@@ -326,7 +336,7 @@ function AddGradeButton() {
                   helperText={
                     // eslint-disable-next-line no-nested-ternary
                     !firstLoad.course && (!course || !course?.trim())
-                      ? "Môn học không được rỗng"
+                      ? "Tên môn học không được rỗng"
                       : ""
                   }
                 />
@@ -357,7 +367,7 @@ function AddGradeButton() {
                   helperText={
                     // eslint-disable-next-line no-nested-ternary
                     !firstLoad.courseCode && (!courseCode || !courseCode.trim())
-                      ? "Môn học không được rỗng"
+                      ? "Mã môn học không được rỗng"
                       : ""
                   }
                 />
@@ -414,6 +424,48 @@ function AddGradeButton() {
                   color="dark"
                   sx={{ mr: 2, width: "30%" }}
                 >
+                  Điểm chữ
+                </MDTypography>
+                <MDInput
+                  placeholder="Nhập điểm chữ"
+                  size="small"
+                  sx={{ width: "70%" }}
+                  value={scoreValue}
+                  inputProps={{ maxLength: 2 }}
+                  onChange={(e) => {
+                    dispatch({
+                      type: "SET_VALUE",
+                      payload: e.target.value ? e.target.value.toUpperCase() : ""
+                    });
+                    setFirstLoad({
+                      ...firstLoad,
+                      value: false
+                    });
+                  }}
+                  error={
+                    !firstLoad.value &&
+                    scoreValue !== "" &&
+                    scoreValue &&
+                    !AcceptValue.includes(scoreValue?.trim())
+                  }
+                  helperText={
+                    // eslint-disable-next-line no-nested-ternary
+                    !firstLoad.value &&
+                    scoreValue !== "" &&
+                    scoreValue &&
+                    !AcceptValue.includes(scoreValue?.trim())
+                      ? "Điểm chữ phải là A, B, C, D hoặc A+, B-"
+                      : ""
+                  }
+                />
+              </MDBox>
+              <MDBox className="relationship__searchBox-item" mb={2}>
+                <MDTypography
+                  variant="body2"
+                  fontWeight="regular"
+                  color="dark"
+                  sx={{ mr: 2, width: "30%" }}
+                >
                   Điểm số <span style={{ color: "red" }}>(*)</span>
                 </MDTypography>
                 <MDInput
@@ -424,10 +476,10 @@ function AddGradeButton() {
                   value={score}
                   inputProps={{ maxLength: 100 }}
                   onChange={handleScoreChange}
-                  error={(!firstLoad.score && score.length === 0) || +score > 10 || +score < 0}
+                  error={(!firstLoad.score && score?.length === 0) || +score > 10 || +score < 0}
                   helperText={
                     // eslint-disable-next-line no-nested-ternary
-                    !firstLoad.score && score.length === 0
+                    !firstLoad.score && score?.length === 0
                       ? "Điểm số không được rỗng"
                       : +score > 10 || +score < 0
                       ? "Điểm số phải nằm trong khoảng 0 đến 10"

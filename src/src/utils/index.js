@@ -205,6 +205,34 @@ export const toDateTime = (date) => {
   return new Date(parts[2], parts[1] - 1, parts[0]);
 };
 
+export function textContent(elem) {
+  if (!elem) {
+    return "";
+  }
+  if (typeof elem === "string") {
+    return elem;
+  }
+  // Debugging for basic content shows that props.children, if any, is either a
+  // ReactElement, or a string, or an Array with any combination. Like for
+  // `<p>Hello <em>world</em>!</p>`:
+  //
+  //   $$typeof: Symbol(react.element)
+  //   type: "p"
+  //   props:
+  //     children:
+  //       - "Hello "
+  //       - $$typeof: Symbol(react.element)
+  //         type: "em"
+  //         props:
+  //           children: "world"
+  //       - "!"
+  const children = elem.props && elem.props.children;
+  if (children instanceof Array) {
+    return children.map(textContent).join("");
+  }
+  return textContent(children);
+}
+
 export const compareDate = (rowA, rowB, id, desc) => {
   const date1 = toDateTime(rowA.values[id]);
   const date2 = toDateTime(rowB.values[id]);

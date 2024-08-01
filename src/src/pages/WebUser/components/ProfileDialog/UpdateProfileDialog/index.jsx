@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -27,6 +28,11 @@ function UpdateProfileDialog(props) {
       name: info.name ? info.name : "",
       phone: info.phone ? info.phone : "",
       dob: info.birthDate ? dayjs(info.birthDate) : null
+    },
+    values: {
+      name: info.name ? info.name : "",
+      phone: info.phone ? info.phone : "",
+      dob: info.birthDate ? dayjs(info.birthDate) : null
     }
   });
   const prepare = (data) => {
@@ -42,7 +48,6 @@ function UpdateProfileDialog(props) {
   };
 
   const onSubmit = (data) => {
-    // console.log("data", data.dob.date());
     toast.promise(
       new Promise((resolve, reject) => {
         updateProfileMutation(prepare(data))
