@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@mui/material";
 import PropTypes from "prop-types";
@@ -57,7 +58,7 @@ function EditDeleteBackBox({ data }) {
               isCurrentAccount={isCurrentAccount}
             />
           </MDBox>
-          {!isCurrentAccount && (
+          {/* {!isCurrentAccount && (
             <MDBox mx={2}>
               <DeleteButton
                 data={data}
@@ -66,7 +67,7 @@ function EditDeleteBackBox({ data }) {
                 redirectURL="/admin/account-management"
               />
             </MDBox>
-          )}
+          )} */}
           {renderBlockButton()}
         </>
       )}
