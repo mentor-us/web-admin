@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import React, { createContext, useReducer } from "react";
 import PropTypes from "prop-types";
 
 // MentorUs React app context
@@ -22,7 +22,10 @@ const initialState = {
    */
   openConfigurator: false,
   darkMode: false,
-  loading: false
+  loading: false,
+  dialogOpen: false,
+  dialogContent: null,
+  currentChannelId: null
 };
 
 // App reducer
@@ -46,7 +49,6 @@ function appReducer(state, action) {
     case "FIXED_NAVBAR": {
       return { ...state, fixedNavbar: action.payload };
     }
-
     case "OPEN_CONFIGURATOR": {
       return { ...state, openConfigurator: action.payload };
     }
@@ -55,6 +57,14 @@ function appReducer(state, action) {
     }
     case "LOADING": {
       return { ...state, loading: action.payload };
+    }
+    case "DIALOG_OPEN": {
+      return {
+        ...state,
+        dialogOpen: action.payload.open,
+        dialogContent: action.payload.content,
+        currentChannelId: action.payload.currentChannelId
+      };
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
@@ -96,3 +106,4 @@ export const setOpenConfigurator = (dispatch, payload) =>
   dispatch({ type: "OPEN_CONFIGURATOR", payload });
 export const setDarkMode = (dispatch, payload) => dispatch({ type: "DARKMODE", payload });
 export const setLoading = (dispatch, payload) => dispatch({ type: "LOADING", payload });
+export const setDialogOpen = (dispatch, payload) => dispatch({ type: "DIALOG_OPEN", payload });

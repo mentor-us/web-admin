@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { Icon, Menu, MenuItem } from "@mui/material";
 import PropTypes from "prop-types";
@@ -46,11 +47,11 @@ function EditDelete({ data }) {
       <MenuItem onClick={handleEdit} sx={{ minWidth: "unset" }}>
         <EditAccountButton data={data} setState={setMenu} isCurrentAccount={isCurrentAccount} />
       </MenuItem>
-      {canDelete && (
+      {/* {canDelete && (
         <MenuItem onClick={handleDelete} sx={{ minWidth: "unset" }}>
           <DeleteButton data={data} setState={setMenu} />
         </MenuItem>
-      )}
+      )} */}
       {!isCurrentAccount && data.status && (
         <MenuItem sx={{ minWidth: "unset" }}>
           <DisableAccountButton data={data} setState={setMenu} />

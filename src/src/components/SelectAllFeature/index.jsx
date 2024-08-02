@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useSelector } from "react-redux";
 import { getAccountCheckedSelector } from "features/accounts/selector";
 import { getGroupsCheckedSelector } from "features/groups/selector";
@@ -191,12 +192,12 @@ function SelectAllFeature(type) {
           component = (
             <MDBox display="flex" justifyContent="center" alignItems="center">
               <MDBox sx={{ mx: 0.5 }}>
-                <DeleteButton
+                {/* <DeleteButton
                   data={checkedAccounts}
                   setState={(e) => e}
                   typeButton="normal"
                   isMultiple
-                />
+                /> */}
               </MDBox>
 
               {enableButton}

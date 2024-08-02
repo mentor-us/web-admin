@@ -127,7 +127,7 @@ function GroupHeader({ groupName, isLoading }) {
         ) : (
           <>
             <Tooltip title={groupName}>
-              <div className="text-base font-bold line-clamp-2">{groupName}</div>
+              <div className="text-base font-bold line-clamp-2 max-w-52">{groupName}</div>
             </Tooltip>
 
             {/* <KeyboardArrowDownIcon fontSize="small" /> */}

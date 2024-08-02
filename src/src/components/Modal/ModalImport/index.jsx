@@ -89,7 +89,7 @@ function ModalImport({
         if (importAction) {
           await importAction(file);
         }
-        SuccessAlert("Import danh sách tài khoản thành công");
+        SuccessAlert("Import thành công");
         closeModal();
         setFile(null);
         setFirstLoad(true);

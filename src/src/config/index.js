@@ -6,3 +6,4 @@ export const SECRECT_API_KEY_CALENDAR = import.meta.env.REACT_APP_SECRECT_API_KE
 export const CALENDAR_ID = import.meta.env.REACT_APP_CALENDAR_ID;
 export const SOCKET_URL = import.meta.env.REACT_APP_SOCKET_URL;
 export const AI_API_KEY = import.meta.env.REACT_APP_GOOGLE_GENERATIVE_AI_API_KEY;
+export const WHISPER_API_URL = import.meta.env.REACT_APP_WHISPER_API_URL;
