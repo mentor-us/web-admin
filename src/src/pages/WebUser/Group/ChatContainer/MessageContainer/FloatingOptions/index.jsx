@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-return-assign */
 /* eslint-disable react/button-has-type */
 import React, { useContext, useMemo, useState } from "react";
@@ -406,13 +407,19 @@ function FloatingOptions({ message, isShow }) {
             Chỉnh sửa
           </MenuItem>
         )}
-        {Array.isArray(message.images) &&
+        {(message.type !== "IMAGE" || !isCheckVideo(message.images[0].url)) && (
+          <MenuItem className="!font-normal !text-black" onClick={onForwardMessage}>
+            Chuyển tiếp
+          </MenuItem>
+        )}
+
+        {/* {Array.isArray(message.images) &&
           message.images.length > 0 &&
           !isCheckVideo(message.images[0].url) && (
             <MenuItem className="!font-normal !text-black" onClick={onForwardMessage}>
               Chuyển tiếp
             </MenuItem>
-          )}
+          )} */}
 
         <MenuItem
           className="!font-normal !text-black"
