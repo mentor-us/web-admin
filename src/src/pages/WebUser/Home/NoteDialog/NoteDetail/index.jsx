@@ -116,100 +116,118 @@ function NoteDetail({ noteUserId, onShareClick, onEditClick, onHistoryClick }) {
 
   return (
     <Stack spacing={2} sx={{ maxHeight: 550, overflowY: "auto", p: 2 }}>
-      {notes?.data.map((note) => (
-        <Fade in key={note.id}>
-          <Paper
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            padding={2}
-            borderRadius={2}
-            className="cursor-pointer"
-            sx={{
-              position: "relative",
-              p: 3,
-              mb: 2,
-              transition: "0.3s",
-              "&:hover": { boxShadow: 6 }
-            }}
-            elevation={2}
-            onClick={() => onHistoryClick(note.id)}
-          >
-            <Box display="flex" flexGrow={1} alignItems="center" gap={2}>
-              <Tooltip title={note.creator.name}>
-                <Avatar
-                  alt={note.creator.name}
-                  src={getImageUrlWithKey(note.creator.imageUrl)}
-                  sx={{ width: 40, height: 40, borderRadius: "50%" }}
-                />
-              </Tooltip>
-              <Box>
-                <div className="font-bold text-base">{note?.title}</div>
-                <div className="text-sm">Ngày cập nhật: {formatDate(note.updatedDate)}</div>
-              </Box>
-            </Box>
-            <Typography
-              variant="body2"
-              className="text-zinc-600"
-              sx={{ flexGrow: 1, mx: 2, ml: 1, mt: 1, fontSize: "0.875rem" }}
-              dangerouslySetInnerHTML={{ __html: note.content }}
-            />
-            <Box display="flex" alignItems="center" className="absolute top-2 right-2">
-              <IconButton onClick={(event) => handleOpenMenu(event, note.id)} aria-label="Settings">
-                <MoreVert />
-              </IconButton>
+      {notes?.data.map((note) => {
+        const isVisibledOptions =
+          note?.isEditable || note?.owner.id === myInfo?.id || note?.creator.id === myInfo?.id;
 
-              <Menu
-                anchorEl={anchorEl}
-                open={open && selectedNoteId === note.id}
-                onClose={handleCloseMenu}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center"
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "center"
-                }}
-              >
-                <MenuItem
-                  onClick={(event) => handleEditNote(event, note.id)}
-                  sx={{
-                    color: "#1976d2",
-                    "&:hover": {
-                      backgroundColor: "#e3f2fd"
-                    }
-                  }}
-                >
-                  <Edit fontSize="small" sx={{ mr: 1 }} /> Chỉnh sửa
-                </MenuItem>
-                <MenuItem
-                  onClick={(event) => handleShareNote(event, note.id)}
-                  sx={{
-                    color: "#1976d2",
-                    "&:hover": {
-                      backgroundColor: "#e3f2fd"
-                    }
-                  }}
-                >
-                  <ShareOutlined fontSize="small" sx={{ mr: 1 }} /> Chia sẻ
-                </MenuItem>
-                <MenuItem
-                  onClick={(event) => handleDeleteNote(event, note.id)}
-                  sx={{
-                    color: "#f44336",
-                    "&:hover": {
-                      backgroundColor: "#ffebee"
-                    }
-                  }}
-                >
-                  <DeleteOutline fontSize="small" sx={{ mr: 1 }} /> Xóa
-                </MenuItem>
-              </Menu>
-            </Box>
-          </Paper>
-        </Fade>
-      ))}
+        return (
+          <Fade in key={note.id}>
+            <Paper
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              padding={2}
+              borderRadius={2}
+              className="cursor-pointer"
+              sx={{
+                position: "relative",
+                p: 3,
+                mb: 2,
+                transition: "0.3s",
+                "&:hover": { boxShadow: 6 }
+              }}
+              elevation={2}
+              onClick={() => onHistoryClick(note.id)}
+            >
+              <Box display="flex" flexGrow={1} alignItems="center" gap={2}>
+                <Tooltip title={note.creator.name}>
+                  <Avatar
+                    alt={note.creator.name}
+                    src={getImageUrlWithKey(note.creator.imageUrl)}
+                    sx={{ width: 40, height: 40, borderRadius: "50%" }}
+                  />
+                </Tooltip>
+                <Box>
+                  <div className="font-bold text-base">{note?.title}</div>
+                  <div className="text-sm">Ngày cập nhật: {formatDate(note.updatedDate)}</div>
+                </Box>
+              </Box>
+              <Typography
+                variant="body2"
+                className="text-zinc-600"
+                sx={{ flexGrow: 1, mx: 2, ml: 1, mt: 1, fontSize: "0.875rem" }}
+                dangerouslySetInnerHTML={{ __html: note.content }}
+              />
+
+              {isVisibledOptions && (
+                <Box display="flex" alignItems="center" className="absolute top-2 right-2">
+                  <IconButton
+                    onClick={(event) => handleOpenMenu(event, note.id)}
+                    aria-label="Settings"
+                  >
+                    <MoreVert />
+                  </IconButton>
+
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={open && selectedNoteId === note.id}
+                    onClose={handleCloseMenu}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center"
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center"
+                    }}
+                  >
+                    {note?.isEditable && (
+                      <MenuItem
+                        onClick={(event) => handleEditNote(event, note.id)}
+                        sx={{
+                          color: "#1976d2",
+                          "&:hover": {
+                            backgroundColor: "#e3f2fd"
+                          }
+                        }}
+                      >
+                        <Edit fontSize="small" sx={{ mr: 1 }} /> Chỉnh sửa
+                      </MenuItem>
+                    )}
+                    {note.owner.id === myInfo?.id && (
+                      <MenuItem
+                        onClick={(event) => handleShareNote(event, note.id)}
+                        sx={{
+                          color: "#1976d2",
+                          "&:hover": {
+                            backgroundColor: "#e3f2fd"
+                          }
+                        }}
+                      >
+                        <ShareOutlined fontSize="small" sx={{ mr: 1 }} /> Chia sẻ
+                      </MenuItem>
+                    )}
+                    {note.owner.id === myInfo?.id ||
+                      (note.creator.id === myInfo?.id && (
+                        <MenuItem
+                          onClick={(event) => handleDeleteNote(event, note.id)}
+                          sx={{
+                            color: "#f44336",
+                            "&:hover": {
+                              backgroundColor: "#ffebee"
+                            }
+                          }}
+                        >
+                          <DeleteOutline fontSize="small" sx={{ mr: 1 }} /> Xóa
+                        </MenuItem>
+                      ))}
+                  </Menu>
+                </Box>
+              )}
+            </Paper>
+          </Fade>
+        );
+      })}
     </Stack>
   );
 }

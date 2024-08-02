@@ -5,8 +5,6 @@ import CourseApi from "api/CourseApi";
 import GradeApi from "api/GradeApi";
 import YearApi from "api/YearApi";
 
-import EventService from "service/EventService";
-
 const years = [
   { id: 1, name: "2023-2024" },
   { id: 2, name: "2022-2023" },

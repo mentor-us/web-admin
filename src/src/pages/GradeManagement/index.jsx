@@ -126,6 +126,12 @@ function GradeManagement() {
 
   const actionImport = async (file) => {
     const response = await GradeApi.importGrades(file, selectImportUserId);
+    await queryClient.refetchQueries({
+      queryKey: ["grades"]
+    });
+    await queryClient.invalidateQueries({
+      queryKey: ["grades"]
+    });
     return addCheckedProp(response.data);
   };
 
