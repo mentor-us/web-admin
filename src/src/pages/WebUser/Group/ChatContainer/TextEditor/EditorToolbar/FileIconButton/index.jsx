@@ -11,7 +11,7 @@ import {
 } from "use-file-picker/validators";
 
 import { v4 as uuidv4 } from "uuid";
-import { AttachmentIcon } from "assets/svgs";
+import { AttachmentIconNoBG } from "assets/svgs";
 import MessageApi from "api/MessageApi";
 
 import { GetChannelMediaKey } from "hooks/channels/keys";
@@ -102,7 +102,7 @@ function FileIconButton({ channelId }) {
         {loading ? (
           <CircularProgress color="info" size={30} />
         ) : (
-          <AttachmentIcon width={30} height={30} />
+          <AttachmentIconNoBG width={30} height={30} />
         )}
       </IconButton>
     </Tooltip>
