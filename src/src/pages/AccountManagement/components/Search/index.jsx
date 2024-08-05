@@ -41,7 +41,7 @@ function SearchBox() {
   // const emailDomainsValid = useSelector(getEmailDomainsValidSelector);
   const itemsPerPage = useSelector(getAccountItemsPerPageSelector);
   const myInfo = useMyInfo();
-  const roleList = myInfo.roles.includes(ROLE.SUPER_ADMIN)
+  const roleList = myInfo?.roles?.includes(ROLE.SUPER_ADMIN)
     ? roleAccountList?.map((option) => option.role)
     : roleAccountList
         ?.filter((item) => item.textValue !== ROLE.SUPER_ADMIN)

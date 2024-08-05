@@ -43,7 +43,7 @@ function EditAccountButton({ data, setState, typeButton, isInDetail, isCurrentAc
   const [open, setOpen] = useState(false);
 
   const myInfo = useMyInfo();
-  const roleList = myInfo.roles.includes(ROLE.SUPER_ADMIN)
+  const roleList = myInfo?.roles?.includes(ROLE.SUPER_ADMIN)
     ? roleAccountList?.map((option) => option.role)
     : roleAccountList
         ?.filter((item) => item.textValue !== ROLE.SUPER_ADMIN)

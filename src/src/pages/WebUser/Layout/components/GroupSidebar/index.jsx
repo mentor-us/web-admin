@@ -173,7 +173,7 @@ function GroupSidebar({ workspace, isLoading }) {
                   />
                 </ListItemButton>
               ) : (
-                <Box>
+                <Box className="max-h-96 overflow-auto">
                   {workspace?.channels.map((channel) => {
                     if (channel && channel.id !== workspace?.defaultChannelId) {
                       return (
@@ -235,7 +235,7 @@ function GroupSidebar({ workspace, isLoading }) {
                   />
                 </ListItemButton>
               ) : (
-                <Box>
+                <Box className="max-h-72 overflow-auto">
                   {workspace?.privates.map((channel) => {
                     return (
                       <ChannelItem
