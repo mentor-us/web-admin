@@ -14,33 +14,29 @@ function MeetingItem({ meeting }) {
   const [openDialogMeeting, setOpenDialogMeeting] = useState(false);
 
   return (
-    <Box className="meeting-message-container ">
-      <Box className="bg-white rounded-lg w-[70%] p-4">
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          flexDirection="column"
-          gap={1}
-        >
+    <Box className="meeting-message-container">
+      <Box className="bg-white rounded-lg p-4 !min-w-[70%] !max-w-[70%]">
+        <Box display="flex" justifyContent="center" flexDirection="column" gap={1}>
           <Box display="flex" justifyContent="center" alignItems="center" gap={1}>
             <ClockIcon width={22} height={22} />
-            <Typography className="text-[#F05B51] !font-bold !text-base">Lịch hẹn</Typography>
+            <Typography className="text-[#F05B51] !font-bold !text-lg">Lịch hẹn</Typography>
           </Box>
-          <Tooltip title={meetingData.title}>
-            <Typography className="!font-bold !text-xl !text-[#333] line-clamp-2">
-              {meetingData.title}
+          <Box className="text-center break-words !max-w-[70%] self-center">
+            <Typography className="!font-bold !text-base !text-[#333] !line-clamp-1 !flex-wrap">
+              <Tooltip title={meetingData.title}>{meetingData.title}</Tooltip>
             </Typography>
-          </Tooltip>
-          <Typography className="!text-lg !text-[#888] line-clamp-2">
+          </Box>
+          <Typography className="!text-sm !text-[#888] !line-clamp-1 self-center">
             Lúc {meetingData.time.from}, ngày {meetingData.time.date}
           </Typography>
-          <Button
-            className="!text-sm !bg-[#ebebeb] !rounded-full !text-[#333] !font-medium"
-            onClick={() => setOpenDialogMeeting(true)}
-          >
-            Mở lịch
-          </Button>
+          <Box className="self-center">
+            <Button
+              className="!text-xs !bg-[#ebebeb] !rounded-full !text-[#333]"
+              onClick={() => setOpenDialogMeeting(true)}
+            >
+              Mở lịch
+            </Button>
+          </Box>
         </Box>
       </Box>
       {openDialogMeeting && (
