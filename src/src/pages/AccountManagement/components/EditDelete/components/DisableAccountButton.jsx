@@ -97,7 +97,7 @@ function DisableAccountButton({ data, setState, typeButton, isInDetail, isMultip
 
     if (typeButton === "normal") {
       return (
-        <MDButton variant="gradient" color="warning" onClick={handleStatusUserChange}>
+        <MDButton variant="gradient" color="error" onClick={handleStatusUserChange}>
           <Icon fontSize="medium" sx={{ mr: 1 }}>
             lock_person
           </Icon>
