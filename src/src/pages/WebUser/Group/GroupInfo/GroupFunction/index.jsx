@@ -120,7 +120,7 @@ function GroupFunction({ type, permission, selectedType }) {
             }}
           >
             <ListItemIcon>
-              <FolderOutlinedIcon width={20} height={20} />
+              <FolderOutlinedIcon width={20} height={20} sx={{ color: "#000000" }} />
             </ListItemIcon>
             <ListItemText disableTypography className="text-base line-clamp-1" primary="Tập tin" />
           </ListItemButton>

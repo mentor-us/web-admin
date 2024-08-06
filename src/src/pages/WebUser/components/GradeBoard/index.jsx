@@ -122,13 +122,14 @@ function GradeBoard(props) {
     });
   }, [year, semester]);
   return (
-    <ThemeProvider theme={theme}>
+    <div>
       <div className="flex flex-col gap-y-2">
-        <Typography variant="h5" component="div" fontWeight="bold">
+        <Typography variant="h5" component="div">
           Bảng Điểm
         </Typography>
+
         <div className="form-group">
-          <Typography variant="strong" component="div">
+          <Typography className="!text-sm" component="div">
             Năm học:
           </Typography>
         </div>
@@ -161,7 +162,7 @@ function GradeBoard(props) {
           />
         </div>
         <div className="form-group">
-          <Typography variant="strong" component="div">
+          <Typography className="!text-sm" component="div">
             Học kỳ:
           </Typography>
         </div>
@@ -212,7 +213,7 @@ function GradeBoard(props) {
             )}
           />
         </div>
-        <div className="flex flex-col gap-y-4 mt-3">
+        <div className="flex flex-col gap-y-4 mt-2">
           {isLoadingGrade && (
             <div className="flex flex-row justify-center">
               <Skeleton variant="rectangular" width="100%" height={60} />
@@ -235,7 +236,7 @@ function GradeBoard(props) {
             })}
         </div>
       </div>
-    </ThemeProvider>
+    </div>
   );
 }
 GradeBoard.propTypes = {

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { API_URL } from "config";
 
-import { groupStatusList, SUPPORTED_VIDEO_EXT } from "./constants";
+import { groupStatusList, phoneNumberRegex, SUPPORTED_VIDEO_EXT } from "./constants";
 
 export * from "./auth";
 export * from "./dateHelper";
@@ -260,4 +260,8 @@ export function isNumber(n) {
 export function isCheckVideo(url) {
   const videoExtensions = SUPPORTED_VIDEO_EXT;
   return videoExtensions.some((extension) => url.toLowerCase().endsWith(extension));
+}
+
+export function isVietnamesePhoneNumber(number) {
+  return phoneNumberRegex.test(number);
 }

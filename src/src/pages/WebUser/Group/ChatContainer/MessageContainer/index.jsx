@@ -95,7 +95,7 @@ function MessageContainer({ channelId }) {
           display: "flex",
           flexDirection: "column-reverse",
           overflow: "hidden",
-          height: "calc(100% - 10px)"
+          height: "calc(100% - 20px)"
         }}
         inverse
         loader={

@@ -13,6 +13,7 @@ import ArrowLeftCircleIcon from "./_raw/arrow-left-circle-icon.svg?react";
 import ArrowDropDown from "./_raw/ArrowDropDown.svg?react";
 import ArrowheadDownIcon from "./_raw/arrowhead-down-icon.svg?react";
 import AttachmentIcon from "./_raw/attachment-icon.svg?react";
+import AttachmentIconNoBG from "./_raw/attachment-icon-no-bg.svg?react";
 import BlankFile from "./_raw/blank-file.svg?react";
 import CalendarIcon from "./_raw/calendar-icon.svg?react";
 import CameraIcon from "./_raw/camera-icon.svg?react";
@@ -132,6 +133,7 @@ export {
   ArrowheadDownIcon,
   ArrowLeftCircleIcon,
   AttachmentIcon,
+  AttachmentIconNoBG,
   BlankFile,
   CalendarIcon,
   CameraIcon,
