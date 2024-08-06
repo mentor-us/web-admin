@@ -169,7 +169,7 @@ function AddCategoryButton() {
                   size="small"
                   sx={{ width: "70%" }}
                   value={name}
-                  inputProps={{ maxLength: 100 }}
+                  maxLength={50}
                   onChange={handleNameChange}
                   error={!firstLoad.name && name.length === 0}
                   helperText={
