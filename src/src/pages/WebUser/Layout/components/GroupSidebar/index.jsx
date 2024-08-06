@@ -81,8 +81,8 @@ function GroupSidebar({ workspace, isLoading }) {
   }, [workspace, channelId]);
 
   return (
-    <>
-      <div className="h-16 bg-white ">
+    <div className="h-full !overflow-y-scroll">
+      <div className="h-16 bg-white">
         <GroupHeader groupName={workspace?.name} isLoading={isLoading} />
       </div>
       <hr />
@@ -257,7 +257,7 @@ function GroupSidebar({ workspace, isLoading }) {
       {openCreateChannelDialog && (
         <CreateNewChannelDialog open={openCreateChannelDialog} handleClose={handleClose} />
       )}
-    </>
+    </div>
   );
 }
 

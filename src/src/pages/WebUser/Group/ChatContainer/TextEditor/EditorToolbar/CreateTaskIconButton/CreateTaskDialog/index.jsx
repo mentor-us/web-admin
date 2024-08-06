@@ -242,16 +242,21 @@ function CreateTaskDialog({
             control={control}
             disabled={!isEditable}
             rules={{
-              required: "Vui lòng nhập tiêu đề"
+              required: "Vui lòng nhập tiêu đề",
+              maxLength: {
+                value: 100,
+                message: "Tiêu đề không được vượt quá 100 ký tự"
+              }
             }}
-            render={({ field }) => (
+            render={({ field: { ref, ...fieldData } }) => (
               <TextField
                 className="!mb-6"
-                label="Tiêu đề *"
+                label="Tiêu đề (*)"
                 fullWidth
                 error={!!errors?.title}
                 helperText={errors?.title?.message}
-                {...field}
+                {...fieldData}
+                inputRef={ref}
               />
             )}
           />
@@ -260,13 +265,27 @@ function CreateTaskDialog({
             name="description"
             control={control}
             disabled={!isEditable}
-            rules={{ required: false }}
-            render={({ field }) => {
-              return (
-                // eslint-disable-next-line react/no-unstable-nested-components
-                <TextField className="!mb-6" label="Mô tả" fullWidth {...field} />
-              );
+            rules={{
+              required: false,
+              maxLength: {
+                value: 250,
+                message: "Mô tả không được vượt quá 250 ký tự"
+              }
             }}
+            render={({ field: { ref, ...fieldData } }) => (
+              <TextField
+                multiline
+                minRows={4}
+                maxRows={4}
+                className="!mb-6"
+                label="Mô tả"
+                fullWidth
+                inputRef={ref}
+                error={!!errors?.description}
+                helperText={errors?.description?.message}
+                {...fieldData}
+              />
+            )}
           />
 
           <Grid container spacing={2}>
@@ -292,7 +311,7 @@ function CreateTaskDialog({
                     <MobileTimePicker
                       className="!mb-6"
                       fullWidth
-                      label="Tới hạn lúc *"
+                      label="Tới hạn lúc (*)"
                       slotProps={{
                         textField: {
                           fullWidth: true,
@@ -334,7 +353,7 @@ function CreateTaskDialog({
                       className="!mb-6"
                       format="DD/MM/YYYY"
                       fullWidth
-                      label="Ngày *"
+                      label="Ngày (*)"
                       slotProps={{
                         actionBar: {
                           actions: ["today"]
@@ -426,7 +445,7 @@ function CreateTaskDialog({
               return (
                 <Autocomplete
                   className="!mt-2"
-                  label="Giao công việc *"
+                  label="Giao công việc (*)"
                   loading={isLoadingMembers}
                   limitTags={3}
                   multiple
@@ -447,7 +466,7 @@ function CreateTaskDialog({
                   }}
                   renderInput={(params) => (
                     <TextField
-                      label="Giao công việc *"
+                      label="Giao công việc (*)"
                       error={!!errors?.attendees}
                       helperText={errors?.attendees?.message}
                       InputProps={{

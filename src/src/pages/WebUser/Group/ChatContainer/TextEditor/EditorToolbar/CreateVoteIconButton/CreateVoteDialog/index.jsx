@@ -128,16 +128,21 @@ function CreateVoteDialog({ open, handleClose }) {
             name="question"
             control={control}
             rules={{
-              required: "Vui lòng nhập câu hỏi cần bình chọn"
+              required: "Vui lòng nhập câu hỏi cần bình chọn",
+              maxLength: {
+                value: 100,
+                message: "Câu hỏi không được vượt quá 100 ký tự"
+              }
             }}
-            render={({ field }) => (
+            render={({ field: { ref, ...fieldData } }) => (
               <TextField
                 className="!mb-2"
                 label="Câu hỏi bình chọn *"
                 fullWidth
                 error={!!errors?.question}
                 helperText={errors?.question?.message}
-                {...field}
+                {...fieldData}
+                inputRef={ref}
               />
             )}
           />

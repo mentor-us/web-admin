@@ -31,30 +31,29 @@ function TaskItem({ task }) {
       <Box className="meeting-message-container">
         <Tooltip placement="top" title={!openDialog ? "Xem chi tiết" : null}>
           <Box
-            className="bg-white rounded-lg w-[70%] p-4 cursor-pointer"
+            className="bg-white rounded-lg !min-w-[70%] !max-w-[70%] p-4 cursor-pointer"
             onClick={() => setOpenDialog(true)}
           >
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              flexDirection="column"
-              gap={1}
-            >
+            <Box display="flex" justifyContent="center" flexDirection="column" gap={1}>
               <Box display="flex" justifyContent="center" alignItems="center" gap={1}>
                 <TaskSquareIcon width={22} height={22} />
-                <Typography className="text-[#F05B51] !font-bold !text-base">Công việc</Typography>
+                <Typography className="text-[#F05B51] !font-bold !text-lg">Công việc</Typography>
               </Box>
-              <Typography className="!font-bold !text-xl !text-[#333] line-clamp-2">
-                {taskData.title}
-              </Typography>
-              <Typography className="!text-lg !text-[#888] line-clamp-2">
+              <Box className="text-center break-words !max-w-[70%] self-center">
+                <Typography className="!font-bold !text-base !text-[#333] !line-clamp-1">
+                  <Tooltip title={taskData.title}>{taskData.title}</Tooltip>
+                </Typography>
+              </Box>
+              <Typography className="!text-sm !text-[#888] !line-clamp-1 self-center">
                 Tới hạn {taskData.deadlineTimeModel.time}, ngày {taskData.deadlineTimeModel.date}
               </Typography>
+
               {ownStatus && ownStatus !== "NULL" && (
-                <Button className="!text-sm !bg-[#ebebeb] !rounded-full !text-[#333] !font-medium">
-                  {TaskStatusObject[taskData.status].displayName}
-                </Button>
+                <Box className="self-center">
+                  <Button className="!text-sx !bg-[#ebebeb] !rounded-full !text-[#333] !font-medium">
+                    {TaskStatusObject[taskData.status].displayName}
+                  </Button>
+                </Box>
               )}
             </Box>
           </Box>
