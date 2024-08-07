@@ -109,7 +109,15 @@ function AddAccountButton() {
   const handleClose = () => isLostAllData();
 
   const handleNameChange = (e) => {
-    setName(e.target.value);
+    const { value } = e.target;
+    const regex = /^[a-zA-Z\s]*$/;
+
+    if (regex.test(value)) {
+      setName(value); // Update state if valid
+    } else {
+      setName(name);
+    }
+
     setFirstLoad({
       ...firstLoad,
       name: false

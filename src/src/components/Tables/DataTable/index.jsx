@@ -225,6 +225,7 @@ function DataTable({
                             type={cell.column.type}
                             info={cell.row.original}
                             {...cell.getCellProps()}
+                            maxWidth="10rem" // Set max-width here
                           >
                             {cell.render("Cell")}
                           </DataTableBodyCell>

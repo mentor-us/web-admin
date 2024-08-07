@@ -7,7 +7,7 @@ import MDAvatar from "components/MDComponents/MDAvatar";
 import MDBox from "components/MDComponents/MDBox";
 import MDTypography from "components/MDComponents/MDTypography";
 
-function DataTableBodyCell({ noBorder, align, children, type, info }) {
+function DataTableBodyCell({ noBorder, align, children, type, info, maxWidth }) {
   const renderChildren = () => {
     switch (type) {
       case "normal":
@@ -76,7 +76,8 @@ function DataTableBodyCell({ noBorder, align, children, type, info }) {
       px={2}
       sx={({ palette: { light }, typography: { size }, borders: { borderWidth } }) => ({
         fontSize: size.sm,
-        borderBottom: noBorder ? "none" : `${borderWidth[1]} solid ${light.main}`
+        borderBottom: noBorder ? "none" : `${borderWidth[1]} solid ${light.main}`,
+        maxWidth // Apply the maxWidth prop here
       })}
     >
       <MDBox color="black" sx={{ verticalAlign: "middle" }}>
@@ -91,7 +92,8 @@ DataTableBodyCell.defaultProps = {
   noBorder: false,
   align: "left",
   type: "normal",
-  info: false
+  info: false,
+  maxWidth: "none" // default value for maxWidth
 };
 
 // Typechecking props for the DataTableBodyCell
@@ -106,7 +108,8 @@ DataTableBodyCell.propTypes = {
       href: PropTypes.string,
       statusColor: PropTypes.string
     })
-  ])
+  ]),
+  maxWidth: PropTypes.string // Typechecking for maxWidth
 };
 
 export default DataTableBodyCell;
