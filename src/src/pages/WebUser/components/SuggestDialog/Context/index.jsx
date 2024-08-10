@@ -102,7 +102,6 @@ function ContextDialog() {
   };
   const { channelId } = useParams();
   const realChannelId = channelId || currentChannelId;
-  console.log("realChannelId", realChannelId);
   const confirm = useConfirm();
   const myInfo = useMyInfo();
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
