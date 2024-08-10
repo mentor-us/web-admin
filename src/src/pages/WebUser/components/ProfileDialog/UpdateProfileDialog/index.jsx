@@ -43,7 +43,7 @@ function UpdateProfileDialog(props) {
       name: data.name,
       phone: data.phone,
       personalEmail: info.personalEmail,
-      birthDate: data.dob.toISOString(),
+      birthDate: data.dob ? data.dob.format("YYYY-MM-DD") : null,
       gender: info.gender
     };
   };

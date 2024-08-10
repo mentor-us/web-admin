@@ -152,7 +152,7 @@ function NoteForm({ onCancel, noteId }) {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Note cho*"
+                  label="Note cho *"
                   error={!!errors?.attendees}
                   helperText={errors?.attendees?.message}
                   InputProps={{
