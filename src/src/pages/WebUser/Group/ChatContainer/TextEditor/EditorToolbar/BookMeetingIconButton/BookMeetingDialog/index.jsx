@@ -510,7 +510,9 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel}>Hủy</Button>
+          <Button color="secondary" onClick={onCancel}>
+            Hủy
+          </Button>
           {isEditable && <Button type="submit">{titlebtnDialog}</Button>}
         </DialogActions>
       </Dialog>

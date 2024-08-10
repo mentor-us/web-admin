@@ -254,7 +254,9 @@ function CreateVoteDialog({ open, handleClose }) {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel}>Hủy</Button>
+          <Button color="secondary" onClick={onCancel}>
+            Hủy
+          </Button>
           <Button type="submit">Tạo bình chọn</Button>
         </DialogActions>
       </Dialog>
