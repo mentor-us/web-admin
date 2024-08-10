@@ -194,14 +194,13 @@ function FloatingOptions({ message, isShow }) {
       const file = new File([fileBlob], "audio.mp3", { type: "audio/mpeg" });
 
       const data = await whisperServices.transcribeAudio(file);
-      console.log("Văn bản chuyển đổi:", data.text);
 
       toast(
         (t) => (
           <div>
             <p
               style={{
-                fontSize: "16px",
+                fontSize: "1rem",
                 fontWeight: "bold",
                 marginBottom: "10px",
                 color: "#333"
@@ -209,24 +208,9 @@ function FloatingOptions({ message, isShow }) {
             >
               Chuyển đổi giọng nói thành văn bản thành công
             </p>
-            {/* <p
-              style={{
-                color: "#555",
-                marginBottom: "10px",
-                // whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                maxWidth: "calc(100% - 40px)", // Ensures it fits within the container
-                padding: "5px 0"
-              }}
-              title={data.text} // Optional: shows full text on hover
-            >
-              {data.text}
-            </p> */}
             <div style={{ display: "flex", gap: "10px" }}>
               <button
                 onClick={() => {
-                  console.log("Văn bản chuyển đổi:", data.text);
                   toast.dismiss(t.id);
                   handleSuggestWhisper(data);
                 }}
@@ -243,7 +227,7 @@ function FloatingOptions({ message, isShow }) {
                 onMouseEnter={(e) => (e.target.style.backgroundColor = "#0056b3")}
                 onMouseLeave={(e) => (e.target.style.backgroundColor = "#007bff")}
               >
-                Mở file
+                Xem chi tiết
               </button>
               <button
                 onClick={() => {
@@ -274,7 +258,6 @@ function FloatingOptions({ message, isShow }) {
         }
       );
     } catch (error) {
-      console.error("Lỗi khi chuyển đổi giọng nói thành văn bản:", error);
       toast.error("Chuyển đổi giọng nói thành văn bản thất bại", {
         id: loadingToastId,
         position: "bottom-right",
@@ -350,7 +333,7 @@ function FloatingOptions({ message, isShow }) {
           </Tooltip>
         )}
         {message?.type === MESSAGE_TYPE.FILE && isMP3(message?.file.filename) && (
-          <Tooltip title="Sử dụng whisper AI" placement="top">
+          <Tooltip title="Chuyển đổi giọng nói thành văn bản" placement="top">
             <IconButton
               aria-label="more"
               id="long-button"

@@ -78,7 +78,7 @@ function ProfileDialog(props) {
 
   const openChat = async () => {
     const data = {
-      channelName: "",
+      channelName: user?.name ?? "Nhóm riêng tư",
       description: "",
       groupId,
       creatorId: myInfo.id,
