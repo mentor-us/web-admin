@@ -265,7 +265,9 @@ function VoteDetailDialog({ open, handleClose, voteId, message }) {
           <VoteSetting message={message} vote={vote} />
           {vote?.status === VOTE_STATUS.OPEN ? (
             <Box>
-              <Button onClick={onCancel}>Hủy</Button>
+              <Button color="secondary" onClick={onCancel}>
+                Hủy
+              </Button>
               <Button
                 disabled={!isDirty}
                 onClick={(event) => {

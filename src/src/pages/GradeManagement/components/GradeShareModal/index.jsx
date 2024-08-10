@@ -367,7 +367,9 @@ function GradeShareModal({ user, onCancel }) {
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onCancel}>Hủy</Button>
+        <Button color="secondary" onClick={onCancel}>
+          Hủy
+        </Button>
         <Button disabled={disableSubmit} onClick={handleSubmit}>
           Lưu
         </Button>

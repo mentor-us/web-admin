@@ -18,7 +18,7 @@ function TextItem({ message, isOwner }) {
           <ListItemText
             primary={
               <div
-                className="text-xs text-nowrap !text-[#444] !line-clamp-5"
+                className="!text-lg text-nowrap !text-[#444] !line-clamp-5"
                 style={{
                   display: "block",
                   overflow: "hidden",
@@ -34,17 +34,33 @@ function TextItem({ message, isOwner }) {
       )}
       <ListItemText
         primary={
-          <div
-            className="text-sm text-nowrap"
-            style={{
-              display: "block",
-              overflow: "hidden",
-              whiteSpace: "initial",
-              textOverflow: "ellipsis",
-              wordBreak: "break-word"
-            }}
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(message.content) }}
-          />
+          message.content === "Tin nhắn đã được xóa" ? (
+            <div
+              className="text-lg text-nowrap"
+              style={{
+                display: "block",
+                overflow: "hidden",
+                whiteSpace: "initial",
+                textOverflow: "ellipsis",
+                fontStyle: "italic",
+                color: "#999",
+                wordBreak: "break-word"
+              }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(message.content) }}
+            />
+          ) : (
+            <div
+              className="text-lg text-nowrap"
+              style={{
+                display: "block",
+                overflow: "hidden",
+                whiteSpace: "initial",
+                textOverflow: "ellipsis",
+                wordBreak: "break-word"
+              }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(message.content) }}
+            />
+          )
         }
       />
     </MessageItemContainer>

@@ -244,7 +244,9 @@ function CreateNewChannelDialog({ open, handleClose }) {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onCancel}>Hủy</Button>
+        <Button color="secondary" onClick={onCancel}>
+          Hủy
+        </Button>
         <Button type="submit">
           {isPending ? <CircularProgress color="inherit" size={20} /> : "Tạo kênh"}
         </Button>

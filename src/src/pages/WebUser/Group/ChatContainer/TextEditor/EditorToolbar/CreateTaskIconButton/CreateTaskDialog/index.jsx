@@ -496,7 +496,9 @@ function CreateTaskDialog({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel}>Đóng</Button>
+          <Button color="secondary" onClick={onCancel}>
+            Đóng
+          </Button>
           {isEditable && <Button type="submit">{titlebtnDialog}</Button>}
         </DialogActions>
       </Dialog>

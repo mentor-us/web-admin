@@ -168,7 +168,9 @@ function ForwardMessageDialog({ open, handleClose, message = null }) {
       </DialogContent>
       <hr />
       <DialogActions>
-        <Button onClick={onCancel}>Hủy</Button>
+        <Button color="secondary" onClick={onCancel}>
+          Hủy
+        </Button>
         <Button
           type="submit"
           disabled={isSubmitting || !listChannel || !listChannel.length}
