@@ -12,6 +12,7 @@ const messages = {
   107: "Tài khoản đã tồn tại!",
   111: "Vui lòng điền đầy đủ thông tin bắt buộc!",
   204: "Nhóm không tồn tại!",
+  205: "Kênh không tồn tại!",
   207: "Tên nhóm đã tồn tại!",
   208: "Loại nhóm không tồn tại!",
   209: "Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc!",

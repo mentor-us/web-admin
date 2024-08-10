@@ -114,6 +114,12 @@ const GroupApi = {
   async getWorkspace(groupId) {
     const URL = `/api/groups/${groupId}/workspace`;
     const data = await AxiosClient.get(URL);
+    console.log("data", data);
+    console.log("data", data);
+    console.log("data", data);
+    console.log("data", data);
+    console.log("data", data);
+
     return data;
   },
   async getGroupDetail(groupId) {

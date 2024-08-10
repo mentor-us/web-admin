@@ -18,7 +18,7 @@ function TextItem({ message, isOwner }) {
           <ListItemText
             primary={
               <div
-                className="text-xs text-nowrap !text-[#444] !line-clamp-5"
+                className="!text-lg text-nowrap !text-[#444] !line-clamp-5"
                 style={{
                   display: "block",
                   overflow: "hidden",
@@ -35,7 +35,7 @@ function TextItem({ message, isOwner }) {
       <ListItemText
         primary={
           <div
-            className="text-sm text-nowrap"
+            className="text-lg text-nowrap"
             style={{
               display: "block",
               overflow: "hidden",
