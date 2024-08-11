@@ -114,12 +114,21 @@ const GroupApi = {
   async getWorkspace(groupId) {
     const URL = `/api/groups/${groupId}/workspace`;
     const data = await AxiosClient.get(URL);
-
+    if (data.returnCode === 204) {
+      window.location.href = "/chat";
+      return;
+    }
+    // eslint-disable-next-line consistent-return
     return data;
   },
   async getGroupDetail(groupId) {
     const URL = `/api/groups/${groupId}/detail`;
     const res = await AxiosClient.get(URL);
+    if (res.returnCode === 104) {
+      window.location.href = "/chat";
+      return;
+    }
+    // eslint-disable-next-line consistent-return
     return res?.data;
   },
   async getGroupMembers(groupId) {
