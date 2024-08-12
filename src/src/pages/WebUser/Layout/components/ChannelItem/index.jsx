@@ -33,7 +33,8 @@ import ChannelIcon from "../ChannelIcon";
 export const styleActiveChannel = (selected) => {
   return {
     "&.Mui-selected": {
-      backgroundColor: selected ? colors.gradients.light.main : "inherit" // Using theme color here
+      backgroundColor: selected ? colors.gradients.light.main : "inherit",
+      cursor: "default" // Using theme color here
     },
     "&:hover": {
       backgroundColor: `${colors.gradients.light.main} !important` // Using theme color here
@@ -145,7 +146,10 @@ function ChannelItem({ channel, role, selectedChannelId, onChannelSelected, disa
     <>
       <Tooltip title={channel.name} arrow placement="right" TransitionComponent={Zoom}>
         <ListItemButton
-          sx={{ ...styleActiveChannel(selectedChannelId === channel?.id), pl: 4 }}
+          sx={{
+            ...styleActiveChannel(selectedChannelId === channel?.id),
+            pl: 4
+          }}
           onClick={() => {
             if (unseenChannelIds.has(channel.id)) {
               removeUnseenMessageChannelId(channel?.id);
@@ -155,15 +159,14 @@ function ChannelItem({ channel, role, selectedChannelId, onChannelSelected, disa
           }}
           onContextMenu={disableContextMenu ? null : handleContextMenu}
           selected={selectedChannelId === channel?.id}
+          disableRipple={selectedChannelId === channel?.id}
         >
           <ListItemIcon>
             <ChannelIcon channel={channel} />
           </ListItemIcon>
           <ListItemText
             disableTypography
-            className={`text-base line-clamp-1 ${
-              unseenChannelIds.has(channel.id) ? "!font-bold" : ""
-            }`}
+            className="text-base line-clamp-1"
             primary={channel.name}
           />
         </ListItemButton>

@@ -10,6 +10,7 @@ import { getMyInfo } from "features/myInfo/slice";
 import PropTypes from "prop-types";
 
 import dayjs from "dayjs";
+import { isVietnamesePhoneNumber } from "utils";
 
 import { useUpdateProfileMutation } from "hooks/profile/mutation";
 
@@ -42,7 +43,7 @@ function UpdateProfileDialog(props) {
       name: data.name,
       phone: data.phone,
       personalEmail: info.personalEmail,
-      birthDate: data.dob.toISOString(),
+      birthDate: data.dob ? data.dob.format("YYYY-MM-DD") : null,
       gender: info.gender
     };
   };
@@ -95,29 +96,48 @@ function UpdateProfileDialog(props) {
           <Controller
             name="name"
             control={control}
-            rules={{ required: "Họ và tên không được để trống" }}
-            render={({ field }) => (
+            rules={{
+              required: "Họ và tên không được để trống",
+              maxLength: {
+                value: 50,
+                message: "Họ và tên không được quá 50 ký tự"
+              }
+            }}
+            render={({ field: { ref, ...remainField } }) => (
               <TextField
-                {...field}
+                {...remainField}
                 className="!mb-3"
-                label="Họ và tên"
+                label="Họ và tên (*)"
                 fullWidth
                 error={!!errors.name}
                 helperText={errors.name?.message}
+                inputRef={ref}
               />
             )}
           />
           <Controller
             name="phone"
             control={control}
-            render={({ field }) => (
+            rules={{
+              validate: {
+                phone: (v) => {
+                  if (!v || isVietnamesePhoneNumber(v)) {
+                    return true;
+                  }
+
+                  return "Số điện thoại không hợp lệ";
+                }
+              }
+            }}
+            render={({ field: { ref, ...remainField } }) => (
               <TextField
-                {...field}
+                {...remainField}
                 className="!mb-3"
                 label="Số điện thoại"
                 fullWidth
                 error={!!errors.phone}
                 helperText={errors?.phone?.message}
+                inputRef={ref}
               />
             )}
           />
@@ -127,11 +147,11 @@ function UpdateProfileDialog(props) {
             rules={{
               validate: {
                 gtnow: (v) => {
-                  if (!v || dayjs().isAfter(v)) {
+                  if (!v || v.isBefore(today)) {
                     return true;
                   }
 
-                  return "Ngày tới hạn phải lớn hơn hoặc bằng ngày hiện tại";
+                  return "Ngày sinh không được lớn hơn ngày hiện tại";
                 }
               }
             }}
@@ -151,12 +171,12 @@ function UpdateProfileDialog(props) {
                     helperText: errors?.date?.message
                   }
                 }}
-                //   localeText={{
-                //     todayButtonLabel: "Hôm nay"
-                //   }}
+                localeText={{
+                  todayButtonLabel: "Hôm nay"
+                }}
                 maxDate={today}
                 onChange={(newValue) => onChange(newValue)}
-                renderInput={(params) => <TextField {...params} label="Ngày *" />}
+                renderInput={(params) => <TextField {...params} />}
                 {...rest}
               />
             )}

@@ -126,13 +126,13 @@ function MessageItemContainer({ children, message, isOwner }) {
                 <PinIconMessenger className="absolute right-0 top-0 translate-x-[50%] translate-y-[-50%] transform scale-x-[-1] scale-y-[1]" />
               )}
               {!isOwner && (
-                <Typography className="!text-xs font-bold text-[#299C49]">
+                <Typography className="!text-base font-bold text-[#299C49]">
                   {message?.sender?.name}
                 </Typography>
               )}
               {children}
               <Typography
-                className="!text-sm !mb-2"
+                className="!text-base !mb-2"
                 style={{
                   color: "#888"
                 }}

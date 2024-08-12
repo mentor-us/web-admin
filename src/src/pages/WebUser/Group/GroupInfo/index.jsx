@@ -253,22 +253,6 @@ export default function GroupInfo() {
             <div className="header-info name w-full font-bold text-base border-white flex justify-center items-center p-1">
               {isSuccess && groupDetail?.name}
             </div>
-            <div className="header-info flex justify-center gap-8 text-xs items-center tools ">
-              {/* <div>
-                {isSuccess && groupDetail?.permissions.includes("GROUP_SETTINGS") && (
-                  <div className="tool-item bg-gray-100 hover:bg-slate-300 rounded-full">
-                    <IconButton size="small" color="black">
-                      <SettingsOutlinedIcon />
-                    </IconButton>
-                  </div>
-                )}
-              </div>
-              <div className="tool-item bg-gray-100 hover:bg-slate-300 rounded-full">
-                <IconButton size="small" color="black">
-                  <NotificationsOutlinedIcon />
-                </IconButton>
-              </div> */}
-            </div>
           </div>
           <Divider
             sx={{
@@ -292,13 +276,6 @@ export default function GroupInfo() {
               <GroupInfoItem type="member" selectedType={selectedType} />
             </List>
           </Collapse>
-          <Divider
-            sx={{
-              margin: 1,
-              padding: 0,
-              backgroundColor: "#ccc"
-            }}
-          />
           <ListItemButton onClick={toggleChannelMedia}>
             <ListItemText
               disableTypography
@@ -333,13 +310,6 @@ export default function GroupInfo() {
               />
             </List>
           </Collapse>
-          <Divider
-            sx={{
-              margin: 1,
-              padding: 0,
-              backgroundColor: "#ccc"
-            }}
-          />
         </div>
       ) : (
         <GroupItemDetail type={showTypeScreen} />

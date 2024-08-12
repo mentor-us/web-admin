@@ -1,6 +1,6 @@
 {
   "name": "mentor-web",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "private": true,
   "dependencies": {
     "@ckeditor/ckeditor5-build-multi-root": "^41.4.2",

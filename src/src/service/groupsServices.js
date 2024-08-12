@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { calculateDays } from "utils";
 import GroupApi from "api/GroupApi";
 
+import CustomError from "errors/CustomError";
 import ServerError from "errors/ServerError";
 
 import ErrorWrapper from "./ErrorServiceWrapper";
@@ -22,9 +23,12 @@ const searchGroup = async (req) => {
 
 const addNewGroup = async (req) => {
   const response = await GroupApi.add(req);
+  if (response.returnCode === 222) {
+    throw new CustomError(response.message);
+  }
 
   if (response.returnCode !== 200) {
-    throw new ServerError(response.returnCode, response.data);
+    throw new ServerError(response.returnCode, response.message);
   }
 
   return response.data;

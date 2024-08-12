@@ -81,8 +81,8 @@ function GroupSidebar({ workspace, isLoading }) {
   }, [workspace, channelId]);
 
   return (
-    <>
-      <div className="h-16 bg-white ">
+    <div className="h-full !overflow-y-scroll">
+      <div className="h-16 bg-white">
         <GroupHeader groupName={workspace?.name} isLoading={isLoading} />
       </div>
       <hr />
@@ -173,7 +173,7 @@ function GroupSidebar({ workspace, isLoading }) {
                   />
                 </ListItemButton>
               ) : (
-                <Box>
+                <Box className="max-h-96 overflow-auto">
                   {workspace?.channels.map((channel) => {
                     if (channel && channel.id !== workspace?.defaultChannelId) {
                       return (
@@ -235,7 +235,7 @@ function GroupSidebar({ workspace, isLoading }) {
                   />
                 </ListItemButton>
               ) : (
-                <Box>
+                <Box className="max-h-72 overflow-auto">
                   {workspace?.privates.map((channel) => {
                     return (
                       <ChannelItem
@@ -257,7 +257,7 @@ function GroupSidebar({ workspace, isLoading }) {
       {openCreateChannelDialog && (
         <CreateNewChannelDialog open={openCreateChannelDialog} handleClose={handleClose} />
       )}
-    </>
+    </div>
   );
 }
 

@@ -59,8 +59,16 @@ function LayoutHelper() {
         bottom="2.4rem"
         zIndex={99}
         color="dark"
-        sx={{ cursor: "pointer" }}
+        sx={{
+          cursor: "pointer",
+          transition: "all 0.3s ease", // Smooth transition for hover effect
+          "&:hover": {
+            bgColor: "#A0D8F3", // Change background color on hover
+            transform: "scale(1.1)" // Slightly enlarge the element on hover
+          }
+        }}
         onClick={openConfig}
+        hover={{ bgColor: "#00A3E0" }}
       >
         <Icon fontSize="small" color="inherit">
           settings

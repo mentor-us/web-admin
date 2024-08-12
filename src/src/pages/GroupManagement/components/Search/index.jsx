@@ -264,6 +264,7 @@ function SearchBox() {
                       type="email"
                       size="small"
                       sx={{ width: "70%" }}
+                      inputProps={{ maxLength: 80 }}
                       value={emailMentor}
                       onChange={handleEmailMentorChange}
                     />
@@ -280,6 +281,7 @@ function SearchBox() {
                       Email Mentee
                     </MDTypography>
                     <MDInput
+                      inputProps={{ maxLength: 80 }}
                       placeholder="Nhập email của mentee"
                       size="small"
                       sx={{ width: "70%" }}

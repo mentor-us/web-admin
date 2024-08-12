@@ -61,7 +61,7 @@ function Footer() {
                 facebook
               </Icon>
               <a
-                className="landing_footer-text"
+                className="landing_footer-text hover:text-blue-500"
                 target="_blank"
                 href="https://www.facebook.com/hieucckha"
                 rel="noreferrer"
@@ -80,7 +80,7 @@ function Footer() {
               />
 
               <a
-                className="landing_footer-text"
+                className="landing_footer-text hover:text-blue-500"
                 target="_blank"
                 href="https://zalo.me/g/jljwwq240"
                 rel="noreferrer"
@@ -94,7 +94,7 @@ function Footer() {
           <div className="landing_footer__contact">
             <div className="landing_footer__contact-text">
               <a
-                className="landing_footer-text"
+                className="landing_footer-text hover:text-blue-500"
                 target="_blank"
                 href="/user-guide-web-admin"
                 rel="noreferrer"
@@ -104,7 +104,7 @@ function Footer() {
             </div>
             <div className="landing_footer__contact-text">
               <a
-                className="landing_footer-text"
+                className="landing_footer-text hover:text-blue-500"
                 target="_blank"
                 href="/user-guide-mobile"
                 rel="noreferrer"

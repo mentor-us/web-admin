@@ -48,7 +48,7 @@ function ConfirmLogout({ name, onLogout, onCancel }) {
           </MDButton>
           <MDButton
             variant="gradient"
-            color="info"
+            color="secondary"
             sx={{ m: 1, textTransform: "none", fontSize: "1rem" }}
             onClick={onCancel}
           >

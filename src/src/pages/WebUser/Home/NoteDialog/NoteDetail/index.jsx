@@ -207,20 +207,20 @@ function NoteDetail({ noteUserId, onShareClick, onEditClick, onHistoryClick }) {
                         <ShareOutlined fontSize="small" sx={{ mr: 1 }} /> Chia sẻ
                       </MenuItem>
                     )}
-                    {note.owner.id === myInfo?.id ||
-                      (note.creator.id === myInfo?.id && (
-                        <MenuItem
-                          onClick={(event) => handleDeleteNote(event, note.id)}
-                          sx={{
-                            color: "#f44336",
-                            "&:hover": {
-                              backgroundColor: "#ffebee"
-                            }
-                          }}
-                        >
-                          <DeleteOutline fontSize="small" sx={{ mr: 1 }} /> Xóa
-                        </MenuItem>
-                      ))}
+                    {(note.owner.id === myInfo?.id || note.creator.id === myInfo?.id) && (
+                      <MenuItem
+                        onClick={(event) => handleDeleteNote(event, note.id)}
+                        sx={{
+                          color: "#f44336",
+                          "&:hover": {
+                            backgroundColor: "#ffebee",
+                            color: "#f44336"
+                          }
+                        }}
+                      >
+                        <DeleteOutline fontSize="small" sx={{ mr: 1 }} /> Xóa
+                      </MenuItem>
+                    )}
                   </Menu>
                 </Box>
               )}

@@ -105,6 +105,10 @@ function VoteDetailOption({
                 name={`choices.${index}.name`}
                 rules={{
                   required: "Không được để trống bình chọn",
+                  maxLength: {
+                    value: 100,
+                    message: "Lựa chọn không được vượt quá 100 ký tự"
+                  },
                   validate: {
                     unique: (v) =>
                       !choices

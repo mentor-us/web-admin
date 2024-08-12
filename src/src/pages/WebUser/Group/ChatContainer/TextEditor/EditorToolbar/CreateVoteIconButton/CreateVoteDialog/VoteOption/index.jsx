@@ -12,6 +12,10 @@ function VoteOption({ control, index, remove, errors }) {
       name={`choices.${index}.name`}
       rules={{
         required: "Không được để trống bình chọn",
+        maxLength: {
+          value: 100,
+          message: "Lựa chọn không được vượt quá 100 ký tự"
+        },
         validate: {
           checkDuplicate: (v) => {
             return (
@@ -23,10 +27,11 @@ function VoteOption({ control, index, remove, errors }) {
           }
         }
       }}
-      render={({ field: innerField }) => (
+      render={({ field: { ref, ...innerField } }) => (
         <Stack direction="row">
           <TextField
             {...innerField}
+            inputRef={ref}
             label={`Lựa chọn ${index + 1} *`}
             error={errors?.choices && errors?.choices[index]}
             helperText={errors?.choices && errors?.choices[index]?.name?.message}

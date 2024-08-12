@@ -48,9 +48,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
   const queryClient = useQueryClient();
   const today = dayjs().add(1, "h").minute(0);
   const { data: meetingDetail } = useGetDetailMeeting(meetingId);
-  const [titleDialog, setTitleDialog] = useState(
-    meetingId ? "Chi tiết lịch hẹn " : "Lịch hẹn  mới"
-  );
+  const [titleDialog, setTitleDialog] = useState(meetingId ? "Chi tiết lịch hẹn " : "Lịch hẹn mới");
   const [isEditable, setIsEditable] = useState(!meetingId);
   const titlebtnDialog = meetingDetail ? "Lưu lịch hẹn " : "Tạo lịch hẹn";
 
@@ -220,16 +218,21 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
             disabled={!isEditable}
             control={control}
             rules={{
-              required: "Vui lòng nhập tiêu đề"
+              required: "Vui lòng nhập tiêu đề",
+              maxLength: {
+                value: 100,
+                message: "Tiêu đề không được vượt quá 100 ký tự"
+              }
             }}
-            render={({ field }) => (
+            render={({ field: { ref, ...fieldData } }) => (
               <TextField
                 className="!mb-6"
-                label="Tiêu đề *"
+                label="Tiêu đề (*)"
                 fullWidth
                 error={!!errors?.title}
                 helperText={errors?.title?.message}
-                {...field}
+                inputRef={ref}
+                {...fieldData}
               />
             )}
           />
@@ -238,16 +241,26 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
             name="description"
             disabled={!isEditable}
             control={control}
-            rules={{ required: false }}
-            render={({ field }) => {
+            rules={{
+              required: false,
+              maxLength: {
+                value: 250,
+                message: "Mô tả không được vượt quá 250 ký tự"
+              }
+            }}
+            render={({ field: { ref, ...fieldData } }) => {
               return (
                 <TextField
                   multiline
+                  minRows={4}
                   maxRows={4}
                   className="!mb-6"
                   label="Mô tả"
                   fullWidth
-                  {...field}
+                  inputRef={ref}
+                  error={!!errors?.description}
+                  helperText={errors?.description?.message}
+                  {...fieldData}
                 />
               );
             }}
@@ -276,7 +289,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                     <MobileTimePicker
                       className="!mb-6"
                       fullWidth
-                      label="Từ *"
+                      label="Từ (*)"
                       slotProps={{
                         textField: {
                           fullWidth: true,
@@ -321,7 +334,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                     <MobileTimePicker
                       className="!mb-6"
                       fullWidth
-                      label="Đến *"
+                      label="Đến (*)"
                       slotProps={{
                         textField: {
                           fullWidth: true,
@@ -359,7 +372,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                       className="!mb-6"
                       format="DD/MM/YYYY"
                       fullWidth
-                      label="Ngày *"
+                      label="Ngày (*)"
                       slotProps={{
                         actionBar: {
                           actions: ["today"]
@@ -390,14 +403,21 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
             name="place"
             disabled={!isEditable}
             control={control}
-            render={({ field }) => (
+            rules={{
+              maxLength: {
+                value: 150,
+                message: "Địa điểm không được vượt quá 150 ký tự"
+              }
+            }}
+            render={({ field: { ref, ...fieldData } }) => (
               <TextField
                 className="!mb-6"
                 label="Địa điểm"
                 fullWidth
                 error={!!errors?.place}
                 helperText={errors?.place?.message}
-                {...field}
+                inputProps={ref}
+                {...fieldData}
               />
             )}
           />
@@ -440,7 +460,7 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                       }}
                       renderInput={(params) => (
                         <TextField
-                          label="Người tham dự *"
+                          label="Người tham dự (*)"
                           error={!!errors?.attendees}
                           helperText={errors?.attendees?.message}
                           InputProps={{
@@ -490,7 +510,9 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel}>Hủy</Button>
+          <Button color="secondary" onClick={onCancel}>
+            Hủy
+          </Button>
           {isEditable && <Button type="submit">{titlebtnDialog}</Button>}
         </DialogActions>
       </Dialog>

@@ -12,6 +12,7 @@ const messages = {
   107: "Tài khoản đã tồn tại!",
   111: "Vui lòng điền đầy đủ thông tin bắt buộc!",
   204: "Nhóm không tồn tại!",
+  205: "Kênh không tồn tại!",
   207: "Tên nhóm đã tồn tại!",
   208: "Loại nhóm không tồn tại!",
   209: "Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc!",
@@ -26,6 +27,7 @@ const messages = {
   219: "Email có phần đuôi không hợp lệ!",
   220: "Vai trò không hợp lệ!",
   221: "Tập tin import không hợp lệ!",
+  222: "Tài khoản đã bị khoá, xin dùng tài khoản khác",
   401: "401", // dùng để trả ra thông báo token hết hạn đã config từ interceptor
   404: "Không tìm thấy loại nhóm!",
   407: "Loại nhóm đã tồn tại!",

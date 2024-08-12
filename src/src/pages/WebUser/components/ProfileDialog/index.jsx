@@ -31,6 +31,7 @@ import useMyInfo from "hooks/useMyInfo";
 import {
   ACTION_IMAGE,
   AVATAR_SIZE,
+  Color,
   ROUTE_URL,
   WALLPAPER_HEIGHT,
   WALLPAPER_WIDTH
@@ -77,7 +78,7 @@ function ProfileDialog(props) {
 
   const openChat = async () => {
     const data = {
-      channelName: "",
+      channelName: user?.name ?? "Nhóm riêng tư",
       description: "",
       groupId,
       creatorId: myInfo.id,
@@ -117,7 +118,7 @@ function ProfileDialog(props) {
         <Stack className="w-full" direction="row" justifyContent="space-between">
           <span className="!p-2">Thông tin tài khoản</span>
           {isEditable && (
-            <Button className="!p-2 !py-0 !text-red-400" onClick={handleLogout}>
+            <Button className="!p-2 !py-0 !text-red-500 hover:opacity-70" onClick={handleLogout}>
               Đăng xuất
             </Button>
           )}
@@ -177,7 +178,6 @@ function ProfileDialog(props) {
                   }
                 }}
                 onClick={handleUpdateAvatar}
-                // component="label"
               >
                 <CameraAltOutlinedIcon />
               </Avatar>
@@ -186,15 +186,14 @@ function ProfileDialog(props) {
 
           <CardContent>
             <div className="flex justify-between items-end">
-              <Typography variant="h4" component="div">
+              <Typography variant="h5" component="div">
                 Thông tin
               </Typography>
               {isEditable && (
                 <Typography
                   variant="h7"
                   component="div"
-                  color="skyblue"
-                  fontStyle="italic"
+                  color={Color.primary}
                   onClick={handleUpdateProfileOpen}
                   className="cursor-pointer hover:underline"
                 >
@@ -226,7 +225,7 @@ function ProfileDialog(props) {
                     </Typography>
                   }
                   secondary={
-                    <Typography variant="h7" color={user.name ? "black" : "grey"}>
+                    <Typography className="!text-sm" color={user.name ? "black" : "grey"}>
                       {user.name ?? "Chưa cập nhật"}
                     </Typography>
                   }
@@ -245,7 +244,7 @@ function ProfileDialog(props) {
                     </Typography>
                   }
                   secondary={
-                    <Typography variant="h7" color={user.email ? "black" : "grey"}>
+                    <Typography className="!text-sm" color={user.email ? "black" : "grey"}>
                       {user.email ?? "Chưa cập nhật"}
                     </Typography>
                   }
@@ -265,7 +264,10 @@ function ProfileDialog(props) {
                       </Typography>
                     }
                     secondary={
-                      <Typography variant="h7" color={user.additionalEmails[0] ? "black" : "grey"}>
+                      <Typography
+                        className="!text-sm"
+                        color={user.additionalEmails[0] ? "black" : "grey"}
+                      >
                         {user.personalEmail ?? "Chưa cập nhật"}
                       </Typography>
                     }
@@ -286,7 +288,7 @@ function ProfileDialog(props) {
                     </Typography>
                   }
                   secondary={
-                    <Typography variant="h7" color={user.birthDate ? "black" : "grey"}>
+                    <Typography className="!text-sm" color={user.birthDate ? "black" : "grey"}>
                       {user.birthDate ? userDate : "Chưa cập nhật"}
                     </Typography>
                   }
@@ -305,8 +307,8 @@ function ProfileDialog(props) {
                     </Typography>
                   }
                   secondary={
-                    <Typography variant="h7" color={user.phone ? "black" : "grey"}>
-                      {user.phone ?? "Chưa cập nhật"}
+                    <Typography className="!text-sm" color={user.phone ? "black" : "grey"}>
+                      {user?.phone !== null && user?.phone !== "" ? user.phone : "Chưa cập nhật"}
                     </Typography>
                   }
                 />
@@ -315,17 +317,8 @@ function ProfileDialog(props) {
             <GradeBoard isEditable={isEditable} user={user} />
             {isEditable ? (
               <div className="flex justify-between items-end mt-4">
-                <Typography variant="h4" component="div">
-                  Liên kết email
-                </Typography>
-                <Typography
-                  className="cursor-pointer hover:underline"
-                  variant="h7"
-                  component="div"
-                  color="skyblue"
-                  fontStyle="italic"
-                >
-                  Cập nhật
+                <Typography variant="h5" component="div">
+                  Email đã liên kết
                 </Typography>
               </div>
             ) : (
