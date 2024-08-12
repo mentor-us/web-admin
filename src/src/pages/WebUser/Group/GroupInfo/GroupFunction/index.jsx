@@ -42,16 +42,22 @@ function GroupFunction({ type, permission, selectedType }) {
     case "utility":
       return (
         <>
-          <ListItemButton
-            onClick={() => {
-              selectedType(GROUP_FUNCTION.MEETING);
-            }}
-          >
-            <ListItemIcon>
-              <CalendarIcon width={20} height={20} />
-            </ListItemIcon>
-            <ListItemText disableTypography className="text-base line-clamp-1" primary="Lịch hẹn" />
-          </ListItemButton>
+          {permission.includes(CHANNEL_PERMISSION.MEETING_MANAGEMENT) && (
+            <ListItemButton
+              onClick={() => {
+                selectedType(GROUP_FUNCTION.MEETING);
+              }}
+            >
+              <ListItemIcon>
+                <CalendarIcon width={20} height={20} />
+              </ListItemIcon>
+              <ListItemText
+                disableTypography
+                className="text-base line-clamp-1"
+                primary="Lịch hẹn"
+              />
+            </ListItemButton>
+          )}
           {permission.includes(CHANNEL_PERMISSION.BOARD_MANAGEMENT) && (
             <ListItemButton
               onClick={() => {
@@ -114,16 +120,22 @@ function GroupFunction({ type, permission, selectedType }) {
             </ListItemIcon>
             <ListItemText disableTypography className="text-base line-clamp-1" primary="Hình ảnh" />
           </ListItemButton>
-          <ListItemButton
-            onClick={() => {
-              selectedType(GROUP_FUNCTION.FILE);
-            }}
-          >
-            <ListItemIcon>
-              <FolderOutlinedIcon width={20} height={20} sx={{ color: "#000000" }} />
-            </ListItemIcon>
-            <ListItemText disableTypography className="text-base line-clamp-1" primary="Tập tin" />
-          </ListItemButton>
+          {permission.includes(CHANNEL_PERMISSION.SEND_FILES) && (
+            <ListItemButton
+              onClick={() => {
+                selectedType(GROUP_FUNCTION.FILE);
+              }}
+            >
+              <ListItemIcon>
+                <FolderOutlinedIcon width={20} height={20} sx={{ color: "#000000" }} />
+              </ListItemIcon>
+              <ListItemText
+                disableTypography
+                className="text-base line-clamp-1"
+                primary="Tập tin"
+              />
+            </ListItemButton>
+          )}
         </>
       );
     default:

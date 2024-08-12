@@ -75,7 +75,7 @@ function GroupDetail() {
 
   useEffect(() => {
     if (mentees && Array.isArray(groupDetail?.mentees)) {
-      if (groupDetail?.mentees.length > 0) {
+      if (groupDetail?.mentees.length >= 0) {
         if (
           typeof groupDetail.mentees[0] === "string" ||
           groupDetail.mentees[0] instanceof String
@@ -95,7 +95,7 @@ function GroupDetail() {
 
   useEffect(() => {
     if (mentors && Array.isArray(groupDetail?.mentors)) {
-      if (groupDetail?.mentors.length > 0) {
+      if (groupDetail?.mentors.length >= 0) {
         if (
           typeof groupDetail.mentors[0] === "string" ||
           groupDetail.mentors[0] instanceof String
