@@ -135,7 +135,6 @@ function StatisticNumberAndChart() {
   useEffect(() => {
     getByMonthData();
   }, [filterValue, yearStatistic]);
-  // console.log(year.$y);
   /// --------------------------------------------------------
 
   return (

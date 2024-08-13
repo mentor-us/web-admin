@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/forbid-prop-types */
 import { Controller, useFormState, useWatch } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -106,9 +107,9 @@ function MeetingForm({ index, control }) {
                         helperText: isHasError ? meetingErrors[index]?.timeStart?.message : null
                       }
                     }}
-                    onChange={(newValue) => onChange(newValue.toISOString())}
+                    onChange={(newValue) => onChange(newValue.toString())}
                     renderInput={(params) => <TextField {...params} label="Từ *" />}
-                    value={value ? dayjs(value.slice(0, -1)) : null}
+                    value={value ? dayjs(value) : null}
                     {...rest}
                   />
                 );
@@ -123,18 +124,15 @@ function MeetingForm({ index, control }) {
                 required: "Vui lòng nhập giờ kết thúc",
                 validate: {
                   gtstart: (v) => {
-                    if (!v || dayjs(timeStart).isBefore(v)) {
+                    if (
+                      !v ||
+                      (dayjs(timeStart).hour() < dayjs(v).hour() &&
+                        dayjs(timeStart).minute() < dayjs(v).minute())
+                    ) {
                       return true;
                     }
 
                     return "Giờ kết thúc phải luôn lớn hơn giờ bắt đầu";
-                  },
-                  gtnow: (v) => {
-                    if (!v || dayjs().isSameOrBefore(v)) {
-                      return true;
-                    }
-
-                    return "Giờ kết thúc phải luôn lớn hơn giờ hiện tại";
                   }
                 }
               }}
@@ -151,9 +149,9 @@ function MeetingForm({ index, control }) {
                         helperText: isHasError ? meetingErrors[index]?.timeEnd?.message : null
                       }
                     }}
-                    onChange={(newValue) => onChange(newValue.toISOString())}
+                    onChange={(newValue) => onChange(newValue.toString())}
                     renderInput={(params) => <TextField {...params} label="Đến *" />}
-                    value={value ? dayjs(value.slice(0, -1)) : null}
+                    value={value ? dayjs(value) : null}
                     {...rest}
                   />
                 );

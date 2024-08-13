@@ -769,7 +769,10 @@ function ContextDialog() {
             queryClient.refetchQueries({
               queryKey: GetAllMeetingInChannelKey(realChannelId)
             })
-          ]);
+          ]).then(() => {
+            setContentType(ContentType.INITIAL);
+            handleClose();
+          });
 
           return "Tạo thành công";
         },

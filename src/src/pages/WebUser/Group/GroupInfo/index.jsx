@@ -288,7 +288,11 @@ export default function GroupInfo() {
 
           <Collapse in={ShowGroupMedia} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <GroupInfoItem type="media" selectedType={selectedType} />
+              <GroupInfoItem
+                type="media"
+                permission={isSuccess && groupDetail?.permissions}
+                selectedType={selectedType}
+              />
             </List>
           </Collapse>
           <ListItemButton onClick={toggleChannelUtility}>

@@ -113,7 +113,6 @@ const loadByEmail = async (req) => {
   if (response.returnCode !== 200) {
     throw new ServerError(response.returnCode);
   }
-  console.log(response);
   return response.data;
 };
 
