@@ -6,6 +6,7 @@ import { addCheckedProp } from "utils";
 
 import groupDetailServices from "service/groupDetailServices";
 import groupsServices from "service/groupsServices";
+import { roleMemberEnum } from "utils/constants";
 
 const columnHeaders = [
   { text: "Email", textValue: "email", isShow: true },
@@ -31,7 +32,8 @@ export const getGroup = createAsyncThunk("groupDetail/getGroup", async (id) => {
 });
 
 export const addMember = createAsyncThunk("groupDetail/addMember", async ({ id, req, type }) => {
-  const response = await groupDetailServices.addMember(id, req, type);
+  let response = await groupDetailServices.addMember(id, req, type);
+  response = await groupDetailServices.getGroup(id);
   return addCheckedProp(response);
 });
 
@@ -115,7 +117,9 @@ const groupDetailSlice = createSlice({
       .addCase(addMember.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = null;
-        state.data = action.payload;
+        state.data = {
+          ...action.payload
+        };
         state.isSelectMenteeAll = false;
         state.isSelectMentorAll = false;
       })
