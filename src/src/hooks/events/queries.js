@@ -17,7 +17,8 @@ export const useGetAllEvents = () =>
           return {
             ...event,
             start: new Date(event.deadline ?? event.timeStart),
-            timeStart: event.deadline ?? event.timeStart
+            timeStart: event.deadline ?? event.timeStart,
+            end: new Date(event.upcomingTime).setHours(23, 59, 0, 0)
           };
         });
         return events;
