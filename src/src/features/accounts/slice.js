@@ -235,13 +235,15 @@ const accountSlice = createSlice({
 
         action.payload.forEach((element) => {
           const currentIndex = state.data.findIndex((item) => item.id === element.id);
-          state.data[currentIndex] = addCheckedProp(element, state.data[currentIndex].isChecked);
+          if (currentIndex >= 0) {
+            state.data[currentIndex] = addCheckedProp(element, state.data[currentIndex].isChecked);
+          }
 
           const currentIndexSearch = state.dataSearch.findIndex((item) => item.id === element.id);
           if (currentIndexSearch >= 0) {
             state.dataSearch[currentIndexSearch] = addCheckedProp(
               element,
-              state.dataSearch[currentIndex].isChecked
+              state?.dataSearch[currentIndexSearch]?.isChecked
             );
           }
         });
@@ -253,13 +255,15 @@ const accountSlice = createSlice({
 
         action.payload.forEach((element) => {
           const currentIndex = state.data.findIndex((item) => item.id === element.id);
-          state.data[currentIndex] = addCheckedProp(element, state.data[currentIndex].isChecked);
+          if (currentIndex >= 0) {
+            state.data[currentIndex] = addCheckedProp(element, state.data[currentIndex].isChecked);
+          }
 
           const currentIndexSearch = state.dataSearch.findIndex((item) => item.id === element.id);
           if (currentIndexSearch >= 0) {
             state.dataSearch[currentIndexSearch] = addCheckedProp(
               element,
-              state.dataSearch[currentIndex].isChecked
+              state.dataSearch[currentIndexSearch].isChecked
             );
           }
         });

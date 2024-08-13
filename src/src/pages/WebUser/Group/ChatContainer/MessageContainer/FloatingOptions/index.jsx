@@ -194,7 +194,6 @@ function FloatingOptions({ message, isShow }) {
       const file = new File([fileBlob], "audio.mp3", { type: "audio/mpeg" });
 
       const data = await whisperServices.transcribeAudio(file);
-      console.log("Văn bản chuyển đổi:", data.text);
 
       toast(
         (t) => (
@@ -226,7 +225,6 @@ function FloatingOptions({ message, isShow }) {
             <div style={{ display: "flex", gap: "10px" }}>
               <button
                 onClick={() => {
-                  console.log("Văn bản chuyển đổi:", data.text);
                   toast.dismiss(t.id);
                   handleSuggestWhisper(data);
                 }}
