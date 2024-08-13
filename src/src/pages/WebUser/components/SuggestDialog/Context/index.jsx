@@ -768,9 +768,11 @@ function ContextDialog() {
             }),
             queryClient.refetchQueries({
               queryKey: GetAllMeetingInChannelKey(realChannelId)
-            }),
-            handleClose()
-          ]);
+            })
+          ]).then(() => {
+            setContentType(ContentType.INITIAL);
+            handleClose();
+          });
 
           return "Tạo thành công";
         },

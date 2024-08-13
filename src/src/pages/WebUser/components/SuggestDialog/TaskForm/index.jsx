@@ -101,9 +101,9 @@ function TaskForm({ index, control }) {
                             : null
                       }
                     }}
-                    onChange={(newValue) => onChange(newValue.toISOString())}
+                    onChange={(newValue) => onChange(newValue.toString())}
                     renderInput={(params) => <TextField {...params} label="Tới hạn *" />}
-                    value={value ? dayjs(value.slice(0, -1)) : null}
+                    value={value ? dayjs(value) : null}
                     {...rest}
                   />
                 );
@@ -153,7 +153,7 @@ function TaskForm({ index, control }) {
                           .date(newValue.date())
                           .month(newValue.month())
                           .year(newValue.year())
-                          .toISOString()
+                          .toString()
                       )
                     }
                     renderInput={(params) => <TextField {...params} label="Ngày *" />}
