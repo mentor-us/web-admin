@@ -117,7 +117,6 @@ function GradeDetailAccount({ user = null }) {
         <MDButton
           sx={{ ml: 1 }}
           onClick={() => {
-            console.log("Click share");
             setShareModal(true);
           }}
           variant="gradient"

@@ -12,7 +12,6 @@ import "./styles.css";
 
 function DeleteOptions({ data, state, setState }) {
   const { type, category } = state;
-  console.log(data, category);
   // const allCategories = removeCategoryFromObject(useSelector(allCategoriesSelector), data);
 
   const handleChange = (e) => {
