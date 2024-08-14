@@ -697,9 +697,11 @@ function ContextDialog() {
           </Box>
         );
       case ContentType.EDIT_TASK:
-        return <TaskForm control={control} index={editItemIndex} />;
+        return <TaskForm control={control} index={editItemIndex} realChannelId={realChannelId} />;
       case ContentType.EDIT_MEETING:
-        return <MeetingForm control={control} index={editItemIndex} />;
+        return (
+          <MeetingForm control={control} index={editItemIndex} realChannelId={realChannelId} />
+        );
       default:
         return null;
     }
@@ -769,7 +771,10 @@ function ContextDialog() {
             queryClient.refetchQueries({
               queryKey: GetAllMeetingInChannelKey(realChannelId)
             })
-          ]);
+          ]).then(() => {
+            setContentType(ContentType.INITIAL);
+            handleClose();
+          });
 
           return "Tạo thành công";
         },
@@ -849,31 +854,41 @@ function ContextDialog() {
         );
       case ContentType.EDIT_TASK:
         return (
-          <Button
-            disabled={isLoading}
-            onClick={async () => {
-              const isValid = await trigger(`tasks.${editItemIndex}`);
-              if (isValid) {
-                changeToPreview();
-              }
-            }}
-          >
-            Xác nhận
-          </Button>
+          <>
+            <Button disabled={isLoading} color="secondary" onClick={changeToPreview}>
+              Hủy
+            </Button>
+            <Button
+              disabled={isLoading}
+              onClick={async () => {
+                const isValid = await trigger(`tasks.${editItemIndex}`);
+                if (isValid) {
+                  changeToPreview();
+                }
+              }}
+            >
+              Xác nhận
+            </Button>
+          </>
         );
       case ContentType.EDIT_MEETING:
         return (
-          <Button
-            disabled={isLoading}
-            onClick={async () => {
-              const isValid = await trigger(`meetings.${editItemIndex}`);
-              if (isValid) {
-                changeToPreview();
-              }
-            }}
-          >
-            Xác nhận
-          </Button>
+          <>
+            <Button disabled={isLoading} color="secondary" onClick={changeToPreview}>
+              Hủy
+            </Button>
+            <Button
+              disabled={isLoading}
+              onClick={async () => {
+                const isValid = await trigger(`meetings.${editItemIndex}`);
+                if (isValid) {
+                  changeToPreview();
+                }
+              }}
+            >
+              Xác nhận
+            </Button>
+          </>
         );
       default:
         return null;

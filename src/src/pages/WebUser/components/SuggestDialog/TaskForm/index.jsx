@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/forbid-prop-types */
-import { Controller, useFormState, useWatch } from "react-hook-form";
+import { Controller, useFormState } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import {
   Autocomplete,
@@ -23,11 +22,12 @@ import { getImageUrlWithKey } from "utils";
 import { useGetChannelMembers } from "hooks/channels/queries";
 import useMyInfo from "hooks/useMyInfo";
 
-function TaskForm({ index, control }) {
+function TaskForm({ index, control, realChannelId }) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
+
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
-    channelId,
+    realChannelId || channelId,
     (members) => members?.filter((member) => member.id !== myInfo.id) ?? []
   );
 
@@ -43,7 +43,11 @@ function TaskForm({ index, control }) {
           name={`tasks.${index}.title`}
           control={control}
           rules={{
-            required: "Vui lòng nhập tiêu đề"
+            required: "Vui lòng nhập tiêu đề",
+            maxLength: {
+              value: 100,
+              message: "Tiêu đề không được vượt quá 100 ký tự"
+            }
           }}
           render={({ field }) => (
             <TextField
@@ -62,7 +66,13 @@ function TaskForm({ index, control }) {
         <Controller
           name={`tasks.${index}.description`}
           control={control}
-          rules={{ required: false }}
+          rules={{
+            required: false,
+            maxLength: {
+              value: 250,
+              message: "Mô tả không được vượt quá 250 ký tự"
+            }
+          }}
           render={({ field }) => {
             return (
               <TextField
@@ -101,9 +111,9 @@ function TaskForm({ index, control }) {
                             : null
                       }
                     }}
-                    onChange={(newValue) => onChange(newValue.toISOString())}
+                    onChange={(newValue) => onChange(newValue.toString())}
                     renderInput={(params) => <TextField {...params} label="Tới hạn *" />}
-                    value={value ? dayjs(value.slice(0, -1)) : null}
+                    value={value ? dayjs(value) : null}
                     {...rest}
                   />
                 );
@@ -153,7 +163,7 @@ function TaskForm({ index, control }) {
                           .date(newValue.date())
                           .month(newValue.month())
                           .year(newValue.year())
-                          .toISOString()
+                          .toString()
                       )
                     }
                     renderInput={(params) => <TextField {...params} label="Ngày *" />}
@@ -234,8 +244,8 @@ function TaskForm({ index, control }) {
                     }}
                     value={
                       channelMembers
-                        ? channelMembers.filter((member) => value.includes(member.id)) || null
-                        : null
+                        ? channelMembers.filter((member) => value.includes(member.id)) || []
+                        : []
                     }
                     {...props}
                   />
@@ -249,11 +259,14 @@ function TaskForm({ index, control }) {
   );
 }
 
-TaskForm.defaultProps = {};
+TaskForm.defaultProps = {
+  realChannelId: null
+};
 
 TaskForm.propTypes = {
   index: PropTypes.number.isRequired,
-  control: PropTypes.object.isRequired
+  control: PropTypes.object.isRequired,
+  realChannelId: PropTypes.string
 };
 
 export default TaskForm;

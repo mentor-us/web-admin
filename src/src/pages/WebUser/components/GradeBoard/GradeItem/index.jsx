@@ -32,8 +32,6 @@ function GradeItem(props) {
   const { item } = props;
   const [state, dispatch] = useReducer(reducer, initState);
   const { score, courseName } = state;
-  console.log("item");
-  console.log(item);
   // const onClickSetModeSharing = () => {
   //   // dispatch({ type: "SET_IS_SUBMITING", payload: true });
   // };

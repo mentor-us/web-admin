@@ -449,13 +449,8 @@ function SuggestDialog(props) {
                             color="dark"
                             sx={{ fontSize: "0.8rem", color: "grey" }}
                           >
-                            {field?.timeStart
-                              ? dayjs(field?.timeStart.slice(0, -1)).format("HH:mm")
-                              : ""}{" "}
-                            -{" "}
-                            {field?.timeEnd
-                              ? dayjs(field?.timeEnd.slice(0, -1)).format("HH:mm")
-                              : ""}{" "}
+                            {field?.timeStart ? dayjs(field?.timeStart).format("HH:mm") : ""} -{" "}
+                            {field?.timeEnd ? dayjs(field?.timeEnd).format("HH:mm") : ""}{" "}
                             {dateFormatted.locale("vi").format("LL")}
                           </Typography>
                           {field?.attendees && field?.attendees?.length > 0 ? (
@@ -526,10 +521,12 @@ function SuggestDialog(props) {
                   }}
                 >
                   {watchedTasks.map((field, index) => {
+                    console.log(field);
                     const deadlineFormatted = dayjs(field?.deadline).toISOString();
                     const isHasError = errors?.tasks?.root?.message
                       ? JSON.parse(errors?.tasks?.root?.message)?.includes(index)
                       : false;
+
                     return (
                       <ListItem
                         key={field.id}
@@ -843,31 +840,41 @@ function SuggestDialog(props) {
         );
       case ContentType.EDIT_TASK:
         return (
-          <Button
-            disabled={isLoading}
-            onClick={async () => {
-              const isValid = await trigger(`tasks.${editItemIndex}`);
-              if (isValid) {
-                changeToPreview();
-              }
-            }}
-          >
-            Xác nhận
-          </Button>
+          <>
+            <Button disabled={isLoading} color="secondary" onClick={changeToPreview}>
+              Hủy
+            </Button>
+            <Button
+              disabled={isLoading}
+              onClick={async () => {
+                const isValid = await trigger(`tasks.${editItemIndex}`);
+                if (isValid) {
+                  changeToPreview();
+                }
+              }}
+            >
+              Xác nhận
+            </Button>
+          </>
         );
       case ContentType.EDIT_MEETING:
         return (
-          <Button
-            disabled={isLoading}
-            onClick={async () => {
-              const isValid = await trigger(`meetings.${editItemIndex}`);
-              if (isValid) {
-                changeToPreview();
-              }
-            }}
-          >
-            Xác nhận
-          </Button>
+          <>
+            <Button disabled={isLoading} color="secondary" onClick={changeToPreview}>
+              Hủy
+            </Button>
+            <Button
+              disabled={isLoading}
+              onClick={async () => {
+                const isValid = await trigger(`meetings.${editItemIndex}`);
+                if (isValid) {
+                  changeToPreview();
+                }
+              }}
+            >
+              Xác nhận
+            </Button>
+          </>
         );
       default:
         return null;

@@ -149,8 +149,6 @@ const GroupApi = {
     const UPDATE_AVATAR_URL = `/api/groups/${groupId}/avatar`;
 
     const formData = new FormData();
-    console.log("image", image);
-
     formData.append("file", image);
     formData.append("groupId", groupId);
 

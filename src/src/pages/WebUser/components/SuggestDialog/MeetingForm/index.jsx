@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/forbid-prop-types */
 import { Controller, useFormState, useWatch } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -22,11 +23,12 @@ import { getImageUrlWithKey } from "utils";
 import { useGetChannelMembers } from "hooks/channels/queries";
 import useMyInfo from "hooks/useMyInfo";
 
-function MeetingForm({ index, control }) {
+function MeetingForm({ index, control, realChannelId }) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
+
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
-    channelId,
+    realChannelId || channelId,
     (members) => members?.filter((member) => member.id !== myInfo.id) ?? []
   );
 
@@ -44,7 +46,11 @@ function MeetingForm({ index, control }) {
           name={`meetings.${index}.title`}
           control={control}
           rules={{
-            required: "Vui lòng nhập tiêu đề"
+            required: "Vui lòng nhập tiêu đề",
+            maxLength: {
+              value: 100,
+              message: "Tiêu đề không được vượt quá 100 ký tự"
+            }
           }}
           render={({ field }) => (
             <TextField
@@ -61,7 +67,13 @@ function MeetingForm({ index, control }) {
         <Controller
           name={`meetings.${index}.description`}
           control={control}
-          rules={{ required: false }}
+          rules={{
+            required: false,
+            maxLength: {
+              value: 250,
+              message: "Mô tả không được vượt quá 250 ký tự"
+            }
+          }}
           render={({ field }) => {
             return (
               <TextField
@@ -106,9 +118,9 @@ function MeetingForm({ index, control }) {
                         helperText: isHasError ? meetingErrors[index]?.timeStart?.message : null
                       }
                     }}
-                    onChange={(newValue) => onChange(newValue.toISOString())}
+                    onChange={(newValue) => onChange(newValue.toString())}
                     renderInput={(params) => <TextField {...params} label="Từ *" />}
-                    value={value ? dayjs(value.slice(0, -1)) : null}
+                    value={value ? dayjs(value) : null}
                     {...rest}
                   />
                 );
@@ -123,18 +135,17 @@ function MeetingForm({ index, control }) {
                 required: "Vui lòng nhập giờ kết thúc",
                 validate: {
                   gtstart: (v) => {
-                    if (!v || dayjs(timeStart).isBefore(v)) {
+                    const timeStartHour = dayjs(timeStart).hour();
+                    const timeStartMinute = dayjs(timeStart).minute();
+                    if (
+                      !v ||
+                      timeStartHour < dayjs(v).hour() ||
+                      (timeStartHour === dayjs(v).hour() && timeStartMinute < dayjs(v).minute())
+                    ) {
                       return true;
                     }
 
                     return "Giờ kết thúc phải luôn lớn hơn giờ bắt đầu";
-                  },
-                  gtnow: (v) => {
-                    if (!v || dayjs().isSameOrBefore(v)) {
-                      return true;
-                    }
-
-                    return "Giờ kết thúc phải luôn lớn hơn giờ hiện tại";
                   }
                 }
               }}
@@ -151,9 +162,9 @@ function MeetingForm({ index, control }) {
                         helperText: isHasError ? meetingErrors[index]?.timeEnd?.message : null
                       }
                     }}
-                    onChange={(newValue) => onChange(newValue.toISOString())}
+                    onChange={(newValue) => onChange(newValue.toString())}
                     renderInput={(params) => <TextField {...params} label="Đến *" />}
-                    value={value ? dayjs(value.slice(0, -1)) : null}
+                    value={value ? dayjs(value) : null}
                     {...rest}
                   />
                 );
@@ -212,6 +223,12 @@ function MeetingForm({ index, control }) {
           getGroupDetailColumnHeadersMentorSelector
           name={`meetings.${index}.place`}
           control={control}
+          rules={{
+            maxLength: {
+              value: 150,
+              message: "Địa điểm không được vượt quá 150 ký tự"
+            }
+          }}
           render={({ field }) => (
             <TextField
               className="!mb-6"
@@ -286,8 +303,8 @@ function MeetingForm({ index, control }) {
                     }}
                     value={
                       channelMembers
-                        ? channelMembers.filter((member) => value.includes(member.id)) || null
-                        : null
+                        ? channelMembers.filter((member) => value.includes(member.id)) || []
+                        : []
                     }
                     {...props}
                   />
@@ -301,11 +318,14 @@ function MeetingForm({ index, control }) {
   );
 }
 
-MeetingForm.defaultProps = {};
+MeetingForm.defaultProps = {
+  realChannelId: null
+};
 
 MeetingForm.propTypes = {
   index: PropTypes.number.isRequired,
-  control: PropTypes.object.isRequired
+  control: PropTypes.object.isRequired,
+  realChannelId: PropTypes.string
 };
 
 export default MeetingForm;
