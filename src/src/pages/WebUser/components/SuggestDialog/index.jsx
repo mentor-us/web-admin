@@ -192,7 +192,6 @@ function SuggestDialog(props) {
   };
 
   const changeToEditMeeting = (currentMeetingIndex) => {
-    console.log(currentMeetingIndex);
     setContentType(ContentType.EDIT_MEETING);
     setEditItemIndex(currentMeetingIndex);
   };
@@ -522,10 +521,12 @@ function SuggestDialog(props) {
                   }}
                 >
                   {watchedTasks.map((field, index) => {
+                    console.log(field);
                     const deadlineFormatted = dayjs(field?.deadline).toISOString();
                     const isHasError = errors?.tasks?.root?.message
                       ? JSON.parse(errors?.tasks?.root?.message)?.includes(index)
                       : false;
+
                     return (
                       <ListItem
                         key={field.id}

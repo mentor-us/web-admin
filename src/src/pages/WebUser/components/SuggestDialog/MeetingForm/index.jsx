@@ -23,11 +23,12 @@ import { getImageUrlWithKey } from "utils";
 import { useGetChannelMembers } from "hooks/channels/queries";
 import useMyInfo from "hooks/useMyInfo";
 
-function MeetingForm({ index, control }) {
+function MeetingForm({ index, control, realChannelId }) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
+
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
-    channelId,
+    realChannelId || channelId,
     (members) => members?.filter((member) => member.id !== myInfo.id) ?? []
   );
 
@@ -124,10 +125,12 @@ function MeetingForm({ index, control }) {
                 required: "Vui lòng nhập giờ kết thúc",
                 validate: {
                   gtstart: (v) => {
+                    const timeStartHour = dayjs(timeStart).hour();
+                    const timeStartMinute = dayjs(timeStart).minute();
                     if (
                       !v ||
-                      (dayjs(timeStart).hour() < dayjs(v).hour() &&
-                        dayjs(timeStart).minute() < dayjs(v).minute())
+                      timeStartHour < dayjs(v).hour() ||
+                      (timeStartHour === dayjs(v).hour() && timeStartMinute < dayjs(v).minute())
                     ) {
                       return true;
                     }
@@ -284,8 +287,8 @@ function MeetingForm({ index, control }) {
                     }}
                     value={
                       channelMembers
-                        ? channelMembers.filter((member) => value.includes(member.id)) || null
-                        : null
+                        ? channelMembers.filter((member) => value.includes(member.id)) || []
+                        : []
                     }
                     {...props}
                   />
@@ -299,11 +302,14 @@ function MeetingForm({ index, control }) {
   );
 }
 
-MeetingForm.defaultProps = {};
+MeetingForm.defaultProps = {
+  realChannelId: null
+};
 
 MeetingForm.propTypes = {
   index: PropTypes.number.isRequired,
-  control: PropTypes.object.isRequired
+  control: PropTypes.object.isRequired,
+  realChannelId: PropTypes.string
 };
 
 export default MeetingForm;
