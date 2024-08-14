@@ -46,7 +46,11 @@ function MeetingForm({ index, control, realChannelId }) {
           name={`meetings.${index}.title`}
           control={control}
           rules={{
-            required: "Vui lòng nhập tiêu đề"
+            required: "Vui lòng nhập tiêu đề",
+            maxLength: {
+              value: 100,
+              message: "Tiêu đề không được vượt quá 100 ký tự"
+            }
           }}
           render={({ field }) => (
             <TextField
@@ -63,7 +67,13 @@ function MeetingForm({ index, control, realChannelId }) {
         <Controller
           name={`meetings.${index}.description`}
           control={control}
-          rules={{ required: false }}
+          rules={{
+            required: false,
+            maxLength: {
+              value: 250,
+              message: "Mô tả không được vượt quá 250 ký tự"
+            }
+          }}
           render={({ field }) => {
             return (
               <TextField
@@ -213,6 +223,12 @@ function MeetingForm({ index, control, realChannelId }) {
           getGroupDetailColumnHeadersMentorSelector
           name={`meetings.${index}.place`}
           control={control}
+          rules={{
+            maxLength: {
+              value: 150,
+              message: "Địa điểm không được vượt quá 150 ký tự"
+            }
+          }}
           render={({ field }) => (
             <TextField
               className="!mb-6"
