@@ -319,13 +319,6 @@ function BookMeetingDialog({ open, handleClose, meetingId = "" }) {
                       }
 
                       return "Giờ kết thúc phải luôn lớn hơn giờ bắt đầu";
-                    },
-                    gtnow: (v) => {
-                      if (!v || dayjs().isSameOrBefore(v)) {
-                        return true;
-                      }
-
-                      return "Giờ kết thúc phải luôn lớn hơn giờ hiện tại";
                     }
                   }
                 }}

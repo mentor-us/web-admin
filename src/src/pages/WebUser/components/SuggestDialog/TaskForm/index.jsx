@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/forbid-prop-types */
-import { Controller, useFormState, useWatch } from "react-hook-form";
+import { Controller, useFormState } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import {
   Autocomplete,
@@ -23,11 +22,12 @@ import { getImageUrlWithKey } from "utils";
 import { useGetChannelMembers } from "hooks/channels/queries";
 import useMyInfo from "hooks/useMyInfo";
 
-function TaskForm({ index, control }) {
+function TaskForm({ index, control, realChannelId }) {
   const myInfo = useMyInfo();
   const { channelId } = useParams();
+
   const { data: channelMembers, isLoading: isLoadingMembers } = useGetChannelMembers(
-    channelId,
+    realChannelId || channelId,
     (members) => members?.filter((member) => member.id !== myInfo.id) ?? []
   );
 
@@ -234,8 +234,8 @@ function TaskForm({ index, control }) {
                     }}
                     value={
                       channelMembers
-                        ? channelMembers.filter((member) => value.includes(member.id)) || null
-                        : null
+                        ? channelMembers.filter((member) => value.includes(member.id)) || []
+                        : []
                     }
                     {...props}
                   />
@@ -249,11 +249,14 @@ function TaskForm({ index, control }) {
   );
 }
 
-TaskForm.defaultProps = {};
+TaskForm.defaultProps = {
+  realChannelId: null
+};
 
 TaskForm.propTypes = {
   index: PropTypes.number.isRequired,
-  control: PropTypes.object.isRequired
+  control: PropTypes.object.isRequired,
+  realChannelId: PropTypes.string
 };
 
 export default TaskForm;
